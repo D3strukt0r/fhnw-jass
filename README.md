@@ -1,4 +1,4 @@
-# fhnw-poker
+# fhnw-jass
 
 The IT-Project in the FHNW
 
@@ -66,7 +66,7 @@ Please read [CONTRIBUTING.md](CONTRIBUTING.md) for details on our code of conduc
 
 ## Versioning
 
-We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/D3strukt0r/fhnw-poker/tags). 
+We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/D3strukt0r/fhnw-jass/tags). 
 
 ## Authors
 
@@ -75,7 +75,7 @@ We use [SemVer](http://semver.org/) for versioning. For the versions available, 
 * **Sasa Trajkova** - *Initial work* - [sasatrajkova](https://github.com/sasatrajkova)
 * **Thomas Weber** - *Initial work*
 
-See also the list of [contributors](https://github.com/D3strukt0r/fhnw-poker/contributors) who participated in this project.
+See also the list of [contributors](https://github.com/D3strukt0r/fhnw-jass/contributors) who participated in this project.
 
 ## License
 
