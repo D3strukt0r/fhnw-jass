@@ -3,6 +3,10 @@ plugins {
     id 'application'
 }
 
+application {
+    mainClassName = 'org.orbitrondev.server.Main'
+}
+
 dependencies {
     implementation project(':lib')
     testImplementation group: 'junit', name: 'junit', version: '4.12'
