@@ -1,6 +1,6 @@
-package org.orbitrondev.server;
+package org.orbitrondev.jass.server;
 
-import org.orbitrondev.lib.Message;
+import org.orbitrondev.jass.lib.Message;
 
 public class Main {
     public static void main(String[] args) {

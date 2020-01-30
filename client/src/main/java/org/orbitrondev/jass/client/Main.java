@@ -1,11 +1,11 @@
-package org.orbitrondev.client;
+package org.orbitrondev.jass.client;
 
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
-import org.orbitrondev.lib.Message;
+import org.orbitrondev.jass.lib.Message;
 
 public class Main extends Application {
     public static void main(String[] args) {

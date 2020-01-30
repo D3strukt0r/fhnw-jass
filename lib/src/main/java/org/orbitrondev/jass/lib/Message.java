@@ -1,4 +1,4 @@
-package org.orbitrondev.lib;
+package org.orbitrondev.jass.lib;
 
 public class Message {
     private String message;
