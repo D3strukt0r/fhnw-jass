@@ -1,28 +1,39 @@
 package org.orbitrondev.jass.client;
 
 import javafx.application.Application;
-import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
+import org.orbitrondev.jass.client.Controller.ServerConnectionController;
+import org.orbitrondev.jass.client.Controller.SplashController;
+import org.orbitrondev.jass.client.Model.ServerConnectionModel;
+import org.orbitrondev.jass.client.Model.SplashModel;
+import org.orbitrondev.jass.client.View.ServerConnectionView;
+import org.orbitrondev.jass.client.View.SplashView;
 
 public class Main extends Application {
     public static void main(String[] args) {
         launch(args);
     }
 
+    private SplashView splashView;
+
     @Override
     public void start(Stage primaryStage) {
-        Message m = new Message("Hello World!");
+        SplashModel splashModel = new SplashModel();
+        splashView = new SplashView(primaryStage, splashModel);
+        new SplashController(this, splashModel, splashView);
+        splashView.start();
+        splashModel.initialize();
+    }
 
-        primaryStage.setTitle(m.getMessage());
-        Button btn = new Button();
-        btn.setText("Say 'Hello World'");
-        btn.setOnAction(event -> System.out.println("Hello World!"));
+    public void startApp() {
+        Stage appStage = new Stage();
 
-        StackPane root = new StackPane();
-        root.getChildren().add(btn);
-        primaryStage.setScene(new Scene(root, 300, 250));
-        primaryStage.show();
+        ServerConnectionModel model = new ServerConnectionModel();
+        ServerConnectionView view = new ServerConnectionView(appStage, model);
+        new ServerConnectionController(model, view);
+
+        splashView.stop();
+        splashView = null;
+        view.start();
     }
 }

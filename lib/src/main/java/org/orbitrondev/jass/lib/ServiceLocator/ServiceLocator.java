@@ -28,4 +28,16 @@ public class ServiceLocator {
             services.add(newService);
         }
     }
+
+    public static void remove(String serviceName) {
+        Service objectFound = null;
+        for (Service service : services) {
+            if (service.getName().equalsIgnoreCase(serviceName)) {
+                objectFound = service;
+            }
+        }
+        if (objectFound != null) {
+            services.remove(objectFound);
+        }
+    }
 }
