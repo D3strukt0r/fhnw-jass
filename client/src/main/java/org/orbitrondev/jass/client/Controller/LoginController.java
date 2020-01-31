@@ -12,6 +12,7 @@ import org.orbitrondev.jass.lib.MVC.Controller;
 import org.orbitrondev.jass.lib.ServiceLocator.ServiceLocator;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class LoginController extends Controller<LoginModel, LoginView> {
@@ -105,7 +106,7 @@ public class LoginController extends Controller<LoginModel, LoginView> {
                 // This exception contains ConnectException, which basically means, it couldn't connect to the server.
                 enableAll();
                 setErrorMessage("gui.login.loginFailed");
-            }
+            } catch (SQLException e) { /* Couldn't save to local db, ignore */ }
 
             if (login.getToken() != null) {
                 ControllerHelper.switchToDashboardWindow(view);
