@@ -1,7 +1,9 @@
 package org.orbitrondev.jass.client.Model;
 
 import javafx.concurrent.Task;
+import org.orbitrondev.jass.client.Utils.DatabaseUtil;
 import org.orbitrondev.jass.lib.MVC.Model;
+import org.orbitrondev.jass.lib.ServiceLocator.ServiceLocator;
 
 import java.util.ArrayList;
 
@@ -14,11 +16,9 @@ public class SplashModel extends Model {
             // List of all tasks
             ArrayList<Runnable> tasks = new ArrayList<>();
 
-            tasks.add(() -> { // Example task
-                try {
-                    Thread.sleep(500);
-                } catch (InterruptedException e) { /* Ignore */ }
-            });
+            // Initialize the db connection in the service locator
+            // TODO: Should the data file be a variable?
+            tasks.add(() -> ServiceLocator.add(new DatabaseUtil("jass.sqlite3")));
 
             // First, take some time, update progress
             this.updateProgress(1, tasks.size() + 1); // Start the progress bar with 1 instead of 0
