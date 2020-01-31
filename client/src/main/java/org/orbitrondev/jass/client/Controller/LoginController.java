@@ -3,16 +3,11 @@ package org.orbitrondev.jass.client.Controller;
 import javafx.application.Platform;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
-import javafx.stage.Stage;
 import org.orbitrondev.jass.client.Entity.LoginEntity;
-import org.orbitrondev.jass.client.Model.DashboardModel;
 import org.orbitrondev.jass.client.Model.LoginModel;
-import org.orbitrondev.jass.client.Model.RegisterModel;
 import org.orbitrondev.jass.client.Utils.BackendUtil;
-import org.orbitrondev.jass.client.View.DashboardView;
 import org.orbitrondev.jass.client.View.ViewHelper;
 import org.orbitrondev.jass.client.View.LoginView;
-import org.orbitrondev.jass.client.View.RegisterView;
 import org.orbitrondev.jass.lib.MVC.Controller;
 import org.orbitrondev.jass.lib.ServiceLocator.ServiceLocator;
 
@@ -89,34 +84,8 @@ public class LoginController extends Controller<LoginModel, LoginView> {
         });
     }
 
-    private void openRegisterWindow() {
-        Platform.runLater(() -> {
-            Stage appStage = new Stage();
-            RegisterModel model = new RegisterModel();
-            RegisterView newView = new RegisterView(appStage, model);
-            new RegisterController(model, newView);
-
-            view.stop();
-            view = null;
-            newView.start();
-        });
-    }
-
-    private void openDashboardWindow() {
-        Platform.runLater(() -> {
-            Stage appStage = new Stage();
-            DashboardModel model = new DashboardModel();
-            DashboardView newView = new DashboardView(appStage, model);
-            new DashboardController(model, newView);
-
-            view.stop();
-            view = null;
-            newView.start();
-        });
-    }
-
     public void clickOnRegister() {
-        openRegisterWindow();
+        ControllerHelper.switchToRegisterWindow(view);
     }
 
     public void clickOnLogin() {
@@ -139,7 +108,7 @@ public class LoginController extends Controller<LoginModel, LoginView> {
             }
 
             if (login.getToken() != null) {
-                openDashboardWindow();
+                ControllerHelper.switchToDashboardWindow(view);
             } else {
                 enableAll();
                 setErrorMessage("gui.login.loginFailed");

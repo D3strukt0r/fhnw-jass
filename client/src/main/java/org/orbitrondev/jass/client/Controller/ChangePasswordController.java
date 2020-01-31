@@ -3,13 +3,10 @@ package org.orbitrondev.jass.client.Controller;
 import javafx.application.Platform;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
-import javafx.stage.Stage;
 import org.orbitrondev.jass.client.Entity.LoginEntity;
 import org.orbitrondev.jass.client.Model.ChangePasswordModel;
-import org.orbitrondev.jass.client.Model.DashboardModel;
 import org.orbitrondev.jass.client.Utils.BackendUtil;
 import org.orbitrondev.jass.client.View.ChangePasswordView;
-import org.orbitrondev.jass.client.View.DashboardView;
 import org.orbitrondev.jass.client.View.ViewHelper;
 import org.orbitrondev.jass.lib.MVC.Controller;
 import org.orbitrondev.jass.lib.ServiceLocator.ServiceLocator;
@@ -96,19 +93,6 @@ public class ChangePasswordController extends Controller<ChangePasswordModel, Ch
         });
     }
 
-    private void openDashboardWindow() {
-        Platform.runLater(() -> {
-            Stage appStage = new Stage();
-            DashboardModel model = new DashboardModel();
-            DashboardView newView = new DashboardView(appStage, model);
-            new DashboardController(model, newView);
-
-            view.stop();
-            view = null;
-            newView.start();
-        });
-    }
-
     public void clickOnChange() {
         // Disable everything to prevent something while working on the data
         disableAll();
@@ -131,7 +115,7 @@ public class ChangePasswordController extends Controller<ChangePasswordModel, Ch
             if (passwordChanged) {
                 ServiceLocator.remove("login");
                 ServiceLocator.add(newLogin);
-                openDashboardWindow();
+                ControllerHelper.switchToDashboardWindow(view);
             } else {
                 enableAll();
                 setErrorMessage("gui.changePassword.changeFailed");
@@ -141,6 +125,6 @@ public class ChangePasswordController extends Controller<ChangePasswordModel, Ch
     }
 
     public void clickOnCancel() {
-        openDashboardWindow();
+        ControllerHelper.switchToDashboardWindow(view);
     }
 }

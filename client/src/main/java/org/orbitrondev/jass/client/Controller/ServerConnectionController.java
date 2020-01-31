@@ -3,18 +3,15 @@ package org.orbitrondev.jass.client.Controller;
 import javafx.application.Platform;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
-import javafx.stage.Stage;
 import javafx.util.StringConverter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.orbitrondev.jass.client.Entity.ServerEntity;
-import org.orbitrondev.jass.client.Model.LoginModel;
 import org.orbitrondev.jass.client.Model.ServerConnectionModel;
 import org.orbitrondev.jass.client.Utils.BackendUtil;
 import org.orbitrondev.jass.client.Utils.DatabaseUtil;
 import org.orbitrondev.jass.client.Utils.I18nUtil;
 import org.orbitrondev.jass.client.View.ViewHelper;
-import org.orbitrondev.jass.client.View.LoginView;
 import org.orbitrondev.jass.client.View.ServerConnectionView;
 import org.orbitrondev.jass.lib.MVC.Controller;
 import org.orbitrondev.jass.lib.ServiceLocator.ServiceLocator;
@@ -163,18 +160,7 @@ public class ServerConnectionController extends Controller<ServerConnectionModel
                         logger.error("Server connection not saved to database");
                     }
                 }
-
-                Platform.runLater(() -> {
-                    // Open login window and close server connection window
-                    Stage appStage = new Stage();
-                    LoginModel model = new LoginModel();
-                    LoginView newView = new LoginView(appStage, model);
-                    new LoginController(model, newView);
-
-                    view.stop();
-                    view = null;
-                    newView.start();
-                });
+                ControllerHelper.switchToLoginWindow(view);
             }
         };
         new Thread(connect).start();

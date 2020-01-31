@@ -5,11 +5,9 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import org.orbitrondev.jass.client.Entity.LoginEntity;
-import org.orbitrondev.jass.client.Model.DashboardModel;
 import org.orbitrondev.jass.client.Model.DeleteAccountModel;
 import org.orbitrondev.jass.client.Model.LoginModel;
 import org.orbitrondev.jass.client.Utils.BackendUtil;
-import org.orbitrondev.jass.client.View.DashboardView;
 import org.orbitrondev.jass.client.View.DeleteAccountView;
 import org.orbitrondev.jass.client.View.ViewHelper;
 import org.orbitrondev.jass.client.View.LoginView;
@@ -69,20 +67,6 @@ public class DeleteAccountController extends Controller<DeleteAccountModel, Dele
         });
     }
 
-    private void openDashboardWindow() {
-        Platform.runLater(() -> {
-            // Open dashboard window and close delete account window
-            Stage appStage = new Stage();
-            DashboardModel model = new DashboardModel();
-            DashboardView newView = new DashboardView(appStage, model);
-            new DashboardController(model, newView);
-
-            view.stop();
-            view = null;
-            newView.start();
-        });
-    }
-
     public void clickOnDelete() {
         // Disable everything to prevent something while working on the data
         disableAll();
@@ -133,6 +117,6 @@ public class DeleteAccountController extends Controller<DeleteAccountModel, Dele
     }
 
     public void clickOnCancel() {
-        openDashboardWindow();
+        ControllerHelper.switchToDashboardWindow(view);
     }
 }

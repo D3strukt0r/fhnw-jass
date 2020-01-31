@@ -3,15 +3,10 @@ package org.orbitrondev.jass.client.Controller;
 import javafx.application.Platform;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
-import javafx.stage.Stage;
 import org.orbitrondev.jass.client.Entity.LoginEntity;
-import org.orbitrondev.jass.client.Model.DashboardModel;
-import org.orbitrondev.jass.client.Model.LoginModel;
 import org.orbitrondev.jass.client.Model.RegisterModel;
 import org.orbitrondev.jass.client.Utils.BackendUtil;
-import org.orbitrondev.jass.client.View.DashboardView;
 import org.orbitrondev.jass.client.View.ViewHelper;
-import org.orbitrondev.jass.client.View.LoginView;
 import org.orbitrondev.jass.client.View.RegisterView;
 import org.orbitrondev.jass.lib.MVC.Controller;
 import org.orbitrondev.jass.lib.ServiceLocator.ServiceLocator;
@@ -98,32 +93,6 @@ public class RegisterController extends Controller<RegisterModel, RegisterView> 
         });
     }
 
-    private void openDashboardWindow() {
-        Platform.runLater(() -> {
-            Stage appStage = new Stage();
-            DashboardModel model = new DashboardModel();
-            DashboardView newView = new DashboardView(appStage, model);
-            new DashboardController(model, newView);
-
-            view.stop();
-            view = null;
-            newView.start();
-        });
-    }
-
-    private void openLoginWindow() {
-        Platform.runLater(() -> {
-            Stage appStage = new Stage();
-            LoginModel model = new LoginModel();
-            LoginView newView = new LoginView(appStage, model);
-            new LoginController(model, newView);
-
-            view.stop();
-            view = null;
-            newView.start();
-        });
-    }
-
     public void clickOnRegister() {
         // Disable everything to prevent something while working on the data
         disableAll();
@@ -144,7 +113,7 @@ public class RegisterController extends Controller<RegisterModel, RegisterView> 
 
             if (login.getToken() != null) {
                 ServiceLocator.add(login);
-                openDashboardWindow();
+                ControllerHelper.switchToDashboardWindow(view);
             } else {
                 enableAll();
                 setErrorMessage("gui.login.loginFailed");
@@ -174,6 +143,6 @@ public class RegisterController extends Controller<RegisterModel, RegisterView> 
     }
 
     public void clickOnLogin() {
-        openLoginWindow();
+        ControllerHelper.switchToLoginWindow(view);
     }
 }
