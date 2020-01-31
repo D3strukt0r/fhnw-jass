@@ -15,7 +15,6 @@ import java.security.Security;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
 
 /**
  * Backend utility class. Acts as an interface between the program and the server.
@@ -33,9 +32,6 @@ public class BackendUtil implements Service, Closeable {
     private OutputStreamWriter socketOut;
 
     private volatile ArrayList<String> lastMessage = new ArrayList<>();
-
-    private ArrayList<MessageTextEventListener> textListener = new ArrayList<>();
-    private ArrayList<MessageErrorEventListener> errorListener = new ArrayList<>();
 
     private volatile boolean stopResponseThread = false;
 
@@ -65,40 +61,17 @@ public class BackendUtil implements Service, Closeable {
      *
      * @since 0.0.1
      */
-    public BackendUtil(String ipAddress, int port, boolean secure) {
-        try {
-            if (secure) {
-                createSecureSocket(ipAddress, port);
-            } else {
-                createStandardSocket(ipAddress, port);
-            }
-
-            socketIn = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            socketOut = new OutputStreamWriter(socket.getOutputStream());
-
-            createResponseThread();
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+    public BackendUtil(String ipAddress, int port, boolean secure) throws IOException {
+        if (secure) {
+            createSecureSocket(ipAddress, port);
+        } else {
+            createStandardSocket(ipAddress, port);
         }
-    }
 
-    /**
-     * @param listener An MessageErrorEventListener object
-     *
-     * @since 0.0.2
-     */
-    public void addMessageTextListener(MessageTextEventListener listener) {
-        this.textListener.add(listener);
-    }
+        socketIn = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+        socketOut = new OutputStreamWriter(socket.getOutputStream());
 
-    /**
-     * @param listener An MessageErrorEventListener object
-     *
-     * @since 0.0.2
-     */
-    public void addMessageErrorListener(MessageErrorEventListener listener) {
-        this.errorListener.add(listener);
+        createResponseThread();
     }
 
     /**
@@ -120,17 +93,6 @@ public class BackendUtil implements Service, Closeable {
                     if (msg != null && msg.length() > 0) {
                         msgSplit = msg.split("\\|");
                         lastMessage.addAll(Arrays.asList(msgSplit));
-
-                        switch (lastMessage.get(0)) {
-                            case "MessageText":
-                                receivedMessageText(lastMessage.get(1), lastMessage.get(2), lastMessage.get(3));
-                                lastMessage.clear();
-                                break;
-                            case "MessageError":
-                                receivedMessageError(lastMessage.get(1));
-                                lastMessage.clear();
-                                break;
-                        }
                     }
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -149,125 +111,15 @@ public class BackendUtil implements Service, Closeable {
     }
 
     /**
-     * Handle an incoming "MessageError" response.
-     *
-     * @param errorMessage A string containing the error message
-     *
-     * @since 0.0.2
-     */
-    private void receivedMessageError(String errorMessage) {
-        if (errorListener != null) {
-            for (MessageErrorEventListener listener : errorListener) {
-                listener.onMessageErrorEvent(errorMessage);
-            }
-        }
-    }
-
-    /**
-     * Handle an incoming "MessageText" response, for when someone posts something.
-     *
-     * @param username   A string containing the name of the user who posted.
-     * @param targetChat A string containing the chat where the message was sent.
-     * @param text       A string containing the message.
-     *
-     * @since 0.0.1
-     */
-    private void receivedMessageText(String username, String targetChat, String text) {
-        logger.debug("Handling incoming message...");
-        DatabaseUtil db = (DatabaseUtil) ServiceLocator.get("db");
-        LoginEntity login = (LoginEntity) ServiceLocator.get("login");
-        UserModel loginUser;
-
-        UserModel fromUser = null;
-        ChatModel toUserOrGroup = null;
-        MessageModel message = null;
-        try {
-            // Get the user with the username, otherwise cache him in the local db
-            fromUser = db.getUserOrCreate(username);
-
-            // Figure out the target
-            loginUser = db.getUserOrCreate(login.getUsername());
-            if (loginUser.getUsername().equals(targetChat)) {
-                logger.debug("Incoming message is going directly to us...");
-                // If the user sent us a message directly...
-                toUserOrGroup = db.getGroupChatOrCreate(loginUser.getUsername() + "_" + fromUser.getUsername(), ChatType.DirectChat);
-
-                // According to the function above, we could have just started this conversation, so we need to figure
-                // that out (by checking, whether the users have already been added.
-                boolean fromUserAdded = false;
-                boolean toUserAdded = false;
-
-                for (UserModel userInGroup : toUserOrGroup.getMembers()) {
-                    if (login.getUsername().equals(userInGroup.getUsername())) {
-                        toUserAdded = true;
-                    }
-                    if (fromUser.getUsername().equals(userInGroup.getUsername())) {
-                        fromUserAdded = true;
-                    }
-                }
-
-                // Add the currently logged in user to the direct chat.
-                if (!toUserAdded) {
-                    toUserOrGroup.addMember(loginUser);
-                    db.getChatDao().update(toUserOrGroup);
-                }
-                // Add the other guy to the direct chat
-                if (!fromUserAdded) {
-                    toUserOrGroup.addMember(fromUser);
-                    db.getChatDao().update(toUserOrGroup);
-                }
-            } else {
-                logger.debug("Incoming message is a group chat...");
-                // Check whether it is a known group chat (public or private)
-                ChatModel result = db.getChatDao().queryBuilder().where().eq("name", targetChat).queryForFirst();
-                if (result != null) {
-                    toUserOrGroup = result;
-                } else {
-                    // TODO: We can't resend a command because we are already running on the listener's thread (Solution
-                    //  for now: Run ListChatrooms at the beginning of the program
-                    // Check whether it is a public group chat (by asking the server again)
-                    ArrayList<String> groupChats = sendListChatrooms(login.getToken());
-                    for (String groupChat : groupChats) {
-                        System.out.println(groupChat + " == " + targetChat);
-                        if (groupChat.equals(targetChat)) {
-                            toUserOrGroup = db.getGroupChatOrCreate(targetChat, ChatType.PublicGroupChat);
-                            break;
-                        }
-                    }
-                }
-            }
-            if (toUserOrGroup == null) {
-                // TODO: Throw unknown target (Must be a private chat we don't know about yet)
-            }
-
-            // Create the message inside the db
-            message = new MessageModel(text, toUserOrGroup, new Date(), fromUser);
-            db.getMessageDao().create(message);
-        } catch (SQLException | IOException e) {
-            e.printStackTrace();
-        }
-
-        // After the message was saved, send it to whichever class handles the event.
-        if (textListener != null) {
-            for (MessageTextEventListener listener : textListener) {
-                listener.onMessageTextEvent(fromUser, toUserOrGroup, message);
-            }
-        }
-    }
-
-    /**
      * Wait until the a "Result" response arrives from the server.
      *
      * @since 0.0.1
      */
     private void waitForResultResponse() {
-        // TODO: This is somehow the reason the tests fail
         while (lastMessage.size() == 0 || !lastMessage.get(0).equals("Result")) {
             try {
                 Thread.sleep(100);
-            } catch (InterruptedException e) {
-                // We don't care
-            }
+            } catch (InterruptedException e) { /* Ignore */ }
         }
     }
 
@@ -329,7 +181,7 @@ public class BackendUtil implements Service, Closeable {
      * @throws IOException If an I/O error occurs.
      * @since 0.0.1
      */
-    public String sendLogin(String username, String password) throws IOException {
+    public String sendLogin(String username, String password) throws IOException, SQLException {
         sendCommand(new String[]{"Login", username, password});
 
         waitForResultResponse();
@@ -338,12 +190,10 @@ public class BackendUtil implements Service, Closeable {
             LoginEntity login = new LoginEntity(username, password, token);
             ServiceLocator.remove("login");
             ServiceLocator.add(login);
-            try {
-                DatabaseUtil db = (DatabaseUtil) ServiceLocator.get("db");
-                db.getLoginDao().create(login);
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+
+            DatabaseUtil db = (DatabaseUtil) ServiceLocator.get("db");
+            db.getLoginDao().create(login);
+
             lastMessage.clear();
             return token;
         }
@@ -361,7 +211,7 @@ public class BackendUtil implements Service, Closeable {
      * @throws IOException If an I/O error occurs.
      * @since 0.0.2
      */
-    public LoginEntity sendLogin(LoginEntity login) throws IOException {
+    public LoginEntity sendLogin(LoginEntity login) throws IOException, SQLException {
         sendCommand(new String[]{"Login", login.getUsername(), login.getPassword()});
 
         waitForResultResponse();
@@ -369,12 +219,9 @@ public class BackendUtil implements Service, Closeable {
             login.setToken(lastMessage.get(2));
             ServiceLocator.remove("login");
             ServiceLocator.add(login);
-            try {
-                DatabaseUtil db = (DatabaseUtil) ServiceLocator.get("db");
-                db.getLoginDao().create(login);
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+            DatabaseUtil db = (DatabaseUtil) ServiceLocator.get("db");
+            db.getLoginDao().create(login);
+
             lastMessage.clear();
             return login;
         }
@@ -461,288 +308,6 @@ public class BackendUtil implements Service, Closeable {
     }
 
     /**
-     * Creates a new chatroom, where people can send messages. After creation, users still have to added (also the
-     * currently logged in user). Rooms can be made private by setting the third variable false.
-     *
-     * @param token    A string containing a token given by the server.
-     * @param name     A string containing the name for the room to be created.
-     * @param isPublic A boolean defining whether the room should be public (true) or private (false)
-     *
-     * @return "true" by default, "false" when name is already taken (by a user or other chatroom), or simply invalid.
-     *
-     * @throws IOException If an I/O error occurs.
-     * @since 0.0.1
-     */
-    public boolean sendCreateChatroom(String token, String name, boolean isPublic) throws IOException {
-        sendCommand(new String[]{"CreateChatroom", token, name, (isPublic ? "true" : "false")});
-
-        waitForResultResponse();
-        boolean result = Boolean.parseBoolean(lastMessage.get(1));
-        if (result) {
-            try {
-                DatabaseUtil db = (DatabaseUtil) ServiceLocator.get("db");
-                db.getGroupChatOrCreate(name, isPublic ? ChatType.PublicGroupChat : ChatType.PrivateGroupChat);
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-        lastMessage.clear();
-        return result;
-    }
-
-    /**
-     * Adds a given user to a given chatroom. For public chatroom, people can add themselves. For private chatrooms, the
-     * creator of it has to add them.
-     *
-     * @param token    A string containing a token given by the server.
-     * @param chatroom A string containing the name for the room to be created.
-     * @param username A string containing the name of the user to be added.
-     *
-     * @return "true" by default, "false" if not added
-     *
-     * @throws IOException If an I/O error occurs.
-     * @since 0.0.1
-     */
-    public boolean sendJoinChatroom(String token, String chatroom, String username) throws IOException {
-        sendCommand(new String[]{"JoinChatroom", token, chatroom, username});
-
-        waitForResultResponse();
-        boolean result = Boolean.parseBoolean(lastMessage.get(1));
-        if (result) {
-            try {
-                UserModel user = serviceLocator.getDb().getUserOrCreate(username);
-                // TODO: We can't really know the chat type, so we have to guess it's public
-                ChatModel chat = serviceLocator.getDb().getGroupChatOrCreate(chatroom, ChatType.PublicGroupChat);
-                chat.addMember(user);
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-        lastMessage.clear();
-        return result;
-    }
-
-    /**
-     * Adds a given user to a given chatroom. For public chatroom, people can add themselves. For private chatrooms, the
-     * creator of it has to add them.
-     *
-     * @param token    A string containing a token given by the server.
-     * @param chatroom A string containing the name of the room.
-     * @param user     A UserModel object containing at least the name of the user to be added.
-     *
-     * @return "true" by default, "false" if not added
-     *
-     * @throws IOException If an I/O error occurs.
-     * @since 0.0.1
-     */
-    public boolean sendJoinChatroom(String token, String chatroom, UserModel user) throws IOException {
-        return sendJoinChatroom(token, chatroom, user.getUsername());
-    }
-
-    /**
-     * Removes a user from a given chatroom.
-     *
-     * @param token    A string containing a token given by the server.
-     * @param chatroom A string containing the name of the room.
-     * @param username A string containing the name of the user to be removed.
-     *
-     * @return "true" when removed successfully, "false" if not. (Hint) Logged in user can always remove himself, admin
-     * can remove anyone.
-     *
-     * @throws IOException If an I/O error occurs.
-     * @since 0.0.1
-     */
-    public boolean sendLeaveChatroom(String token, String chatroom, String username) throws IOException {
-        sendCommand(new String[]{"LeaveChatroom", token, chatroom, username});
-
-        waitForResultResponse();
-        boolean result = Boolean.parseBoolean(lastMessage.get(1));
-        if (result) {
-            try {
-                UserModel user = serviceLocator.getDb().getUserOrCreate(username);
-                // TODO: We can't really know the chat type, so we have to guess it's public
-                ChatModel chat = serviceLocator.getDb().getGroupChatOrCreate(chatroom, ChatType.PublicGroupChat);
-                chat.removeMember(user);
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-        lastMessage.clear();
-        return result;
-    }
-
-    /**
-     * Removes a user from a given chatroom.
-     *
-     * @param token    A string containing a token given by the server.
-     * @param chatroom A string containing the name of the room.
-     * @param user     A UserModel object containing at least the name of the user to be added.
-     *
-     * @return "true" when removed successfully, "false" if not. (Hint) Logged in user can always remove himself, admin
-     * can remove anyone.
-     *
-     * @throws IOException If an I/O error occurs.
-     * @since 0.0.1
-     */
-    public boolean sendLeaveChatroom(String token, String chatroom, UserModel user) throws IOException {
-        return sendLeaveChatroom(token, chatroom, user.getUsername());
-    }
-
-    /**
-     * @param token    A string containing a token given by the server.
-     * @param chatroom A string containing the name of the room.
-     *
-     * @return "true" if removed successfully, "false" if not. (Hint) Only the creator can delete a room.
-     *
-     * @throws IOException If an I/O error occurs.
-     * @since 0.0.1
-     */
-    public boolean sendDeleteChatroom(String token, String chatroom) throws IOException {
-        sendCommand(new String[]{"DeleteChatroom", token, chatroom});
-
-        waitForResultResponse();
-        boolean result = Boolean.parseBoolean(lastMessage.get(1));
-        if (result) {
-            try {
-                // TODO: We can't really know the chat type, so we have to guess it's public
-                ChatModel chat = serviceLocator.getDb().getGroupChatOrCreate(chatroom, ChatType.PublicGroupChat);
-                DatabaseUtil db = (DatabaseUtil) ServiceLocator.get("db");
-                db.getChatDao().delete(chat);
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-        lastMessage.clear();
-        return result;
-    }
-
-    /**
-     * Returns a list of all public chatrooms.
-     *
-     * @param token A string containing a token given by the server.
-     *
-     * @return "ArrayList" if 0 or more chatrooms available, "null" if failed
-     *
-     * @throws IOException If an I/O error occurs.
-     * @since 0.0.1
-     */
-    public ArrayList<String> sendListChatrooms(String token) throws IOException {
-        sendCommand(new String[]{"ListChatrooms", token});
-
-        waitForResultResponse();
-        if (lastMessage.get(1).equals("true")) {
-            lastMessage.remove("Result");
-            lastMessage.remove("true");
-            ArrayList<String> groupChatList = new ArrayList<>(lastMessage);
-
-            // Save the list to the DB
-            DatabaseUtil db = (DatabaseUtil) ServiceLocator.get("db");
-            groupChatList.forEach(s -> {
-                try {
-                    db.getGroupChatOrCreate(s, ChatType.PublicGroupChat);
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            });
-
-            lastMessage.clear();
-            return groupChatList;
-        }
-        lastMessage.clear();
-        return null;
-    }
-
-    /**
-     * Sends a ping to the server
-     *
-     * @return "true" if succeeds (basically always), "false" if not
-     *
-     * @throws IOException If an I/O error occurs.
-     * @since 0.0.1
-     */
-    public boolean sendPing() throws IOException {
-        sendCommand(new String[]{"Ping"});
-
-        waitForResultResponse();
-        boolean result = Boolean.parseBoolean(lastMessage.get(1));
-        lastMessage.clear();
-        return result;
-    }
-
-    /**
-     * @param token A string containing a token given by the server.
-     *
-     * @return "true" if succeeds and token is valid, "false" if one or both cases are not the case.
-     *
-     * @throws IOException If an I/O error occurs.
-     * @since 0.0.1
-     */
-    public boolean sendPing(String token) throws IOException {
-        sendCommand(new String[]{"Ping", token});
-
-        waitForResultResponse();
-        boolean result = Boolean.parseBoolean(lastMessage.get(1));
-        lastMessage.clear();
-        return result;
-    }
-
-    /**
-     * Sends a message to a given user or chatroom
-     *
-     * @param token   A string containing a token given by the server.
-     * @param target  A string containing the name of a chatroom or a user.
-     * @param message A string containing the message (max length of 1024 characters).
-     *
-     * @return Object of type MessageModel if message was sent, "null" if 1) target user not online 2) current logged in
-     * user is not member of the chatroom 3) if he message is over 1024 characters
-     *
-     * @throws IOException If an I/O error occurs.
-     * @since 0.0.1
-     */
-    public MessageModel sendSendMessage(String token, String target, String message) throws IOException {
-        if (message.length() > 1024) {
-            return null;
-        }
-        sendCommand(new String[]{"SendMessage", token, target, message});
-
-        waitForResultResponse();
-        boolean result = Boolean.parseBoolean(lastMessage.get(1));
-        MessageModel messageObject = null;
-        if (result) {
-            try {
-                DatabaseUtil db = (DatabaseUtil) ServiceLocator.get("db");
-                LoginEntity login = (LoginEntity) ServiceLocator.get("login");
-                ChatModel chat = null;
-                List<UserModel> results = db.getUserDao().queryBuilder().where().eq("username", target).query();
-                if (results.size() != 0) {
-                    // It's a message which is between two users
-                    chat = db.getGroupChatOrCreate(login.getUsername() + "_" + target, ChatType.DirectChat);
-                } else {
-                    List<ChatModel> results2 = db.getChatDao().queryBuilder().where().eq("name", target).query();
-                    if (results.size() != 0) {
-                        // It's a message which is inside a known group chat (public, private)
-                        chat = results2.get(0);
-                    } else {
-                        // It's a message for a group we don't know yet
-                        ArrayList<String> groupList = sendListChatrooms(login.getToken());
-                        for (String groupInList : groupList) {
-                            if (groupInList.equals(target)) {
-                                chat = db.getGroupChatOrCreate(groupInList, ChatType.PublicGroupChat);
-                            }
-                        }
-                    }
-                }
-                messageObject = new MessageModel(message, chat, new Date(), db.getUserOrCreate(login.getUsername()));
-                db.getMessageDao().create(messageObject);
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-        lastMessage.clear();
-        return messageObject;
-    }
-
-    /**
      * Checks whether the user is currently logged in.
      *
      * @param token    A string containing a token given by the server.
@@ -758,80 +323,8 @@ public class BackendUtil implements Service, Closeable {
 
         waitForResultResponse();
         boolean result = Boolean.parseBoolean(lastMessage.get(1));
-        try {
-            DatabaseUtil db = (DatabaseUtil) ServiceLocator.get("db");
-            UserModel user = db.getUserOrCreate(username);
-            if (result) {
-                user.setOnline();
-            } else {
-                user.setOffline();
-            }
-            db.getUserDao().update(user);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
         lastMessage.clear();
         return result;
-    }
-
-    /**
-     * Checks whether the user is currently logged in.
-     *
-     * @param token A string containing a token given by the server.
-     * @param user  A UserModel object containing at least the name of the user.
-     *
-     * @return "true" if user is currently logged in, "false" if not.
-     *
-     * @throws IOException If an I/O error occurs.
-     * @since 0.0.1
-     */
-    public boolean sendUserOnline(String token, UserModel user) throws IOException {
-        return sendUserOnline(token, user.getUsername());
-    }
-
-    /**
-     * Get a list of all members inside a chatroom.
-     *
-     * @param token    A string containing a token given by the server.
-     * @param chatroom A string containing the name of the chatroom.
-     *
-     * @return "ArrayList" of 0 or more users inside the chat, "null" if failed or currently logged in user is not a
-     * member
-     *
-     * @throws IOException If an I/O error occurs.
-     * @since 0.0.1
-     */
-    public ArrayList<String> sendListChatroomUsers(String token, String chatroom) throws IOException {
-        sendCommand(new String[]{"ListChatroomUsers", token, chatroom});
-
-        waitForResultResponse();
-        if (lastMessage.get(1).equals("true")) {
-            lastMessage.remove("Result");
-            lastMessage.remove("true");
-            ArrayList<String> usersList = new ArrayList<>(lastMessage);
-            if (usersList.size() > 0) {
-                try {
-                    // TODO: We can't really know the chat type, so we have to guess it's public
-                    ChatModel chat = serviceLocator.getDb().getGroupChatOrCreate(chatroom, ChatType.PublicGroupChat);
-                    usersList.forEach(s -> {
-                        try {
-                            UserModel user = serviceLocator.getDb().getUserOrCreate(s);
-                            // TODO: Add him only, if he isn't yet!
-                            chat.addMember(user);
-                        } catch (SQLException e) {
-                            e.printStackTrace();
-                        }
-                    });
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
-
-            lastMessage.clear();
-            return usersList;
-        }
-        lastMessage.clear();
-        return null;
     }
 
     /**
