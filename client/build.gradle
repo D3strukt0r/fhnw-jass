@@ -9,6 +9,15 @@ application {
 
 dependencies {
     implementation project(':lib')
+
+    implementation group: 'com.jfoenix', name: 'jfoenix', version: '8.0.8'
+    implementation group: 'com.github.jiconfont', name: 'jiconfont-javafx', version: '1.0.0'
+    implementation group: 'com.github.jiconfont', name: 'jiconfont-google_material_design_icons', version: '2.2.0.2'
+
+    implementation group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.12.1'
+    implementation group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.12.1'
+    implementation group: 'org.apache.logging.log4j', name: 'log4j-slf4j-impl', version: '2.12.1'
+
     testImplementation group: 'junit', name: 'junit', version: '4.12'
 }
 
