@@ -183,24 +183,6 @@ public class BackendUtil implements Service, Closeable {
     }
 
     /**
-     * Delete the currently logged in user from the server. After successful deletion, token becomes invalid
-     *
-     * @param token A string containing a token given by the server.
-     *
-     * @return "true" by default, "false" when token is invalid.
-     *
-     * @since 0.0.1
-     */
-    public boolean sendDeleteLogin(String token) {
-        sendCommand(new String[]{"DeleteLogin", token});
-
-        waitForResultResponse();
-        boolean result = Boolean.parseBoolean(lastMessage.get(1));
-        lastMessage.clear();
-        return result;
-    }
-
-    /**
      * Checks whether the user is currently logged in.
      *
      * @param token    A string containing a token given by the server.
