@@ -4,17 +4,18 @@ import com.sun.net.ssl.internal.ssl.Provider;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.orbitrondev.jass.client.Entity.LoginEntity;
+import org.orbitrondev.jass.client.Message.Message;
+import org.orbitrondev.jass.lib.Message.MessageData;
 import org.orbitrondev.jass.lib.ServiceLocator.Service;
 import org.orbitrondev.jass.lib.ServiceLocator.ServiceLocator;
 
 import javax.net.ssl.SSLSocket;
 import javax.net.ssl.SSLSocketFactory;
 import java.io.*;
+import java.lang.reflect.Constructor;
 import java.net.Socket;
 import java.security.Security;
-import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 /**
  * Backend utility class. Acts as an interface between the program and the server.
@@ -27,13 +28,9 @@ public class BackendUtil implements Service, Closeable {
     private static final Logger logger = LogManager.getLogger(BackendUtil.class);
 
     private Socket socket;
+    private volatile boolean serverReachable = true;
 
-    private BufferedReader socketIn;
-    private OutputStreamWriter socketOut;
-
-    private volatile ArrayList<String> lastMessage = new ArrayList<>();
-
-    private volatile boolean stopResponseThread = false;
+    private ArrayList<Message> lastMessages = new ArrayList<>();
 
     /**
      * Creates a Socket (insecure) to the backend.
@@ -44,12 +41,7 @@ public class BackendUtil implements Service, Closeable {
      * @since 0.0.1
      */
     public BackendUtil(String ipAddress, int port) throws IOException {
-        createStandardSocket(ipAddress, port);
-
-        socketIn = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-        socketOut = new OutputStreamWriter(socket.getOutputStream());
-
-        createResponseThread();
+        this(ipAddress, port, false);
     }
 
     /**
@@ -68,9 +60,6 @@ public class BackendUtil implements Service, Closeable {
             createStandardSocket(ipAddress, port);
         }
 
-        socketIn = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-        socketOut = new OutputStreamWriter(socket.getOutputStream());
-
         createResponseThread();
     }
 
@@ -82,71 +71,74 @@ public class BackendUtil implements Service, Closeable {
     private void createResponseThread() {
         // Create thread to read incoming messages
         Runnable r = () -> {
-            while (true) {
-                String msg;
-                String[] msgSplit;
-
+            while (serverReachable) {
+                Message msg = null;
                 try {
-                    msg = socketIn.readLine();
-                    logger.info("Response received: " + msg);
+                    BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+                    String msgText = in.readLine(); // Will wait here for complete line
+                    if (msgText == null) break; // In case the server closes the socket
 
-                    if (msg != null && msg.length() > 0) {
-                        msgSplit = msg.split("\\|");
-                        lastMessage.addAll(Arrays.asList(msgSplit));
+                    logger.info("Receiving message: " + msgText);
+
+                    // Break message into individual parts, and remove extra spaces
+                    MessageData msgData = MessageData.unserialize(msgText);
+
+                    // Create a message object of the correct class, using reflection
+                    String messageClassName = Message.class.getPackage().getName() + "." + msgData.getMessageType();
+                    try {
+                        Class<?> messageClass = Class.forName(messageClassName);
+                        Constructor<?> constructor = messageClass.getConstructor(MessageData.class);
+                        msg = (Message) constructor.newInstance(msgData);
+                        logger.info("Received message of type " + msgData.getMessageType());
+                    } catch (Exception e) {
+                        logger.error("Received invalid message of type " + msgData.getMessageType());
                     }
                 } catch (IOException e) {
-                    e.printStackTrace();
-                    break;
+                    logger.error(e.toString());
                 }
-                if (msg == null) break; // In case the server closes the socket
-                if (stopResponseThread) break;
+
+                lastMessages.add(msg);
             }
         };
         Thread t = new Thread(r);
         t.start();
     }
 
-    public void stopResponseThread() {
-        stopResponseThread = true;
-    }
-
     /**
-     * Wait until the a "Result" response arrives from the server.
+     * Wait until the corresponding "Result" response arrives from the server.
      *
      * @since 0.0.1
      */
-    private void waitForResultResponse() {
-        while (lastMessage.size() == 0 || !lastMessage.get(0).equals("Result")) {
+    public Message waitForResultResponse(int id) {
+        while (true) {
+            if (lastMessages.size() != 0) {
+                for (Message m : lastMessages) {
+                    if (m.getId() == id) {
+                        lastMessages.remove(m);
+                        return m;
+                    }
+                }
+            }
             try {
                 Thread.sleep(100);
             } catch (InterruptedException e) { /* Ignore */ }
         }
     }
 
-    /**
-     * Sends a command to the server.
-     *
-     * @param command A string containing the whole string which is sent to the server.
-     *
-     * @throws IOException If an I/O error occurs.
-     * @since 0.0.1
-     */
-    public void sendCommand(String command) throws IOException {
-        logger.info("Command sent: " + command);
-        socketOut.write(command + "\n");
-        socketOut.flush();
-    }
 
     /**
-     * Builds the command from the parts and send the command to the server.
-     *
-     * @param commandParts An array of strings containing all the command parts.
-     *
-     * @throws IOException If an I/O error occurs.
-     * @since 0.0.1
+     * Send a message to this server. In case of an exception, log the client out.
      */
-    public void sendCommand(String[] commandParts) throws IOException {
-        sendCommand(String.join("|", commandParts));
+    public void send(Message msg) {
+        try {
+            OutputStreamWriter out = new OutputStreamWriter(socket.getOutputStream());
+            logger.info("Sending message: " + this.toString());
+            out.write(msg.toString() + "\n"); // This will send the serialized MessageData object
+            out.flush();
+        } catch (IOException e) {
+            logger.info("Server unreachable; logged out");
+            serverReachable = false;
+        }
     }
 
     /**
@@ -158,75 +150,15 @@ public class BackendUtil implements Service, Closeable {
      * @return "true" when user was created. "false" when name already taken (by a user or chatroom) or is simply
      * invalid.
      *
-     * @throws IOException If an I/O error occurs.
      * @since 0.0.1
      */
-    public boolean sendCreateLogin(String username, String password) throws IOException {
+    public boolean sendCreateLogin(String username, String password) {
         sendCommand(new String[]{"CreateLogin", username, password});
 
         waitForResultResponse();
         boolean result = Boolean.parseBoolean(lastMessage.get(1));
         lastMessage.clear();
         return result;
-    }
-
-    /**
-     * Login to the server.
-     *
-     * @param username A string containing the name of the user.
-     * @param password A string containing the password of the user.
-     *
-     * @return A string containing the token when logged in, "null" when username/password to match existing user.
-     *
-     * @throws IOException If an I/O error occurs.
-     * @since 0.0.1
-     */
-    public String sendLogin(String username, String password) throws IOException, SQLException {
-        sendCommand(new String[]{"Login", username, password});
-
-        waitForResultResponse();
-        if (lastMessage.get(1).equals("true")) {
-            String token = lastMessage.get(2);
-            LoginEntity login = new LoginEntity(username, password, token);
-            ServiceLocator.remove("login");
-            ServiceLocator.add(login);
-
-            DatabaseUtil db = (DatabaseUtil) ServiceLocator.get("db");
-            db.getLoginDao().create(login);
-
-            lastMessage.clear();
-            return token;
-        }
-        lastMessage.clear();
-        return null;
-    }
-
-    /**
-     * Login to the server.
-     *
-     * @param login An LoginModel object containing the username and password.
-     *
-     * @return An object containing the user when logged in, "null" when username/password to match existing user.
-     *
-     * @throws IOException If an I/O error occurs.
-     * @since 0.0.2
-     */
-    public LoginEntity sendLogin(LoginEntity login) throws IOException, SQLException {
-        sendCommand(new String[]{"Login", login.getUsername(), login.getPassword()});
-
-        waitForResultResponse();
-        if (lastMessage.get(1).equals("true")) {
-            login.setToken(lastMessage.get(2));
-            ServiceLocator.remove("login");
-            ServiceLocator.add(login);
-            DatabaseUtil db = (DatabaseUtil) ServiceLocator.get("db");
-            db.getLoginDao().create(login);
-
-            lastMessage.clear();
-            return login;
-        }
-        lastMessage.clear();
-        return null;
     }
 
     /**
@@ -259,10 +191,9 @@ public class BackendUtil implements Service, Closeable {
      *
      * @return "true" by default, "false" when the token is invalid.
      *
-     * @throws IOException If an I/O error occurs.
      * @since 0.0.1
      */
-    public boolean sendChangePassword(String token, String newPassword) throws IOException {
+    public boolean sendChangePassword(String token, String newPassword) {
         sendCommand(new String[]{"ChangePassword", token, newPassword});
 
         waitForResultResponse();
@@ -278,10 +209,9 @@ public class BackendUtil implements Service, Closeable {
      *
      * @return "true" by default, "false" when token is invalid.
      *
-     * @throws IOException If an I/O error occurs.
      * @since 0.0.1
      */
-    public boolean sendDeleteLogin(String token) throws IOException {
+    public boolean sendDeleteLogin(String token) {
         sendCommand(new String[]{"DeleteLogin", token});
 
         waitForResultResponse();
@@ -295,10 +225,9 @@ public class BackendUtil implements Service, Closeable {
      *
      * @return "true" by default. Impossible to fail.
      *
-     * @throws IOException If an I/O error occurs.
      * @since 0.0.1
      */
-    public boolean sendLogout() throws IOException {
+    public boolean sendLogout() {
         sendCommand(new String[]{"Logout"});
 
         waitForResultResponse();
@@ -315,10 +244,9 @@ public class BackendUtil implements Service, Closeable {
      *
      * @return "true" if user is currently logged in, "false" if not.
      *
-     * @throws IOException If an I/O error occurs.
      * @since 0.0.1
      */
-    public boolean sendUserOnline(String token, String username) throws IOException {
+    public boolean sendUserOnline(String token, String username) {
         sendCommand(new String[]{"UserOnline", token, username});
 
         waitForResultResponse();

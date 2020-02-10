@@ -2,6 +2,7 @@ package org.orbitrondev.jass.server;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.orbitrondev.jass.lib.Message.MessageData;
 import org.orbitrondev.jass.server.Entity.User;
 import org.orbitrondev.jass.server.Message.Message;
 import org.orbitrondev.jass.server.Message.MessageError;
@@ -45,13 +46,10 @@ public class Client {
                         String msgText = in.readLine(); // Will wait here for complete line
                         logger.info("Receiving message: " + msgText);
 
-                        // Break message into individual parts, and remove extra spaces
-                        String[] parts = msgText.split("\\|");
-                        for (int i = 0; i < parts.length; i++) {
-                            parts[i] = parts[i].trim();
-                        }
+                        // Convert JSON string into a workable object
+                        MessageData msgData = MessageData.unserialize(msgText);
 
-                        // Create a message object of the correct class, using reflection
+                        // Create a server message object of the correct class, using reflection
                         //
                         // This would be more understandable - but a *lot* longer - if we used
                         // a series of "if" statements:
@@ -60,14 +58,14 @@ public class Client {
                         // else if (parts[0].equals("Logout") msg = new Logout(parts);
                         // else if ...
                         // else ...
-                        String messageClassName = Message.class.getPackage().getName() + "." + parts[0];
+                        String messageClassName = Message.class.getPackage().getName() + "." + msgData.getMessageType();
                         try {
                             Class<?> messageClass = Class.forName(messageClassName);
-                            Constructor<?> constructor = messageClass.getConstructor(String[].class);
-                            msg = (Message) constructor.newInstance(new Object[] { parts });
-                            logger.info("Received message of type " + parts[0]);
+                            Constructor<?> constructor = messageClass.getConstructor(MessageData.class);
+                            msg = (Message) constructor.newInstance(msgData);
+                            logger.info("Received message of type " + msgData.getMessageType());
                         } catch (Exception e) {
-                            logger.error("Received invalid message of type " + parts[0]);
+                            logger.error("Received invalid message of type " + msgData.getMessageType());
                         }
                     } catch (IOException e) {
                         logger.error(e.toString());
@@ -101,7 +99,7 @@ public class Client {
         try {
             OutputStreamWriter out = new OutputStreamWriter(socket.getOutputStream());
             logger.info("Sending message: " + this.toString());
-            out.write(msg.toString() + "\n");
+            out.write(msg.toString() + "\n"); // This will send the serialized MessageData object
             out.flush();
         } catch (IOException e) {
             logger.info("Client " + getUsername() + " unreachable; logged out");
