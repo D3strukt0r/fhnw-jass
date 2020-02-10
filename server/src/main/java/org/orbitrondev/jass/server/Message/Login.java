@@ -9,36 +9,35 @@ import org.orbitrondev.jass.server.Entity.User;
 import org.orbitrondev.jass.server.Entity.UserRepository;
 
 /**
- * Login to an existing account. If successful, return an authentication token
- * to the client.
+ * Login to an existing account. If successful, return an authentication token to the client.
  */
 public class Login extends Message {
     private LoginData data;
 
-	public Login(MessageData rawData) {
-		super(rawData);
-		data = (LoginData) rawData;
-	}
+    public Login(MessageData rawData) {
+        super(rawData);
+        data = (LoginData) rawData;
+    }
 
-	@Override
-	public void process(Client client) {
-		Message reply;
-		// Find existing login matching the username
+    @Override
+    public void process(Client client) {
+        Message reply;
+        // Find existing login matching the username
         User user = null;
         if (UserRepository.usernameExists(data.getUsername())) {
             user = UserRepository.getByUsername(data.getUsername());
         }
-		if (user != null && user.checkPassword(data.getPassword())) {
-			client.setUser(user);
-			String token = User.createToken();
-			client.setToken(token);
+        if (user != null && user.checkPassword(data.getPassword())) {
+            client.setUser(user);
+            String token = User.createToken();
+            client.setToken(token);
 
-			JSONObject resultData = new JSONObject();
-			resultData.put("token", token);
-			reply = new Result(new ResultData(true, resultData));
-		} else {
-			reply = new Result(new ResultData(false));
-		}
-		client.send(reply);
-	}
+            JSONObject resultData = new JSONObject();
+            resultData.put("token", token);
+            reply = new Result(new ResultData(true, resultData));
+        } else {
+            reply = new Result(new ResultData(false));
+        }
+        client.send(reply);
+    }
 }
