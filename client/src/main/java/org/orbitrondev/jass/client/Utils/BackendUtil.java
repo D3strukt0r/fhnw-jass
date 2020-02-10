@@ -142,26 +142,6 @@ public class BackendUtil implements Service, Closeable {
     }
 
     /**
-     * Register a user on the the server.
-     *
-     * @param username A string containing the name of the user.
-     * @param password A string containing the password of the user.
-     *
-     * @return "true" when user was created. "false" when name already taken (by a user or chatroom) or is simply
-     * invalid.
-     *
-     * @since 0.0.1
-     */
-    public boolean sendCreateLogin(String username, String password) {
-        sendCommand(new String[]{"CreateLogin", username, password});
-
-        waitForResultResponse();
-        boolean result = Boolean.parseBoolean(lastMessage.get(1));
-        lastMessage.clear();
-        return result;
-    }
-
-    /**
      * @return "true" if logged in, otherwise "false"
      *
      * @since 0.0.2
