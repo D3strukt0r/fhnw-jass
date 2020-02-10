@@ -1,5 +1,9 @@
 package org.orbitrondev.jass.server.Message;
 
+import org.json.JSONObject;
+import org.orbitrondev.jass.lib.Message.LoginData;
+import org.orbitrondev.jass.lib.Message.MessageData;
+import org.orbitrondev.jass.lib.Message.ResultData;
 import org.orbitrondev.jass.server.Client;
 import org.orbitrondev.jass.server.Entity.User;
 import org.orbitrondev.jass.server.Entity.UserRepository;
@@ -9,13 +13,11 @@ import org.orbitrondev.jass.server.Entity.UserRepository;
  * to the client.
  */
 public class Login extends Message {
-	private String username;
-	private String password;
+    private LoginData data;
 
-	public Login(String[] data) {
-		super(data);
-		this.username = data[1];
-		this.password = data[2];
+	public Login(MessageData rawData) {
+		super(rawData);
+		data = (LoginData) rawData;
 	}
 
 	@Override
@@ -23,16 +25,19 @@ public class Login extends Message {
 		Message reply;
 		// Find existing login matching the username
         User user = null;
-        if (UserRepository.usernameExists(username)) {
-            user = UserRepository.getByUsername(username);
+        if (UserRepository.usernameExists(data.getUsername())) {
+            user = UserRepository.getByUsername(data.getUsername());
         }
-		if (user != null && user.checkPassword(password)) {
+		if (user != null && user.checkPassword(data.getPassword())) {
 			client.setUser(user);
 			String token = User.createToken();
 			client.setToken(token);
-			reply = new Result(true, token);
+
+			JSONObject resultData = new JSONObject();
+			resultData.put("token", token);
+			reply = new Result(new ResultData(true, resultData));
 		} else {
-			reply = new Result(false);
+			reply = new Result(new ResultData(false));
 		}
 		client.send(reply);
 	}
