@@ -5,12 +5,26 @@ import javafx.stage.Stage;
 import org.orbitrondev.jass.client.Model.DashboardModel;
 import org.orbitrondev.jass.client.Model.LoginModel;
 import org.orbitrondev.jass.client.Model.RegisterModel;
+import org.orbitrondev.jass.client.Model.ServerConnectionModel;
 import org.orbitrondev.jass.client.View.DashboardView;
 import org.orbitrondev.jass.client.View.LoginView;
 import org.orbitrondev.jass.client.View.RegisterView;
+import org.orbitrondev.jass.client.View.ServerConnectionView;
 import org.orbitrondev.jass.lib.MVC.View;
 
 public class ControllerHelper {
+    static void switchToServerConnectionWindow(final View<?> oldView) {
+        Platform.runLater(() -> {
+            Stage appStage = new Stage();
+            ServerConnectionModel model = new ServerConnectionModel();
+            ServerConnectionView newView = new ServerConnectionView(appStage, model);
+            new ServerConnectionController(model, newView);
+
+            oldView.stop();
+            newView.start();
+        });
+    }
+
     static void switchToDashboardWindow(final View<?> oldView) {
         Platform.runLater(() -> {
             Stage appStage = new Stage();
