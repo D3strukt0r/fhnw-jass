@@ -1,9 +1,12 @@
-package org.orbitrondev.jass.server.Message;
+package org.orbitrondev.jass.client.Message;
 
+import org.orbitrondev.jass.client.Utils.BackendUtil;
 import org.orbitrondev.jass.lib.Message.MessageData;
 import org.orbitrondev.jass.lib.Message.MessageErrorData;
-import org.orbitrondev.jass.server.Client;
 
+/**
+ * Login to the server.
+ */
 public class MessageError extends Message {
     private MessageErrorData data;
 
@@ -13,9 +16,11 @@ public class MessageError extends Message {
     }
 
     /**
-     * This message type does no processing at all
+     * This message type does no processing at all (only the server)
      */
     @Override
-    public void process(Client client) {
+    public boolean process(BackendUtil backendUtil) {
+        // TODO: Somehow show error popup when we get such a message
+        return true;
     }
 }
