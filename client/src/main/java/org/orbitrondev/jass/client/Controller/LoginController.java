@@ -4,15 +4,15 @@ import javafx.application.Platform;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import org.orbitrondev.jass.client.Entity.LoginEntity;
+import org.orbitrondev.jass.client.Message.Login;
 import org.orbitrondev.jass.client.Model.LoginModel;
 import org.orbitrondev.jass.client.Utils.BackendUtil;
 import org.orbitrondev.jass.client.View.ViewHelper;
 import org.orbitrondev.jass.client.View.LoginView;
 import org.orbitrondev.jass.lib.MVC.Controller;
+import org.orbitrondev.jass.lib.Message.LoginData;
 import org.orbitrondev.jass.lib.ServiceLocator.ServiceLocator;
 
-import java.io.IOException;
-import java.sql.SQLException;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class LoginController extends Controller<LoginModel, LoginView> {
@@ -98,17 +98,11 @@ public class LoginController extends Controller<LoginModel, LoginView> {
 
         // Connection would freeze window (and the animations) so do it in a different thread.
         Runnable loginTask = () -> {
-            try {
-                // Try to login (the BackendController automatically saves it to the DB)
-                BackendUtil backend = (BackendUtil) ServiceLocator.get("backend");
-                backend.sendLogin(login);
-            } catch (IOException e) {
-                // This exception contains ConnectException, which basically means, it couldn't connect to the server.
-                enableAll();
-                setErrorMessage("gui.login.loginFailed");
-            } catch (SQLException e) { /* Couldn't save to local db, ignore */ }
+            BackendUtil backend = (BackendUtil) ServiceLocator.get("backend");
+            Login loginMsg = new Login(new LoginData(login.getUsername(), login.getPassword()));
 
-            if (login.getToken() != null) {
+            if (loginMsg.process(backend)) {
+                login.setToken(loginMsg.getToken());
                 ControllerHelper.switchToDashboardWindow(view);
             } else {
                 enableAll();

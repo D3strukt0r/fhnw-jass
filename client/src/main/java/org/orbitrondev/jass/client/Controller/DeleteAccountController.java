@@ -5,6 +5,8 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import org.orbitrondev.jass.client.Entity.LoginEntity;
+import org.orbitrondev.jass.client.Message.DeleteLogin;
+import org.orbitrondev.jass.client.Message.Logout;
 import org.orbitrondev.jass.client.Model.DeleteAccountModel;
 import org.orbitrondev.jass.client.Model.LoginModel;
 import org.orbitrondev.jass.client.Utils.BackendUtil;
@@ -12,9 +14,9 @@ import org.orbitrondev.jass.client.View.DeleteAccountView;
 import org.orbitrondev.jass.client.View.ViewHelper;
 import org.orbitrondev.jass.client.View.LoginView;
 import org.orbitrondev.jass.lib.MVC.Controller;
+import org.orbitrondev.jass.lib.Message.DeleteLoginData;
+import org.orbitrondev.jass.lib.Message.LogoutData;
 import org.orbitrondev.jass.lib.ServiceLocator.ServiceLocator;
-
-import java.io.IOException;
 
 public class DeleteAccountController extends Controller<DeleteAccountModel, DeleteAccountView> {
     protected DeleteAccountController(DeleteAccountModel model, DeleteAccountView view) {
@@ -24,7 +26,7 @@ public class DeleteAccountController extends Controller<DeleteAccountModel, Dele
         view.getBtnDelete().setOnAction(event -> clickOnDelete());
 
         // register ourselves to listen for button clicks
-        view.getBtnCancel().setOnAction(event -> clickOnCancel());
+        view.getBtnCancel().setOnAction(event -> ControllerHelper.switchToDashboardWindow(view));
 
         // register ourselves to handle window-closing event
         view.getStage().setOnCloseRequest(event -> Platform.exit());
@@ -73,18 +75,11 @@ public class DeleteAccountController extends Controller<DeleteAccountModel, Dele
 
         // Connection would freeze window (and the animations) so do it in a different thread.
         Runnable logoutTask = () -> {
-            boolean userLoggedOut = false;
-            try {
-                // Try to logout
-                BackendUtil backend = (BackendUtil) ServiceLocator.get("backend");
-                userLoggedOut = backend.sendLogout();
-            } catch (IOException e) {
-                // This exception contains ConnectException, which basically means, it couldn't connect to the server.
-                enableAll();
-                setErrorMessage("gui.deleteAccount.logoutFailed");
-            }
+            // Try to logout
+            BackendUtil backend = (BackendUtil) ServiceLocator.get("backend");
+            Logout logoutMsg = new Logout(new LogoutData());
 
-            if (userLoggedOut) {
+            if (logoutMsg.process(backend)) {
                 ServiceLocator.remove("login");
                 openLoginWindow();
             } else {
@@ -93,19 +88,12 @@ public class DeleteAccountController extends Controller<DeleteAccountModel, Dele
             }
         };
         Runnable deleteTask = () -> {
-            boolean userDeleted = false;
-            try {
-                // Try to delete the account
-                BackendUtil backend = (BackendUtil) ServiceLocator.get("backend");
-                LoginEntity login = (LoginEntity) ServiceLocator.get("login");
-                userDeleted = backend.sendDeleteLogin(login.getToken());
-            } catch (IOException e) {
-                // This exception contains ConnectException, which basically means, it couldn't connect to the server.
-                enableAll();
-                setErrorMessage("gui.deleteAccount.deleteFailed");
-            }
+            // Try to delete the account
+            BackendUtil backend = (BackendUtil) ServiceLocator.get("backend");
+            LoginEntity login = (LoginEntity) ServiceLocator.get("login");
+            DeleteLogin deleteLoginMsg = new DeleteLogin(new DeleteLoginData(login.getToken()));
 
-            if (userDeleted) {
+            if (deleteLoginMsg.process(backend)) {
                 // If deleted, try logging out now.
                 new Thread(logoutTask).start();
             } else {
@@ -114,9 +102,5 @@ public class DeleteAccountController extends Controller<DeleteAccountModel, Dele
             }
         };
         new Thread(deleteTask).start();
-    }
-
-    public void clickOnCancel() {
-        ControllerHelper.switchToDashboardWindow(view);
     }
 }

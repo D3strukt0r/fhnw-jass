@@ -4,14 +4,15 @@ import javafx.application.Platform;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import org.orbitrondev.jass.client.Entity.LoginEntity;
+import org.orbitrondev.jass.client.Message.ChangePassword;
 import org.orbitrondev.jass.client.Model.ChangePasswordModel;
 import org.orbitrondev.jass.client.Utils.BackendUtil;
 import org.orbitrondev.jass.client.View.ChangePasswordView;
 import org.orbitrondev.jass.client.View.ViewHelper;
 import org.orbitrondev.jass.lib.MVC.Controller;
+import org.orbitrondev.jass.lib.Message.ChangePasswordData;
 import org.orbitrondev.jass.lib.ServiceLocator.ServiceLocator;
 
-import java.io.IOException;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class ChangePasswordController extends Controller<ChangePasswordModel, ChangePasswordView> {
@@ -20,7 +21,7 @@ public class ChangePasswordController extends Controller<ChangePasswordModel, Ch
 
         // register ourselves to listen for button clicks
         view.getBtnChange().setOnAction(event -> clickOnChange());
-        view.getBtnCancel().setOnAction(event -> clickOnCancel());
+        view.getBtnCancel().setOnAction(event -> ControllerHelper.switchToDashboardWindow(view));
 
         // Disable/Enable the login button depending on if the inputs are valid
         AtomicBoolean oldPasswordValid = new AtomicBoolean(false);
@@ -101,18 +102,11 @@ public class ChangePasswordController extends Controller<ChangePasswordModel, Ch
         Runnable changePasswordTask = () -> {
             LoginEntity login = (LoginEntity) ServiceLocator.get("login");
             LoginEntity newLogin = new LoginEntity(login.getUsername(), view.getNewPassword().getText(), login.getToken());
-            boolean passwordChanged = false;
-            try {
-                // Try to login (the BackendController automatically saves it to the DB)
-                BackendUtil backend = (BackendUtil) ServiceLocator.get("backend");
-                passwordChanged = backend.sendChangePassword(login.getToken(), newLogin.getPassword());
-            } catch (IOException e) {
-                // This exception contains ConnectException, which basically means, it couldn't connect to the server.
-                enableAll();
-                setErrorMessage("gui.changePassword.changeFailed");
-            }
 
-            if (passwordChanged) {
+            BackendUtil backend = (BackendUtil) ServiceLocator.get("backend");
+            ChangePassword changePasswordMsg = new ChangePassword(new ChangePasswordData(login.getToken(), newLogin.getPassword()));
+
+            if (changePasswordMsg.process(backend)) {
                 ServiceLocator.remove("login");
                 ServiceLocator.add(newLogin);
                 ControllerHelper.switchToDashboardWindow(view);
@@ -122,9 +116,5 @@ public class ChangePasswordController extends Controller<ChangePasswordModel, Ch
             }
         };
         new Thread(changePasswordTask).start();
-    }
-
-    public void clickOnCancel() {
-        ControllerHelper.switchToDashboardWindow(view);
     }
 }
