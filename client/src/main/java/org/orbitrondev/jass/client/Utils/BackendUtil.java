@@ -164,25 +164,6 @@ public class BackendUtil implements Service, Closeable {
     }
 
     /**
-     * Checks whether the user is currently logged in.
-     *
-     * @param token    A string containing a token given by the server.
-     * @param username A string containing the username of the wanted user.
-     *
-     * @return "true" if user is currently logged in, "false" if not.
-     *
-     * @since 0.0.1
-     */
-    public boolean sendUserOnline(String token, String username) {
-        sendCommand(new String[]{"UserOnline", token, username});
-
-        waitForResultResponse();
-        boolean result = Boolean.parseBoolean(lastMessage.get(1));
-        lastMessage.clear();
-        return result;
-    }
-
-    /**
      * Creates a normal socket to the server.
      *
      * @param ipAddress A String containing the ip address to reach the server.
