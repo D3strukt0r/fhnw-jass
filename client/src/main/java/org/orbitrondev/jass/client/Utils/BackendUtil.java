@@ -201,22 +201,6 @@ public class BackendUtil implements Service, Closeable {
     }
 
     /**
-     * Logs the current user out from the server. After successful logout, token becomes invalid.
-     *
-     * @return "true" by default. Impossible to fail.
-     *
-     * @since 0.0.1
-     */
-    public boolean sendLogout() {
-        sendCommand(new String[]{"Logout"});
-
-        waitForResultResponse();
-        boolean result = Boolean.parseBoolean(lastMessage.get(1));
-        lastMessage.clear();
-        return result;
-    }
-
-    /**
      * Checks whether the user is currently logged in.
      *
      * @param token    A string containing a token given by the server.
