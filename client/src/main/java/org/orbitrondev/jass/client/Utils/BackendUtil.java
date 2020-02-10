@@ -164,25 +164,6 @@ public class BackendUtil implements Service, Closeable {
     }
 
     /**
-     * Overwrite the password of currently logged in user.
-     *
-     * @param token       A string containing a token given by the server.
-     * @param newPassword A string containing the new password to overwrite.
-     *
-     * @return "true" by default, "false" when the token is invalid.
-     *
-     * @since 0.0.1
-     */
-    public boolean sendChangePassword(String token, String newPassword) {
-        sendCommand(new String[]{"ChangePassword", token, newPassword});
-
-        waitForResultResponse();
-        boolean result = Boolean.parseBoolean(lastMessage.get(1));
-        lastMessage.clear();
-        return result;
-    }
-
-    /**
      * Checks whether the user is currently logged in.
      *
      * @param token    A string containing a token given by the server.
