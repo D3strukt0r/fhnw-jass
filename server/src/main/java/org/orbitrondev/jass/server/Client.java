@@ -21,6 +21,7 @@ package org.orbitrondev.jass.server;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.orbitrondev.jass.lib.Message.MessageData;
+import org.orbitrondev.jass.lib.Message.MessageErrorData;
 import org.orbitrondev.jass.server.Entity.User;
 import org.orbitrondev.jass.server.Message.Message;
 import org.orbitrondev.jass.server.Message.MessageError;
@@ -94,7 +95,7 @@ public class Client {
                     if (msg != null)
                         msg.process(Client.this);
                     else { // Invalid message or broken socket
-                        send(new MessageError());
+                        send(new MessageError(new MessageErrorData(MessageErrorData.ErrorType.INVALID_COMMAND)));
                     }
                 }
             } catch (Exception e) {
