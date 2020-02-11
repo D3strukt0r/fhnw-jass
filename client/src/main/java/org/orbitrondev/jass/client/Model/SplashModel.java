@@ -1,3 +1,21 @@
+/*
+ * fhnw-jass is jass game programmed in java for a school project.
+ * Copyright (C) 2020 Manuele Vaccari
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
 package org.orbitrondev.jass.client.Model;
 
 import javafx.concurrent.Task;
@@ -7,6 +25,13 @@ import org.orbitrondev.jass.lib.ServiceLocator.ServiceLocator;
 
 import java.util.ArrayList;
 
+/**
+ * The model for the splash view.
+ *
+ * @author Manuele Vaccari
+ * @version %I%, %G%
+ * @since 0.0.1
+ */
 public class SplashModel extends Model {
     public final Task<Void> initializer = new Task<Void>() {
         @Override
@@ -26,12 +51,11 @@ public class SplashModel extends Model {
                 tasks.get(i).run();
                 this.updateProgress(i + 2, tasks.size() + 1);
             }
+
             // For better UX, let the user see the full progress bar
             try {
                 Thread.sleep(500);
-            } catch (InterruptedException e) {
-                // Ignore
-            }
+            } catch (InterruptedException e) { /* Ignore */ }
             return null;
         }
     };

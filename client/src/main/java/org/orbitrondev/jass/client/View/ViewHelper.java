@@ -1,3 +1,21 @@
+/*
+ * fhnw-jass is jass game programmed in java for a school project.
+ * Copyright (C) 2020 Manuele Vaccari
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
 package org.orbitrondev.jass.client.View;
 
 import com.jfoenix.controls.JFXButton;
@@ -30,10 +48,17 @@ import org.orbitrondev.jass.client.Validator.IsSameValidator;
 
 import java.util.Locale;
 
+/**
+ * A helper class for the views, to get elements easily.
+ *
+ * @author Manuele Vaccari
+ * @version %I%, %G%
+ * @since 0.0.1
+ */
 public class ViewHelper {
-
-    // Shortcuts for UI elements
-
+    /**
+     * Shortcuts for UI elements
+     */
     public static Region useSpacer(int space) {
         Region spacer = new Region();
         spacer.setPrefHeight(space);
@@ -55,8 +80,8 @@ public class ViewHelper {
     }
 
     public static Text useText(String translatorKey, Stage paneToBindWidth) {
-        // https://stackoverflow.com/questions/51199903/how-to-bind-a-value-to-the-result-of-a-calculation
         Text textField = useText(translatorKey);
+        // https://stackoverflow.com/questions/51199903/how-to-bind-a-value-to-the-result-of-a-calculation
         DoubleProperty padding = new SimpleDoubleProperty(40.0); // Check the css at .custom-container (padding left and right = 40)
         NumberBinding wrapping = Bindings.subtract(paneToBindWidth.widthProperty(), padding);
         textField.wrappingWidthProperty().bind(wrapping);
@@ -138,8 +163,9 @@ public class ViewHelper {
         return navBar;
     }
 
-    // Shortcut for validator with UI input elements
-
+    /**
+     * Shortcuts for validator with UI input elements
+     */
     public static RequiredFieldValidator useRequiredValidator(String translatorKey) {
         RequiredFieldValidator requiredValidator = new RequiredFieldValidator();
         requiredValidator.messageProperty().bind(I18nUtil.createStringBinding(translatorKey));
@@ -172,8 +198,9 @@ public class ViewHelper {
         return isValidPortValidator;
     }
 
-    // Shortcut for UI menus
-
+    /**
+     * Shortcuts for UI menus
+     */
     public static MenuBar useDefaultMenuBar() {
         MenuBar menuBar = new MenuBar();
 
@@ -247,7 +274,9 @@ public class ViewHelper {
         return exitItem;
     }
 
-    // Icons
+    /**
+     * Shortcuts for the icons
+     */
     public static IconNode useIcon(IconCode iconCode, Color color) {
         IconNode icon = new IconNode(iconCode);
         icon.setFill(color);
