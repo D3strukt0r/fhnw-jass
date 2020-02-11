@@ -1,3 +1,21 @@
+/*
+ * fhnw-jass is jass game programmed in java for a school project.
+ * Copyright (C) 2020 Manuele Vaccari
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
 package org.orbitrondev.jass.client.Controller;
 
 import javafx.application.Platform;
@@ -17,11 +35,23 @@ import org.orbitrondev.jass.lib.ServiceLocator.ServiceLocator;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
+/**
+ * The controller for the register view.
+ *
+ * @author Manuele Vaccari
+ * @version %I%, %G%
+ * @since 0.0.1
+ */
 public class RegisterController extends Controller<RegisterModel, RegisterView> {
+    /**
+     * Initializes all event listeners for the view.
+     *
+     * @since 0.0.1
+     */
     protected RegisterController(RegisterModel model, RegisterView view) {
         super(model, view);
 
-        // register ourselves to listen for button clicks
+        // Register ourselves to listen for button clicks
         view.getBtnRegister().setOnAction(event -> clickOnRegister());
         view.getBtnLogin().setOnAction(event -> ControllerHelper.switchToLoginWindow(view));
 
@@ -55,34 +85,59 @@ public class RegisterController extends Controller<RegisterModel, RegisterView> 
             }
         });
 
-        // register ourselves to handle window-closing event
+        // Register ourselves to handle window-closing event
         view.getStage().setOnCloseRequest(event -> Platform.exit());
     }
 
+    /**
+     * Disables all the input fields in the view.
+     *
+     * @since 0.0.1
+     */
     public void disableInputs() {
         view.getUsername().setDisable(true);
         view.getPassword().setDisable(true);
         view.getRepeatPassword().setDisable(true);
     }
 
+    /**
+     * Disables all the form fields in the view.
+     *
+     * @since 0.0.1
+     */
     public void disableAll() {
         disableInputs();
         view.getBtnRegister().setDisable(true);
         view.getBtnLogin().setDisable(true);
     }
 
+    /**
+     * Enables all the input fields in the view.
+     *
+     * @since 0.0.1
+     */
     public void enableInputs() {
         view.getUsername().setDisable(false);
         view.getPassword().setDisable(false);
         view.getRepeatPassword().setDisable(false);
     }
 
+    /**
+     * Enables all the form fields in the view.
+     *
+     * @since 0.0.1
+     */
     public void enableAll() {
         enableInputs();
         view.getBtnRegister().setDisable(false);
         view.getBtnLogin().setDisable(false);
     }
 
+    /**
+     * As the view contains an error message field, this updates the text and the window appropriately.
+     *
+     * @since 0.0.1
+     */
     public void setErrorMessage(String translatorKey) {
         Platform.runLater(() -> {
             if (view.getErrorMessage().getChildren().size() == 0) {
@@ -96,38 +151,40 @@ public class RegisterController extends Controller<RegisterModel, RegisterView> 
         });
     }
 
+    /**
+     * Handles the click on the register button. Inputs should already be checked. This will send it to the server, and
+     * update local values if successful.
+     *
+     * @since 0.0.1
+     */
     public void clickOnRegister() {
         // Disable everything to prevent something while working on the data
         disableAll();
 
-        LoginEntity login = new LoginEntity(view.getUsername().getText(), view.getPassword().getText());
-
         // Connection would freeze window (and the animations) so do it in a different thread.
-        Runnable loginTask = () -> {
-            BackendUtil backend = (BackendUtil) ServiceLocator.get("backend");
-            Login loginMsg = new Login(new LoginData(login.getUsername(), login.getPassword()));
+        new Thread(() -> {
+            LoginEntity login = new LoginEntity(view.getUsername().getText(), view.getPassword().getText());
 
-            if (loginMsg.process(backend)) {
-                login.setToken(loginMsg.getToken());
-                ServiceLocator.add(login);
-                ControllerHelper.switchToDashboardWindow(view);
-            } else {
-                enableAll();
-                setErrorMessage("gui.login.loginFailed");
-            }
-        };
-        Runnable registerTask = () -> {
             BackendUtil backend = (BackendUtil) ServiceLocator.get("backend");
             CreateLogin createLoginMsg = new CreateLogin(new CreateLoginData(login.getUsername(), login.getPassword()));
 
+            // Try sending the register command.
             if (createLoginMsg.process(backend)) {
+                Login loginMsg = new Login(new LoginData(login.getUsername(), login.getPassword()));
+
                 // If registered, try logging in now.
-                new Thread(loginTask).start();
+                if (loginMsg.process(backend)) {
+                    login.setToken(loginMsg.getToken());
+                    ServiceLocator.add(login);
+                    ControllerHelper.switchToDashboardWindow(view);
+                } else {
+                    enableAll();
+                    setErrorMessage("gui.login.loginFailed");
+                }
             } else {
                 enableAll();
                 setErrorMessage("gui.register.registerFailed");
             }
-        };
-        new Thread(registerTask).start();
+        }).start();
     }
 }

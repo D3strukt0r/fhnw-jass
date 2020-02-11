@@ -1,3 +1,21 @@
+/*
+ * fhnw-jass is jass game programmed in java for a school project.
+ * Copyright (C) 2020 Manuele Vaccari
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
 package org.orbitrondev.jass.client.Controller;
 
 import javafx.application.Platform;
@@ -20,17 +38,29 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+/**
+ * The controller for the server connection view.
+ *
+ * @author Manuele Vaccari
+ * @version %I%, %G%
+ * @since 0.0.1
+ */
 public class ServerConnectionController extends Controller<ServerConnectionModel, ServerConnectionView> {
     private static final Logger logger = LogManager.getLogger(ServerConnectionController.class);
 
+    /**
+     * Initializes all event listeners for the view.
+     *
+     * @since 0.0.1
+     */
     public ServerConnectionController(ServerConnectionModel model, ServerConnectionView view) {
         super(model, view);
         DatabaseUtil db = (DatabaseUtil) ServiceLocator.get("db");
 
-        // register ourselves to listen for changes in the dropdown
+        // Register ourselves to listen for changes in the dropdown
         view.getChooseServer().setOnAction(event -> updateChosenServer());
 
-        // register ourselves to listen for button clicks
+        // Register ourselves to listen for button clicks
         view.getBtnConnect().setOnAction(event -> clickOnConnect());
 
         // Add options to server list drop down
@@ -81,7 +111,7 @@ public class ServerConnectionController extends Controller<ServerConnectionModel
             }
         });
 
-        // register ourselves to handle window-closing event
+        // Register ourselves to handle window-closing event
         view.getStage().setOnCloseRequest(event -> Platform.exit());
     }
 
@@ -99,54 +129,89 @@ public class ServerConnectionController extends Controller<ServerConnectionModel
         }
     }
 
+    /**
+     * Disables all the input fields in the view.
+     *
+     * @since 0.0.1
+     */
     public void disableInputs() {
         view.getServerIp().setDisable(true);
         view.getPort().setDisable(true);
     }
 
+    /**
+     * Disables all the form fields in the view.
+     *
+     * @since 0.0.1
+     */
     public void disableAll() {
         disableInputs();
         view.getBtnConnect().setDisable(true);
     }
 
+    /**
+     * Enables all the input fields in the view.
+     *
+     * @since 0.0.1
+     */
     public void enableInputs() {
         view.getServerIp().setDisable(false);
         view.getPort().setDisable(false);
     }
 
+    /**
+     * Enables all the form fields in the view.
+     *
+     * @since 0.0.1
+     */
     public void enableAll() {
         enableInputs();
         view.getBtnConnect().setDisable(false);
     }
 
+    /**
+     * As the view contains an error message field, this updates the text and the window appropriately.
+     *
+     * @since 0.0.1
+     */
+    public void setErrorMessage(String translatorKey) {
+        Platform.runLater(() -> {
+            if (view.getErrorMessage().getChildren().size() == 0) {
+                // Make window larger, so it doesn't become crammed, only if we haven't done so yet
+                view.getStage().setHeight(view.getStage().getHeight() + 30);
+            }
+            Text text = ViewHelper.useText(translatorKey);
+            text.setFill(Color.RED);
+            view.getErrorMessage().getChildren().clear();
+            view.getErrorMessage().getChildren().addAll(text, ViewHelper.useSpacer(20));
+        });
+    }
+
+    /**
+     * Handles the click on the connect button. Inputs should already be checked. This will try to connect to the
+     * server.
+     *
+     * @since 0.0.1
+     */
     public void clickOnConnect() {
         // Disable everything to prevent something while working on the data
         disableAll();
 
-        ServerEntity server = new ServerEntity(view.getServerIp().getText(), Integer.parseInt(view.getPort().getText()));
-        ServiceLocator.add(server);
-
         // Connection would freeze window (and the animations) so do it in a different thread.
-        Runnable connect = () -> {
+        new Thread(() -> {
+            ServerEntity server = new ServerEntity(view.getServerIp().getText(), Integer.parseInt(view.getPort().getText()));
+            ServiceLocator.add(server);
+
             BackendUtil backend = null;
             try {
                 // Try to connect to the server
+                // TODO: Let user choose whether to use secure connection, and default selection (automatic connection)
                 backend = new BackendUtil(server.getIp(), server.getPort());
                 ServiceLocator.add(backend);
             } catch (IOException e) {
                 // This exception contains ConnectException, which basically means, it couldn't connect to the server.
                 enableAll();
-                Platform.runLater(() -> {
-
-                    if (view.getErrorMessage().getChildren().size() == 0) {
-                        // Make window larger, so it doesn't become crammed, only if we haven't done so yet
-                        view.getStage().setHeight(view.getStage().getHeight() + 30);
-                    }
-                    Text text = ViewHelper.useText("gui.serverConnection.connectionFailed");
-                    text.setFill(Color.RED);
-                    view.getErrorMessage().getChildren().clear();
-                    view.getErrorMessage().getChildren().addAll(text, ViewHelper.useSpacer(20));
-                });
+                setErrorMessage("gui.serverConnection.connectionFailed");
             }
 
             if (backend != null) {
@@ -162,7 +227,6 @@ public class ServerConnectionController extends Controller<ServerConnectionModel
                 }
                 ControllerHelper.switchToLoginWindow(view);
             }
-        };
-        new Thread(connect).start();
+        }).start();
     }
 }
