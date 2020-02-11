@@ -1,3 +1,21 @@
+/*
+ * fhnw-jass is jass game programmed in java for a school project.
+ * Copyright (C) 2020 Manuele Vaccari
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
 package org.orbitrondev.jass.client.Entity;
 
 import com.j256.ormlite.field.DatabaseField;
@@ -5,7 +23,7 @@ import com.j256.ormlite.table.DatabaseTable;
 import org.orbitrondev.jass.lib.ServiceLocator.Service;
 
 /**
- * A subclass of all login information.
+ * A model containing all locally saved login informations.
  *
  * @author Manuele Vaccari
  * @version %I%, %G%
@@ -13,11 +31,9 @@ import org.orbitrondev.jass.lib.ServiceLocator.Service;
  */
 @DatabaseTable(tableName = "login")
 public class LoginEntity implements Service {
-
     /**
-     * FIELDS ////////////////////////////////
+     * Fields (Columns)
      */
-
     @DatabaseField(generatedId = true)
     private int id;
 
@@ -30,10 +46,12 @@ public class LoginEntity implements Service {
     @DatabaseField
     private String token;
 
-    /**
-     * CONSTRUCTORS //////////////////////////
-     */
+    @DatabaseField(defaultValue = "false")
+    private boolean connectAutomatically = false;
 
+    /**
+     * Constructors
+     */
     LoginEntity() {
         // For ORMLite
         // all persisted classes must define a no-arg constructor
@@ -45,15 +63,32 @@ public class LoginEntity implements Service {
         this.password = password;
     }
 
+    public LoginEntity(String username, String password, boolean connectAutomatically) {
+        this.username = username;
+        this.password = password;
+        this.connectAutomatically = connectAutomatically;
+    }
+
     public LoginEntity(String username, String password, String token) {
         this.username = username;
         this.password = password;
         this.token = token;
     }
 
+    public LoginEntity(String username, String password, String token, boolean connectAutomatically) {
+        this.username = username;
+        this.password = password;
+        this.token = token;
+        this.connectAutomatically = connectAutomatically;
+    }
+
     /**
-     * METHODS ///////////////////////////////
+     * Methods
      */
+    @Override
+    public String getName() {
+        return "login";
+    }
 
     public int getId() {
         return id;
@@ -63,8 +98,16 @@ public class LoginEntity implements Service {
         return username;
     }
 
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
     public String getPassword() {
         return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public String getToken() {
@@ -75,8 +118,11 @@ public class LoginEntity implements Service {
         this.token = token;
     }
 
-    @Override
-    public String getName() {
-        return "login";
+    public boolean isConnectAutomatically() {
+        return connectAutomatically;
+    }
+
+    public void setConnectAutomatically(boolean connectAutomatically) {
+        this.connectAutomatically = connectAutomatically;
     }
 }

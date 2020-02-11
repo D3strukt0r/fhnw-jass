@@ -1,3 +1,21 @@
+/*
+ * fhnw-jass is jass game programmed in java for a school project.
+ * Copyright (C) 2020 Manuele Vaccari
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
 package org.orbitrondev.jass.client.Entity;
 
 import com.j256.ormlite.field.DatabaseField;
@@ -13,11 +31,9 @@ import org.orbitrondev.jass.lib.ServiceLocator.Service;
  */
 @DatabaseTable(tableName = "server")
 public class ServerEntity implements Service {
-
     /**
-     * FIELDS ////////////////////////////////
+     * Fields (Columns)
      */
-
     @DatabaseField(generatedId = true)
     private int id;
 
@@ -31,12 +47,11 @@ public class ServerEntity implements Service {
     private boolean secure = false;
 
     @DatabaseField(defaultValue = "false")
-    private boolean defaultServer = false;
+    private boolean connectAutomatically = false;
 
     /**
-     * CONSTRUCTORS //////////////////////////
+     * Constructors
      */
-
     ServerEntity() {
         // For ORMLite
         // all persisted classes must define a no-arg constructor
@@ -54,16 +69,20 @@ public class ServerEntity implements Service {
         this.secure = secure;
     }
 
-    public ServerEntity(String ip, int port, boolean secure, boolean defaultServer) {
+    public ServerEntity(String ip, int port, boolean secure, boolean connectAutomatically) {
         this.ip = ip;
         this.port = port;
         this.secure = secure;
-        this.defaultServer = defaultServer;
+        this.connectAutomatically = connectAutomatically;
     }
 
     /**
-     * METHODS ///////////////////////////////
+     * Methods
      */
+    @Override
+    public String getName() {
+        return "server";
+    }
 
     public int getId() {
         return id;
@@ -73,24 +92,31 @@ public class ServerEntity implements Service {
         return ip;
     }
 
+    public void setIp(String ip) {
+        this.ip = ip;
+    }
+
     public int getPort() {
         return port;
+    }
+
+    public void setPort(int port) {
+        this.port = port;
     }
 
     public boolean isSecure() {
         return secure;
     }
 
-    public boolean isDefaultServer() {
-        return defaultServer;
+    public void setSecure(boolean secure) {
+        this.secure = secure;
     }
 
-    public void setDefaultServer(boolean defaultServer) {
-        this.defaultServer = defaultServer;
+    public boolean isConnectAutomatically() {
+        return connectAutomatically;
     }
 
-    @Override
-    public String getName() {
-        return "server";
+    public void setConnectAutomatically(boolean connectAutomatically) {
+        this.connectAutomatically = connectAutomatically;
     }
 }
