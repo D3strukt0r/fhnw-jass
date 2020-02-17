@@ -22,10 +22,11 @@ import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.orbitrondev.jass.server.Utils.HashUtil;
 
-import javax.crypto.SecretKeyFactory;
-import javax.crypto.spec.PBEKeySpec;
+import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
+import java.security.spec.InvalidKeySpecException;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.util.Date;
@@ -41,8 +42,6 @@ import java.util.Date;
 public class User {
     private static final Logger logger = LogManager.getLogger(User.class);
     private static final SecureRandom rand = new SecureRandom();
-    private static final int iterations = 127;
-    private final byte[] salt = new byte[64];
 
     /**
      * Fields (Columns)
@@ -77,16 +76,12 @@ public class User {
         // with at least package visibility
     }
     public User(String username) {
-        rand.nextBytes(salt);
-
         this.username = username;
     }
 
     public User(String username, String password) {
-        rand.nextBytes(salt);
-
         this.username = username;
-        changePassword(password);;
+        setPassword(password);;
     }
 
     /**
@@ -109,63 +104,26 @@ public class User {
     }
 
     public void setPassword(String password) {
-        this.password = password;
+        try {
+            this.password = HashUtil.generateStorngPasswordHash(password);
+        } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
+            logger.fatal("Secure password hashing not possible - stopping server");
+            System.exit(0);
+        }
     }
 
     public boolean checkPassword(String password) {
-        String newHash = hash(password);
-        boolean success = this.password.equals(newHash);
-        if (success) setLastLogin(Date.from(Instant.now()));;
-        return success;
-    }
+        boolean matched = false;
 
-    public void changePassword(String newPassword) {
-        rand.nextBytes(salt); // Change the salt with the password!
-        setPassword(hash(newPassword));
-    }
-
-    // TODO: Put this somewhere else
-    public static String createToken() {
-        byte[] token = new byte[16];
-        rand.nextBytes(token);
-        return bytesToHex(token);
-    }
-
-    /**
-     * There are many sources of info on how to securely hash passwords. I'm not a
-     * crypto expert, so I follow the recommendations of the experts. Here are two
-     * examples:
-     *
-     * https://crackstation.net/hashing-security.htm
-     *
-     * https://howtodoinjava.com/security/how-to-generate-secure-password-hash-md5-sha-pbkdf2-bcrypt-examples/
-     */
-    private String hash(String password) {
         try {
-            char[] chars = password.toCharArray();
-            PBEKeySpec spec = new PBEKeySpec(chars, salt, iterations, 64 * 8);
-            SecretKeyFactory skf = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1"); // TODO: Should this be here?
-            byte[] hash = skf.generateSecret(spec).getEncoded();
-            return bytesToHex(hash);
-        } catch (Exception e) {
+            matched = HashUtil.validatePassword(password, this.password);
+        } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
             logger.fatal("Secure password hashing not possible - stopping server");
             System.exit(0);
-            return null; // Will never execute, but keeps Java happy
         }
-    }
 
-    // From:
-    // https://stackoverflow.com/questions/9655181/how-to-convert-a-byte-array-to-a-hex-string-in-java
-    private final static char[] hexArray = "0123456789ABCDEF".toCharArray();
-
-    public static String bytesToHex(byte[] bytes) {
-        char[] hexChars = new char[bytes.length * 2];
-        for (int j = 0; j < bytes.length; j++) {
-            int v = bytes[j] & 0xFF;
-            hexChars[j * 2] = hexArray[v >>> 4];
-            hexChars[j * 2 + 1] = hexArray[v & 0x0F];
-        }
-        return new String(hexChars);
+        if (matched) setLastLogin(Date.from(Instant.now()));;
+        return matched;
     }
 
     public boolean isOnline() {
@@ -216,5 +174,26 @@ public class User {
     @Override
     public String toString() {
         return username;
+    }
+
+    // TODO: Put this somewhere else
+    public static String createToken() {
+        byte[] token = new byte[16];
+        rand.nextBytes(token);
+        return bytesToHex(token);
+    }
+
+    // From:
+    // https://stackoverflow.com/questions/9655181/how-to-convert-a-byte-array-to-a-hex-string-in-java
+    private final static char[] hexArray = "0123456789ABCDEF".toCharArray();
+
+    public static String bytesToHex(byte[] bytes) {
+        char[] hexChars = new char[bytes.length * 2];
+        for (int j = 0; j < bytes.length; j++) {
+            int v = bytes[j] & 0xFF;
+            hexChars[j * 2] = hexArray[v >>> 4];
+            hexChars[j * 2 + 1] = hexArray[v & 0x0F];
+        }
+        return new String(hexChars);
     }
 }

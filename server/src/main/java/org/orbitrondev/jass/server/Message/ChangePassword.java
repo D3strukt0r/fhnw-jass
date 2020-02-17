@@ -44,7 +44,7 @@ public class ChangePassword extends Message {
         boolean result = false;
         if (client.getToken().equals(data.getToken())) {
             User user = client.getUser();
-            user.changePassword(data.getNewPassword());
+            user.setPassword(data.getNewPassword());
             result = true;
         }
         client.send(new Result(new ResultData(result)));
