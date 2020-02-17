@@ -18,6 +18,8 @@
 
 package org.orbitrondev.jass.server.Message;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.json.JSONObject;
 import org.orbitrondev.jass.lib.Message.LoginData;
 import org.orbitrondev.jass.lib.Message.MessageData;
@@ -34,6 +36,7 @@ import org.orbitrondev.jass.server.Entity.UserRepository;
  * @since 0.0.1
  */
 public class Login extends Message {
+    private static final Logger logger = LogManager.getLogger(Login.class);
     private LoginData data;
 
     public Login(MessageData rawData) {
@@ -43,23 +46,30 @@ public class Login extends Message {
 
     @Override
     public void process(Client client) {
-        Message reply;
         // Find existing login matching the username
-        User user = null;
+        User user;
         if (UserRepository.usernameExists(data.getUsername())) {
+            logger.info("User " + data.getUsername() + " exists");
             user = UserRepository.getByUsername(data.getUsername());
+        } else {
+            logger.info("User " + data.getUsername() + " does not exist");
+            client.send(new Result(new ResultData(false)));
+            return;
         }
+
+        // Check if the client used the correct password
         if (user != null && user.checkPassword(data.getPassword())) {
+            logger.info("Client used the correct password");
             client.setUser(user);
             String token = User.createToken();
             client.setToken(token);
 
             JSONObject resultData = new JSONObject();
             resultData.put("token", token);
-            reply = new Result(new ResultData(true, resultData));
+            client.send(new Result(new ResultData(true, resultData)));
         } else {
-            reply = new Result(new ResultData(false));
+            logger.info("Client used the wrong password");
+            client.send(new Result(new ResultData(false)));
         }
-        client.send(reply);
     }
 }

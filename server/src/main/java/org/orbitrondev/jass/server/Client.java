@@ -117,7 +117,7 @@ public class Client {
     public void send(Message msg) {
         try {
             OutputStreamWriter out = new OutputStreamWriter(socket.getOutputStream());
-            logger.info("Sending message: " + this.toString());
+            logger.info("Sending message: " + msg.toString());
             out.write(msg.toString() + "\n"); // This will send the serialized MessageData object
             out.flush();
         } catch (IOException e) {

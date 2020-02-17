@@ -18,6 +18,8 @@
 
 package org.orbitrondev.jass.server.Message;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.orbitrondev.jass.lib.Message.CreateLoginData;
 import org.orbitrondev.jass.lib.Message.MessageData;
 import org.orbitrondev.jass.lib.Message.ResultData;
@@ -33,6 +35,7 @@ import org.orbitrondev.jass.server.Entity.UserRepository;
  * @since 0.0.1
  */
 public class CreateLogin extends Message {
+    private static final Logger logger = LogManager.getLogger(CreateLogin.class);
     private CreateLoginData data;
 
     public CreateLogin(MessageData rawData) {
@@ -47,12 +50,20 @@ public class CreateLogin extends Message {
     @Override
     public void process(Client client) {
         boolean result = false;
+        // Check for a valid username
         if (data.getUsername() != null && data.getUsername().length() >= 3) {
+            // Check for a valid password
             if (data.getPassword() != null && data.getPassword().length() >= 3) { // lax password requirements
+                // Check whether the username is not already taken
                 if (!UserRepository.usernameExists(data.getUsername())) {
                     User newUser = new User(data.getUsername(), data.getPassword());
-                    UserRepository.create(newUser);
-                    result = true;
+                    // Add the new user to the database, and only return true if it was saved successfully
+                    if (UserRepository.create(newUser)) {
+                        logger.info("User " + newUser.getUsername() + " created");
+                        result = true;
+                    } else {
+                        logger.warn("User " + newUser.getUsername() + " could not be created");
+                    }
                 }
             }
         }
