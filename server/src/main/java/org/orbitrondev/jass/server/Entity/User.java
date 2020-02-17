@@ -40,6 +40,7 @@ import java.util.Date;
 @DatabaseTable(tableName = "users")
 public class User {
     private static final Logger logger = LogManager.getLogger(User.class);
+    private static final SecureRandom rand = new SecureRandom();
     private static final int iterations = 127;
     private final byte[] salt = new byte[64];
 
@@ -76,10 +77,14 @@ public class User {
         // with at least package visibility
     }
     public User(String username) {
+        rand.nextBytes(salt);
+
         this.username = username;
     }
 
     public User(String username, String password) {
+        rand.nextBytes(salt);
+
         this.username = username;
         changePassword(password);;
     }
@@ -109,20 +114,18 @@ public class User {
 
     public boolean checkPassword(String password) {
         String newHash = hash(password);
-        boolean success = password.equals(newHash);
+        boolean success = this.password.equals(newHash);
         if (success) setLastLogin(Date.from(Instant.now()));;
         return success;
     }
 
     public void changePassword(String newPassword) {
-        SecureRandom rand = new SecureRandom();
         rand.nextBytes(salt); // Change the salt with the password!
         setPassword(hash(newPassword));
     }
 
     // TODO: Put this somewhere else
     public static String createToken() {
-        SecureRandom rand = new SecureRandom();
         byte[] token = new byte[16];
         rand.nextBytes(token);
         return bytesToHex(token);
