@@ -77,7 +77,13 @@ public class Main {
         }
 
         // Do the arguments' task
-        int port = Integer.parseInt(cmd.getOptionValue("port"));
+        int port = 0;
+        try {
+            port = Integer.parseInt(cmd.getOptionValue("port"));
+        } catch (NumberFormatException e) {
+            logger.error("Port is not set or not a number (integer)");
+            System.exit(1);
+        }
 
         if (cmd.hasOption("db-location")) {
             dbLocation = cmd.getOptionValue("db-location");
