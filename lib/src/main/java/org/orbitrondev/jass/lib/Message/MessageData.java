@@ -29,7 +29,7 @@ public abstract class MessageData implements Serializable {
         JSONObject data = new JSONObject(jsonString);
 
         try {
-            String messageClassName = MessageData.class.getPackage().getName() + "." + data.getString("messageType");
+            String messageClassName = MessageData.class.getPackage().getName() + "." + data.getString("messageType") + "Data";
             Class<?> messageClass = Class.forName(messageClassName);
             Constructor<?> constructor = messageClass.getConstructor(JSONObject.class);
             return (MessageData) constructor.newInstance(data);
