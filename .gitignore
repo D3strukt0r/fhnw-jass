@@ -266,3 +266,5 @@ gradle-app.setting
 **/build/
 
 # End of https://www.gitignore.io/api/java,macos,gradle,windows,eclipse,intellij,database
+
+.idea/**/dataSources.xml
