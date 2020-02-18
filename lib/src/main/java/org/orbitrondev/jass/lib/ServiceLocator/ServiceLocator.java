@@ -33,7 +33,7 @@ public class ServiceLocator {
 
     public static Service get(String serviceName) {
         for (Service service : services) {
-            if (service.getName().equalsIgnoreCase(serviceName)) {
+            if (service.getServiceName().equalsIgnoreCase(serviceName)) {
                 return service;
             }
         }
@@ -43,7 +43,7 @@ public class ServiceLocator {
     public static void add(Service newService) {
         boolean exists = false;
         for (Service service : services) {
-            if (service.getName().equalsIgnoreCase(newService.getName())) {
+            if (service.getServiceName().equalsIgnoreCase(newService.getServiceName())) {
                 exists = true;
             }
         }
@@ -55,7 +55,7 @@ public class ServiceLocator {
     public static void remove(String serviceName) {
         Service objectFound = null;
         for (Service service : services) {
-            if (service.getName().equalsIgnoreCase(serviceName)) {
+            if (service.getServiceName().equalsIgnoreCase(serviceName)) {
                 objectFound = service;
             }
         }

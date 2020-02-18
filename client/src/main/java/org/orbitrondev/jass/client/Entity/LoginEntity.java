@@ -86,7 +86,7 @@ public class LoginEntity implements Service {
      * Methods
      */
     @Override
-    public String getName() {
+    public String getServiceName() {
         return "login";
     }
 

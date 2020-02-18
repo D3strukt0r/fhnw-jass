@@ -80,7 +80,7 @@ public class ServerEntity implements Service {
      * Methods
      */
     @Override
-    public String getName() {
+    public String getServiceName() {
         return "server";
     }
 

@@ -271,7 +271,7 @@ public class BackendUtil implements Service, Closeable {
     }
 
     @Override
-    public String getName() {
+    public String getServiceName() {
         return "backend";
     }
 }

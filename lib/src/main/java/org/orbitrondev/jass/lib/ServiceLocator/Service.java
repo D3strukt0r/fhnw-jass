@@ -26,5 +26,5 @@ package org.orbitrondev.jass.lib.ServiceLocator;
  * @since 0.0.1
  */
 public interface Service {
-    public String getName();
+    public String getServiceName();
 }

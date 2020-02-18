@@ -121,7 +121,7 @@ public class DatabaseUtil implements Service, Closeable {
     }
 
     @Override
-    public String getName() {
+    public String getServiceName() {
         return "db";
     }
 }
