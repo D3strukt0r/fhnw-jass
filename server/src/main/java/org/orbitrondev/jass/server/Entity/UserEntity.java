@@ -38,8 +38,8 @@ import java.util.Date;
  * @since 0.0.1
  */
 @DatabaseTable(tableName = "users")
-public class User {
-    private static final Logger logger = LogManager.getLogger(User.class);
+public class UserEntity {
+    private static final Logger logger = LogManager.getLogger(UserEntity.class);
 
     /**
      * Fields (Columns)
@@ -68,17 +68,17 @@ public class User {
     /**
      * Constructors
      */
-    User() {
+    UserEntity() {
         // For ORMLite
         // all persisted classes must define a no-arg constructor
         // with at least package visibility
     }
 
-    public User(String username) {
+    public UserEntity(String username) {
         this.username = username;
     }
 
-    public User(String username, String password) {
+    public UserEntity(String username, String password) {
         this.username = username;
         setPassword(password);
     }

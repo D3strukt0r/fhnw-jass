@@ -19,13 +19,13 @@
 package org.orbitrondev.jass.server.Entity;
 
 import org.orbitrondev.jass.lib.ServiceLocator.ServiceLocator;
-import org.orbitrondev.jass.server.DatabaseUtil;
+import org.orbitrondev.jass.server.Utils.DatabaseUtil;
 
 import java.sql.SQLException;
 import java.util.List;
 
 public class UserRepository {
-    public static boolean create(User user) {
+    public static boolean create(UserEntity user) {
         DatabaseUtil db = (DatabaseUtil) ServiceLocator.get("db");
         if (db == null) {
             return false;
@@ -38,7 +38,7 @@ public class UserRepository {
         }
     }
 
-    public static boolean remove(User user) {
+    public static boolean remove(UserEntity user) {
         DatabaseUtil db = (DatabaseUtil) ServiceLocator.get("db");
         if (db == null) {
             return false;
@@ -52,14 +52,14 @@ public class UserRepository {
         }
     }
 
-    public static User getByUsername(String username) {
+    public static UserEntity getByUsername(String username) {
         DatabaseUtil db = (DatabaseUtil) ServiceLocator.get("db");
         if (db == null) {
             return null;
         }
 
         try {
-            List<User> results = db.getUserDao().queryBuilder().where().eq("username", username).query();
+            List<UserEntity> results = db.getUserDao().queryBuilder().where().eq("username", username).query();
             if(results.size() != 0) {
                 return results.get(0);
             } else {
@@ -77,7 +77,7 @@ public class UserRepository {
         }
 
         try {
-            List<User> results = db.getUserDao().queryBuilder().where().eq("username", username).query();
+            List<UserEntity> results = db.getUserDao().queryBuilder().where().eq("username", username).query();
             return results.size() != 0;
         } catch (SQLException e) {
             return false;

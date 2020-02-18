@@ -16,7 +16,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package org.orbitrondev.jass.server;
+package org.orbitrondev.jass.server.Utils;
 
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.dao.DaoManager;
@@ -40,7 +40,7 @@ import java.sql.SQLException;
 public class DatabaseUtil implements Service, Closeable {
     private ConnectionSource connectionSource;
 
-    private Dao<User, String> userDao;
+    private Dao<UserEntity, String> userDao;
 
     /**
      * Create a database connection
@@ -71,12 +71,12 @@ public class DatabaseUtil implements Service, Closeable {
         /*
          * Create our DAOs. One for each class and associated table.
          */
-        userDao = DaoManager.createDao(connectionSource, User.class);
+        userDao = DaoManager.createDao(connectionSource, UserEntity.class);
 
         /*
          * Create the tables, if they don't exist yet.
          */
-        TableUtils.createTableIfNotExists(connectionSource, User.class);
+        TableUtils.createTableIfNotExists(connectionSource, UserEntity.class);
     }
 
     /**
@@ -96,7 +96,7 @@ public class DatabaseUtil implements Service, Closeable {
      *
      * @since 0.0.1
      */
-    public Dao<User, String> getUserDao() {
+    public Dao<UserEntity, String> getUserDao() {
         return userDao;
     }
 

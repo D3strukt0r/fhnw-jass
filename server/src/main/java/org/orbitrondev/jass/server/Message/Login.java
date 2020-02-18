@@ -25,7 +25,7 @@ import org.orbitrondev.jass.lib.Message.LoginData;
 import org.orbitrondev.jass.lib.Message.MessageData;
 import org.orbitrondev.jass.lib.Message.ResultData;
 import org.orbitrondev.jass.server.Client;
-import org.orbitrondev.jass.server.Entity.User;
+import org.orbitrondev.jass.server.Entity.UserEntity;
 import org.orbitrondev.jass.server.Entity.UserRepository;
 
 import java.security.SecureRandom;
@@ -50,7 +50,7 @@ public class Login extends Message {
     @Override
     public void process(Client client) {
         // Find existing login matching the username
-        User user;
+        UserEntity user;
         if (UserRepository.usernameExists(data.getUsername())) {
             logger.info("User " + data.getUsername() + " exists");
             user = UserRepository.getByUsername(data.getUsername());

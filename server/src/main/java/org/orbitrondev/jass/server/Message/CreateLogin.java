@@ -24,7 +24,7 @@ import org.orbitrondev.jass.lib.Message.CreateLoginData;
 import org.orbitrondev.jass.lib.Message.MessageData;
 import org.orbitrondev.jass.lib.Message.ResultData;
 import org.orbitrondev.jass.server.Client;
-import org.orbitrondev.jass.server.Entity.User;
+import org.orbitrondev.jass.server.Entity.UserEntity;
 import org.orbitrondev.jass.server.Entity.UserRepository;
 
 /**
@@ -56,7 +56,7 @@ public class CreateLogin extends Message {
             if (data.getPassword() != null && data.getPassword().length() >= 3) { // lax password requirements
                 // Check whether the username is not already taken
                 if (!UserRepository.usernameExists(data.getUsername())) {
-                    User newUser = new User(data.getUsername(), data.getPassword());
+                    UserEntity newUser = new UserEntity(data.getUsername(), data.getPassword());
                     // Add the new user to the database, and only return true if it was saved successfully
                     if (UserRepository.create(newUser)) {
                         logger.info("User " + newUser.getUsername() + " created");

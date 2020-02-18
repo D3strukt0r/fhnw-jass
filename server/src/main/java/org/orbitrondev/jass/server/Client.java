@@ -22,7 +22,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.orbitrondev.jass.lib.Message.MessageData;
 import org.orbitrondev.jass.lib.Message.MessageErrorData;
-import org.orbitrondev.jass.server.Entity.User;
+import org.orbitrondev.jass.server.Entity.UserEntity;
 import org.orbitrondev.jass.server.Message.Message;
 import org.orbitrondev.jass.server.Message.MessageError;
 
@@ -45,7 +45,7 @@ public class Client {
 
     private Socket socket;
     private volatile boolean clientReachable = true;
-    private User user = null;
+    private UserEntity user = null;
     private String token = null;
 
     /**
@@ -127,7 +127,7 @@ public class Client {
         }
     }
 
-    public User getUser() {
+    public UserEntity getUser() {
         return user;
     }
 
@@ -137,7 +137,7 @@ public class Client {
         return name;
     }
 
-    public void setUser(User user) {
+    public void setUser(UserEntity user) {
         this.user = user;
     }
 

@@ -22,7 +22,7 @@ import org.orbitrondev.jass.lib.Message.ChangePasswordData;
 import org.orbitrondev.jass.lib.Message.MessageData;
 import org.orbitrondev.jass.lib.Message.ResultData;
 import org.orbitrondev.jass.server.Client;
-import org.orbitrondev.jass.server.Entity.User;
+import org.orbitrondev.jass.server.Entity.UserEntity;
 
 /**
  * Overwrite the password of the currently logged in user.
@@ -43,7 +43,7 @@ public class ChangePassword extends Message {
     public void process(Client client) {
         boolean result = false;
         if (client.getToken().equals(data.getToken())) {
-            User user = client.getUser();
+            UserEntity user = client.getUser();
             user.setPassword(data.getNewPassword());
             result = true;
         }

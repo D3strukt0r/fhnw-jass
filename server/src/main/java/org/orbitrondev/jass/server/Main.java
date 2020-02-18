@@ -25,6 +25,7 @@ import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.core.LoggerContext;
 import org.apache.logging.log4j.core.config.Configuration;
 import org.orbitrondev.jass.lib.ServiceLocator.ServiceLocator;
+import org.orbitrondev.jass.server.Utils.DatabaseUtil;
 
 import java.io.IOException;
 import java.security.GeneralSecurityException;
