@@ -13,13 +13,9 @@
         </Console>
     </Appenders>
     <Loggers>
-        <Logger name="com.j256.ormlite.table.TableUtils" level="all" additivity="false">
-            <!--<AppenderRef ref="Console" level="warn"/>-->
-            <AppenderRef ref="File"/>
-        </Logger>
-        <Root level="all">
-            <!--<AppenderRef ref="Console" level="warn"/>-->
-            <AppenderRef ref="File"/>
+        <Root level="info">
+            <AppenderRef ref="Console"/>
+            <AppenderRef ref="File" level="trace"/>
         </Root>
     </Loggers>
 </Configuration>
