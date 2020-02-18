@@ -55,6 +55,11 @@ public abstract class MessageData implements Serializable {
         this.messageType = messageType;
     }
 
+    public MessageData(int id, String messageType) {
+        this.id = id;
+        this.messageType = messageType;
+    }
+
     public MessageData(JSONObject data) {
         id = data.getInt("id");
         messageType = data.getString("messageType");

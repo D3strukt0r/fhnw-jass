@@ -38,6 +38,6 @@ public class Logout extends Message {
     public void process(Client client) {
         client.setToken(null); // Destroy authentication token
         client.setUser(null); // Destroy account information
-        client.send(new Result(new ResultData(true)));
+        client.send(new Result(new ResultData(rawData.getId(), true)));
     }
 }

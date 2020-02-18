@@ -47,7 +47,7 @@ public class ChangePassword extends Message {
             user.setPassword(data.getNewPassword());
             result = true;
         }
-        client.send(new Result(new ResultData(result)));
+        client.send(new Result(new ResultData(data.getId(), result)));
     }
 
 }

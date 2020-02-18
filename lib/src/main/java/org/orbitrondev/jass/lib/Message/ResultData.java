@@ -34,14 +34,14 @@ public class ResultData extends MessageData {
     /**
      * This constructor is used by most messages
      */
-    public ResultData(boolean result) {
-        super("Result");
+    public ResultData(int id, boolean result) {
+        super(id, "Result");
         this.result = result;
         resultData = new JSONObject();
     }
 
-    public ResultData(boolean result, JSONObject resultData) {
-        super("Result");
+    public ResultData(int id, boolean result, JSONObject resultData) {
+        super(id, "Result");
         this.result = result;
         this.resultData = resultData;
     }

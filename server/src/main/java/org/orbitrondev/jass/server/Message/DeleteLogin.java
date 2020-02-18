@@ -48,6 +48,6 @@ public class DeleteLogin extends Message {
             client.setUser(null);
             result = true;
         }
-        client.send(new Result(new ResultData(result)));
+        client.send(new Result(new ResultData(data.getId(), result)));
     }
 }

@@ -53,7 +53,7 @@ public class Login extends Message {
             user = UserRepository.getByUsername(data.getUsername());
         } else {
             logger.info("User " + data.getUsername() + " does not exist");
-            client.send(new Result(new ResultData(false)));
+            client.send(new Result(new ResultData(data.getId(), false)));
             return;
         }
 
@@ -66,10 +66,10 @@ public class Login extends Message {
 
             JSONObject resultData = new JSONObject();
             resultData.put("token", token);
-            client.send(new Result(new ResultData(true, resultData)));
+            client.send(new Result(new ResultData(data.getId(), true, resultData)));
         } else {
             logger.info("Client used the wrong password");
-            client.send(new Result(new ResultData(false)));
+            client.send(new Result(new ResultData(data.getId(), false)));
         }
     }
 }

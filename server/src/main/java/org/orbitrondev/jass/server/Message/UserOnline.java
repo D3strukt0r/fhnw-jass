@@ -51,6 +51,6 @@ public class UserOnline extends Message {
         if (client.getToken() != null && client.getToken().equals(data.getToken())) {
             result = Listener.exists(data.getUsername());
         }
-        client.send(new Result(new ResultData(result)));
+        client.send(new Result(new ResultData(data.getId(), result)));
     }
 }
