@@ -28,6 +28,8 @@ import org.orbitrondev.jass.server.Client;
 import org.orbitrondev.jass.server.Entity.User;
 import org.orbitrondev.jass.server.Entity.UserRepository;
 
+import java.security.SecureRandom;
+
 /**
  * Login to an existing account. If successful, return an authentication token to the client.
  *
@@ -38,6 +40,7 @@ import org.orbitrondev.jass.server.Entity.UserRepository;
 public class Login extends Message {
     private static final Logger logger = LogManager.getLogger(Login.class);
     private LoginData data;
+    private static final SecureRandom rand = new SecureRandom();
 
     public Login(MessageData rawData) {
         super(rawData);
@@ -61,7 +64,7 @@ public class Login extends Message {
         if (user != null && user.checkPassword(data.getPassword())) {
             logger.info("Client used the correct password");
             client.setUser(user);
-            String token = User.createToken();
+            String token = createToken();
             client.setToken(token);
 
             JSONObject resultData = new JSONObject();
@@ -71,5 +74,25 @@ public class Login extends Message {
             logger.info("Client used the wrong password");
             client.send(new Result(new ResultData(data.getId(), false)));
         }
+    }
+
+    public static String createToken() {
+        byte[] token = new byte[16];
+        rand.nextBytes(token);
+        return bytesToHex(token);
+    }
+
+    // From:
+    // https://stackoverflow.com/questions/9655181/how-to-convert-a-byte-array-to-a-hex-string-in-java
+    private final static char[] hexArray = "0123456789ABCDEF".toCharArray();
+
+    public static String bytesToHex(byte[] bytes) {
+        char[] hexChars = new char[bytes.length * 2];
+        for (int j = 0; j < bytes.length; j++) {
+            int v = bytes[j] & 0xFF;
+            hexChars[j * 2] = hexArray[v >>> 4];
+            hexChars[j * 2 + 1] = hexArray[v & 0x0F];
+        }
+        return new String(hexChars);
     }
 }
