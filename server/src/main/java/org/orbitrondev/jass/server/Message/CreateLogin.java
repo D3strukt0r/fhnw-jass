@@ -63,8 +63,6 @@ public class CreateLogin extends Message {
                     if (UserRepository.create(newUser)) {
                         logger.info("User " + newUser.getUsername() + " created");
                         result = true;
-                    } else {
-                        logger.warn("User " + newUser.getUsername() + " could not be created");
                     }
                 }
             }

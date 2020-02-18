@@ -18,6 +18,8 @@
 
 package org.orbitrondev.jass.server.Message;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.orbitrondev.jass.lib.Message.DeleteLoginData;
 import org.orbitrondev.jass.lib.Message.MessageData;
 import org.orbitrondev.jass.lib.Message.ResultData;
@@ -32,6 +34,7 @@ import org.orbitrondev.jass.server.Entity.UserRepository;
  * @since 0.0.1
  */
 public class DeleteLogin extends Message {
+    private static final Logger logger = LogManager.getLogger(DeleteLogin.class);
     private DeleteLoginData data;
 
     public DeleteLogin(MessageData rawData) {
@@ -42,12 +45,17 @@ public class DeleteLogin extends Message {
     @Override
     public void process(Client client) {
         boolean result = false;
-        if (client.getToken().equals(data.getToken())) {
-            UserRepository.remove(client.getUser());
-            client.setToken(null);
-            client.setUser(null);
-            result = true;
+
+        // Only continue if the user has the right token.
+        if (client.getToken() != null && client.getToken().equals(data.getToken())) {
+            if (UserRepository.remove(client.getUser())) {
+                logger.info("User " + client.getUser().getUsername() + " was deleted");
+                client.setToken(null);
+                client.setUser(null);
+                result = true;
+            }
         }
+
         client.send(new Result(new ResultData(data.getId(), result)));
     }
 }

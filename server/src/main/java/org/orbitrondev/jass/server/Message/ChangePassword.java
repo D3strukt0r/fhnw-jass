@@ -18,11 +18,14 @@
 
 package org.orbitrondev.jass.server.Message;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.orbitrondev.jass.lib.Message.ChangePasswordData;
 import org.orbitrondev.jass.lib.Message.MessageData;
 import org.orbitrondev.jass.lib.Message.ResultData;
 import org.orbitrondev.jass.server.Client;
 import org.orbitrondev.jass.server.Entity.UserEntity;
+import org.orbitrondev.jass.server.Entity.UserRepository;
 
 /**
  * Overwrite the password of the currently logged in user.
@@ -32,6 +35,7 @@ import org.orbitrondev.jass.server.Entity.UserEntity;
  * @since 0.0.1
  */
 public class ChangePassword extends Message {
+    private static final Logger logger = LogManager.getLogger(ChangePassword.class);
     private ChangePasswordData data;
 
     public ChangePassword(MessageData rawData) {
@@ -44,6 +48,7 @@ public class ChangePassword extends Message {
         boolean result = false;
 
         // Only continue if the user has the right token.
+        if (client.getToken() != null && client.getToken().equals(data.getToken())) {
             UserEntity user = client.getUser();
             user.setPassword(data.getNewPassword());
             result = true;
