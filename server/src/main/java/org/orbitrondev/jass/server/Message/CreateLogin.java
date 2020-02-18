@@ -50,13 +50,15 @@ public class CreateLogin extends Message {
     @Override
     public void process(Client client) {
         boolean result = false;
+
         // Check for a valid username
         if (data.getUsername() != null && data.getUsername().length() >= 3) {
-            // Check for a valid password
-            if (data.getPassword() != null && data.getPassword().length() >= 3) { // lax password requirements
+            // Check for a valid password (lax password requirements)
+            if (data.getPassword() != null && data.getPassword().length() >= 3) {
                 // Check whether the username is not already taken
                 if (!UserRepository.usernameExists(data.getUsername())) {
                     UserEntity newUser = new UserEntity(data.getUsername(), data.getPassword());
+
                     // Add the new user to the database, and only return true if it was saved successfully
                     if (UserRepository.create(newUser)) {
                         logger.info("User " + newUser.getUsername() + " created");
@@ -67,6 +69,7 @@ public class CreateLogin extends Message {
                 }
             }
         }
+
         client.send(new Result(new ResultData(data.getId(), result)));
     }
 

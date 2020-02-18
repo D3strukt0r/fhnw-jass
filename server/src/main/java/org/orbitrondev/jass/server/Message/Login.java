@@ -49,7 +49,7 @@ public class Login extends Message {
 
     @Override
     public void process(Client client) {
-        // Find existing login matching the username
+        // Find existing login matching the username.
         UserEntity user;
         if (UserRepository.usernameExists(data.getUsername())) {
             logger.info("User " + data.getUsername() + " exists");
@@ -60,13 +60,16 @@ public class Login extends Message {
             return;
         }
 
-        // Check if the client used the correct password
+        // Check if the client used the correct password.
         if (user != null && user.checkPassword(data.getPassword())) {
             logger.info("Client used the correct password");
+
+            // Save the user to this connection.
             client.setUser(user);
             String token = createToken();
             client.setToken(token);
 
+            // Return the token to the client.
             JSONObject resultData = new JSONObject();
             resultData.put("token", token);
             client.send(new Result(new ResultData(data.getId(), true, resultData)));
@@ -76,6 +79,7 @@ public class Login extends Message {
         }
     }
 
+    // Code by Bradley
     public static String createToken() {
         byte[] token = new byte[16];
         rand.nextBytes(token);

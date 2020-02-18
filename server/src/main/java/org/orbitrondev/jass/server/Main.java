@@ -32,11 +32,11 @@ import java.security.GeneralSecurityException;
 import java.sql.SQLException;
 
 /**
- * Copyright 2015, FHNW, Prof. Dr. Brad Richards. All rights reserved. This code
- * is licensed under the terms of the BSD 3-clause license (see the file
- * license.txt).
+ * Copyright 2015, FHNW, Prof. Dr. Brad Richards. All rights reserved. This code is licensed under the terms of the BSD
+ * 3-clause license (see the file license.txt).
  *
  * @author Brad Richards
+ * @author Manuele Vaccari
  */
 public class Main {
     private static final Logger logger = LogManager.getLogger(Main.class);
@@ -77,7 +77,7 @@ public class Main {
             System.exit(1);
         }
 
-        // Do the arguments' task
+        // Check for the ports argument
         int port = 0;
         try {
             port = Integer.parseInt(cmd.getOptionValue("port"));
@@ -86,6 +86,7 @@ public class Main {
             System.exit(1);
         }
 
+        // Check if the user wants to use a different location for the database
         if (cmd.hasOption("db-location")) {
             dbLocation = cmd.getOptionValue("db-location");
         }
@@ -97,6 +98,7 @@ public class Main {
             System.exit(1);
         }
 
+        // Check if the user wants more output in the console
         if (cmd.hasOption("verbose")) {
             final LoggerContext ctx = (LoggerContext) LogManager.getContext(false);
             final Configuration config = ctx.getConfiguration();
@@ -104,6 +106,7 @@ public class Main {
             ctx.updateLoggers();
         }
 
+        // Check if the user wants to use ssl
         boolean secure = cmd.hasOption("ssl");
 
         // Start the listener

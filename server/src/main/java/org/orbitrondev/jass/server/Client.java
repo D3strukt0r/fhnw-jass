@@ -39,6 +39,7 @@ import java.net.Socket;
  * license.txt).
  *
  * @author Brad Richards
+ * @author Manuele Vaccari (to work with Json messaging)
  */
 public class Client {
     private static final Logger logger = LogManager.getLogger(Client.class);

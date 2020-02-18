@@ -42,7 +42,8 @@ public class ChangePassword extends Message {
     @Override
     public void process(Client client) {
         boolean result = false;
-        if (client.getToken().equals(data.getToken())) {
+
+        // Only continue if the user has the right token.
             UserEntity user = client.getUser();
             user.setPassword(data.getNewPassword());
             result = true;

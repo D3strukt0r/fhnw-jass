@@ -48,9 +48,13 @@ public class UserOnline extends Message {
     @Override
     public void process(Client client) {
         boolean result = false;
+
+        // Only continue if the user has the right token.
         if (client.getToken() != null && client.getToken().equals(data.getToken())) {
+            // Check if there is anyone connected with the given username.
             result = Listener.exists(data.getUsername());
         }
+
         client.send(new Result(new ResultData(data.getId(), result)));
     }
 }

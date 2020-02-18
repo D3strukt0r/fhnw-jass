@@ -68,10 +68,12 @@ public class Listener extends Thread {
     }
 
     @Override
+    @SuppressWarnings("InfiniteLoopStatement")
     public void run() {
         logger.info("Starting listener on port " + port);
         while (true) {
             try {
+                // Listen for new incoming connections.
                 Socket socket = listener.accept();
                 clients.add(new Client(socket));
             } catch (Exception e) {
@@ -80,6 +82,13 @@ public class Listener extends Thread {
         }
     }
 
+    /**
+     * Check if there is someone connected using the given username.
+     *
+     * @param username A string with the username
+     *
+     * @return "true" if a client is connected, otherwise "false"
+     */
     public synchronized static boolean exists(String username) {
         for (Client c : clients) {
             if (c.getUser() != null && c.getUser().getUsername().equals(username)) return true;
@@ -87,6 +96,11 @@ public class Listener extends Thread {
         return false;
     }
 
+    /**
+     * Remove the desired client from the list of connected clients.
+     *
+     * @param client A client object
+     */
     public synchronized static void remove(Client client) {
         clients.remove(client);
     }

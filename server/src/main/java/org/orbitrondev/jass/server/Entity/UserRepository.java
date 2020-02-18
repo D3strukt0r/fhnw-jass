@@ -27,10 +27,13 @@ import java.util.List;
 public class UserRepository {
     public static boolean create(UserEntity user) {
         DatabaseUtil db = (DatabaseUtil) ServiceLocator.get("db");
+        // Check that database is available, otherwise fail.
         if (db == null) {
             return false;
         }
+
         try {
+            // Add the user to the db
             db.getUserDao().create(user);
             return true;
         } catch (SQLException e) {
@@ -40,11 +43,13 @@ public class UserRepository {
 
     public static boolean remove(UserEntity user) {
         DatabaseUtil db = (DatabaseUtil) ServiceLocator.get("db");
+        // Check that database is available, otherwise fail.
         if (db == null) {
             return false;
         }
 
         try {
+            // Remove the user from the db
             db.getUserDao().delete(user);
             return true;
         } catch (SQLException e) {
@@ -54,13 +59,15 @@ public class UserRepository {
 
     public static UserEntity getByUsername(String username) {
         DatabaseUtil db = (DatabaseUtil) ServiceLocator.get("db");
+        // Check that database is available, otherwise fail.
         if (db == null) {
             return null;
         }
 
         try {
+            // Find all users with the given username (only one)
             List<UserEntity> results = db.getUserDao().queryBuilder().where().eq("username", username).query();
-            if(results.size() != 0) {
+            if (results.size() != 0) {
                 return results.get(0);
             } else {
                 return null;
@@ -72,11 +79,13 @@ public class UserRepository {
 
     public static boolean usernameExists(String username) {
         DatabaseUtil db = (DatabaseUtil) ServiceLocator.get("db");
+        // Check that database is available, otherwise fail.
         if (db == null) {
             return false;
         }
 
         try {
+            // Check if there is somebody in the db already using the given username.
             List<UserEntity> results = db.getUserDao().queryBuilder().where().eq("username", username).query();
             return results.size() != 0;
         } catch (SQLException e) {
