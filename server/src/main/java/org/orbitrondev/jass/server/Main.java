@@ -23,7 +23,6 @@ import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.core.LoggerContext;
-import org.apache.logging.log4j.core.config.Configuration;
 import org.orbitrondev.jass.lib.ServiceLocator.ServiceLocator;
 import org.orbitrondev.jass.server.Utils.DatabaseUtil;
 
@@ -45,45 +44,32 @@ public class Main {
     public static void main(String[] args) {
         // Create all arguments for the command line interface
         Options options = new Options();
-
-        Option dbOption = new Option("p", "port", true, "Defines the port to use");
-        options.addOption(dbOption);
-
-        Option dbLocationOption = new Option("l", "db-location", true, "Define where the database is saved");
-        dbLocationOption.setOptionalArg(true);
-        options.addOption(dbLocationOption);
-
-        Option verboseOption = new Option("v", "verbose", false, "Show more extensive logs");
-        verboseOption.setOptionalArg(true);
-        options.addOption(verboseOption);
-
-        Option secureOption = new Option("s", "ssl", false, "Accept secure connections");
-        secureOption.setOptionalArg(true);
-        options.addOption(secureOption);
+        options
+            .addOption(Option.builder("p").longOpt("port").desc("Defines the port to use").required().hasArg().build())
+            .addOption(Option.builder("l").longOpt("db-location").desc("Define where the database is saved").hasArg().build())
+            .addOption(Option.builder("v").longOpt("verbose").desc("Show more extensive logs").hasArg(false).build())
+            .addOption(Option.builder("s").longOpt("ssl").desc("Accept secure connections").hasArg(false).build());
 
         CommandLineParser parser = new DefaultParser();
         HelpFormatter formatter = new HelpFormatter();
-        CommandLine cmd = null;
+        CommandLine cmd;
 
         try {
             cmd = parser.parse(options, args);
         } catch (ParseException e) {
-            System.out.println(e.getMessage());
+            // When using an unknown argument
+            System.out.println(e.getMessage()); // Prints "Unrecognized option: ..."
             formatter.printHelp("server.jar", options);
-
-            System.exit(1);
-        }
-        if (cmd == null) {
-            System.exit(1);
+            return;
         }
 
         // Check for the ports argument
-        int port = 0;
+        int port;
         try {
             port = Integer.parseInt(cmd.getOptionValue("port"));
         } catch (NumberFormatException e) {
-            logger.error("Port is not set or not a number (integer)");
-            System.exit(1);
+            logger.fatal("The value you used for port is not an integer");
+            return;
         }
 
         // Check if the user wants to use a different location for the database
@@ -95,14 +81,13 @@ public class Main {
             ServiceLocator.add(db);
         } catch (SQLException e) {
             logger.fatal("Error creating connection to database");
-            System.exit(1);
+            return;
         }
 
         // Check if the user wants more output in the console
         if (cmd.hasOption("verbose")) {
             final LoggerContext ctx = (LoggerContext) LogManager.getContext(false);
-            final Configuration config = ctx.getConfiguration();
-            config.getRootLogger().addAppender(config.getAppender("Console"), Level.INFO, null);
+            ctx.getConfiguration().getRootLogger().setLevel(Level.DEBUG);
             ctx.updateLoggers();
         }
 

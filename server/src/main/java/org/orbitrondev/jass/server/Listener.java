@@ -22,7 +22,6 @@ import com.sun.net.ssl.internal.ssl.Provider;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import javax.net.ssl.SSLServerSocket;
 import javax.net.ssl.SSLServerSocketFactory;
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -61,7 +60,7 @@ public class Listener extends Thread {
 
             // Initialize the Server Socket
             SSLServerSocketFactory sslServerSocketfactory = (SSLServerSocketFactory) SSLServerSocketFactory.getDefault();
-            listener = (SSLServerSocket) sslServerSocketfactory.createServerSocket(port, 10, null);
+            listener = sslServerSocketfactory.createServerSocket(port, 10, null);
         } else {
             listener = new ServerSocket(port, 10, null);
         }
