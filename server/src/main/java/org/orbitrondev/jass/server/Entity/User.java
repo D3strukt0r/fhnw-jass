@@ -73,13 +73,14 @@ public class User {
         // all persisted classes must define a no-arg constructor
         // with at least package visibility
     }
+
     public User(String username) {
         this.username = username;
     }
 
     public User(String username, String password) {
         this.username = username;
-        setPassword(password);;
+        setPassword(password);
     }
 
     /**
@@ -120,7 +121,7 @@ public class User {
             System.exit(0);
         }
 
-        if (matched) setLastLogin(Date.from(Instant.now()));;
+        if (matched) setLastLogin(Date.from(Instant.now()));
         return matched;
     }
 
