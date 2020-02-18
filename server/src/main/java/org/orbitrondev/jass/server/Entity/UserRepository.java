@@ -57,6 +57,22 @@ public class UserRepository {
         }
     }
 
+    public static boolean update(UserEntity user) {
+        DatabaseUtil db = (DatabaseUtil) ServiceLocator.get("db");
+        // Check that database is available, otherwise fail.
+        if (db == null) {
+            return false;
+        }
+
+        try {
+            // Update the user object in the db
+            db.getUserDao().update(user);
+            return true;
+        } catch (SQLException e) {
+            return false;
+        }
+    }
+
     public static UserEntity getByUsername(String username) {
         DatabaseUtil db = (DatabaseUtil) ServiceLocator.get("db");
         // Check that database is available, otherwise fail.

@@ -51,8 +51,14 @@ public class ChangePassword extends Message {
         if (client.getToken() != null && client.getToken().equals(data.getToken())) {
             UserEntity user = client.getUser();
             user.setPassword(data.getNewPassword());
-            result = true;
+
+            // Update inside the db, and only return true, if that was also successful.
+            if (UserRepository.update(user)) {
+                logger.info("User " + user.getUsername() + " changed his password.");
+                result = true;
+            }
         }
+
         client.send(new Result(new ResultData(data.getId(), result)));
     }
 
