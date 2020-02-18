@@ -30,9 +30,8 @@ import java.security.Security;
 import java.util.ArrayList;
 
 /**
- * Copyright 2015, FHNW, Prof. Dr. Brad Richards. All rights reserved. This code
- * is licensed under the terms of the BSD 3-clause license (see the file
- * license.txt).
+ * Copyright 2015, FHNW, Prof. Dr. Brad Richards. All rights reserved. This code is licensed under the terms of the BSD
+ * 3-clause license (see the file license.txt).
  *
  * @author Brad Richards
  */
@@ -75,7 +74,7 @@ public class Listener extends Thread {
                 // Listen for new incoming connections.
                 Socket socket = listener.accept();
                 clients.add(new Client(socket));
-            } catch (Exception e) {
+            } catch (IOException e) {
                 logger.info(e.toString());
             }
         }

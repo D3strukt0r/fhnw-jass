@@ -32,6 +32,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.lang.reflect.Constructor;
 import java.net.Socket;
+import java.net.SocketException;
 
 /**
  * Copyright 2015, FHNW, Prof. Dr. Brad Richards. All rights reserved. This code
@@ -41,11 +42,12 @@ import java.net.Socket;
  * @author Brad Richards
  * @author Manuele Vaccari (to work with Json messaging)
  */
-public class Client {
+public class Client extends Thread {
     private static final Logger logger = LogManager.getLogger(Client.class);
 
     private Socket socket;
     private volatile boolean clientReachable = true;
+
     private UserEntity user = null;
     private String token = null;
 
@@ -54,62 +56,62 @@ public class Client {
      * start a thread to receive messages from the client.
      */
     public Client(Socket socket) {
+        super();
+        this.setName("ClientThread");
         this.socket = socket;
 
         // Create thread to read incoming messages
-        Runnable r = () -> {
-            try {
-                while (clientReachable) {
-                    Message msg = null;
-                    try {
-                        BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-                        String msgText = in.readLine(); // Will wait here for complete line
-                        logger.info("Receiving message: " + msgText);
-
-                        // Convert JSON string into a workable object
-                        MessageData msgData = MessageData.unserialize(msgText);
-
-                        // Create a server message object of the correct class, using reflection
-                        //
-                        // This would be more understandable - but a *lot* longer - if we used
-                        // a series of "if" statements:
-                        //
-                        // if (parts[0].equals("Login") msg = new Login(parts);
-                        // else if (parts[0].equals("Logout") msg = new Logout(parts);
-                        // else if ...
-                        // else ...
-                        String messageClassName = Message.class.getPackage().getName() + "." + msgData.getMessageType();
-                        try {
-                            Class<?> messageClass = Class.forName(messageClassName);
-                            Constructor<?> constructor = messageClass.getConstructor(MessageData.class);
-                            msg = (Message) constructor.newInstance(msgData);
-                            logger.info("Received message of type " + msgData.getMessageType());
-                        } catch (Exception e) {
-                            logger.error("Received invalid message of type " + msgData.getMessageType());
-                        }
-                    } catch (IOException e) {
-                        logger.error(e.toString());
-                    }
-
-                    // Note the syntax "Client.this" - writing "this" would reference the Runnable
-                    // object
-                    if (msg != null)
-                        msg.process(Client.this);
-                    else { // Invalid message or broken socket
-                        send(new MessageError(new MessageErrorData(MessageErrorData.ErrorType.INVALID_COMMAND)));
-                    }
-                }
-            } catch (Exception e) {
-                logger.info("Client " + getUsername() + " disconnected");
-            } finally {
-                // Free up RAM by deleting disconnected clients.
-                Listener.remove(this);
-            }
-        };
-        Thread t = new Thread(r);
-        t.start();
+        this.start();
 
         logger.info("New client created: " + getUsername());
+    }
+
+    @Override
+    public void run() {
+        while (clientReachable) {
+            Message msg = null;
+            try {
+                BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+                String msgText = in.readLine(); // Will wait here for complete line
+                logger.info("Receiving message: " + msgText);
+
+                // Convert JSON string into a workable object
+                MessageData msgData = MessageData.unserialize(msgText);
+
+                // Create a server message object of the correct class, using reflection
+                //
+                // This would be more understandable - but a *lot* longer - if we used
+                // a series of "if" statements:
+                //
+                // if (parts[0].equals("Login") msg = new Login(parts);
+                // else if (parts[0].equals("Logout") msg = new Logout(parts);
+                // else if ...
+                // else ...
+                String messageClassName = Message.class.getPackage().getName() + "." + msgData.getMessageType();
+                try {
+                    Class<?> messageClass = Class.forName(messageClassName);
+                    Constructor<?> constructor = messageClass.getConstructor(MessageData.class);
+                    msg = (Message) constructor.newInstance(msgData);
+                    logger.info("Received message of type " + msgData.getMessageType());
+                } catch (Exception e) {
+                    logger.error("Received invalid message of type " + msgData.getMessageType());
+                }
+            } catch (SocketException e) {
+                logger.info("Client " + getUsername() + " disconnected");
+                disconnect();
+                continue;
+            } catch (IOException e) {
+                logger.error(e.toString());
+            }
+
+            // Note the syntax "Client.this" - writing "this" would reference the Runnable
+            // object
+            if (msg != null)
+                msg.process(Client.this);
+            else { // Invalid message or broken socket
+                send(new MessageError(new MessageErrorData(MessageErrorData.ErrorType.INVALID_COMMAND)));
+            }
+        }
     }
 
     /**
@@ -123,9 +125,17 @@ public class Client {
             out.flush();
         } catch (IOException e) {
             logger.info("Client " + getUsername() + " unreachable; logged out");
-            clientReachable = false;
-            this.token = null;
+            disconnect();
         }
+    }
+
+    public void disconnect() {
+        clientReachable = false;
+        token = null;
+        user = null;
+
+        // Free up RAM by deleting disconnected clients.
+        Listener.remove(this);
     }
 
     public UserEntity getUser() {
@@ -133,7 +143,7 @@ public class Client {
     }
 
     public String getUsername() {
-        String name = null;
+        String name = "<undefined>";
         if (user != null) name = user.getUsername();
         return name;
     }
