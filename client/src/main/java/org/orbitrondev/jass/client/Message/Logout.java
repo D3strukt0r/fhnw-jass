@@ -20,7 +20,7 @@ package org.orbitrondev.jass.client.Message;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.orbitrondev.jass.client.Utils.BackendUtil;
+import org.orbitrondev.jass.client.Utils.SocketUtil;
 import org.orbitrondev.jass.lib.Message.MessageData;
 import org.orbitrondev.jass.lib.Message.ResultData;
 
@@ -39,10 +39,10 @@ public class Logout extends Message {
     }
 
     @Override
-    public boolean process(BackendUtil backendUtil) {
-        backendUtil.send(this);
+    public boolean process(SocketUtil socket) {
+        socket.send(this);
 
-        Message result = backendUtil.waitForResultResponse(rawData.getId());
+        Message result = socket.waitForResultResponse(rawData.getId());
         ResultData resultData = (ResultData) result.getRawData();
 
         return resultData.getResult();

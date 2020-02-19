@@ -27,7 +27,7 @@ import org.orbitrondev.jass.client.Entity.LoginEntity;
 import org.orbitrondev.jass.client.Entity.LoginRepository;
 import org.orbitrondev.jass.client.Message.Login;
 import org.orbitrondev.jass.client.Model.LoginModel;
-import org.orbitrondev.jass.client.Utils.BackendUtil;
+import org.orbitrondev.jass.client.Utils.SocketUtil;
 import org.orbitrondev.jass.client.Utils.DatabaseUtil;
 import org.orbitrondev.jass.client.View.ViewHelper;
 import org.orbitrondev.jass.client.View.LoginView;
@@ -166,7 +166,7 @@ public class LoginController extends Controller<LoginModel, LoginView> {
                 view.getConnectAutomatically().isSelected()
             );
             System.out.println(view.getConnectAutomatically().isSelected());
-            BackendUtil backend = (BackendUtil) ServiceLocator.get("backend");
+            SocketUtil backend = (SocketUtil) ServiceLocator.get("backend");
             Login loginMsg = new Login(new LoginData(login.getUsername(), login.getPassword()));
 
             // Send the login request to the server. Update locally if successful.

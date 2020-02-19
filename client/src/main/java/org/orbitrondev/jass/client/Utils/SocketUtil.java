@@ -18,7 +18,6 @@
 
 package org.orbitrondev.jass.client.Utils;
 
-import com.sun.net.ssl.internal.ssl.Provider;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.orbitrondev.jass.client.Entity.LoginEntity;
@@ -27,12 +26,13 @@ import org.orbitrondev.jass.lib.Message.MessageData;
 import org.orbitrondev.jass.lib.ServiceLocator.Service;
 import org.orbitrondev.jass.lib.ServiceLocator.ServiceLocator;
 
-import javax.net.ssl.SSLSocket;
-import javax.net.ssl.SSLSocketFactory;
+import javax.net.SocketFactory;
+import javax.net.ssl.*;
 import java.io.*;
 import java.net.Socket;
 import java.net.SocketException;
-import java.security.Security;
+import java.security.*;
+import java.security.cert.CertificateException;
 import java.util.ArrayList;
 
 /**
@@ -42,25 +42,13 @@ import java.util.ArrayList;
  * @version %I%, %G%
  * @since 0.0.1
  */
-public class BackendUtil extends Thread implements Service, Closeable {
-    private static final Logger logger = LogManager.getLogger(BackendUtil.class);
+public class SocketUtil extends Thread implements Service, Closeable {
+    private static final Logger logger = LogManager.getLogger(SocketUtil.class);
 
     private Socket socket;
     private volatile boolean serverReachable = true;
 
     private ArrayList<Message> lastMessages = new ArrayList<>();
-
-    /**
-     * Creates a Socket (insecure) to the backend.
-     *
-     * @param ipAddress A String containing the ip address to reach the server.
-     * @param port      An integer containing the port which the server uses.
-     *
-     * @since 0.0.1
-     */
-    public BackendUtil(String ipAddress, int port) throws IOException {
-        this(ipAddress, port, false);
-    }
 
     /**
      * Creates a Socket (insecure or secure) to the backend.
@@ -71,7 +59,7 @@ public class BackendUtil extends Thread implements Service, Closeable {
      *
      * @since 0.0.1
      */
-    public BackendUtil(String ipAddress, int port, boolean secure) throws IOException {
+    public SocketUtil(String ipAddress, int port, boolean secure) throws IOException, KeyStoreException, CertificateException, NoSuchAlgorithmException, UnrecoverableKeyException, KeyManagementException {
         super();
         this.setName("BackendThread");
         this.setDaemon(true);
@@ -79,22 +67,35 @@ public class BackendUtil extends Thread implements Service, Closeable {
         if (secure) {
             logger.info("Connecting to server at: " + ipAddress + ":" + port + " (with SSL)");
 
-            // TODO: SSL is not properly setup
-            // Check out: https://gitlab.fhnw.ch/bradley.richards/java-projects/blob/master/src/chatroom/Howto_SSL_Certificates_in_Java.odt
+            /*
+             * @author https://stackoverflow.com/questions/53323855/sslserversocket-and-certificate-setup
+             */
+            // Create and initialize the SSLContext with key material
+            char[] trustStorePassword = "JassGame".toCharArray();
+            char[] keyStorePassword = "JassGame".toCharArray();
 
-            // Registering the JSSE provider
-            Security.addProvider(new Provider());
+            // First initialize the key and trust material
+            KeyStore trustStore = KeyStore.getInstance(KeyStore.getDefaultType());
+            trustStore.load(getClass().getResourceAsStream("/client.keystore"), trustStorePassword);
 
-            // Specifying the Truststore details. This is needed if you have created a
-            // truststore, for example, for self-signed certificates
-            System.setProperty("javax.net.ssl.trustStore", "truststore.ts");
-            System.setProperty("javax.net.ssl.trustStorePassword", "trustme");
+            KeyStore keyStore = KeyStore.getInstance(KeyStore.getDefaultType());
+            keyStore.load(getClass().getResourceAsStream("/client.keystore"), keyStorePassword);
 
-            // Creating Client Sockets
-            SSLSocketFactory sslsocketfactory = (SSLSocketFactory) SSLSocketFactory.getDefault();
-            socket = sslsocketfactory.createSocket(ipAddress, port);
+            // KeyManagers decide which key material to use
+            KeyManagerFactory kmf = KeyManagerFactory.getInstance(KeyManagerFactory.getDefaultAlgorithm());
+            kmf.init(keyStore, keyStorePassword);
 
-            // The next line is entirely optional !!
+            // TrustManagers decide whether to allow connections
+            TrustManagerFactory tmf = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
+            tmf.init(trustStore);
+
+            SSLContext sslContext = SSLContext.getInstance("TLS");
+            sslContext.init(kmf.getKeyManagers(), tmf.getTrustManagers(), SecureRandom.getInstanceStrong());
+
+            SocketFactory factory = sslContext.getSocketFactory();
+            socket = factory.createSocket(ipAddress, port);
+
+            // The next line is entirely optional!
             // The SSL handshake would happen automatically, the first time we send data.
             // Or we can immediately force the handshaking with this method:
             ((SSLSocket) socket).startHandshake();

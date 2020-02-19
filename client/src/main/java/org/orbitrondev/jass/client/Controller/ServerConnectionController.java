@@ -27,7 +27,7 @@ import org.apache.logging.log4j.Logger;
 import org.orbitrondev.jass.client.Entity.ServerEntity;
 import org.orbitrondev.jass.client.Entity.ServerRepository;
 import org.orbitrondev.jass.client.Model.ServerConnectionModel;
-import org.orbitrondev.jass.client.Utils.BackendUtil;
+import org.orbitrondev.jass.client.Utils.SocketUtil;
 import org.orbitrondev.jass.client.Utils.DatabaseUtil;
 import org.orbitrondev.jass.client.Utils.I18nUtil;
 import org.orbitrondev.jass.client.View.ViewHelper;
@@ -36,6 +36,12 @@ import org.orbitrondev.jass.lib.MVC.Controller;
 import org.orbitrondev.jass.lib.ServiceLocator.ServiceLocator;
 
 import java.io.IOException;
+import java.net.ConnectException;
+import java.security.KeyManagementException;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.UnrecoverableKeyException;
+import java.security.cert.CertificateException;
 import java.sql.SQLException;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -216,16 +222,21 @@ public class ServerConnectionController extends Controller<ServerConnectionModel
             );
             ServiceLocator.add(server);
 
-            BackendUtil backend = null;
+            SocketUtil backend = null;
             try {
                 // Try to connect to the server
-                backend = new BackendUtil(server.getIp(), server.getPort(), server.isSecure());
+                backend = new SocketUtil(server.getIp(), server.getPort(), server.isSecure());
                 ServiceLocator.add(backend);
                 ServerRepository.setToConnectAutomatically(server); // Make sure it's the only entry
+            } catch (ConnectException e) {
+                enableAll();
+                setErrorMessage("gui.serverConnection.connect.connection");
             } catch (IOException e) {
-                // This exception contains ConnectException, which basically means, it couldn't connect to the server.
                 enableAll();
                 setErrorMessage("gui.serverConnection.connectionFailed");
+            } catch (CertificateException | NoSuchAlgorithmException | UnrecoverableKeyException | KeyStoreException | KeyManagementException e) {
+                enableAll();
+                setErrorMessage("gui.serverConnection.connect.ssl");
             }
 
             if (backend != null) {

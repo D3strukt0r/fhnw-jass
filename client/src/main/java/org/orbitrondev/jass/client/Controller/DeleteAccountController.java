@@ -25,7 +25,7 @@ import org.orbitrondev.jass.client.Entity.LoginEntity;
 import org.orbitrondev.jass.client.Message.DeleteLogin;
 import org.orbitrondev.jass.client.Message.Logout;
 import org.orbitrondev.jass.client.Model.DeleteAccountModel;
-import org.orbitrondev.jass.client.Utils.BackendUtil;
+import org.orbitrondev.jass.client.Utils.SocketUtil;
 import org.orbitrondev.jass.client.View.DeleteAccountView;
 import org.orbitrondev.jass.client.View.ViewHelper;
 import org.orbitrondev.jass.lib.MVC.Controller;
@@ -108,7 +108,7 @@ public class DeleteAccountController extends Controller<DeleteAccountModel, Dele
 
         // Connection would freeze window (and the animations) so do it in a different thread.
         new Thread(() -> {
-            BackendUtil backend = (BackendUtil) ServiceLocator.get("backend");
+            SocketUtil backend = (SocketUtil) ServiceLocator.get("backend");
             LoginEntity login = (LoginEntity) ServiceLocator.get("login");
             DeleteLogin deleteLoginMsg = new DeleteLogin(new DeleteLoginData(login.getToken()));
 

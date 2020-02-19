@@ -18,7 +18,7 @@
 
 package org.orbitrondev.jass.client.Message;
 
-import org.orbitrondev.jass.client.Utils.BackendUtil;
+import org.orbitrondev.jass.client.Utils.SocketUtil;
 import org.orbitrondev.jass.lib.Message.MessageData;
 import org.orbitrondev.jass.lib.Message.ResultData;
 import org.orbitrondev.jass.lib.Message.UserOnlineData;
@@ -39,10 +39,10 @@ public class UserOnline extends Message {
     }
 
     @Override
-    public boolean process(BackendUtil backendUtil) {
-        backendUtil.send(this);
+    public boolean process(SocketUtil socket) {
+        socket.send(this);
 
-        Message result = backendUtil.waitForResultResponse(data.getId());
+        Message result = socket.waitForResultResponse(data.getId());
         ResultData resultData = (ResultData) result.getRawData();
 
         return resultData.getResult();

@@ -24,7 +24,7 @@ import javafx.scene.text.Text;
 import org.orbitrondev.jass.client.Entity.LoginEntity;
 import org.orbitrondev.jass.client.Message.ChangePassword;
 import org.orbitrondev.jass.client.Model.ChangePasswordModel;
-import org.orbitrondev.jass.client.Utils.BackendUtil;
+import org.orbitrondev.jass.client.Utils.SocketUtil;
 import org.orbitrondev.jass.client.View.ChangePasswordView;
 import org.orbitrondev.jass.client.View.ViewHelper;
 import org.orbitrondev.jass.lib.MVC.Controller;
@@ -164,7 +164,7 @@ public class ChangePasswordController extends Controller<ChangePasswordModel, Ch
             LoginEntity login = (LoginEntity) ServiceLocator.get("login");
             LoginEntity newLogin = new LoginEntity(login.getUsername(), view.getNewPassword().getText(), login.getToken());
 
-            BackendUtil backend = (BackendUtil) ServiceLocator.get("backend");
+            SocketUtil backend = (SocketUtil) ServiceLocator.get("backend");
             ChangePassword changePasswordMsg = new ChangePassword(new ChangePasswordData(login.getToken(), newLogin.getPassword()));
 
             // Send the change password request to the server. Update locally if successful.

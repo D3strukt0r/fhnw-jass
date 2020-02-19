@@ -27,13 +27,18 @@ import org.orbitrondev.jass.client.Entity.ServerEntity;
 import org.orbitrondev.jass.client.Entity.ServerRepository;
 import org.orbitrondev.jass.client.Main;
 import org.orbitrondev.jass.client.Message.Login;
-import org.orbitrondev.jass.client.Utils.BackendUtil;
+import org.orbitrondev.jass.client.Utils.SocketUtil;
 import org.orbitrondev.jass.client.Utils.DatabaseUtil;
 import org.orbitrondev.jass.lib.MVC.Model;
 import org.orbitrondev.jass.lib.Message.LoginData;
 import org.orbitrondev.jass.lib.ServiceLocator.ServiceLocator;
 
 import java.io.IOException;
+import java.security.KeyManagementException;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.UnrecoverableKeyException;
+import java.security.cert.CertificateException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
@@ -74,11 +79,11 @@ public class SplashModel extends Model {
                 if (server != null) {
                     logger.info("Server to connect automatically found");
                     try {
-                        BackendUtil backend = new BackendUtil(server.getIp(), server.getPort(), server.isSecure());
+                        SocketUtil backend = new SocketUtil(server.getIp(), server.getPort(), server.isSecure());
                         ServiceLocator.add(backend);
                         connected = true;
                         logger.info("Connected to server");
-                    } catch (IOException e) { /* Ignore and continue */ }
+                    } catch (IOException | KeyStoreException | CertificateException | NoSuchAlgorithmException | UnrecoverableKeyException | KeyManagementException e) { /* Ignore and continue */ }
                 }
             });
             // Check whether we can already login
@@ -86,7 +91,7 @@ public class SplashModel extends Model {
                 LoginEntity login = LoginRepository.findConnectAutomatically();
                 if (login != null) {
                     logger.info("Automatic login found");
-                    BackendUtil backend = (BackendUtil) ServiceLocator.get("backend");
+                    SocketUtil backend = (SocketUtil) ServiceLocator.get("backend");
                     if (backend != null) {
                         logger.info("Backend for login is available...");
                         Login loginMsg = new Login(new LoginData(login.getUsername(), login.getPassword()));

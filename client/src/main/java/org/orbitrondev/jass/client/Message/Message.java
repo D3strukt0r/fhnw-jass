@@ -18,7 +18,7 @@
 
 package org.orbitrondev.jass.client.Message;
 
-import org.orbitrondev.jass.client.Utils.BackendUtil;
+import org.orbitrondev.jass.client.Utils.SocketUtil;
 import org.orbitrondev.jass.lib.Message.MessageData;
 
 import java.lang.reflect.Constructor;
@@ -49,7 +49,7 @@ public abstract class Message {
     /**
      * Perform whatever actions are required for this particular type of message.
      */
-    public abstract boolean process(BackendUtil backendUtil);
+    public abstract boolean process(SocketUtil socket);
 
     /**
      * Create a message object of the correct class, using reflection

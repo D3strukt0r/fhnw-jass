@@ -25,7 +25,7 @@ import org.orbitrondev.jass.client.Entity.LoginEntity;
 import org.orbitrondev.jass.client.Message.CreateLogin;
 import org.orbitrondev.jass.client.Message.Login;
 import org.orbitrondev.jass.client.Model.RegisterModel;
-import org.orbitrondev.jass.client.Utils.BackendUtil;
+import org.orbitrondev.jass.client.Utils.SocketUtil;
 import org.orbitrondev.jass.client.View.ViewHelper;
 import org.orbitrondev.jass.client.View.RegisterView;
 import org.orbitrondev.jass.lib.MVC.Controller;
@@ -165,7 +165,7 @@ public class RegisterController extends Controller<RegisterModel, RegisterView> 
         new Thread(() -> {
             LoginEntity login = new LoginEntity(view.getUsername().getText(), view.getPassword().getText());
 
-            BackendUtil backend = (BackendUtil) ServiceLocator.get("backend");
+            SocketUtil backend = (SocketUtil) ServiceLocator.get("backend");
             CreateLogin createLoginMsg = new CreateLogin(new CreateLoginData(login.getUsername(), login.getPassword()));
 
             // Try sending the register command.

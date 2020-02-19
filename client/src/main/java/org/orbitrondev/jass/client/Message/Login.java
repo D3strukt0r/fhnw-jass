@@ -18,10 +18,8 @@
 
 package org.orbitrondev.jass.client.Message;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.orbitrondev.jass.client.Entity.LoginEntity;
-import org.orbitrondev.jass.client.Utils.BackendUtil;
+import org.orbitrondev.jass.client.Utils.SocketUtil;
 import org.orbitrondev.jass.lib.Message.LoginData;
 import org.orbitrondev.jass.lib.Message.MessageData;
 import org.orbitrondev.jass.lib.Message.ResultData;
@@ -45,10 +43,10 @@ public class Login extends Message {
 	}
 
 	@Override
-	public boolean process(BackendUtil backendUtil) {
-        backendUtil.send(this);
+	public boolean process(SocketUtil socket) {
+        socket.send(this);
 
-        Message result = backendUtil.waitForResultResponse(data.getId());
+        Message result = socket.waitForResultResponse(data.getId());
         ResultData resultData = (ResultData) result.getRawData();
 
         if (resultData.getResult()) {

@@ -22,7 +22,7 @@ import javafx.application.Platform;
 import javafx.scene.control.Alert;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
-import org.orbitrondev.jass.client.Utils.BackendUtil;
+import org.orbitrondev.jass.client.Utils.SocketUtil;
 import org.orbitrondev.jass.lib.Message.MessageData;
 import org.orbitrondev.jass.lib.Message.MessageErrorData;
 
@@ -45,7 +45,7 @@ public class MessageError extends Message {
      * This message type does no processing at all (only the server)
      */
     @Override
-    public boolean process(BackendUtil backendUtil) {
+    public boolean process(SocketUtil socket) {
         Platform.runLater(() -> {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error");
