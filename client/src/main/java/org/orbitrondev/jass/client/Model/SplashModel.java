@@ -19,10 +19,14 @@
 package org.orbitrondev.jass.client.Model;
 
 import javafx.concurrent.Task;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.orbitrondev.jass.client.Main;
 import org.orbitrondev.jass.client.Utils.DatabaseUtil;
 import org.orbitrondev.jass.lib.MVC.Model;
 import org.orbitrondev.jass.lib.ServiceLocator.ServiceLocator;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 /**
@@ -33,6 +37,8 @@ import java.util.ArrayList;
  * @since 0.0.1
  */
 public class SplashModel extends Model {
+    private static final Logger logger = LogManager.getLogger(SplashModel.class);
+
     public final Task<Void> initializer = new Task<Void>() {
         @Override
         protected Void call() {
@@ -42,8 +48,14 @@ public class SplashModel extends Model {
             ArrayList<Runnable> tasks = new ArrayList<>();
 
             // Initialize the db connection in the service locator
-            // TODO: Should the data file be a variable?
-            tasks.add(() -> ServiceLocator.add(new DatabaseUtil("jass.sqlite3")));
+            tasks.add(() -> {
+                try {
+                    DatabaseUtil db = new DatabaseUtil(Main.dbLocation);
+                    ServiceLocator.add(db);
+                } catch (SQLException e) {
+                    logger.fatal("Error creating connection to database");
+                }
+            });
 
             // First, take some time, update progress
             this.updateProgress(1, tasks.size() + 1); // Start the progress bar with 1 instead of 0

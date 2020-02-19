@@ -51,20 +51,15 @@ public class DatabaseUtil implements Service, Closeable {
      *
      * @since 0.0.1
      */
-    public DatabaseUtil(String databaseLocation) {
-        try {
-            // this uses h2 but you can change it to match your database
-            String databaseUrl = "jdbc:sqlite:" + databaseLocation;
+    public DatabaseUtil(String databaseLocation) throws SQLException {
+        // this uses h2 but you can change it to match your database
+        String databaseUrl = "jdbc:sqlite:" + databaseLocation;
 
-            // create our data-source for the database
-            connectionSource = new JdbcConnectionSource(databaseUrl);
+        // create our data-source for the database
+        connectionSource = new JdbcConnectionSource(databaseUrl);
 
-            // setup our database and DAOs
-            setupDatabase();
-        } catch (SQLException e) {
-            // TODO: Handle exception
-            e.printStackTrace();
-        }
+        // setup our database and DAOs
+        setupDatabase();
     }
 
     /**
