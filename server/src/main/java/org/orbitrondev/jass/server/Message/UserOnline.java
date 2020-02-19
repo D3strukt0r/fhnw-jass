@@ -22,7 +22,7 @@ import org.orbitrondev.jass.lib.Message.MessageData;
 import org.orbitrondev.jass.lib.Message.ResultData;
 import org.orbitrondev.jass.lib.Message.UserOnlineData;
 import org.orbitrondev.jass.server.Client;
-import org.orbitrondev.jass.server.Listener;
+import org.orbitrondev.jass.server.Utils.ServerSocketUtil;
 
 /**
  * Checks if a user is currently connected.
@@ -52,7 +52,7 @@ public class UserOnline extends Message {
         // Only continue if the user has the right token.
         if (client.getToken() != null && client.getToken().equals(data.getToken())) {
             // Check if there is anyone connected with the given username.
-            result = Listener.exists(data.getUsername());
+            result = ServerSocketUtil.exists(data.getUsername());
         }
 
         client.send(new Result(new ResultData(data.getId(), result)));

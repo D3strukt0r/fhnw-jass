@@ -25,9 +25,11 @@ import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.core.LoggerContext;
 import org.orbitrondev.jass.lib.ServiceLocator.ServiceLocator;
 import org.orbitrondev.jass.server.Utils.DatabaseUtil;
+import org.orbitrondev.jass.server.Utils.ServerSocketUtil;
 
 import java.io.IOException;
-import java.security.GeneralSecurityException;
+import java.security.*;
+import java.security.cert.CertificateException;
 import java.sql.SQLException;
 
 /**
@@ -94,12 +96,14 @@ public class Main {
 
         // Start the listener
         try {
-            (new Listener(port, secure)).start();
+            (new ServerSocketUtil(port, secure)).start();
         } catch (IOException e) {
             if (secure && e.getCause() instanceof GeneralSecurityException) {
                 logger.fatal("Error creating secure socket connection - does the keystore exist?");
             }
             logger.info(e.toString());
+        } catch (CertificateException | NoSuchAlgorithmException | UnrecoverableKeyException | KeyStoreException | KeyManagementException e) {
+            logger.fatal("Error creating secure socket connection - does the keystore exist?");
         }
     }
 }

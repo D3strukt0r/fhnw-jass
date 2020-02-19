@@ -25,6 +25,7 @@ import org.orbitrondev.jass.lib.Message.MessageErrorData;
 import org.orbitrondev.jass.server.Entity.UserEntity;
 import org.orbitrondev.jass.server.Message.Message;
 import org.orbitrondev.jass.server.Message.MessageError;
+import org.orbitrondev.jass.server.Utils.ServerSocketUtil;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -126,7 +127,7 @@ public class Client extends Thread {
         user = null;
 
         // Free up RAM by deleting disconnected clients.
-        Listener.remove(this);
+        ServerSocketUtil.remove(this);
     }
 
     public UserEntity getUser() {
