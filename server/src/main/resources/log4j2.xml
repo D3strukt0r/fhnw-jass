@@ -13,6 +13,14 @@
         </Console>
     </Appenders>
     <Loggers>
+        <Logger name="com.j256.ormlite" additivity="false">
+            <AppenderRef ref="Console" level="info"/>
+            <AppenderRef ref="File" level="trace"/>
+        </Logger>
+        <Logger name="com.j256.ormlite.stmt.StatementExecutor" additivity="false">
+            <AppenderRef ref="Console" level="debug"/>
+            <AppenderRef ref="File" level="trace"/>
+        </Logger>
         <Root level="info">
             <AppenderRef ref="Console"/>
             <AppenderRef ref="File" level="trace"/>
