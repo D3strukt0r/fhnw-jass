@@ -21,6 +21,9 @@ package org.orbitrondev.jass.client.Message;
 import org.orbitrondev.jass.client.Utils.BackendUtil;
 import org.orbitrondev.jass.lib.Message.MessageData;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+
 /**
  * The base model every message that is being sent to the server, needs to implement.
  *
@@ -47,6 +50,22 @@ public abstract class Message {
      * Perform whatever actions are required for this particular type of message.
      */
     public abstract boolean process(BackendUtil backendUtil);
+
+    /**
+     * Create a message object of the correct class, using reflection
+     *
+     * @author Bradley Richards
+     */
+    public static Message fromDataObject(MessageData messageData) {
+        String messageClassName = Message.class.getPackage().getName() + "." + messageData.getMessageType();
+        try {
+            Class<?> messageClass = Class.forName(messageClassName);
+            Constructor<?> constructor = messageClass.getConstructor(MessageData.class);
+            return (Message) constructor.newInstance(messageData);
+        } catch (InstantiationException | InvocationTargetException | NoSuchMethodException | IllegalAccessException | ClassNotFoundException e) {
+            return null;
+        }
+    }
 
     /**
      * A message is really just a bunch of strings separated by vertical bars

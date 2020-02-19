@@ -21,6 +21,9 @@ package org.orbitrondev.jass.server.Message;
 import org.orbitrondev.jass.lib.Message.MessageData;
 import org.orbitrondev.jass.server.Client;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+
 /**
  * Abstract model which every message has to implement.
  *
@@ -39,6 +42,30 @@ public abstract class Message {
      * Perform whatever actions are required for this particular type of message.
      */
     public abstract void process(Client client);
+
+    /**
+     * Create a server message object of the correct class, using reflection
+     *
+     * This would be more understandable - but a *lot* longer - if we used
+     * a series of "if" statements:
+     *
+     * if (parts[0].equals("Login") msg = new Login(parts);
+     * else if (parts[0].equals("Logout") msg = new Logout(parts);
+     * else if ...
+     * else ...
+     *
+     * @author Bradley Richards
+     */
+    public static Message fromDataObject(MessageData messageData) {
+        String messageClassName = Message.class.getPackage().getName() + "." + messageData.getMessageType();
+        try {
+            Class<?> messageClass = Class.forName(messageClassName);
+            Constructor<?> constructor = messageClass.getConstructor(MessageData.class);
+            return (Message) constructor.newInstance(messageData);
+        } catch (InstantiationException | InvocationTargetException | NoSuchMethodException | IllegalAccessException | ClassNotFoundException e) {
+            return null;
+        }
+    }
 
     /**
      * A message is really just a bunch of strings separated by vertical bars

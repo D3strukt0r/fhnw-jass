@@ -30,14 +30,12 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
-import java.lang.reflect.Constructor;
 import java.net.Socket;
 import java.net.SocketException;
 
 /**
- * Copyright 2015, FHNW, Prof. Dr. Brad Richards. All rights reserved. This code
- * is licensed under the terms of the BSD 3-clause license (see the file
- * license.txt).
+ * Copyright 2015, FHNW, Prof. Dr. Brad Richards. All rights reserved. This code is licensed under the terms of the BSD
+ * 3-clause license (see the file license.txt).
  *
  * @author Brad Richards
  * @author Manuele Vaccari (to work with Json messaging)
@@ -52,8 +50,8 @@ public class Client extends Thread {
     private String token = null;
 
     /**
-     * Create a new client object, communicating over the given socket. Immediately
-     * start a thread to receive messages from the client.
+     * Create a new client object, communicating over the given socket. Immediately start a thread to receive messages
+     * from the client.
      */
     public Client(Socket socket) {
         super();
@@ -79,22 +77,15 @@ public class Client extends Thread {
                 MessageData msgData = MessageData.unserialize(msgText);
 
                 // Create a server message object of the correct class, using reflection
-                //
-                // This would be more understandable - but a *lot* longer - if we used
-                // a series of "if" statements:
-                //
-                // if (parts[0].equals("Login") msg = new Login(parts);
-                // else if (parts[0].equals("Logout") msg = new Logout(parts);
-                // else if ...
-                // else ...
-                String messageClassName = Message.class.getPackage().getName() + "." + msgData.getMessageType();
-                try {
-                    Class<?> messageClass = Class.forName(messageClassName);
-                    Constructor<?> constructor = messageClass.getConstructor(MessageData.class);
-                    msg = (Message) constructor.newInstance(msgData);
-                    logger.info("Received message of type " + msgData.getMessageType());
-                } catch (Exception e) {
-                    logger.error("Received invalid message of type " + msgData.getMessageType());
+                if (msgData == null) {
+                    logger.error("Received invalid message");
+                } else {
+                    msg = Message.fromDataObject(msgData);
+                    if (msg == null) {
+                        logger.error("Received invalid message of type " + msgData.getMessageType());
+                    } else {
+                        logger.info("Received message of type " + msgData.getMessageType());
+                    }
                 }
             } catch (SocketException e) {
                 logger.info("Client " + getUsername() + " disconnected");

@@ -30,7 +30,6 @@ import org.orbitrondev.jass.lib.ServiceLocator.ServiceLocator;
 import javax.net.ssl.SSLSocket;
 import javax.net.ssl.SSLSocketFactory;
 import java.io.*;
-import java.lang.reflect.Constructor;
 import java.net.Socket;
 import java.net.SocketException;
 import java.security.Security;
@@ -123,15 +122,15 @@ public class BackendUtil extends Thread implements Service, Closeable {
                 MessageData msgData = MessageData.unserialize(msgText);
 
                 // Create a message object of the correct class, using reflection
-                // Code by Bradley
-                String messageClassName = Message.class.getPackage().getName() + "." + msgData.getMessageType();
-                try {
-                    Class<?> messageClass = Class.forName(messageClassName);
-                    Constructor<?> constructor = messageClass.getConstructor(MessageData.class);
-                    msg = (Message) constructor.newInstance(msgData);
-                    logger.info("Received message of type " + msgData.getMessageType());
-                } catch (Exception e) {
-                    logger.error("Received invalid message of type " + msgData.getMessageType());
+                if (msgData == null) {
+                    logger.error("Received invalid message");
+                } else {
+                    msg = Message.fromDataObject(msgData);
+                    if (msg == null) {
+                        logger.error("Received invalid message of type " + msgData.getMessageType());
+                    } else {
+                        logger.info("Received message of type " + msgData.getMessageType());
+                    }
                 }
             } catch (SocketException e) {
                 logger.info("Server disconnected");
