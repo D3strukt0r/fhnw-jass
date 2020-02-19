@@ -76,10 +76,10 @@ public class SocketUtil extends Thread implements Service, Closeable {
 
             // First initialize the key and trust material
             KeyStore trustStore = KeyStore.getInstance(KeyStore.getDefaultType());
-            trustStore.load(getClass().getResourceAsStream("/client.keystore"), trustStorePassword);
+            trustStore.load(getClass().getResourceAsStream("/ssl/client.keystore"), trustStorePassword);
 
             KeyStore keyStore = KeyStore.getInstance(KeyStore.getDefaultType());
-            keyStore.load(getClass().getResourceAsStream("/client.keystore"), keyStorePassword);
+            keyStore.load(getClass().getResourceAsStream("/ssl/client.keystore"), keyStorePassword);
 
             // KeyManagers decide which key material to use
             KeyManagerFactory kmf = KeyManagerFactory.getInstance(KeyManagerFactory.getDefaultAlgorithm());
