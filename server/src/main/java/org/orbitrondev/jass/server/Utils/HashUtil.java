@@ -15,6 +15,8 @@ import java.security.spec.InvalidKeySpecException;
  * https://crackstation.net/hashing-security.htm
  *
  * @author https://howtodoinjava.com/security/how-to-generate-secure-password-hash-md5-sha-pbkdf2-bcrypt-examples/
+ * @version %I%, %G%
+ * @since 0.0.1
  */
 public class HashUtil {
     public static String generateStorngPasswordHash(String password) throws NoSuchAlgorithmException, InvalidKeySpecException {

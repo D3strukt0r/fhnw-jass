@@ -10,6 +10,13 @@ import org.orbitrondev.jass.client.Controller.SplashController;
 import org.orbitrondev.jass.client.Model.SplashModel;
 import org.orbitrondev.jass.client.View.SplashView;
 
+/**
+ * The main class for the client application.
+ *
+ * @author Manuele Vaccari
+ * @version %I%, %G%
+ * @since 0.0.1
+ */
 public class Main extends Application {
     public static String dbLocation = "jass.sqlite3";
 
@@ -20,16 +27,14 @@ public class Main extends Application {
             .addOption(Option.builder("l").longOpt("db-location").desc("Define where the database is saved").hasArg().build())
             .addOption(Option.builder("v").longOpt("verbose").desc("Show more extensive logs").hasArg(false).build());
 
-        CommandLineParser parser = new DefaultParser();
-        HelpFormatter formatter = new HelpFormatter();
+        // Check the arguments validity
         CommandLine cmd;
-
         try {
-            cmd = parser.parse(options, args);
+            cmd = (new DefaultParser()).parse(options, args);
         } catch (ParseException e) {
             // When using an unknown argument
             System.out.println(e.getMessage()); // Prints "Unrecognized option: ..."
-            formatter.printHelp("client.jar", options);
+            (new HelpFormatter()).printHelp("client.jar", options);
             return;
         }
 

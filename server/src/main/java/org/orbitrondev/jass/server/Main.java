@@ -31,11 +31,11 @@ import java.security.GeneralSecurityException;
 import java.sql.SQLException;
 
 /**
- * Copyright 2015, FHNW, Prof. Dr. Brad Richards. All rights reserved. This code is licensed under the terms of the BSD
- * 3-clause license (see the file license.txt).
+ * The main class for the server application.
  *
- * @author Brad Richards
  * @author Manuele Vaccari
+ * @version %I%, %G%
+ * @since 0.0.1
  */
 public class Main {
     private static final Logger logger = LogManager.getLogger(Main.class);
@@ -50,16 +50,14 @@ public class Main {
             .addOption(Option.builder("v").longOpt("verbose").desc("Show more extensive logs").hasArg(false).build())
             .addOption(Option.builder("s").longOpt("ssl").desc("Accept secure connections").hasArg(false).build());
 
-        CommandLineParser parser = new DefaultParser();
-        HelpFormatter formatter = new HelpFormatter();
+        // Check the arguments validity
         CommandLine cmd;
-
         try {
-            cmd = parser.parse(options, args);
+            cmd = (new DefaultParser()).parse(options, args);
         } catch (ParseException e) {
             // When using an unknown argument
             System.out.println(e.getMessage()); // Prints "Unrecognized option: ..."
-            formatter.printHelp("server.jar", options);
+            (new HelpFormatter()).printHelp("server.jar", options);
             return;
         }
 
@@ -96,8 +94,7 @@ public class Main {
 
         // Start the listener
         try {
-            Listener lt = new Listener(port, secure);
-            lt.start();
+            (new Listener(port, secure)).start();
         } catch (IOException e) {
             if (secure && e.getCause() instanceof GeneralSecurityException) {
                 logger.fatal("Error creating secure socket connection - does the keystore exist?");
