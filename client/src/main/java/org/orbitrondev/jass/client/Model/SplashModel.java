@@ -21,11 +21,19 @@ package org.orbitrondev.jass.client.Model;
 import javafx.concurrent.Task;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.orbitrondev.jass.client.Entity.LoginEntity;
+import org.orbitrondev.jass.client.Entity.LoginRepository;
+import org.orbitrondev.jass.client.Entity.ServerEntity;
+import org.orbitrondev.jass.client.Entity.ServerRepository;
 import org.orbitrondev.jass.client.Main;
+import org.orbitrondev.jass.client.Message.Login;
+import org.orbitrondev.jass.client.Utils.BackendUtil;
 import org.orbitrondev.jass.client.Utils.DatabaseUtil;
 import org.orbitrondev.jass.lib.MVC.Model;
+import org.orbitrondev.jass.lib.Message.LoginData;
 import org.orbitrondev.jass.lib.ServiceLocator.ServiceLocator;
 
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
@@ -38,6 +46,9 @@ import java.util.ArrayList;
  */
 public class SplashModel extends Model {
     private static final Logger logger = LogManager.getLogger(SplashModel.class);
+
+    private boolean connected = false;
+    private boolean loggedIn = false;
 
     public final Task<Void> initializer = new Task<Void>() {
         @Override
@@ -52,10 +63,44 @@ public class SplashModel extends Model {
                 try {
                     DatabaseUtil db = new DatabaseUtil(Main.dbLocation);
                     ServiceLocator.add(db);
+                    logger.info("Connection to database created");
                 } catch (SQLException e) {
                     logger.fatal("Error creating connection to database");
                 }
             });
+            // Check whether we can already connect to the server automatically
+            tasks.add(() -> {
+                ServerEntity server = ServerRepository.findConnectAutomatically();
+                if (server != null) {
+                    logger.info("Server to connect automatically found");
+                    try {
+                        BackendUtil backend = new BackendUtil(server.getIp(), server.getPort(), server.isSecure());
+                        ServiceLocator.add(backend);
+                        connected = true;
+                        logger.info("Connected to server");
+                    } catch (IOException e) { /* Ignore and continue */ }
+                }
+            });
+            // Check whether we can already login
+            tasks.add(() -> {
+                LoginEntity login = LoginRepository.findConnectAutomatically();
+                if (login != null) {
+                    logger.info("Automatic login found");
+                    BackendUtil backend = (BackendUtil) ServiceLocator.get("backend");
+                    if (backend != null) {
+                        logger.info("Backend for login is available...");
+                        Login loginMsg = new Login(new LoginData(login.getUsername(), login.getPassword()));
+
+                        // Send the login request to the server. Update locally if successful.
+                        if (loginMsg.process(backend)) {
+                            login.setToken(loginMsg.getToken());
+                            loggedIn = true;
+                            logger.info("Logged in");
+                        }
+                    }
+                }
+            });
+
 
             // First, take some time, update progress
             this.updateProgress(1, tasks.size() + 1); // Start the progress bar with 1 instead of 0
@@ -74,5 +119,13 @@ public class SplashModel extends Model {
 
     public void initialize() {
         new Thread(initializer).start();
+    }
+
+    public boolean isConnected() {
+        return connected;
+    }
+
+    public boolean isLoggedIn() {
+        return loggedIn;
     }
 }

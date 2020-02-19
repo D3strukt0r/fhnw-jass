@@ -61,4 +61,17 @@ public class ServerRepository {
             return false;
         }
     }
+
+    public static ServerEntity findConnectAutomatically() {
+        DatabaseUtil db = (DatabaseUtil) ServiceLocator.get("db");
+        if (db == null) {
+            return null;
+        }
+        for (ServerEntity s : db.getServerDao()) {
+            if (s.isConnectAutomatically()) {
+                return s;
+            }
+        }
+        return null;
+    }
 }

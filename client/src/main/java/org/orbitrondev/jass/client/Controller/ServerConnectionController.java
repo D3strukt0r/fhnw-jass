@@ -25,6 +25,7 @@ import javafx.util.StringConverter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.orbitrondev.jass.client.Entity.ServerEntity;
+import org.orbitrondev.jass.client.Entity.ServerRepository;
 import org.orbitrondev.jass.client.Model.ServerConnectionModel;
 import org.orbitrondev.jass.client.Utils.BackendUtil;
 import org.orbitrondev.jass.client.Utils.DatabaseUtil;
@@ -220,6 +221,7 @@ public class ServerConnectionController extends Controller<ServerConnectionModel
                 // Try to connect to the server
                 backend = new BackendUtil(server.getIp(), server.getPort(), server.isSecure());
                 ServiceLocator.add(backend);
+                ServerRepository.setToConnectAutomatically(server); // Make sure it's the only entry
             } catch (IOException e) {
                 // This exception contains ConnectException, which basically means, it couldn't connect to the server.
                 enableAll();

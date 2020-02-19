@@ -22,13 +22,10 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.orbitrondev.jass.client.Entity.LoginEntity;
 import org.orbitrondev.jass.client.Utils.BackendUtil;
-import org.orbitrondev.jass.client.Utils.DatabaseUtil;
 import org.orbitrondev.jass.lib.Message.LoginData;
 import org.orbitrondev.jass.lib.Message.MessageData;
 import org.orbitrondev.jass.lib.Message.ResultData;
 import org.orbitrondev.jass.lib.ServiceLocator.ServiceLocator;
-
-import java.sql.SQLException;
 
 /**
  * Login to the server.
@@ -38,7 +35,6 @@ import java.sql.SQLException;
  * @since 0.0.1
  */
 public class Login extends Message {
-    private static final Logger logger = LogManager.getLogger(Login.class);
     private LoginData data;
 
     private String token = null;
@@ -61,13 +57,6 @@ public class Login extends Message {
             LoginEntity login = new LoginEntity(data.getUsername(), data.getPassword(), token);
             ServiceLocator.remove("login");
             ServiceLocator.add(login);
-
-            DatabaseUtil db = (DatabaseUtil) ServiceLocator.get("db");
-            try {
-                db.getLoginDao().create(login);
-            } catch (SQLException e) {
-                logger.error("Couldn't save login data to local database.");
-            }
         }
         return resultData.getResult();
 	}

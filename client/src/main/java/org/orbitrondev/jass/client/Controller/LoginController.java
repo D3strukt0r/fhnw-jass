@@ -21,16 +21,21 @@ package org.orbitrondev.jass.client.Controller;
 import javafx.application.Platform;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.orbitrondev.jass.client.Entity.LoginEntity;
+import org.orbitrondev.jass.client.Entity.LoginRepository;
 import org.orbitrondev.jass.client.Message.Login;
 import org.orbitrondev.jass.client.Model.LoginModel;
 import org.orbitrondev.jass.client.Utils.BackendUtil;
+import org.orbitrondev.jass.client.Utils.DatabaseUtil;
 import org.orbitrondev.jass.client.View.ViewHelper;
 import org.orbitrondev.jass.client.View.LoginView;
 import org.orbitrondev.jass.lib.MVC.Controller;
 import org.orbitrondev.jass.lib.Message.LoginData;
 import org.orbitrondev.jass.lib.ServiceLocator.ServiceLocator;
 
+import java.sql.SQLException;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
@@ -41,6 +46,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * @since 0.0.1
  */
 public class LoginController extends Controller<LoginModel, LoginView> {
+    private static final Logger logger = LogManager.getLogger(LoginController.class);
     /**
      * Initializes all event listeners for the view.
      *
@@ -159,12 +165,24 @@ public class LoginController extends Controller<LoginModel, LoginView> {
                 view.getPassword().getText(),
                 view.getConnectAutomatically().isSelected()
             );
+            System.out.println(view.getConnectAutomatically().isSelected());
             BackendUtil backend = (BackendUtil) ServiceLocator.get("backend");
             Login loginMsg = new Login(new LoginData(login.getUsername(), login.getPassword()));
 
             // Send the login request to the server. Update locally if successful.
             if (loginMsg.process(backend)) {
                 login.setToken(loginMsg.getToken());
+
+                // Save the login in the db
+                DatabaseUtil db = (DatabaseUtil) ServiceLocator.get("db");
+                try {
+                    db.getLoginDao().create(login);
+                } catch (SQLException e) {
+                    logger.error("Couldn't save login data to local database.");
+                }
+
+
+                LoginRepository.setToConnectAutomatically(login); // Make sure it's the only entry
                 ControllerHelper.switchToDashboardWindow(view);
             } else {
                 enableAll();

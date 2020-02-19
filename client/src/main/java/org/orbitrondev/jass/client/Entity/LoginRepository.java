@@ -61,4 +61,17 @@ public class LoginRepository {
             return false;
         }
     }
+
+    public static LoginEntity findConnectAutomatically() {
+        DatabaseUtil db = (DatabaseUtil) ServiceLocator.get("db");
+        if (db == null) {
+            return null;
+        }
+        for (LoginEntity l : db.getLoginDao()) {
+            if (l.isConnectAutomatically()) {
+                return l;
+            }
+        }
+        return null;
+    }
 }

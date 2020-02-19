@@ -22,7 +22,15 @@ public class SplashController extends Controller<SplashModel, SplashView> {
         view.progress.progressProperty().bind(model.initializer.progressProperty());
         model.initializer.stateProperty().addListener((o, oldValue, newValue) -> {
             if (newValue == Worker.State.SUCCEEDED) {
-                ControllerHelper.switchToServerConnectionWindow(view);
+                // If already logged in go to the game directly, if at least connected, go to login screen, otherwise
+                // to server connection
+                if (model.isLoggedIn()) {
+                    ControllerHelper.switchToDashboardWindow(view);
+                } else if (model.isConnected()) {
+                    ControllerHelper.switchToLoginWindow(view);
+                } else {
+                    ControllerHelper.switchToServerConnectionWindow(view);
+                }
             }
         });
     }
