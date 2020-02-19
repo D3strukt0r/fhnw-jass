@@ -32,6 +32,7 @@ import javax.net.ssl.SSLSocketFactory;
 import java.io.*;
 import java.lang.reflect.Constructor;
 import java.net.Socket;
+import java.net.SocketException;
 import java.security.Security;
 import java.util.ArrayList;
 
@@ -42,7 +43,7 @@ import java.util.ArrayList;
  * @version %I%, %G%
  * @since 0.0.1
  */
-public class BackendUtil implements Service, Closeable {
+public class BackendUtil extends Thread implements Service, Closeable {
     private static final Logger logger = LogManager.getLogger(BackendUtil.class);
 
     private Socket socket;
@@ -72,54 +73,76 @@ public class BackendUtil implements Service, Closeable {
      * @since 0.0.1
      */
     public BackendUtil(String ipAddress, int port, boolean secure) throws IOException {
+        super();
+        this.setName("BackendThread");
+        this.setDaemon(true);
+
         if (secure) {
-            createSecureSocket(ipAddress, port);
+            logger.info("Connecting to server at: " + ipAddress + ":" + port + " (with SSL)");
+
+            // TODO: SSL is not properly setup
+            // Check out: https://gitlab.fhnw.ch/bradley.richards/java-projects/blob/master/src/chatroom/Howto_SSL_Certificates_in_Java.odt
+
+            // Registering the JSSE provider
+            Security.addProvider(new Provider());
+
+            // Specifying the Truststore details. This is needed if you have created a
+            // truststore, for example, for self-signed certificates
+            System.setProperty("javax.net.ssl.trustStore", "truststore.ts");
+            System.setProperty("javax.net.ssl.trustStorePassword", "trustme");
+
+            // Creating Client Sockets
+            SSLSocketFactory sslsocketfactory = (SSLSocketFactory) SSLSocketFactory.getDefault();
+            socket = sslsocketfactory.createSocket(ipAddress, port);
+
+            // The next line is entirely optional !!
+            // The SSL handshake would happen automatically, the first time we send data.
+            // Or we can immediately force the handshaking with this method:
+            ((SSLSocket) socket).startHandshake();
         } else {
-            createStandardSocket(ipAddress, port);
+            logger.info("Connecting to server at: " + ipAddress + ":" + port);
+            socket = new Socket(ipAddress, port);
         }
 
-        createResponseThread();
+        // Create thread to read incoming messages
+        this.start();
     }
 
-    /**
-     * Creates a thread in the background, which waits for a response from the server.
-     *
-     * @since 0.0.1
-     */
-    private void createResponseThread() {
-        // Create thread to read incoming messages
-        Runnable r = () -> {
-            while (serverReachable) {
-                Message msg = null;
+    @Override
+    public void run() {
+        while (serverReachable) {
+            Message msg = null;
+            try {
+                BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+                String msgText = in.readLine(); // Will wait here for complete line
+                if (msgText == null) break; // In case the server closes the socket
+
+                logger.info("Receiving message: " + msgText);
+
+                // Break message into individual parts, and remove extra spaces
+                MessageData msgData = MessageData.unserialize(msgText);
+
+                // Create a message object of the correct class, using reflection
+                // Code by Bradley
+                String messageClassName = Message.class.getPackage().getName() + "." + msgData.getMessageType();
                 try {
-                    BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-                    String msgText = in.readLine(); // Will wait here for complete line
-                    if (msgText == null) break; // In case the server closes the socket
-
-                    logger.info("Receiving message: " + msgText);
-
-                    // Break message into individual parts, and remove extra spaces
-                    MessageData msgData = MessageData.unserialize(msgText);
-
-                    // Create a message object of the correct class, using reflection
-                    String messageClassName = Message.class.getPackage().getName() + "." + msgData.getMessageType();
-                    try {
-                        Class<?> messageClass = Class.forName(messageClassName);
-                        Constructor<?> constructor = messageClass.getConstructor(MessageData.class);
-                        msg = (Message) constructor.newInstance(msgData);
-                        logger.info("Received message of type " + msgData.getMessageType());
-                    } catch (Exception e) {
-                        logger.error("Received invalid message of type " + msgData.getMessageType());
-                    }
-                } catch (IOException e) {
-                    logger.error(e.toString());
+                    Class<?> messageClass = Class.forName(messageClassName);
+                    Constructor<?> constructor = messageClass.getConstructor(MessageData.class);
+                    msg = (Message) constructor.newInstance(msgData);
+                    logger.info("Received message of type " + msgData.getMessageType());
+                } catch (Exception e) {
+                    logger.error("Received invalid message of type " + msgData.getMessageType());
                 }
-
-                lastMessages.add(msg);
+            } catch (SocketException e) {
+                logger.info("Server disconnected");
+                close();
+                continue;
+            } catch (IOException e) {
+                logger.error(e.toString());
             }
-        };
-        Thread t = new Thread(r);
-        t.start();
+
+            lastMessages.add(msg);
+        }
     }
 
     /**
@@ -155,7 +178,7 @@ public class BackendUtil implements Service, Closeable {
             out.flush();
         } catch (IOException e) {
             logger.info("Server unreachable; logged out");
-            serverReachable = false;
+            close();
         }
     }
 
@@ -182,63 +205,14 @@ public class BackendUtil implements Service, Closeable {
     }
 
     /**
-     * Creates a normal socket to the server.
-     *
-     * @param ipAddress A String containing the ip address to reach the server.
-     * @param port      An integer containing the port which the server uses.
-     *
-     * @throws IOException If an I/O error occurs.
-     * @since 0.0.1
-     */
-    public void createStandardSocket(String ipAddress, int port) throws IOException {
-        logger.info("Connecting to server at: " + ipAddress + ":" + port);
-        socket = new Socket(ipAddress, port);
-    }
-
-    /**
-     * Creates a secure socket (SSL) to the server.
-     *
-     * @param ipAddress A String containing the ip address to reach the server.
-     * @param port      An integer containing the port which the server uses.
-     *
-     * @throws IOException If an I/O error occurs.
-     * @since 0.0.1
-     */
-    public void createSecureSocket(String ipAddress, int port) throws IOException {
-        logger.info("Connecting to server at: " + ipAddress + ":" + port + " (with SSL)");
-
-        // TODO: SSL is not properly setup
-        // Check out: https://gitlab.fhnw.ch/bradley.richards/java-projects/blob/master/src/chatroom/Howto_SSL_Certificates_in_Java.odt
-
-        // Registering the JSSE provider
-        Security.addProvider(new Provider());
-
-        // Specifying the Truststore details. This is needed if you have created a
-        // truststore, for example, for self-signed certificates
-        System.setProperty("javax.net.ssl.trustStore", "truststore.ts");
-        System.setProperty("javax.net.ssl.trustStorePassword", "trustme");
-
-        // Creating Client Sockets
-        SSLSocketFactory sslsocketfactory = (SSLSocketFactory) SSLSocketFactory.getDefault();
-        socket = sslsocketfactory.createSocket(ipAddress, port);
-
-        // The next line is entirely optional !!
-        // The SSL handshake would happen automatically, the first time we send data.
-        // Or we can immediately force the handshaking with this method:
-        ((SSLSocket) socket).startHandshake();
-    }
-
-    /**
      * Verifies that the string is a valid ip address.
      *
      * @param ipAddress A String containing the ip address.
      *
      * @return "true" if valid, "false" if not.
      *
+     * @author https://stackoverflow.com/questions/5667371/validate-ipv4-address-in-java
      * @since 0.0.1
-     */
-    /*
-     * Reference: https://stackoverflow.com/questions/5667371/validate-ipv4-address-in-java
      */
     public static boolean isValidIpAddress(String ipAddress) {
         return ipAddress.matches("^((0|1\\d?\\d?|2[0-4]?\\d?|25[0-5]?|[3-9]\\d?)\\.){3}(0|1\\d?\\d?|2[0-4]?\\d?|25[0-5]?|[3-9]\\d?)$");
@@ -260,13 +234,15 @@ public class BackendUtil implements Service, Closeable {
     /**
      * Closes the socket.
      *
-     * @throws IOException If an I/O error occurs.
      * @since 0.0.1
      */
     @Override
-    public void close() throws IOException {
+    public void close() {
+        serverReachable = false;
         if (socket != null) {
-            socket.close();
+            try {
+                socket.close();
+            } catch (IOException e) { /* Ignore */ }
         }
     }
 
