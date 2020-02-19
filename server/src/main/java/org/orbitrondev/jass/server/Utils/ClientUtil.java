@@ -26,6 +26,7 @@ import org.orbitrondev.jass.server.Entity.UserEntity;
 import org.orbitrondev.jass.server.Message.Message;
 import org.orbitrondev.jass.server.Message.MessageError;
 
+import javax.net.ssl.SSLException;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -93,7 +94,7 @@ public class ClientUtil extends Thread {
                         logger.info("Received message of type " + msgData.getMessageType());
                     }
                 }
-            } catch (SocketException e) {
+            } catch (SocketException | SSLException e) {
                 logger.info("Client " + getUsername() + " disconnected");
                 disconnect();
                 continue;
