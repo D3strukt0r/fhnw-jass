@@ -23,7 +23,7 @@ import org.apache.logging.log4j.Logger;
 import org.orbitrondev.jass.lib.Message.ChangePasswordData;
 import org.orbitrondev.jass.lib.Message.MessageData;
 import org.orbitrondev.jass.lib.Message.ResultData;
-import org.orbitrondev.jass.server.Client;
+import org.orbitrondev.jass.server.Utils.ClientUtil;
 import org.orbitrondev.jass.server.Entity.UserEntity;
 import org.orbitrondev.jass.server.Entity.UserRepository;
 
@@ -44,7 +44,7 @@ public class ChangePassword extends Message {
     }
 
     @Override
-    public void process(Client client) {
+    public void process(ClientUtil client) {
         boolean result = false;
 
         // Only continue if the user has the right token.

@@ -20,7 +20,7 @@ package org.orbitrondev.jass.server.Message;
 
 import org.orbitrondev.jass.lib.Message.MessageData;
 import org.orbitrondev.jass.lib.Message.ResultData;
-import org.orbitrondev.jass.server.Client;
+import org.orbitrondev.jass.server.Utils.ClientUtil;
 
 /**
  * Logs out a user from the current connection.
@@ -35,7 +35,7 @@ public class Logout extends Message {
     }
 
     @Override
-    public void process(Client client) {
+    public void process(ClientUtil client) {
         client.setToken(null); // Destroy authentication token
         client.setUser(null); // Destroy account information
         client.send(new Result(new ResultData(rawData.getId(), true)));

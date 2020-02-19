@@ -21,7 +21,7 @@ package org.orbitrondev.jass.server.Message;
 import org.orbitrondev.jass.lib.Message.MessageData;
 import org.orbitrondev.jass.lib.Message.ResultData;
 import org.orbitrondev.jass.lib.Message.UserOnlineData;
-import org.orbitrondev.jass.server.Client;
+import org.orbitrondev.jass.server.Utils.ClientUtil;
 import org.orbitrondev.jass.server.Utils.ServerSocketUtil;
 
 /**
@@ -46,7 +46,7 @@ public class UserOnline extends Message {
      * question.
      */
     @Override
-    public void process(Client client) {
+    public void process(ClientUtil client) {
         boolean result = false;
 
         // Only continue if the user has the right token.

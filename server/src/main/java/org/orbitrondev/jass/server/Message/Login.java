@@ -24,7 +24,7 @@ import org.json.JSONObject;
 import org.orbitrondev.jass.lib.Message.LoginData;
 import org.orbitrondev.jass.lib.Message.MessageData;
 import org.orbitrondev.jass.lib.Message.ResultData;
-import org.orbitrondev.jass.server.Client;
+import org.orbitrondev.jass.server.Utils.ClientUtil;
 import org.orbitrondev.jass.server.Entity.UserEntity;
 import org.orbitrondev.jass.server.Entity.UserRepository;
 
@@ -48,7 +48,7 @@ public class Login extends Message {
     }
 
     @Override
-    public void process(Client client) {
+    public void process(ClientUtil client) {
         // Find existing login matching the username.
         UserEntity user;
         if (UserRepository.usernameExists(data.getUsername())) {

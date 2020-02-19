@@ -23,7 +23,7 @@ import org.apache.logging.log4j.Logger;
 import org.orbitrondev.jass.lib.Message.CreateLoginData;
 import org.orbitrondev.jass.lib.Message.MessageData;
 import org.orbitrondev.jass.lib.Message.ResultData;
-import org.orbitrondev.jass.server.Client;
+import org.orbitrondev.jass.server.Utils.ClientUtil;
 import org.orbitrondev.jass.server.Entity.UserEntity;
 import org.orbitrondev.jass.server.Entity.UserRepository;
 
@@ -48,7 +48,7 @@ public class CreateLogin extends Message {
      * chatroom
      */
     @Override
-    public void process(Client client) {
+    public void process(ClientUtil client) {
         boolean result = false;
 
         // Check for a valid username

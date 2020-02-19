@@ -20,7 +20,6 @@ package org.orbitrondev.jass.server.Utils;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.orbitrondev.jass.server.Client;
 
 import javax.net.ssl.KeyManagerFactory;
 import javax.net.ssl.SSLContext;
@@ -47,7 +46,7 @@ public class ServerSocketUtil extends Thread {
     private final ServerSocket listener;
     private final int port;
 
-    private static final ArrayList<Client> clients = new ArrayList<>();
+    private static final ArrayList<ClientUtil> clients = new ArrayList<>();
 
     public ServerSocketUtil(int port, boolean secure) throws IOException, KeyStoreException, CertificateException, NoSuchAlgorithmException, UnrecoverableKeyException, KeyManagementException {
         super();
@@ -104,7 +103,7 @@ public class ServerSocketUtil extends Thread {
             try {
                 // Listen for new incoming connections.
                 Socket socket = listener.accept();
-                clients.add(new Client(socket));
+                clients.add(new ClientUtil(socket));
             } catch (IOException e) {
                 logger.info(e.toString());
             }
@@ -119,7 +118,7 @@ public class ServerSocketUtil extends Thread {
      * @return "true" if a client is connected, otherwise "false"
      */
     public synchronized static boolean exists(String username) {
-        for (Client c : clients) {
+        for (ClientUtil c : clients) {
             if (c.getUser() != null && c.getUser().getUsername().equals(username)) return true;
         }
         return false;
@@ -130,7 +129,7 @@ public class ServerSocketUtil extends Thread {
      *
      * @param client A client object
      */
-    public synchronized static void remove(Client client) {
+    public synchronized static void remove(ClientUtil client) {
         clients.remove(client);
     }
 }

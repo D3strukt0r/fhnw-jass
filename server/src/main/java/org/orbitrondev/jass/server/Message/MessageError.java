@@ -20,7 +20,7 @@ package org.orbitrondev.jass.server.Message;
 
 import org.orbitrondev.jass.lib.Message.MessageData;
 import org.orbitrondev.jass.lib.Message.MessageErrorData;
-import org.orbitrondev.jass.server.Client;
+import org.orbitrondev.jass.server.Utils.ClientUtil;
 
 /**
  * Empty error message, because of inexisting command.
@@ -41,6 +41,6 @@ public class MessageError extends Message {
      * This message type does no processing at all
      */
     @Override
-    public void process(Client client) {
+    public void process(ClientUtil client) {
     }
 }

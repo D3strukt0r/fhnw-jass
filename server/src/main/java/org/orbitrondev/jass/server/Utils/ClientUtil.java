@@ -16,7 +16,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package org.orbitrondev.jass.server;
+package org.orbitrondev.jass.server.Utils;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -25,7 +25,6 @@ import org.orbitrondev.jass.lib.Message.MessageErrorData;
 import org.orbitrondev.jass.server.Entity.UserEntity;
 import org.orbitrondev.jass.server.Message.Message;
 import org.orbitrondev.jass.server.Message.MessageError;
-import org.orbitrondev.jass.server.Utils.ServerSocketUtil;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -41,8 +40,8 @@ import java.net.SocketException;
  * @author Brad Richards
  * @author Manuele Vaccari (to work with Json messaging)
  */
-public class Client extends Thread {
-    private static final Logger logger = LogManager.getLogger(Client.class);
+public class ClientUtil extends Thread {
+    private static final Logger logger = LogManager.getLogger(ClientUtil.class);
 
     private Socket socket;
     private volatile boolean clientReachable = true;
@@ -54,7 +53,7 @@ public class Client extends Thread {
      * Create a new client object, communicating over the given socket. Immediately start a thread to receive messages
      * from the client.
      */
-    public Client(Socket socket) {
+    public ClientUtil(Socket socket) {
         super();
         this.setName("ClientThread");
         this.socket = socket;
@@ -99,7 +98,7 @@ public class Client extends Thread {
             // Note the syntax "Client.this" - writing "this" would reference the Runnable
             // object
             if (msg != null)
-                msg.process(Client.this);
+                msg.process(ClientUtil.this);
             else { // Invalid message or broken socket
                 send(new MessageError(new MessageErrorData(MessageErrorData.ErrorType.INVALID_COMMAND)));
             }

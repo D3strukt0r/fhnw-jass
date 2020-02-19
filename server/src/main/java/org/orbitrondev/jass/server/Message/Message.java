@@ -19,7 +19,7 @@
 package org.orbitrondev.jass.server.Message;
 
 import org.orbitrondev.jass.lib.Message.MessageData;
-import org.orbitrondev.jass.server.Client;
+import org.orbitrondev.jass.server.Utils.ClientUtil;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -41,7 +41,7 @@ public abstract class Message {
     /**
      * Perform whatever actions are required for this particular type of message.
      */
-    public abstract void process(Client client);
+    public abstract void process(ClientUtil client);
 
     /**
      * Create a server message object of the correct class, using reflection
