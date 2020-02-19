@@ -19,6 +19,7 @@
 package org.orbitrondev.jass.client.View;
 
 import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXCheckBox;
 import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
 import javafx.scene.Scene;
@@ -41,6 +42,7 @@ public class LoginView extends View<LoginModel> {
     private VBox errorMessage;
     private JFXTextField username;
     private JFXPasswordField password;
+    private JFXCheckBox connectAutomatically;
     private JFXButton btnLogin;
     private JFXButton btnRegister;
 
@@ -76,6 +78,9 @@ public class LoginView extends View<LoginModel> {
             ViewHelper.useRequiredValidator("gui.login.password.empty")
         );
 
+        // Create checkboxes
+        connectAutomatically = ViewHelper.useCheckBox("gui.serverConnection.connectAutomatically");
+
         // Create body
         HBox btnRow = new HBox();
         btnRow.setSpacing(4); // Otherwise the login and register are right beside each other
@@ -99,9 +104,11 @@ public class LoginView extends View<LoginModel> {
             errorMessage,
             ViewHelper.useSpacer(10),
             username,
-            ViewHelper.useSpacer(25),
+            ViewHelper.useSpacer(20),
             password,
-            ViewHelper.useSpacer(25),
+            ViewHelper.useSpacer(15),
+            connectAutomatically,
+            ViewHelper.useSpacer(15),
             btnRow
         );
 
@@ -136,6 +143,10 @@ public class LoginView extends View<LoginModel> {
 
     public JFXPasswordField getPassword() {
         return password;
+    }
+
+    public JFXCheckBox getConnectAutomatically() {
+        return connectAutomatically;
     }
 
     public JFXButton getBtnLogin() {

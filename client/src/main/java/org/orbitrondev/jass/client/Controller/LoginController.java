@@ -88,6 +88,7 @@ public class LoginController extends Controller<LoginModel, LoginView> {
     public void disableInputs() {
         view.getUsername().setDisable(true);
         view.getPassword().setDisable(true);
+        view.getConnectAutomatically().setDisable(true);
     }
 
     /**
@@ -109,6 +110,7 @@ public class LoginController extends Controller<LoginModel, LoginView> {
     public void enableInputs() {
         view.getUsername().setDisable(false);
         view.getPassword().setDisable(false);
+        view.getConnectAutomatically().setDisable(false);
     }
 
     /**
@@ -152,9 +154,11 @@ public class LoginController extends Controller<LoginModel, LoginView> {
 
         // Connection would freeze window (and the animations) so do it in a different thread.
         new Thread(() -> {
-            LoginEntity login = new LoginEntity(view.getUsername().getText(), view.getPassword().getText());
-            ServiceLocator.add(login); // TODO: Check if this line is necessary?
-
+            LoginEntity login = new LoginEntity(
+                view.getUsername().getText(),
+                view.getPassword().getText(),
+                view.getConnectAutomatically().isSelected()
+            );
             BackendUtil backend = (BackendUtil) ServiceLocator.get("backend");
             Login loginMsg = new Login(new LoginData(login.getUsername(), login.getPassword()));
 
