@@ -73,6 +73,12 @@ public class ClientUtil extends Thread {
                 String msgText = in.readLine(); // Will wait here for complete line
                 logger.info("Receiving message: " + msgText);
 
+                if (msgText == null) {
+                    logger.info("Client " + getUsername() + " disconnected");
+                    disconnect();
+                    continue;
+                }
+
                 // Convert JSON string into a workable object
                 MessageData msgData = MessageData.unserialize(msgText);
 

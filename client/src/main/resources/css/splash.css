@@ -10,14 +10,14 @@
     -fx-background-position: center center;
 }
 
-.jfx-progress-bar {
+.progress-bar, .jfx-progress-bar {
     -fx-alignment: center;
 }
 
-.jfx-progress-bar > .bar {
+.progress-bar > .bar, .jfx-progress-bar > .bar {
     -fx-background-color: #2e7d32;
-    -fx-padding: 6;
+    -fx-padding: 8px;
 }
-.jfx-progress-bar > .track {
+.progress-bar > .track, .jfx-progress-bar > .track {
     -fx-background-color: #3c3f41;
 }

@@ -51,7 +51,7 @@ public class ServerSocketUtil extends Thread {
     public ServerSocketUtil(int port, boolean secure) throws IOException, KeyStoreException, CertificateException, NoSuchAlgorithmException, UnrecoverableKeyException, KeyManagementException {
         super();
         this.port = port;
-        this.setName("ListenerThread");
+        this.setName("ServerSocketThread");
 
         if (secure) {
             /*

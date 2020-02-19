@@ -18,8 +18,8 @@
 
 package org.orbitrondev.jass.client.View;
 
-import com.jfoenix.controls.JFXProgressBar;
 import javafx.scene.Scene;
+import javafx.scene.control.ProgressBar;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
@@ -36,7 +36,7 @@ import org.orbitrondev.jass.lib.MVC.View;
  * @since 0.0.1
  */
 public class SplashView extends View<SplashModel> {
-    public JFXProgressBar progress;
+    public ProgressBar progress;
 
     public SplashView(Stage stage, SplashModel model) {
         super(stage, model);
@@ -52,7 +52,7 @@ public class SplashView extends View<SplashModel> {
         iconContainer.getStyleClass().add("icon-container");
         root.setCenter(iconContainer);
 
-        progress = new JFXProgressBar();
+        progress = new ProgressBar();
         progress.setMaxWidth(Double.MAX_VALUE);
         root.setBottom(progress);
 

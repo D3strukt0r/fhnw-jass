@@ -18,7 +18,7 @@ import org.orbitrondev.jass.client.View.SplashView;
  * @since 0.0.1
  */
 public class Main extends Application {
-    public static String dbLocation = "jass.sqlite3";
+    public static String dbLocation = "data/jass.sqlite3";
 
     public static void main(String[] args) {
         // Create all arguments for the command line interface

@@ -41,7 +41,7 @@ import java.sql.SQLException;
  */
 public class Main {
     private static final Logger logger = LogManager.getLogger(Main.class);
-    public static String dbLocation = "jass_server.sqlite3";
+    public static String dbLocation = "data/jass_server.sqlite3";
 
     public static void main(String[] args) {
         // Create all arguments for the command line interface
