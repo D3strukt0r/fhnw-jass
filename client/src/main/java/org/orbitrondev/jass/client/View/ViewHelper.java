@@ -19,6 +19,7 @@
 package org.orbitrondev.jass.client.View;
 
 import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXCheckBox;
 import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
 import com.jfoenix.validation.IntegerValidator;
@@ -112,6 +113,12 @@ public class ViewHelper {
         passwordField.setLabelFloat(true);
         passwordField.promptTextProperty().bind(I18nUtil.createStringBinding(translatorKey));
         return passwordField;
+    }
+
+    public static JFXCheckBox useCheckBox(String translatorKey) {
+        JFXCheckBox checkBox = new JFXCheckBox();
+        checkBox.textProperty().bind(I18nUtil.createStringBinding(translatorKey));
+        return checkBox;
     }
 
     public static JFXButton usePrimaryButton(String translatorKey) {

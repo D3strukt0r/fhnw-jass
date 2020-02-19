@@ -137,6 +137,8 @@ public class ServerConnectionController extends Controller<ServerConnectionModel
     public void disableInputs() {
         view.getServerIp().setDisable(true);
         view.getPort().setDisable(true);
+        view.getSecure().setDisable(true);
+        view.getConnectAutomatically().setDisable(true);
     }
 
     /**
@@ -157,6 +159,8 @@ public class ServerConnectionController extends Controller<ServerConnectionModel
     public void enableInputs() {
         view.getServerIp().setDisable(false);
         view.getPort().setDisable(false);
+        view.getSecure().setDisable(false);
+        view.getConnectAutomatically().setDisable(false);
     }
 
     /**
@@ -199,14 +203,18 @@ public class ServerConnectionController extends Controller<ServerConnectionModel
 
         // Connection would freeze window (and the animations) so do it in a different thread.
         new Thread(() -> {
-            ServerEntity server = new ServerEntity(view.getServerIp().getText(), Integer.parseInt(view.getPort().getText()));
+            ServerEntity server = new ServerEntity(
+                view.getServerIp().getText(),
+                Integer.parseInt(view.getPort().getText()),
+                view.getSecure().isSelected(),
+                view.getConnectAutomatically().isSelected()
+            );
             ServiceLocator.add(server);
 
             BackendUtil backend = null;
             try {
                 // Try to connect to the server
-                // TODO: Let user choose whether to use secure connection, and default selection (automatic connection)
-                backend = new BackendUtil(server.getIp(), server.getPort());
+                backend = new BackendUtil(server.getIp(), server.getPort(), server.isSecure());
                 ServiceLocator.add(backend);
             } catch (IOException e) {
                 // This exception contains ConnectException, which basically means, it couldn't connect to the server.

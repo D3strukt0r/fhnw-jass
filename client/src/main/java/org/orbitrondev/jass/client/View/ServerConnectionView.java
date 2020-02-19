@@ -19,6 +19,7 @@
 package org.orbitrondev.jass.client.View;
 
 import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXCheckBox;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXTextField;
 import javafx.scene.Scene;
@@ -41,6 +42,8 @@ public class ServerConnectionView extends View<ServerConnectionModel> {
     private VBox errorMessage;
     private JFXTextField serverIp;
     private JFXTextField port;
+    private JFXCheckBox secure;
+    private JFXCheckBox connectAutomatically;
     private JFXButton btnConnect;
     private JFXComboBox<ServerEntity> chooseServer;
 
@@ -81,6 +84,9 @@ public class ServerConnectionView extends View<ServerConnectionModel> {
             ViewHelper.useIsValidPortValidator("gui.serverConnection.port.outOfRange")
         );
 
+        secure = ViewHelper.useCheckBox("gui.serverConnection.secure");
+        connectAutomatically = ViewHelper.useCheckBox("gui.serverConnection.connectAutomatically");
+
         // Create button to connect
         btnConnect = ViewHelper.usePrimaryButton("gui.serverConnection.connect");
         btnConnect.setDisable(true);
@@ -98,6 +104,10 @@ public class ServerConnectionView extends View<ServerConnectionModel> {
             port,
             ViewHelper.useSpacer(25),
             ViewHelper.useText("gui.serverConnection.port.hint", stage),
+            ViewHelper.useSpacer(15),
+            secure,
+            ViewHelper.useSpacer(10),
+            connectAutomatically,
             ViewHelper.useSpacer(15),
             btnConnect
         );
@@ -137,6 +147,14 @@ public class ServerConnectionView extends View<ServerConnectionModel> {
 
     public JFXTextField getPort() {
         return port;
+    }
+
+    public JFXCheckBox getSecure() {
+        return secure;
+    }
+
+    public JFXCheckBox getConnectAutomatically() {
+        return connectAutomatically;
     }
 
     public JFXButton getBtnConnect() {
