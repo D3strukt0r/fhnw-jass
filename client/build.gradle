@@ -1,7 +1,7 @@
 plugins {
     id 'java'
     id 'application'
-    id 'org.openjfx.javafxplugin' version '0.0.8'
+//    id 'org.openjfx.javafxplugin' version '0.0.8'
 }
 
 application {
@@ -11,7 +11,8 @@ application {
 dependencies {
     implementation project(':lib')
 
-    implementation group: 'com.jfoenix', name: 'jfoenix', version: '9.0.8'
+//    implementation group: 'com.jfoenix', name: 'jfoenix', version: '9.0.8'
+    implementation group: 'com.jfoenix', name: 'jfoenix', version: '8.0.8'
     implementation group: 'com.github.jiconfont', name: 'jiconfont-javafx', version: '1.0.0'
     implementation group: 'com.github.jiconfont', name: 'jiconfont-google_material_design_icons', version: '2.2.0.2'
 
@@ -30,13 +31,13 @@ dependencies {
     testImplementation group: 'junit', name: 'junit', version: '4.12'
 }
 
-javafx {
-    version = "11"
-    modules = [ 'javafx.controls' ]
-}
+//javafx {
+//    version = "11"
+//    modules = [ 'javafx.controls' ]
+//}
 
 jar {
-    archiveName("jass.jar")
+//    archiveName("jass.jar")
 
     manifest {
         attributes 'Implementation-Title': project.name,

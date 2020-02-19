@@ -21,7 +21,7 @@ dependencies {
 }
 
 jar {
-    archiveName("jass-server.jar")
+//    archiveName("jass-server.jar")
 
     manifest {
         attributes 'Implementation-Title': project.name,
