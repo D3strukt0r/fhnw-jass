@@ -47,7 +47,7 @@ public class Main {
         // Create all arguments for the command line interface
         Options options = new Options();
         options
-            .addOption(Option.builder("p").longOpt("port").desc("Defines the port to use").required().hasArg().build())
+            .addOption(Option.builder("p").longOpt("port").desc("Defines the port to use").hasArg().build())
             .addOption(Option.builder("l").longOpt("db-location").desc("Define where the database is saved").hasArg().build())
             .addOption(Option.builder("v").longOpt("verbose").desc("Show more extensive logs").hasArg(false).build())
             .addOption(Option.builder("s").longOpt("ssl").desc("Accept secure connections").hasArg(false).build());
@@ -64,12 +64,14 @@ public class Main {
         }
 
         // Check for the ports argument
-        int port;
-        try {
-            port = Integer.parseInt(cmd.getOptionValue("port"));
-        } catch (NumberFormatException e) {
-            logger.fatal("The value you used for port is not an integer");
-            return;
+        int port = 1024;
+        if (cmd.hasOption("port")) {
+            try {
+                port = Integer.parseInt(cmd.getOptionValue("port"));
+            } catch (NumberFormatException e) {
+                logger.fatal("The value you used for port is not an integer");
+                return;
+            }
         }
 
         // Check if the user wants to use a different location for the database
