@@ -119,13 +119,17 @@ public class ServerConnectionController extends Controller<ServerConnectionModel
         ServerEntity server = view.getChooseServer().getSelectionModel().getSelectedItem();
 
         if (server == null || server.getIp() == null) {
-            enableInputs();
             view.getServerIp().setText("");
             view.getPort().setText("");
+            view.getSecure().setSelected(false);
+            view.getConnectAutomatically().setSelected(false);
+            enableInputs();
         } else {
             disableInputs();
             view.getServerIp().setText(server.getIp());
             view.getPort().setText(Integer.toString(server.getPort()));
+            view.getSecure().setSelected(server.isSecure());
+            view.getConnectAutomatically().setSelected(server.isConnectAutomatically());
         }
     }
 
