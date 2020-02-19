@@ -13,17 +13,17 @@
         </Console>
     </Appenders>
     <Loggers>
-        <Logger name="com.j256.ormlite" additivity="false">
-            <AppenderRef ref="Console" level="info"/>
-            <AppenderRef ref="File" level="trace"/>
+        <Logger name="com.j256.ormlite" level="info" additivity="false">
+            <AppenderRef ref="Console" />
+            <AppenderRef ref="File" level="debug"/>
         </Logger>
-        <Logger name="com.j256.ormlite.stmt.StatementExecutor" additivity="false">
-            <AppenderRef ref="Console" level="debug"/>
-            <AppenderRef ref="File" level="trace"/>
+        <Logger name="com.j256.ormlite.stmt.StatementExecutor" level="debug" additivity="false">
+            <AppenderRef ref="Console" />
+            <AppenderRef ref="File"/>
         </Logger>
         <Root level="info">
             <AppenderRef ref="Console"/>
-            <AppenderRef ref="File" level="trace"/>
+            <AppenderRef ref="File" level="debug"/>
         </Root>
     </Loggers>
 </Configuration>
