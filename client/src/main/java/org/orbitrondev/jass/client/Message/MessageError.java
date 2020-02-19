@@ -18,6 +18,10 @@
 
 package org.orbitrondev.jass.client.Message;
 
+import javafx.application.Platform;
+import javafx.scene.control.Alert;
+import javafx.scene.image.Image;
+import javafx.stage.Stage;
 import org.orbitrondev.jass.client.Utils.BackendUtil;
 import org.orbitrondev.jass.lib.Message.MessageData;
 import org.orbitrondev.jass.lib.Message.MessageErrorData;
@@ -42,7 +46,25 @@ public class MessageError extends Message {
      */
     @Override
     public boolean process(BackendUtil backendUtil) {
-        // TODO: Somehow show error popup when we get such a message
+        Platform.runLater(() -> {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText("Ooops, the server sent an error message!");
+
+            switch (data.getErrorMessage()) {
+                case INVALID_COMMAND:
+                    alert.setContentText("The client sent a command unknown to the server");
+                    break;
+                default:
+                    alert.setContentText("Unknown error message received.");
+                    break;
+            }
+            alert.setContentText("Ooops, there was an error!");
+
+            Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+            stage.getIcons().add(new Image(getClass().getResource("/images/icon.png").toString()));
+            alert.showAndWait();
+        });
         return true;
     }
 }
