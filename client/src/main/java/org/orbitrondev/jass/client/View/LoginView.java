@@ -79,7 +79,7 @@ public class LoginView extends View<LoginModel> {
         );
 
         // Create checkboxes
-        connectAutomatically = ViewHelper.useCheckBox("gui.serverConnection.connectAutomatically");
+        connectAutomatically = ViewHelper.useCheckBox("gui.login.connectAutomatically");
 
         // Create body
         HBox btnRow = new HBox();
