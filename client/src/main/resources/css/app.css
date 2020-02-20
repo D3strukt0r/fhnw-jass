@@ -30,6 +30,8 @@ dark: #005005;
     -fx-font-size: 12px;
     -jfx-button-type: RAISED;
     -fx-background-color: #2e7d32;
+    -fx-border-color: #2e7d32;
+    -fx-border-radius: 3px; /* There is no radius by default */
     -fx-pref-width: 328;
     -fx-text-fill: white;
 }

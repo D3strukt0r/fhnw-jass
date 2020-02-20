@@ -18,7 +18,21 @@
 
 package org.orbitrondev.jass.client.Controller;
 
+import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXCheckBox;
+import com.jfoenix.controls.JFXComboBox;
+import com.jfoenix.controls.JFXTextField;
 import javafx.application.Platform;
+import javafx.beans.binding.Bindings;
+import javafx.beans.binding.NumberBinding;
+import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.SimpleDoubleProperty;
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
+import javafx.scene.control.Menu;
+import javafx.scene.control.MenuItem;
+import javafx.scene.input.KeyCombination;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.util.StringConverter;
@@ -26,23 +40,23 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.orbitrondev.jass.client.Entity.ServerEntity;
 import org.orbitrondev.jass.client.Entity.ServerRepository;
-import org.orbitrondev.jass.client.Model.ServerConnectionModel;
+import org.orbitrondev.jass.client.FXML.FXMLController;
 import org.orbitrondev.jass.client.Utils.SocketUtil;
 import org.orbitrondev.jass.client.Utils.DatabaseUtil;
 import org.orbitrondev.jass.client.Utils.I18nUtil;
 import org.orbitrondev.jass.client.View.ViewHelper;
-import org.orbitrondev.jass.client.View.ServerConnectionView;
-import org.orbitrondev.jass.client.MVC.Controller;
 import org.orbitrondev.jass.lib.ServiceLocator.ServiceLocator;
 
 import java.io.IOException;
 import java.net.ConnectException;
+import java.net.URL;
 import java.security.KeyManagementException;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.UnrecoverableKeyException;
 import java.security.cert.CertificateException;
 import java.sql.SQLException;
+import java.util.ResourceBundle;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
@@ -52,36 +66,104 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * @version %I%, %G%
  * @since 0.0.1
  */
-public class ServerConnectionController extends Controller<ServerConnectionModel, ServerConnectionView> {
+public class ServerConnectionController extends FXMLController {
     private static final Logger logger = LogManager.getLogger(ServerConnectionController.class);
 
-    /**
-     * Initializes all event listeners for the view.
-     *
-     * @since 0.0.1
-     */
-    public ServerConnectionController(ServerConnectionModel model, ServerConnectionView view) {
-        super(model, view);
+    @FXML
+    public Menu mFile;
+    @FXML
+    public Menu mFileChangeLanguage;
+    @FXML
+    public MenuItem mFileExit;
+    @FXML
+    public Menu mEdit;
+    @FXML
+    public MenuItem mEditDelete;
+    @FXML
+    public Menu mHelp;
+    @FXML
+    public MenuItem mHelpAbout;
+
+    @FXML
+    private VBox root;
+    @FXML
+    private Text navbar;
+    @FXML
+    private VBox errorMessage;
+    @FXML
+    private JFXComboBox<ServerEntity> chooseServer;
+    @FXML
+    private JFXTextField ip;
+    @FXML
+    public Text ipHint;
+    @FXML
+    private JFXTextField port;
+    @FXML
+    private Text portHint;
+    @FXML
+    private JFXCheckBox secure;
+    @FXML
+    private JFXCheckBox connectAutomatically;
+    @FXML
+    private JFXButton connect;
+
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
         DatabaseUtil db = (DatabaseUtil) ServiceLocator.get("db");
 
-        // Register ourselves to listen for changes in the dropdown
-        view.getChooseServer().setOnAction(event -> updateChosenServer());
+        /*
+         * Bind all texts
+         */
+        mFile.textProperty().bind(I18nUtil.createStringBinding(mFile.getText()));
+        mFileChangeLanguage.textProperty().bind(I18nUtil.createStringBinding(mFileChangeLanguage.getText()));
+        ViewHelper.useLanguageMenuContent(mFileChangeLanguage);
+        mFileExit.textProperty().bind(I18nUtil.createStringBinding(mFileExit.getText()));
+        mFileExit.setAccelerator(KeyCombination.keyCombination("Alt+F4"));
 
-        // Register ourselves to listen for button clicks
-        view.getBtnConnect().setOnAction(event -> clickOnConnect());
+        mEdit.textProperty().bind(I18nUtil.createStringBinding(mEdit.getText()));
+        mEditDelete.textProperty().bind(I18nUtil.createStringBinding(mEditDelete.getText()));
 
-        // Add options to server list drop down
-        view.getChooseServer().setConverter(new StringConverter<ServerEntity>() {
+        mHelp.textProperty().bind(I18nUtil.createStringBinding(mHelp.getText()));
+        mHelpAbout.textProperty().bind(I18nUtil.createStringBinding(mHelpAbout.getText()));
+
+        // TODO: Cannot use toUpperCase
+        //navbar.textProperty().bind(I18nUtil.createStringBinding(() -> I18nUtil.get(navbar.getText()).toUpperCase()));
+        navbar.textProperty().bind(I18nUtil.createStringBinding(navbar.getText()));
+
+        ip.promptTextProperty().bind(I18nUtil.createStringBinding(ip.getPromptText()));
+        ipHint.textProperty().bind(I18nUtil.createStringBinding(ipHint.getText()));
+        // https://stackoverflow.com/questions/51199903/how-to-bind-a-value-to-the-result-of-a-calculation
+        // Check the css at .custom-container (padding left and right = 40)
+        DoubleProperty padding = new SimpleDoubleProperty(40.0);
+        NumberBinding wrapping = Bindings.subtract(root.widthProperty(), padding);
+        ipHint.wrappingWidthProperty().bind(wrapping);
+
+        port.promptTextProperty().bind(I18nUtil.createStringBinding(port.getPromptText()));
+        portHint.textProperty().bind(I18nUtil.createStringBinding(portHint.getText()));
+        portHint.wrappingWidthProperty().bind(wrapping);
+
+        connectAutomatically.textProperty().bind(I18nUtil.createStringBinding(connectAutomatically.getText()));
+        secure.textProperty().bind(I18nUtil.createStringBinding(secure.getText()));
+
+        // TODO: Cannot use toUpperCase
+        //connect.textProperty().bind(I18nUtil.createStringBinding(() -> I18nUtil.get(connect.getText()).toUpperCase()));
+        connect.textProperty().bind(I18nUtil.createStringBinding(connect.getText()));
+
+        /*
+         * Converts the ServerEntity to a String
+         */
+        chooseServer.setConverter(new StringConverter<ServerEntity>() {
             @Override
             public String toString(ServerEntity server) {
-                return
-                    server == null || server.getIp() == null
-                        ? I18nUtil.get("gui.serverConnection.create")
-                        : (
-                        server.isSecure()
-                            ? I18nUtil.get("gui.serverConnection.entry.ssl", server.getIp(), Integer.toString(server.getPort()))
-                            : I18nUtil.get("gui.serverConnection.entry", server.getIp(), Integer.toString(server.getPort()))
-                    );
+                return server == null || server.getIp() == null
+                    ? I18nUtil.get("gui.serverConnection.create")
+                    : (server.isSecure()
+                        ? (server.isConnectAutomatically()
+                            ? I18nUtil.get("gui.serverConnection.entry.ssl.default", server.getIp(), Integer.toString(server.getPort()))
+                            : I18nUtil.get("gui.serverConnection.entry.ssl", server.getIp(), Integer.toString(server.getPort())))
+                        : (server.isConnectAutomatically()
+                            ? I18nUtil.get("gui.serverConnection.entry.default", server.getIp(), Integer.toString(server.getPort()))
+                            : I18nUtil.get("gui.serverConnection.entry", server.getIp(), Integer.toString(server.getPort()))));
             }
 
             @Override
@@ -89,55 +171,53 @@ public class ServerConnectionController extends Controller<ServerConnectionModel
                 return null;
             }
         });
-        view.getChooseServer().getItems().add(new ServerEntity(null, 0));
-        view.getChooseServer().getSelectionModel().selectFirst();
-        for (ServerEntity server : db.getServerDao()) {
-            view.getChooseServer().getItems().add(server);
+        // Add the "Create new..." element
+        chooseServer.getItems().add(new ServerEntity(null, 0));
+        chooseServer.getSelectionModel().selectFirst();
+        // Find all saved element
+        if (db != null) {
+            for (ServerEntity server : db.getServerDao()) {
+                chooseServer.getItems().add(server);
+            }
         }
 
-        // Disable/Enable the Connect button depending on if the inputs are valid
+        /*
+         * Disable/Enable the Connect button depending on if the inputs are valid
+         */
         AtomicBoolean serverIpValid = new AtomicBoolean(false);
         AtomicBoolean portValid = new AtomicBoolean(false);
         Runnable updateButtonClickable = () -> {
             if (!serverIpValid.get() || !portValid.get()) {
-                view.getBtnConnect().setDisable(true);
+                connect.setDisable(true);
             } else {
-                view.getBtnConnect().setDisable(false);
+                connect.setDisable(false);
             }
         };
-        view.getServerIp().textProperty().addListener((o, oldVal, newVal) -> {
+        ip.textProperty().addListener((o, oldVal, newVal) -> {
             if (!oldVal.equals(newVal)) {
-                serverIpValid.set(view.getServerIp().validate());
+                serverIpValid.set(ip.validate());
                 updateButtonClickable.run();
             }
         });
-        view.getPort().textProperty().addListener((o, oldVal, newVal) -> {
+        port.textProperty().addListener((o, oldVal, newVal) -> {
             if (!oldVal.equals(newVal)) {
-                portValid.set(view.getPort().validate());
+                portValid.set(port.validate());
                 updateButtonClickable.run();
             }
         });
 
-        // Register ourselves to handle window-closing event
-        view.getStage().setOnCloseRequest(event -> Platform.exit());
-    }
-
-    public void updateChosenServer() {
-        ServerEntity server = view.getChooseServer().getSelectionModel().getSelectedItem();
-
-        if (server == null || server.getIp() == null) {
-            view.getServerIp().setText("");
-            view.getPort().setText("");
-            view.getSecure().setSelected(false);
-            view.getConnectAutomatically().setSelected(false);
-            enableInputs();
-        } else {
-            disableInputs();
-            view.getServerIp().setText(server.getIp());
-            view.getPort().setText(Integer.toString(server.getPort()));
-            view.getSecure().setSelected(server.isSecure());
-            view.getConnectAutomatically().setSelected(server.isConnectAutomatically());
-        }
+        /*
+         * Validate input fields
+         */
+        ip.getValidators().addAll(
+            ViewHelper.useRequiredValidator("gui.serverConnection.ip.empty"),
+            ViewHelper.useIsValidIpValidator("gui.serverConnection.ip.notIp")
+        );
+        port.getValidators().addAll(
+            ViewHelper.useRequiredValidator("gui.serverConnection.port.empty"),
+            ViewHelper.useIsIntegerValidator("gui.serverConnection.port.nan"),
+            ViewHelper.useIsValidPortValidator("gui.serverConnection.port.outOfRange")
+        );
     }
 
     /**
@@ -146,10 +226,10 @@ public class ServerConnectionController extends Controller<ServerConnectionModel
      * @since 0.0.1
      */
     public void disableInputs() {
-        view.getServerIp().setDisable(true);
-        view.getPort().setDisable(true);
-        view.getSecure().setDisable(true);
-        view.getConnectAutomatically().setDisable(true);
+        ip.setDisable(true);
+        port.setDisable(true);
+        secure.setDisable(true);
+        connectAutomatically.setDisable(true);
     }
 
     /**
@@ -159,7 +239,7 @@ public class ServerConnectionController extends Controller<ServerConnectionModel
      */
     public void disableAll() {
         disableInputs();
-        view.getBtnConnect().setDisable(true);
+        connect.setDisable(true);
     }
 
     /**
@@ -168,10 +248,10 @@ public class ServerConnectionController extends Controller<ServerConnectionModel
      * @since 0.0.1
      */
     public void enableInputs() {
-        view.getServerIp().setDisable(false);
-        view.getPort().setDisable(false);
-        view.getSecure().setDisable(false);
-        view.getConnectAutomatically().setDisable(false);
+        ip.setDisable(false);
+        port.setDisable(false);
+        secure.setDisable(false);
+        connectAutomatically.setDisable(false);
     }
 
     /**
@@ -181,7 +261,7 @@ public class ServerConnectionController extends Controller<ServerConnectionModel
      */
     public void enableAll() {
         enableInputs();
-        view.getBtnConnect().setDisable(false);
+        connect.setDisable(false);
     }
 
     /**
@@ -191,15 +271,48 @@ public class ServerConnectionController extends Controller<ServerConnectionModel
      */
     public void setErrorMessage(String translatorKey) {
         Platform.runLater(() -> {
-            if (view.getErrorMessage().getChildren().size() == 0) {
+            if (errorMessage.getChildren().size() == 0) {
                 // Make window larger, so it doesn't become crammed, only if we haven't done so yet
-                view.getStage().setHeight(view.getStage().getHeight() + 30);
+                // TODO: Don't use root, use the stage (view.getStage().setHeight(x))
+                //double newHeight = root.getHeight() + 30;
+                //root.setMaxHeight(newHeight);
+                //root.setPrefHeight(newHeight);
+                //root.setMinHeight(newHeight);
+                errorMessage.setPrefHeight(50);
             }
             Text text = ViewHelper.useText(translatorKey);
             text.setFill(Color.RED);
-            view.getErrorMessage().getChildren().clear();
-            view.getErrorMessage().getChildren().addAll(text, ViewHelper.useSpacer(20));
+            errorMessage.getChildren().clear();
+            errorMessage.getChildren().addAll(text, ViewHelper.useSpacer(20));
         });
+    }
+
+    @FXML
+    private void clickOnExit(ActionEvent event) {
+        Platform.exit();
+    }
+
+    /**
+     * Updates the view depending if we create a new element or choose an existing one
+     *
+     * @since 0.0.1
+     */
+    @FXML
+    private void clickOnChooseServer(ActionEvent event) {
+        ServerEntity server = chooseServer.getSelectionModel().getSelectedItem();
+        if (server == null || server.getIp() == null) {
+            enableInputs();
+            ip.setText("");
+            port.setText("");
+            secure.setSelected(false);
+            connectAutomatically.setSelected(false);
+        } else {
+            disableInputs();
+            ip.setText(server.getIp());
+            port.setText(Integer.toString(server.getPort()));
+            secure.setSelected(server.isSecure());
+            connectAutomatically.setSelected(server.isConnectAutomatically());
+        }
     }
 
     /**
@@ -208,50 +321,56 @@ public class ServerConnectionController extends Controller<ServerConnectionModel
      *
      * @since 0.0.1
      */
-    public void clickOnConnect() {
+    @FXML
+    private void clickOnConnect(ActionEvent event) {
         // Disable everything to prevent something while working on the data
         disableAll();
 
         // Connection would freeze window (and the animations) so do it in a different thread.
         new Thread(() -> {
+            DatabaseUtil db = (DatabaseUtil) ServiceLocator.get("db");
+
             ServerEntity server = new ServerEntity(
-                view.getServerIp().getText(),
-                Integer.parseInt(view.getPort().getText()),
-                view.getSecure().isSelected(),
-                view.getConnectAutomatically().isSelected()
+                ip.getText(),
+                Integer.parseInt(port.getText()),
+                secure.isSelected(),
+                connectAutomatically.isSelected()
             );
             ServiceLocator.add(server);
 
-            SocketUtil backend = null;
+            SocketUtil socket = null;
             try {
                 // Try to connect to the server
-                backend = new SocketUtil(server.getIp(), server.getPort(), server.isSecure());
-                ServiceLocator.add(backend);
+                socket = new SocketUtil(server.getIp(), server.getPort(), server.isSecure());
+                ServiceLocator.add(socket);
                 ServerRepository.setToConnectAutomatically(server); // Make sure it's the only entry
             } catch (ConnectException e) {
                 enableAll();
                 setErrorMessage("gui.serverConnection.connect.connection");
             } catch (IOException e) {
                 enableAll();
-                setErrorMessage("gui.serverConnection.connectionFailed");
+                setErrorMessage("gui.serverConnection.connect.failed");
             } catch (CertificateException | NoSuchAlgorithmException | UnrecoverableKeyException | KeyStoreException | KeyManagementException e) {
                 enableAll();
                 setErrorMessage("gui.serverConnection.connect.ssl");
             }
 
-            if (backend != null) {
+            if (socket != null) {
                 // If the user selected "Create new connection" add it to the DB
-                ServerEntity selectedItem = view.getChooseServer().getSelectionModel().getSelectedItem();
+                ServerEntity selectedItem = chooseServer.getSelectionModel().getSelectedItem();
                 if (selectedItem != null && selectedItem.getIp() == null) {
                     try {
-                        DatabaseUtil db = (DatabaseUtil) ServiceLocator.get("db");
                         db.getServerDao().create(server);
                     } catch (SQLException e) {
                         logger.error("Server connection not saved to database");
                     }
                 }
-                ControllerHelper.switchToLoginWindow(view);
+                ControllerHelper.switchToLoginWindow();
             }
         }).start();
+    }
+
+    public JFXButton getConnect() {
+        return connect;
     }
 }

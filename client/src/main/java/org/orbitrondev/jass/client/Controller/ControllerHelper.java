@@ -20,15 +20,11 @@ package org.orbitrondev.jass.client.Controller;
 
 import javafx.application.Platform;
 import javafx.stage.Stage;
-import org.orbitrondev.jass.client.Model.DashboardModel;
-import org.orbitrondev.jass.client.Model.LoginModel;
-import org.orbitrondev.jass.client.Model.RegisterModel;
-import org.orbitrondev.jass.client.Model.ServerConnectionModel;
-import org.orbitrondev.jass.client.View.DashboardView;
-import org.orbitrondev.jass.client.View.LoginView;
 import org.orbitrondev.jass.client.View.RegisterView;
 import org.orbitrondev.jass.client.View.ServerConnectionView;
-import org.orbitrondev.jass.client.MVC.View;
+import org.orbitrondev.jass.client.Model.DashboardModel;
+import org.orbitrondev.jass.client.View.DashboardView;
+import org.orbitrondev.jass.client.View.LoginView;
 
 /**
  * A helper class for the controllers to switch between windows easily.
@@ -38,70 +34,37 @@ import org.orbitrondev.jass.client.MVC.View;
  * @since 0.0.1
  */
 public class ControllerHelper {
-    /**
-     * Switch to the server connection window, and close the current window.
-     *
-     * @since 0.0.1
-     */
-    static void switchToServerConnectionWindow(final View<?> oldView) {
-        Platform.runLater(() -> {
-            Stage stage = new Stage();
-            ServerConnectionModel model = new ServerConnectionModel();
-            ServerConnectionView newView = new ServerConnectionView(stage, model);
-            new ServerConnectionController(model, newView);
+    // Reuse the same window
+    private static Stage stage = new Stage();
 
-            oldView.stop();
-            newView.start();
+    public static void switchToServerConnectionWindow() {
+        Platform.runLater(() -> {
+            ServerConnectionView view = new ServerConnectionView(stage);
+            view.start();
         });
     }
 
-    /**
-     * Switch to the dashboard window, and close the current window.
-     *
-     * @since 0.0.1
-     */
-    static void switchToDashboardWindow(final View<?> oldView) {
+    public static void switchToLoginWindow() {
+        Platform.runLater(() -> {
+            LoginView view = new LoginView(stage);
+            view.start();
+        });
+    }
+
+    public static void switchToRegisterWindow() {
+        Platform.runLater(() -> {
+            RegisterView view = new RegisterView(stage);
+            view.start();
+        });
+    }
+
+    public static void switchToDashboardWindow() {
         Platform.runLater(() -> {
             Stage stage = new Stage();
             DashboardModel model = new DashboardModel();
             DashboardView newView = new DashboardView(stage, model);
             new DashboardController(model, newView);
 
-            oldView.stop();
-            newView.start();
-        });
-    }
-
-    /**
-     * Switch to the login window, and close the current window.
-     *
-     * @since 0.0.1
-     */
-    static void switchToLoginWindow(final View<?> oldView) {
-        Platform.runLater(() -> {
-            Stage stage = new Stage();
-            LoginModel model = new LoginModel();
-            LoginView newView = new LoginView(stage, model);
-            new LoginController(model, newView);
-
-            oldView.stop();
-            newView.start();
-        });
-    }
-
-    /**
-     * Switch to the register window, and close the current window.
-     *
-     * @since 0.0.1
-     */
-    static void switchToRegisterWindow(final View<?> oldView) {
-        Platform.runLater(() -> {
-            Stage stage = new Stage();
-            RegisterModel model = new RegisterModel();
-            RegisterView newView = new RegisterView(stage, model);
-            new RegisterController(model, newView);
-
-            oldView.stop();
             newView.start();
         });
     }

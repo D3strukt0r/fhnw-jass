@@ -53,7 +53,10 @@ public class DeleteAccountController extends Controller<DeleteAccountModel, Dele
         view.getBtnDelete().setOnAction(event -> clickOnDelete());
 
         // Register ourselves to listen for button clicks
-        view.getBtnCancel().setOnAction(event -> ControllerHelper.switchToDashboardWindow(view));
+        view.getBtnCancel().setOnAction(event -> {
+            ControllerHelper.switchToDashboardWindow();
+            view.stop();
+        });
 
         // Register ourselves to handle window-closing event
         view.getStage().setOnCloseRequest(event -> Platform.exit());
@@ -119,7 +122,8 @@ public class DeleteAccountController extends Controller<DeleteAccountModel, Dele
                 // If deleted, try logging out now.
                 if (logoutMsg.process(backend)) {
                     ServiceLocator.remove("login");
-                    ControllerHelper.switchToLoginWindow(view);
+                    ControllerHelper.switchToLoginWindow();
+                    view.stop();
                 } else {
                     enableAll();
                     setErrorMessage("gui.deleteAccount.logoutFailed");

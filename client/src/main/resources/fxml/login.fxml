@@ -11,17 +11,18 @@
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
-
-<VBox fx:id="root"
-      styleClass="background-white"
+<?import javafx.scene.control.SeparatorMenuItem?>
+<VBox styleClass="background-white"
       stylesheets="@../css/app.css"
+      prefWidth="350"
       xmlns="http://javafx.com/javafx/8.0.171"
       xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="org.orbitrondev.jass.client.FXML.LoginController">
+      fx:controller="org.orbitrondev.jass.client.Controller.LoginController">
     <MenuBar>
         <Menu fx:id="mFile" text="gui.menu.file">
             <Menu fx:id="mFileChangeLanguage" text="gui.menu.file.changeLanguage" />
-            <MenuItem fx:id="mFileExit" text="gui.menu.file.exit" />
+            <SeparatorMenuItem />
+            <MenuItem fx:id="mFileExit" text="gui.menu.file.exit" onAction="#clickOnExit" />
         </Menu>
         <Menu fx:id="mEdit" text="gui.menu.edit">
             <MenuItem fx:id="mEditDelete" text="gui.menu.edit.delete" />
@@ -39,20 +40,19 @@
     <!-- body -->
     <VBox styleClass="custom-container">
         <VBox fx:id="errorMessage" prefHeight="0.0" />
-        <Region prefHeight="10.0" VBox.vgrow="ALWAYS" />
 
         <JFXTextField fx:id="username" labelFloat="true" promptText="gui.login.username" />
-        <Region prefHeight="20.0" VBox.vgrow="ALWAYS" />
+        <Region prefHeight="35.0" VBox.vgrow="ALWAYS" />
 
         <JFXPasswordField fx:id="password" labelFloat="true" promptText="gui.login.password" />
-        <Region prefHeight="15.0" VBox.vgrow="ALWAYS" />
+        <Region prefHeight="35.0" VBox.vgrow="ALWAYS" />
 
         <JFXCheckBox fx:id="connectAutomatically" text="gui.login.connectAutomatically" />
         <Region prefHeight="15.0" VBox.vgrow="ALWAYS" />
 
-        <HBox>
-            <JFXButton fx:id="login" disable="true" styleClass="primary" text="gui.login.login" />
-            <JFXButton fx:id="register" styleClass="secondary" text="gui.login.register" />
+        <HBox spacing="4">
+            <JFXButton fx:id="login" disable="true" styleClass="primary" text="gui.login.login" onAction="#clickOnLogin" />
+            <JFXButton fx:id="register" styleClass="secondary" text="gui.login.register" onAction="#clickOnRegister" />
         </HBox>
     </VBox>
 </VBox>

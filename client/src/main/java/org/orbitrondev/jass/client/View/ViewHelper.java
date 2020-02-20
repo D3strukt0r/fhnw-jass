@@ -238,6 +238,11 @@ public class ViewHelper {
 
     public static Menu useLanguageMenu() {
         Menu changeLanguageMenu = useMenu("gui.menu.file.changeLanguage");
+        useLanguageMenuContent(changeLanguageMenu);
+        return changeLanguageMenu;
+    }
+
+    public static void useLanguageMenuContent(Menu changeLanguageMenu) {
         for (Locale locale : I18nUtil.getSupportedLocales()) {
             StringProperty langInLocale = new SimpleStringProperty();
             String lang;
@@ -265,7 +270,6 @@ public class ViewHelper {
             language.setOnAction(event -> I18nUtil.setLocale(locale));
             changeLanguageMenu.getItems().add(language);
         }
-        return changeLanguageMenu;
     }
 
     public static MenuItem useMenuItem(String translatorKey) {

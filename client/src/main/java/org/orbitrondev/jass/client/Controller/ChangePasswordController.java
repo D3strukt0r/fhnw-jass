@@ -51,7 +51,10 @@ public class ChangePasswordController extends Controller<ChangePasswordModel, Ch
 
         // Register ourselves to listen for button clicks
         view.getBtnChange().setOnAction(event -> clickOnChange());
-        view.getBtnCancel().setOnAction(event -> ControllerHelper.switchToDashboardWindow(view));
+        view.getBtnCancel().setOnAction(event -> {
+            ControllerHelper.switchToDashboardWindow();
+            view.stop();
+        });
 
         // Disable/Enable the login button depending on if the inputs are valid
         AtomicBoolean oldPasswordValid = new AtomicBoolean(false);
@@ -171,7 +174,8 @@ public class ChangePasswordController extends Controller<ChangePasswordModel, Ch
             if (changePasswordMsg.process(backend)) {
                 ServiceLocator.remove("login");
                 ServiceLocator.add(newLogin);
-                ControllerHelper.switchToDashboardWindow(view);
+                ControllerHelper.switchToDashboardWindow();
+                view.stop();
             } else {
                 enableAll();
                 setErrorMessage("gui.changePassword.changeFailed");

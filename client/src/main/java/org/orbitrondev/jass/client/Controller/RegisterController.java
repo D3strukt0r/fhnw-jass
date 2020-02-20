@@ -18,75 +18,147 @@
 
 package org.orbitrondev.jass.client.Controller;
 
+import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXCheckBox;
+import com.jfoenix.controls.JFXPasswordField;
+import com.jfoenix.controls.JFXTextField;
 import javafx.application.Platform;
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
+import javafx.scene.control.Menu;
+import javafx.scene.control.MenuItem;
+import javafx.scene.input.KeyCombination;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import org.orbitrondev.jass.client.Entity.LoginEntity;
+import org.orbitrondev.jass.client.FXML.FXMLController;
 import org.orbitrondev.jass.client.Message.CreateLogin;
 import org.orbitrondev.jass.client.Message.Login;
-import org.orbitrondev.jass.client.Model.RegisterModel;
+import org.orbitrondev.jass.client.Utils.I18nUtil;
 import org.orbitrondev.jass.client.Utils.SocketUtil;
 import org.orbitrondev.jass.client.View.ViewHelper;
-import org.orbitrondev.jass.client.View.RegisterView;
-import org.orbitrondev.jass.client.MVC.Controller;
 import org.orbitrondev.jass.lib.Message.CreateLoginData;
 import org.orbitrondev.jass.lib.Message.LoginData;
 import org.orbitrondev.jass.lib.ServiceLocator.ServiceLocator;
 
+import java.net.URL;
+import java.util.ResourceBundle;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
- * The controller for the register view.
+ * The controller for the server connection view.
  *
  * @author Manuele Vaccari
  * @version %I%, %G%
  * @since 0.0.1
  */
-public class RegisterController extends Controller<RegisterModel, RegisterView> {
-    /**
-     * Initializes all event listeners for the view.
-     *
-     * @since 0.0.1
-     */
-    protected RegisterController(RegisterModel model, RegisterView view) {
-        super(model, view);
+public class RegisterController extends FXMLController {
+    @FXML
+    public Menu mFile;
+    @FXML
+    public Menu mFileChangeLanguage;
+    @FXML
+    public MenuItem mFileExit;
+    @FXML
+    public Menu mEdit;
+    @FXML
+    public MenuItem mEditDelete;
+    @FXML
+    public Menu mHelp;
+    @FXML
+    public MenuItem mHelpAbout;
 
-        // Register ourselves to listen for button clicks
-        view.getBtnRegister().setOnAction(event -> clickOnRegister());
-        view.getBtnLogin().setOnAction(event -> ControllerHelper.switchToLoginWindow(view));
+    @FXML
+    private Text navbar;
+    @FXML
+    private VBox errorMessage;
+    @FXML
+    private JFXTextField username;
+    @FXML
+    private JFXPasswordField password;
+    @FXML
+    private JFXPasswordField repeatPassword;
+    @FXML
+    private JFXCheckBox connectAutomatically;
+    @FXML
+    private JFXButton register;
+    @FXML
+    private JFXButton login;
 
-        // Disable/Enable the login button depending on if the inputs are valid
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        /*
+         * Bind all texts
+         */
+        mFile.textProperty().bind(I18nUtil.createStringBinding(mFile.getText()));
+        mFileChangeLanguage.textProperty().bind(I18nUtil.createStringBinding(mFileChangeLanguage.getText()));
+        ViewHelper.useLanguageMenuContent(mFileChangeLanguage);
+        mFileExit.textProperty().bind(I18nUtil.createStringBinding(mFileExit.getText()));
+        mFileExit.setAccelerator(KeyCombination.keyCombination("Alt+F4"));
+
+        mEdit.textProperty().bind(I18nUtil.createStringBinding(mEdit.getText()));
+        mEditDelete.textProperty().bind(I18nUtil.createStringBinding(mEditDelete.getText()));
+
+        mHelp.textProperty().bind(I18nUtil.createStringBinding(mHelp.getText()));
+        mHelpAbout.textProperty().bind(I18nUtil.createStringBinding(mHelpAbout.getText()));
+
+        navbar.textProperty().bind(I18nUtil.createStringBinding(navbar.getText()));
+
+        username.promptTextProperty().bind(I18nUtil.createStringBinding(username.getPromptText()));
+        password.promptTextProperty().bind(I18nUtil.createStringBinding(password.getPromptText()));
+        repeatPassword.promptTextProperty().bind(I18nUtil.createStringBinding(repeatPassword.getPromptText()));
+
+        connectAutomatically.textProperty().bind(I18nUtil.createStringBinding(connectAutomatically.getText()));
+
+        register.textProperty().bind(I18nUtil.createStringBinding(register.getText()));
+        login.textProperty().bind(I18nUtil.createStringBinding(login.getText()));
+
+        /*
+         * Disable/Enable the Connect button depending on if the inputs are valid
+         */
         AtomicBoolean usernameValid = new AtomicBoolean(false);
         AtomicBoolean passwordValid = new AtomicBoolean(false);
         AtomicBoolean repeatPasswordValid = new AtomicBoolean(false);
         Runnable updateButtonClickable = () -> {
             if (!usernameValid.get() || !passwordValid.get() || !repeatPasswordValid.get()) {
-                view.getBtnRegister().setDisable(true);
+                register.setDisable(true);
             } else {
-                view.getBtnRegister().setDisable(false);
+                register.setDisable(false);
             }
         };
-        view.getUsername().textProperty().addListener((o, oldVal, newVal) -> {
+        username.textProperty().addListener((o, oldVal, newVal) -> {
             if (!oldVal.equals(newVal)) {
-                usernameValid.set(view.getUsername().validate());
+                usernameValid.set(username.validate());
                 updateButtonClickable.run();
             }
         });
-        view.getPassword().textProperty().addListener((o, oldVal, newVal) -> {
+        password.textProperty().addListener((o, oldVal, newVal) -> {
             if (!oldVal.equals(newVal)) {
-                passwordValid.set(view.getPassword().validate());
+                passwordValid.set(password.validate());
                 updateButtonClickable.run();
             }
         });
-        view.getRepeatPassword().textProperty().addListener((o, oldVal, newVal) -> {
+        repeatPassword.textProperty().addListener((o, oldVal, newVal) -> {
             if (!oldVal.equals(newVal)) {
-                repeatPasswordValid.set(view.getRepeatPassword().validate());
+                repeatPasswordValid.set(repeatPassword.validate());
                 updateButtonClickable.run();
             }
         });
 
-        // Register ourselves to handle window-closing event
-        view.getStage().setOnCloseRequest(event -> Platform.exit());
+        /*
+         * Validate input fields
+         */
+        username.getValidators().addAll(
+            ViewHelper.useRequiredValidator("gui.register.username.empty")
+        );
+        password.getValidators().addAll(
+            ViewHelper.useRequiredValidator("gui.register.password.empty")
+        );
+        repeatPassword.getValidators().addAll(
+            ViewHelper.useRequiredValidator("gui.register.repeatPassword.empty"),
+            ViewHelper.useIsSameValidator(password, "gui.register.repeatPassword.notSame")
+        );
     }
 
     /**
@@ -95,9 +167,9 @@ public class RegisterController extends Controller<RegisterModel, RegisterView> 
      * @since 0.0.1
      */
     public void disableInputs() {
-        view.getUsername().setDisable(true);
-        view.getPassword().setDisable(true);
-        view.getRepeatPassword().setDisable(true);
+        username.setDisable(true);
+        password.setDisable(true);
+        connectAutomatically.setDisable(true);
     }
 
     /**
@@ -107,8 +179,8 @@ public class RegisterController extends Controller<RegisterModel, RegisterView> 
      */
     public void disableAll() {
         disableInputs();
-        view.getBtnRegister().setDisable(true);
-        view.getBtnLogin().setDisable(true);
+        login.setDisable(true);
+        register.setDisable(true);
     }
 
     /**
@@ -117,9 +189,9 @@ public class RegisterController extends Controller<RegisterModel, RegisterView> 
      * @since 0.0.1
      */
     public void enableInputs() {
-        view.getUsername().setDisable(false);
-        view.getPassword().setDisable(false);
-        view.getRepeatPassword().setDisable(false);
+        username.setDisable(false);
+        password.setDisable(false);
+        connectAutomatically.setDisable(false);
     }
 
     /**
@@ -129,8 +201,8 @@ public class RegisterController extends Controller<RegisterModel, RegisterView> 
      */
     public void enableAll() {
         enableInputs();
-        view.getBtnRegister().setDisable(false);
-        view.getBtnLogin().setDisable(false);
+        login.setDisable(false);
+        register.setDisable(false);
     }
 
     /**
@@ -140,15 +212,25 @@ public class RegisterController extends Controller<RegisterModel, RegisterView> 
      */
     public void setErrorMessage(String translatorKey) {
         Platform.runLater(() -> {
-            if (view.getErrorMessage().getChildren().size() == 0) {
+            if (errorMessage.getChildren().size() == 0) {
                 // Make window larger, so it doesn't become crammed, only if we haven't done so yet
-                view.getStage().setHeight(view.getStage().getHeight() + 30);
+                // TODO: Don't use root, use the stage (view.getStage().setHeight(x))
+                //double newHeight = root.getHeight() + 30;
+                //root.setMaxHeight(newHeight);
+                //root.setPrefHeight(newHeight);
+                //root.setMinHeight(newHeight);
+                errorMessage.setPrefHeight(50);
             }
             Text text = ViewHelper.useText(translatorKey);
             text.setFill(Color.RED);
-            view.getErrorMessage().getChildren().clear();
-            view.getErrorMessage().getChildren().addAll(text, ViewHelper.useSpacer(20));
+            errorMessage.getChildren().clear();
+            errorMessage.getChildren().addAll(text, ViewHelper.useSpacer(20));
         });
+    }
+
+    @FXML
+    private void clickOnExit(ActionEvent event) {
+        Platform.exit();
     }
 
     /**
@@ -157,13 +239,14 @@ public class RegisterController extends Controller<RegisterModel, RegisterView> 
      *
      * @since 0.0.1
      */
-    public void clickOnRegister() {
+    @FXML
+    private void clickOnRegister(ActionEvent event) {
         // Disable everything to prevent something while working on the data
         disableAll();
 
         // Connection would freeze window (and the animations) so do it in a different thread.
         new Thread(() -> {
-            LoginEntity login = new LoginEntity(view.getUsername().getText(), view.getPassword().getText());
+            LoginEntity login = new LoginEntity(username.getText(), password.getText());
 
             SocketUtil backend = (SocketUtil) ServiceLocator.get("backend");
             CreateLogin createLoginMsg = new CreateLogin(new CreateLoginData(login.getUsername(), login.getPassword()));
@@ -176,15 +259,25 @@ public class RegisterController extends Controller<RegisterModel, RegisterView> 
                 if (loginMsg.process(backend)) {
                     login.setToken(loginMsg.getToken());
                     ServiceLocator.add(login);
-                    ControllerHelper.switchToDashboardWindow(view);
+                    ControllerHelper.switchToDashboardWindow();
+                    Platform.runLater(() -> this.login.getScene().getWindow().hide()); // Dashboard is still MVC
                 } else {
                     enableAll();
-                    setErrorMessage("gui.login.loginFailed");
+                    setErrorMessage("gui.login.login.failed");
                 }
             } else {
                 enableAll();
-                setErrorMessage("gui.register.registerFailed");
+                setErrorMessage("gui.register.register.failed");
             }
         }).start();
+    }
+
+    @FXML
+    private void clickOnLogin(ActionEvent event) {
+        ControllerHelper.switchToLoginWindow();
+    }
+
+    public JFXButton getRegister() {
+        return register;
     }
 }

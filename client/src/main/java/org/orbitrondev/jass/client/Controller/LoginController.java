@@ -18,73 +18,135 @@
 
 package org.orbitrondev.jass.client.Controller;
 
+import com.jfoenix.controls.*;
 import javafx.application.Platform;
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
+import javafx.scene.control.Menu;
+import javafx.scene.control.MenuItem;
+import javafx.scene.input.KeyCombination;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.orbitrondev.jass.client.Entity.LoginEntity;
 import org.orbitrondev.jass.client.Entity.LoginRepository;
+import org.orbitrondev.jass.client.FXML.FXMLController;
 import org.orbitrondev.jass.client.Message.Login;
-import org.orbitrondev.jass.client.Model.LoginModel;
-import org.orbitrondev.jass.client.Utils.SocketUtil;
 import org.orbitrondev.jass.client.Utils.DatabaseUtil;
+import org.orbitrondev.jass.client.Utils.I18nUtil;
+import org.orbitrondev.jass.client.Utils.SocketUtil;
 import org.orbitrondev.jass.client.View.ViewHelper;
-import org.orbitrondev.jass.client.View.LoginView;
-import org.orbitrondev.jass.client.MVC.Controller;
 import org.orbitrondev.jass.lib.Message.LoginData;
 import org.orbitrondev.jass.lib.ServiceLocator.ServiceLocator;
 
+import java.net.URL;
 import java.sql.SQLException;
+import java.util.ResourceBundle;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
- * The controller for the login view.
+ * The controller for the server connection view.
  *
  * @author Manuele Vaccari
  * @version %I%, %G%
  * @since 0.0.1
  */
-public class LoginController extends Controller<LoginModel, LoginView> {
+public class LoginController extends FXMLController {
     private static final Logger logger = LogManager.getLogger(LoginController.class);
 
-    /**
-     * Initializes all event listeners for the view.
-     *
-     * @since 0.0.1
-     */
-    protected LoginController(LoginModel model, LoginView view) {
-        super(model, view);
+    @FXML
+    public Menu mFile;
+    @FXML
+    public Menu mFileChangeLanguage;
+    @FXML
+    public MenuItem mFileExit;
+    @FXML
+    public Menu mEdit;
+    @FXML
+    public MenuItem mEditDelete;
+    @FXML
+    public Menu mHelp;
+    @FXML
+    public MenuItem mHelpAbout;
 
-        // Register ourselves to listen for button clicks
-        view.getBtnLogin().setOnAction(event -> clickOnLogin());
-        view.getBtnRegister().setOnAction(event -> ControllerHelper.switchToRegisterWindow(view));
+    @FXML
+    private Text navbar;
+    @FXML
+    private VBox errorMessage;
+    @FXML
+    private JFXTextField username;
+    @FXML
+    private JFXPasswordField password;
+    @FXML
+    private JFXCheckBox connectAutomatically;
+    @FXML
+    private JFXButton login;
+    @FXML
+    private JFXButton register;
 
-        // Disable/Enable the login button depending on if the inputs are valid
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        /*
+         * Bind all texts
+         */
+        mFile.textProperty().bind(I18nUtil.createStringBinding(mFile.getText()));
+        mFileChangeLanguage.textProperty().bind(I18nUtil.createStringBinding(mFileChangeLanguage.getText()));
+        ViewHelper.useLanguageMenuContent(mFileChangeLanguage);
+        mFileExit.textProperty().bind(I18nUtil.createStringBinding(mFileExit.getText()));
+        mFileExit.setAccelerator(KeyCombination.keyCombination("Alt+F4"));
+
+        mEdit.textProperty().bind(I18nUtil.createStringBinding(mEdit.getText()));
+        mEditDelete.textProperty().bind(I18nUtil.createStringBinding(mEditDelete.getText()));
+
+        mHelp.textProperty().bind(I18nUtil.createStringBinding(mHelp.getText()));
+        mHelpAbout.textProperty().bind(I18nUtil.createStringBinding(mHelpAbout.getText()));
+
+        navbar.textProperty().bind(I18nUtil.createStringBinding(navbar.getText()));
+
+        username.promptTextProperty().bind(I18nUtil.createStringBinding(username.getPromptText()));
+        password.promptTextProperty().bind(I18nUtil.createStringBinding(password.getPromptText()));
+
+        connectAutomatically.textProperty().bind(I18nUtil.createStringBinding(connectAutomatically.getText()));
+
+        login.textProperty().bind(I18nUtil.createStringBinding(login.getText()));
+        register.textProperty().bind(I18nUtil.createStringBinding(register.getText()));
+
+        /*
+         * Disable/Enable the "Connect"-button depending on if the inputs are valid
+         */
         AtomicBoolean usernameValid = new AtomicBoolean(false);
         AtomicBoolean passwordValid = new AtomicBoolean(false);
         Runnable updateButtonClickable = () -> {
             if (!usernameValid.get() || !passwordValid.get()) {
-                view.getBtnLogin().setDisable(true);
+                login.setDisable(true);
             } else {
-                view.getBtnLogin().setDisable(false);
+                login.setDisable(false);
             }
         };
-        view.getUsername().textProperty().addListener((o, oldVal, newVal) -> {
+        username.textProperty().addListener((o, oldVal, newVal) -> {
             if (!oldVal.equals(newVal)) {
-                usernameValid.set(view.getUsername().validate());
+                usernameValid.set(username.validate());
                 updateButtonClickable.run();
             }
         });
-        view.getPassword().textProperty().addListener((o, oldVal, newVal) -> {
+        password.textProperty().addListener((o, oldVal, newVal) -> {
             if (!oldVal.equals(newVal)) {
-                passwordValid.set(view.getPassword().validate());
+                passwordValid.set(password.validate());
                 updateButtonClickable.run();
             }
         });
 
-        // Register ourselves to handle window-closing event
-        view.getStage().setOnCloseRequest(event -> Platform.exit());
+        /*
+         * Validate input fields
+         */
+        username.getValidators().addAll(
+            ViewHelper.useRequiredValidator("gui.login.username.empty")
+        );
+        password.getValidators().addAll(
+            ViewHelper.useRequiredValidator("gui.login.password.empty")
+        );
     }
 
     /**
@@ -93,9 +155,9 @@ public class LoginController extends Controller<LoginModel, LoginView> {
      * @since 0.0.1
      */
     public void disableInputs() {
-        view.getUsername().setDisable(true);
-        view.getPassword().setDisable(true);
-        view.getConnectAutomatically().setDisable(true);
+        username.setDisable(true);
+        password.setDisable(true);
+        connectAutomatically.setDisable(true);
     }
 
     /**
@@ -105,8 +167,8 @@ public class LoginController extends Controller<LoginModel, LoginView> {
      */
     public void disableAll() {
         disableInputs();
-        view.getBtnLogin().setDisable(true);
-        view.getBtnRegister().setDisable(true);
+        login.setDisable(true);
+        register.setDisable(true);
     }
 
     /**
@@ -115,9 +177,9 @@ public class LoginController extends Controller<LoginModel, LoginView> {
      * @since 0.0.1
      */
     public void enableInputs() {
-        view.getUsername().setDisable(false);
-        view.getPassword().setDisable(false);
-        view.getConnectAutomatically().setDisable(false);
+        username.setDisable(false);
+        password.setDisable(false);
+        connectAutomatically.setDisable(false);
     }
 
     /**
@@ -127,8 +189,8 @@ public class LoginController extends Controller<LoginModel, LoginView> {
      */
     public void enableAll() {
         enableInputs();
-        view.getBtnLogin().setDisable(false);
-        view.getBtnRegister().setDisable(false);
+        login.setDisable(false);
+        register.setDisable(false);
     }
 
     /**
@@ -138,15 +200,25 @@ public class LoginController extends Controller<LoginModel, LoginView> {
      */
     public void setErrorMessage(String translatorKey) {
         Platform.runLater(() -> {
-            if (view.getErrorMessage().getChildren().size() == 0) {
+            if (errorMessage.getChildren().size() == 0) {
                 // Make window larger, so it doesn't become crammed, only if we haven't done so yet
-                view.getStage().setHeight(view.getStage().getHeight() + 30);
+                // TODO: Don't use root, use the stage (view.getStage().setHeight(x))
+                //double newHeight = root.getHeight() + 30;
+                //root.setMaxHeight(newHeight);
+                //root.setPrefHeight(newHeight);
+                //root.setMinHeight(newHeight);
+                errorMessage.setPrefHeight(50);
             }
             Text text = ViewHelper.useText(translatorKey);
             text.setFill(Color.RED);
-            view.getErrorMessage().getChildren().clear();
-            view.getErrorMessage().getChildren().addAll(text, ViewHelper.useSpacer(20));
+            errorMessage.getChildren().clear();
+            errorMessage.getChildren().addAll(text, ViewHelper.useSpacer(20));
         });
+    }
+
+    @FXML
+    private void clickOnExit(ActionEvent event) {
+        Platform.exit();
     }
 
     /**
@@ -155,16 +227,17 @@ public class LoginController extends Controller<LoginModel, LoginView> {
      *
      * @since 0.0.1
      */
-    public void clickOnLogin() {
+    @FXML
+    private void clickOnLogin(ActionEvent event) {
         // Disable everything to prevent something while working on the data
         disableAll();
 
         // Connection would freeze window (and the animations) so do it in a different thread.
         new Thread(() -> {
             LoginEntity login = new LoginEntity(
-                view.getUsername().getText(),
-                view.getPassword().getText(),
-                view.getConnectAutomatically().isSelected()
+                username.getText(),
+                password.getText(),
+                connectAutomatically.isSelected()
             );
             SocketUtil backend = (SocketUtil) ServiceLocator.get("backend");
             Login loginMsg = new Login(new LoginData(login.getUsername(), login.getPassword()));
@@ -181,13 +254,22 @@ public class LoginController extends Controller<LoginModel, LoginView> {
                     logger.error("Couldn't save login data to local database.");
                 }
 
-
                 LoginRepository.setToConnectAutomatically(login); // Make sure it's the only entry
-                ControllerHelper.switchToDashboardWindow(view);
+                ControllerHelper.switchToDashboardWindow();
+                Platform.runLater(() -> this.login.getScene().getWindow().hide()); // Dashboard is still MVC
             } else {
                 enableAll();
-                setErrorMessage("gui.login.loginFailed");
+                setErrorMessage("gui.login.login.failed");
             }
         }).start();
+    }
+
+    @FXML
+    private void clickOnRegister(ActionEvent event) {
+        ControllerHelper.switchToRegisterWindow();
+    }
+
+    public JFXButton getLogin() {
+        return login;
     }
 }
