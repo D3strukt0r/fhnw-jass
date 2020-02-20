@@ -28,7 +28,7 @@ import org.orbitrondev.jass.client.View.DashboardView;
 import org.orbitrondev.jass.client.View.LoginView;
 import org.orbitrondev.jass.client.View.RegisterView;
 import org.orbitrondev.jass.client.View.ServerConnectionView;
-import org.orbitrondev.jass.lib.MVC.View;
+import org.orbitrondev.jass.client.MVC.View;
 
 /**
  * A helper class for the controllers to switch between windows easily.

@@ -21,7 +21,7 @@ package org.orbitrondev.jass.client.Controller;
 import javafx.application.Platform;
 import org.orbitrondev.jass.client.Model.DashboardModel;
 import org.orbitrondev.jass.client.View.DashboardView;
-import org.orbitrondev.jass.lib.MVC.Controller;
+import org.orbitrondev.jass.client.MVC.Controller;
 
 /**
  * The controller for the dashboard (game) view.

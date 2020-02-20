@@ -29,7 +29,7 @@ import org.orbitrondev.jass.client.Main;
 import org.orbitrondev.jass.client.Message.Login;
 import org.orbitrondev.jass.client.Utils.SocketUtil;
 import org.orbitrondev.jass.client.Utils.DatabaseUtil;
-import org.orbitrondev.jass.lib.MVC.Model;
+import org.orbitrondev.jass.client.MVC.Model;
 import org.orbitrondev.jass.lib.Message.LoginData;
 import org.orbitrondev.jass.lib.ServiceLocator.ServiceLocator;
 

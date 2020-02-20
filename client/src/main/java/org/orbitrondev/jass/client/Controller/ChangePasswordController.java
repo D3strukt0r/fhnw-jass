@@ -27,7 +27,7 @@ import org.orbitrondev.jass.client.Model.ChangePasswordModel;
 import org.orbitrondev.jass.client.Utils.SocketUtil;
 import org.orbitrondev.jass.client.View.ChangePasswordView;
 import org.orbitrondev.jass.client.View.ViewHelper;
-import org.orbitrondev.jass.lib.MVC.Controller;
+import org.orbitrondev.jass.client.MVC.Controller;
 import org.orbitrondev.jass.lib.Message.ChangePasswordData;
 import org.orbitrondev.jass.lib.ServiceLocator.ServiceLocator;
 

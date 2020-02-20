@@ -29,6 +29,9 @@ public abstract class MessageData implements Serializable {
         JSONObject data = new JSONObject(jsonString);
 
         try {
+            /*
+             * @author https://stackoverflow.com/questions/3574065/instantiate-a-class-object-with-constructor-that-accepts-a-string-parameter
+             */
             String messageClassName = MessageData.class.getPackage().getName() + "." + data.getString("messageType") + "Data";
             Class<?> messageClass = Class.forName(messageClassName);
             Constructor<?> constructor = messageClass.getConstructor(JSONObject.class);

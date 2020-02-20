@@ -32,7 +32,7 @@ import org.orbitrondev.jass.client.Utils.DatabaseUtil;
 import org.orbitrondev.jass.client.Utils.I18nUtil;
 import org.orbitrondev.jass.client.View.ViewHelper;
 import org.orbitrondev.jass.client.View.ServerConnectionView;
-import org.orbitrondev.jass.lib.MVC.Controller;
+import org.orbitrondev.jass.client.MVC.Controller;
 import org.orbitrondev.jass.lib.ServiceLocator.ServiceLocator;
 
 import java.io.IOException;

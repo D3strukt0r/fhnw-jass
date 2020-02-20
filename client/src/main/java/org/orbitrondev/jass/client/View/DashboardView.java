@@ -23,7 +23,7 @@ import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import org.orbitrondev.jass.client.Model.DashboardModel;
 import org.orbitrondev.jass.client.Utils.I18nUtil;
-import org.orbitrondev.jass.lib.MVC.View;
+import org.orbitrondev.jass.client.MVC.View;
 
 /**
  * The dashboard view.

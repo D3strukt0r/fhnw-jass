@@ -3,7 +3,7 @@ package org.orbitrondev.jass.client.Controller;
 import javafx.concurrent.Worker;
 import org.orbitrondev.jass.client.Model.SplashModel;
 import org.orbitrondev.jass.client.View.SplashView;
-import org.orbitrondev.jass.lib.MVC.Controller;
+import org.orbitrondev.jass.client.MVC.Controller;
 
 /**
  * The controller for the splash view.

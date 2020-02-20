@@ -28,7 +28,7 @@ import org.orbitrondev.jass.client.Model.RegisterModel;
 import org.orbitrondev.jass.client.Utils.SocketUtil;
 import org.orbitrondev.jass.client.View.ViewHelper;
 import org.orbitrondev.jass.client.View.RegisterView;
-import org.orbitrondev.jass.lib.MVC.Controller;
+import org.orbitrondev.jass.client.MVC.Controller;
 import org.orbitrondev.jass.lib.Message.CreateLoginData;
 import org.orbitrondev.jass.lib.Message.LoginData;
 import org.orbitrondev.jass.lib.ServiceLocator.ServiceLocator;

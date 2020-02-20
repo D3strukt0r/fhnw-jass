@@ -1,4 +1,4 @@
-package org.orbitrondev.jass.lib.MVC;
+package org.orbitrondev.jass.client.MVC;
 
 import javafx.scene.Scene;
 import javafx.scene.image.Image;

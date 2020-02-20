@@ -18,7 +18,7 @@
 
 package org.orbitrondev.jass.client.Model;
 
-import org.orbitrondev.jass.lib.MVC.Model;
+import org.orbitrondev.jass.client.MVC.Model;
 
 /**
  * The model for the delete account view.

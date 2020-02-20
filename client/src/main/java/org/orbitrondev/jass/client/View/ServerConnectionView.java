@@ -29,7 +29,7 @@ import javafx.stage.Stage;
 import org.orbitrondev.jass.client.Entity.ServerEntity;
 import org.orbitrondev.jass.client.Model.ServerConnectionModel;
 import org.orbitrondev.jass.client.Utils.I18nUtil;
-import org.orbitrondev.jass.lib.MVC.View;
+import org.orbitrondev.jass.client.MVC.View;
 
 /**
  * The server connection view.

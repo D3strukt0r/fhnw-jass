@@ -1,4 +1,4 @@
-package org.orbitrondev.jass.lib.MVC;
+package org.orbitrondev.jass.client.MVC;
 
 /**
  * Copyright 2015, FHNW, Prof. Dr. Brad Richards. All rights reserved. This code

@@ -28,7 +28,7 @@ import org.orbitrondev.jass.client.Model.DeleteAccountModel;
 import org.orbitrondev.jass.client.Utils.SocketUtil;
 import org.orbitrondev.jass.client.View.DeleteAccountView;
 import org.orbitrondev.jass.client.View.ViewHelper;
-import org.orbitrondev.jass.lib.MVC.Controller;
+import org.orbitrondev.jass.client.MVC.Controller;
 import org.orbitrondev.jass.lib.Message.DeleteLoginData;
 import org.orbitrondev.jass.lib.Message.LogoutData;
 import org.orbitrondev.jass.lib.ServiceLocator.ServiceLocator;

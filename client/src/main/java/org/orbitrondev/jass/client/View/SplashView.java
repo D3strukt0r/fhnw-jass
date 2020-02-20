@@ -26,7 +26,7 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import org.orbitrondev.jass.client.Model.SplashModel;
-import org.orbitrondev.jass.lib.MVC.View;
+import org.orbitrondev.jass.client.MVC.View;
 
 /**
  * The splash view.

@@ -29,7 +29,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import org.orbitrondev.jass.client.Model.LoginModel;
 import org.orbitrondev.jass.client.Utils.I18nUtil;
-import org.orbitrondev.jass.lib.MVC.View;
+import org.orbitrondev.jass.client.MVC.View;
 
 /**
  * The login view.
