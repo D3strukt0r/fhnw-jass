@@ -47,6 +47,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
  */
 public class LoginController extends Controller<LoginModel, LoginView> {
     private static final Logger logger = LogManager.getLogger(LoginController.class);
+
     /**
      * Initializes all event listeners for the view.
      *
@@ -165,7 +166,6 @@ public class LoginController extends Controller<LoginModel, LoginView> {
                 view.getPassword().getText(),
                 view.getConnectAutomatically().isSelected()
             );
-            System.out.println(view.getConnectAutomatically().isSelected());
             SocketUtil backend = (SocketUtil) ServiceLocator.get("backend");
             Login loginMsg = new Login(new LoginData(login.getUsername(), login.getPassword()));
 

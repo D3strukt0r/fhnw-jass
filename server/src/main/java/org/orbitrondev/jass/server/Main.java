@@ -73,6 +73,7 @@ public class Main {
                 return;
             }
         }
+        logger.info("Using port " + port);
 
         // Check if the user wants to use a different location for the database
         if (cmd.hasOption("db-location")) {
@@ -81,6 +82,7 @@ public class Main {
         try {
             DatabaseUtil db = new DatabaseUtil(dbLocation);
             ServiceLocator.add(db);
+            logger.info("Connection to database created");
         } catch (SQLException e) {
             logger.fatal("Error creating connection to database");
             return;
@@ -95,6 +97,7 @@ public class Main {
 
         // Check if the user wants to use ssl
         boolean secure = cmd.hasOption("ssl");
+        logger.info("SSL is " + (secure ? "enabled" : "disabled"));
 
         // Start the listener
         try {

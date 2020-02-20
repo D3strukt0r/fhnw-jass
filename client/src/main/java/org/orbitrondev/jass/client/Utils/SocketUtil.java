@@ -61,7 +61,7 @@ public class SocketUtil extends Thread implements Service, Closeable {
      */
     public SocketUtil(String ipAddress, int port, boolean secure) throws IOException, KeyStoreException, CertificateException, NoSuchAlgorithmException, UnrecoverableKeyException, KeyManagementException {
         super();
-        this.setName("BackendThread");
+        this.setName("SocketThread");
         this.setDaemon(true);
 
         if (secure) {
