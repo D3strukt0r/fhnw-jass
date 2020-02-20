@@ -1,34 +1,51 @@
 plugins {
-    id 'java'
+    id('java')
+    id('application')
 }
 
 dependencies {
-    implementation project(':lib')
+    implementation(project(':lib'))
 
-    implementation group: 'org.xerial', name: 'sqlite-jdbc', version: '3.28.0'
-    implementation group: 'com.j256.ormlite', name: 'ormlite-core', version: '5.1'
-    implementation group: 'com.j256.ormlite', name: 'ormlite-jdbc', version: '5.1'
+    // Use SQLite and ORM for storage
+    implementation(group: 'org.xerial', name: 'sqlite-jdbc', version: '3.28.0')
+    implementation(group: 'com.j256.ormlite', name: 'ormlite-core', version: '5.1')
+    implementation(group: 'com.j256.ormlite', name: 'ormlite-jdbc', version: '5.1')
 
-    implementation group: 'org.json', name: 'json', version: '20190722'
+    // Use JSON for messaging
+    implementation(group: 'org.json', name: 'json', version: '20190722')
 
-    implementation group: 'commons-cli', name: 'commons-cli', version: '1.4'
+    // Needed to pass arguments
+    implementation(group: 'commons-cli', name: 'commons-cli', version: '1.4')
 
-    implementation group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.12.1'
-    implementation group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.12.1'
-    implementation group: 'org.apache.logging.log4j', name: 'log4j-slf4j-impl', version: '2.12.1'
+    // For logging
+    implementation(group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.12.1')
+    implementation(group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.12.1')
+    implementation(group: 'org.apache.logging.log4j', name: 'log4j-slf4j-impl', version: '2.12.1')
 
-    testImplementation group: 'junit', name: 'junit', version: '4.12'
+    // For testing
+    testImplementation(group: 'junit', name: 'junit', version: '4.12')
+}
+
+// When running :server:run, where should it start?
+application {
+    mainClassName('org.orbitrondev.jass.server.Main')
+}
+
+// When running :server:run, these arguments are included
+run {
+    args('--ssl', '--verbose')
 }
 
 jar {
-//    archiveName("jass-server.jar")
+    // So that Docker can easily find the file
+    //archiveName("jass-server.jar")
 
+    // Every .jar needs a manifest file
     manifest {
-        attributes 'Implementation-Title': project.name,
-                'Implementation-Version': project.version,
-                'Main-Class': 'org.orbitrondev.jass.server.Main'
+        attributes('Implementation-Title': project.name, 'Implementation-Version': project.version, 'Main-Class': mainClassName)
     }
 
+    // Makes sure the :lib project is included
     from {
         configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
     }

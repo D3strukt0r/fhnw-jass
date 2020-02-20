@@ -1,12 +1,15 @@
 plugins {
-    id 'java'
+    id('java')
 }
 
 allprojects {
-    group 'org.orbitrondev'
-    version '0.0.1'
+    group('org.orbitrondev')
+    version('0.0.1')
 
-    sourceCompatibility = 1.8
+    java {
+        sourceCompatibility(JavaVersion.VERSION_1_8)
+        targetCompatibility(JavaVersion.VERSION_1_8)
+    }
 
     repositories {
         mavenCentral()
