@@ -125,6 +125,7 @@ public class SocketUtil extends Thread implements Service, Closeable {
                 // Create a message object of the correct class, using reflection
                 if (msgData == null) {
                     logger.error("Received invalid message");
+                    continue;
                 } else {
                     msg = Message.fromDataObject(msgData);
                     if (msg == null) {

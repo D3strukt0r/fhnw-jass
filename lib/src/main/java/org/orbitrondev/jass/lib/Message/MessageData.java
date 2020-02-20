@@ -18,6 +18,7 @@
 
 package org.orbitrondev.jass.lib.Message;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.Serializable;
@@ -26,7 +27,12 @@ import java.lang.reflect.InvocationTargetException;
 
 public abstract class MessageData implements Serializable {
     public static MessageData unserialize(String jsonString) {
-        JSONObject data = new JSONObject(jsonString);
+        JSONObject data;
+        try {
+            data = new JSONObject(jsonString);
+        } catch (JSONException e) {
+            return null;
+        }
 
         try {
             /*
