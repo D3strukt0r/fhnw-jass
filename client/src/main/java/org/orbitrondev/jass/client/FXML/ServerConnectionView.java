@@ -22,6 +22,7 @@ import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
 import org.orbitrondev.jass.client.Utils.I18nUtil;
 
@@ -47,9 +48,19 @@ public class ServerConnectionView extends FXMLView {
     @Override
     protected Scene create_GUI() {
         try {
-            Parent root = FXMLLoader.load(getClass().getResource("/fxml/server_connection.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/server_connection.fxml"));
+            Parent root = loader.load();
+            ServerConnectionController controller = loader.getController();
 
             Scene scene = new Scene(root);
+            scene.setOnKeyPressed(event -> {
+                // Click the connect button by clicking ENTER
+                if (event.getCode() == KeyCode.ENTER) {
+                    if (!controller.getConnect().isDisable()) {
+                        controller.getConnect().fire();
+                    }
+                }
+            });
             scene.getStylesheets().add(getClass().getResource("/css/app.css").toExternalForm());
             return scene;
         } catch (IOException e) {

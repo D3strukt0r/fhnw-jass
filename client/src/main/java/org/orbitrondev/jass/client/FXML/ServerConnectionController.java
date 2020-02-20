@@ -96,11 +96,11 @@ public class ServerConnectionController extends FXMLController {
     @FXML
     private JFXTextField port;
     @FXML
-    public Text portHint;
+    private Text portHint;
     @FXML
-    public JFXCheckBox secure;
+    private JFXCheckBox secure;
     @FXML
-    public JFXCheckBox connectAutomatically;
+    private JFXCheckBox connectAutomatically;
     @FXML
     private JFXButton connect;
 
@@ -328,5 +328,9 @@ public class ServerConnectionController extends FXMLController {
             errorMessage.getChildren().clear();
             errorMessage.getChildren().addAll(text, ViewHelper.useSpacer(20));
         });
+    }
+
+    public JFXButton getConnect() {
+        return connect;
     }
 }
