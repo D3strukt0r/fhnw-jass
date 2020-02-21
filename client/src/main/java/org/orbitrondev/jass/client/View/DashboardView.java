@@ -20,6 +20,7 @@ package org.orbitrondev.jass.client.View;
 
 import javafx.scene.Scene;
 import javafx.scene.layout.*;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import org.orbitrondev.jass.client.Model.DashboardModel;
 import org.orbitrondev.jass.client.Utils.I18nUtil;
@@ -43,6 +44,8 @@ public class DashboardView extends View<DashboardModel> {
     @Override
     protected Scene create_GUI() {
         VBox root = new VBox();
+        Text text = new Text("Here will be the game...");
+        root.getChildren().addAll(text);
         Scene scene = new Scene(root);
         scene.getStylesheets().add(getClass().getResource("/css/app.css").toExternalForm());
         return scene;
