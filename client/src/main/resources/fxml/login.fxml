@@ -34,7 +34,7 @@
 
     <!-- navbar -->
     <HBox styleClass="navbar">
-        <Text fx:id="navbar" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="gui.login.title" />
+        <Text fx:id="navbar" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="gui.login.title2" />
     </HBox>
 
     <!-- body -->
