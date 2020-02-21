@@ -112,7 +112,9 @@ public class SocketUtil extends Thread implements Service, Closeable {
     public void run() {
         while (serverReachable) {
             Message msg = null;
-            try (BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()))) {
+            try {
+                // TODO: Why does try-with-resources not work?
+                BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
                 String msgText = in.readLine(); // Will wait here for complete line
                 if (msgText == null) break; // In case the server closes the socket
 
@@ -170,7 +172,8 @@ public class SocketUtil extends Thread implements Service, Closeable {
      * Send a message to this server. In case of an exception, log the client out.
      */
     public void send(Message msg) {
-        try (OutputStreamWriter out = new OutputStreamWriter(socket.getOutputStream())) {
+        try {
+            OutputStreamWriter out = new OutputStreamWriter(socket.getOutputStream());
             logger.info("Sending message: " + msg.toString());
             out.write(msg.toString() + "\n"); // This will send the serialized MessageData object
             out.flush();
