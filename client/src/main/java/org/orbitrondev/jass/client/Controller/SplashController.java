@@ -1,29 +1,32 @@
 package org.orbitrondev.jass.client.Controller;
 
-import javafx.application.Platform;
+import com.jfoenix.controls.JFXProgressBar;
 import javafx.concurrent.Worker;
-import javafx.stage.Stage;
-import org.orbitrondev.jass.client.Model.ServerConnectionModel;
+import javafx.fxml.FXML;
+import org.orbitrondev.jass.client.FXML.FXMLController;
 import org.orbitrondev.jass.client.Model.SplashModel;
-import org.orbitrondev.jass.client.View.ServerConnectionView;
 import org.orbitrondev.jass.client.View.SplashView;
-import org.orbitrondev.jass.client.MVC.Controller;
+
+import java.net.URL;
+import java.util.ResourceBundle;
 
 /**
  * The controller for the splash view.
  *
  * @author Brad Richards
  */
-public class SplashController extends Controller<SplashModel, SplashView> {
-    /**
-     * Initializes all event listeners for the view.
-     *
-     * @since 0.0.1
-     */
-    public SplashController(SplashModel model, SplashView view) {
-        super(model, view);
+public class SplashController extends FXMLController {
+    private SplashModel model;
+    private SplashView view;
 
-        view.progress.progressProperty().bind(model.initializer.progressProperty());
+    @FXML
+    private JFXProgressBar loadingProgress;
+
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        model = new SplashModel();
+
+        loadingProgress.progressProperty().bind(model.initializer.progressProperty());
         model.initializer.stateProperty().addListener((o, oldValue, newValue) -> {
             if (newValue == Worker.State.SUCCEEDED) {
                 // If already logged in go to the game directly, if at least connected, go to login screen, otherwise
@@ -35,8 +38,14 @@ public class SplashController extends Controller<SplashModel, SplashView> {
                 } else {
                     ControllerHelper.switchToServerConnectionWindow();
                 }
-                Platform.runLater(view::stop);
+                view.getStage().hide();
             }
         });
+
+        model.initialize();
+    }
+
+    public void setView(SplashView view) {
+        this.view = view;
     }
 }

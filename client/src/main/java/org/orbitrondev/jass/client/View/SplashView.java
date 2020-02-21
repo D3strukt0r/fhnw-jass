@@ -18,15 +18,15 @@
 
 package org.orbitrondev.jass.client.View;
 
-import com.jfoenix.controls.JFXProgressBar;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import org.orbitrondev.jass.client.Model.SplashModel;
-import org.orbitrondev.jass.client.MVC.View;
+import org.orbitrondev.jass.client.Controller.SplashController;
+import org.orbitrondev.jass.client.FXML.FXMLView;
+
+import java.io.IOException;
 
 /**
  * The splash view.
@@ -35,30 +35,23 @@ import org.orbitrondev.jass.client.MVC.View;
  * @version %I%, %G%
  * @since 0.0.1
  */
-public class SplashView extends View<SplashModel> {
-    public JFXProgressBar progress;
-
-    public SplashView(Stage stage, SplashModel model) {
-        super(stage, model);
+public class SplashView extends FXMLView {
+    public SplashView(Stage stage) {
+        super(stage);
         stage.initStyle(StageStyle.TRANSPARENT); // Also undecorated
     }
 
     @Override
     protected Scene create_GUI() {
-        BorderPane root = new BorderPane();
-        root.getStyleClass().add("splash");
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/splash_screen.fxml"));
+            Parent root = loader.load();
+            SplashController controller = loader.getController();
+            controller.setView(this);
 
-        HBox iconContainer = new HBox();
-        iconContainer.getStyleClass().add("icon-container");
-        root.setCenter(iconContainer);
-
-        progress = new JFXProgressBar();
-        progress.setMaxWidth(Double.MAX_VALUE);
-        root.setBottom(progress);
-
-        Scene scene = new Scene(root, 300, 300, Color.TRANSPARENT);
-        scene.getStylesheets().addAll(this.getClass().getResource("/css/splash.css").toExternalForm());
-
-        return scene;
+            return new Scene(root);
+        } catch (IOException e) {
+            return null;
+        }
     }
 }

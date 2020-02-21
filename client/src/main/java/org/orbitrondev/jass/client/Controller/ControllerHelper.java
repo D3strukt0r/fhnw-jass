@@ -20,11 +20,8 @@ package org.orbitrondev.jass.client.Controller;
 
 import javafx.application.Platform;
 import javafx.stage.Stage;
-import org.orbitrondev.jass.client.View.RegisterView;
-import org.orbitrondev.jass.client.View.ServerConnectionView;
+import org.orbitrondev.jass.client.View.*;
 import org.orbitrondev.jass.client.Model.DashboardModel;
-import org.orbitrondev.jass.client.View.DashboardView;
-import org.orbitrondev.jass.client.View.LoginView;
 
 /**
  * A helper class for the controllers to switch between windows easily.
@@ -36,6 +33,14 @@ import org.orbitrondev.jass.client.View.LoginView;
 public class ControllerHelper {
     // Reuse the same window
     private static Stage stage = new Stage();
+
+    public static void switchToSplashScreen() {
+        Platform.runLater(() -> {
+            Stage stage = new Stage();
+            SplashView view = new SplashView(stage);
+            view.start();
+        });
+    }
 
     public static void switchToServerConnectionWindow() {
         Platform.runLater(() -> {

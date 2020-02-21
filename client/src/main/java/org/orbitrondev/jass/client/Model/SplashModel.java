@@ -111,6 +111,12 @@ public class SplashModel extends Model {
             this.updateProgress(1, tasks.size() + 1); // Start the progress bar with 1 instead of 0
             for (int i = 0; i < tasks.size(); i++) {
                 tasks.get(i).run();
+
+                // Loading is currently very fast, to appreciate the loading bar, wait a little
+                try {
+                    Thread.sleep(200);
+                } catch (InterruptedException e) { /* Ignore */ }
+
                 this.updateProgress(i + 2, tasks.size() + 1);
             }
 

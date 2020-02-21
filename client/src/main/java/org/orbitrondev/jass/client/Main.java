@@ -6,9 +6,7 @@ import org.apache.commons.cli.*;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.core.LoggerContext;
-import org.orbitrondev.jass.client.Controller.SplashController;
-import org.orbitrondev.jass.client.Model.SplashModel;
-import org.orbitrondev.jass.client.View.SplashView;
+import org.orbitrondev.jass.client.Controller.ControllerHelper;
 
 /**
  * The main class for the client application.
@@ -55,10 +53,6 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) {
-        SplashModel splashModel = new SplashModel();
-        SplashView splashView = new SplashView(primaryStage, splashModel);
-        new SplashController(splashModel, splashView);
-        splashView.start();
-        splashModel.initialize();
+        ControllerHelper.switchToSplashScreen();
     }
 }
