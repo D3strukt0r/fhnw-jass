@@ -25,8 +25,9 @@ import org.orbitrondev.jass.client.Entity.LoginEntity;
 import org.orbitrondev.jass.client.Message.ChangePassword;
 import org.orbitrondev.jass.client.Model.ChangePasswordModel;
 import org.orbitrondev.jass.client.Utils.SocketUtil;
+import org.orbitrondev.jass.client.Utils.WindowUtil;
 import org.orbitrondev.jass.client.View.ChangePasswordView;
-import org.orbitrondev.jass.client.View.ViewHelper;
+import org.orbitrondev.jass.client.Utils.ViewUtil;
 import org.orbitrondev.jass.client.MVC.Controller;
 import org.orbitrondev.jass.lib.Message.ChangePasswordData;
 import org.orbitrondev.jass.lib.ServiceLocator.ServiceLocator;
@@ -46,13 +47,13 @@ public class ChangePasswordController extends Controller<ChangePasswordModel, Ch
      *
      * @since 0.0.1
      */
-    protected ChangePasswordController(ChangePasswordModel model, ChangePasswordView view) {
+    public ChangePasswordController(ChangePasswordModel model, ChangePasswordView view) {
         super(model, view);
 
         // Register ourselves to listen for button clicks
         view.getBtnChange().setOnAction(event -> clickOnChange());
         view.getBtnCancel().setOnAction(event -> {
-            ControllerHelper.switchToDashboardWindow();
+            WindowUtil.switchToDashboardWindow();
             view.stop();
         });
 
@@ -145,10 +146,10 @@ public class ChangePasswordController extends Controller<ChangePasswordModel, Ch
                 // Make window larger, so it doesn't become crammed, only if we haven't done so yet
                 view.getStage().setHeight(view.getStage().getHeight() + 30);
             }
-            Text text = ViewHelper.useText(translatorKey);
+            Text text = ViewUtil.useText(translatorKey);
             text.setFill(Color.RED);
             view.getErrorMessage().getChildren().clear();
-            view.getErrorMessage().getChildren().addAll(text, ViewHelper.useSpacer(20));
+            view.getErrorMessage().getChildren().addAll(text, ViewUtil.useSpacer(20));
         });
     }
 
@@ -174,7 +175,7 @@ public class ChangePasswordController extends Controller<ChangePasswordModel, Ch
             if (changePasswordMsg.process(backend)) {
                 ServiceLocator.remove("login");
                 ServiceLocator.add(newLogin);
-                ControllerHelper.switchToDashboardWindow();
+                WindowUtil.switchToDashboardWindow();
                 view.stop();
             } else {
                 enableAll();

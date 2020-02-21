@@ -44,7 +44,8 @@ import org.orbitrondev.jass.client.FXML.FXMLController;
 import org.orbitrondev.jass.client.Utils.SocketUtil;
 import org.orbitrondev.jass.client.Utils.DatabaseUtil;
 import org.orbitrondev.jass.client.Utils.I18nUtil;
-import org.orbitrondev.jass.client.View.ViewHelper;
+import org.orbitrondev.jass.client.Utils.WindowUtil;
+import org.orbitrondev.jass.client.Utils.ViewUtil;
 import org.orbitrondev.jass.lib.ServiceLocator.ServiceLocator;
 
 import java.io.IOException;
@@ -116,7 +117,7 @@ public class ServerConnectionController extends FXMLController {
          */
         mFile.textProperty().bind(I18nUtil.createStringBinding(mFile.getText()));
         mFileChangeLanguage.textProperty().bind(I18nUtil.createStringBinding(mFileChangeLanguage.getText()));
-        ViewHelper.useLanguageMenuContent(mFileChangeLanguage);
+        ViewUtil.useLanguageMenuContent(mFileChangeLanguage);
         mFileExit.textProperty().bind(I18nUtil.createStringBinding(mFileExit.getText()));
         mFileExit.setAccelerator(KeyCombination.keyCombination("Alt+F4"));
 
@@ -210,13 +211,13 @@ public class ServerConnectionController extends FXMLController {
          * Validate input fields
          */
         ip.getValidators().addAll(
-            ViewHelper.useRequiredValidator("gui.serverConnection.ip.empty"),
-            ViewHelper.useIsValidIpValidator("gui.serverConnection.ip.notIp")
+            ViewUtil.useRequiredValidator("gui.serverConnection.ip.empty"),
+            ViewUtil.useIsValidIpValidator("gui.serverConnection.ip.notIp")
         );
         port.getValidators().addAll(
-            ViewHelper.useRequiredValidator("gui.serverConnection.port.empty"),
-            ViewHelper.useIsIntegerValidator("gui.serverConnection.port.nan"),
-            ViewHelper.useIsValidPortValidator("gui.serverConnection.port.outOfRange")
+            ViewUtil.useRequiredValidator("gui.serverConnection.port.empty"),
+            ViewUtil.useIsIntegerValidator("gui.serverConnection.port.nan"),
+            ViewUtil.useIsValidPortValidator("gui.serverConnection.port.outOfRange")
         );
     }
 
@@ -280,10 +281,10 @@ public class ServerConnectionController extends FXMLController {
                 //root.setMinHeight(newHeight);
                 errorMessage.setPrefHeight(50);
             }
-            Text text = ViewHelper.useText(translatorKey);
+            Text text = ViewUtil.useText(translatorKey);
             text.setFill(Color.RED);
             errorMessage.getChildren().clear();
-            errorMessage.getChildren().addAll(text, ViewHelper.useSpacer(20));
+            errorMessage.getChildren().addAll(text, ViewUtil.useSpacer(20));
         });
     }
 
@@ -365,7 +366,7 @@ public class ServerConnectionController extends FXMLController {
                         logger.error("Server connection not saved to database");
                     }
                 }
-                ControllerHelper.switchToLoginWindow();
+                WindowUtil.switchToLoginWindow();
             }
         }).start();
     }

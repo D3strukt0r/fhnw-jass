@@ -37,7 +37,8 @@ import org.orbitrondev.jass.client.Message.Login;
 import org.orbitrondev.jass.client.Utils.DatabaseUtil;
 import org.orbitrondev.jass.client.Utils.I18nUtil;
 import org.orbitrondev.jass.client.Utils.SocketUtil;
-import org.orbitrondev.jass.client.View.ViewHelper;
+import org.orbitrondev.jass.client.Utils.WindowUtil;
+import org.orbitrondev.jass.client.Utils.ViewUtil;
 import org.orbitrondev.jass.lib.Message.LoginData;
 import org.orbitrondev.jass.lib.ServiceLocator.ServiceLocator;
 
@@ -95,7 +96,7 @@ public class LoginController extends FXMLController {
          */
         mFile.textProperty().bind(I18nUtil.createStringBinding(mFile.getText()));
         mFileChangeLanguage.textProperty().bind(I18nUtil.createStringBinding(mFileChangeLanguage.getText()));
-        ViewHelper.useLanguageMenuContent(mFileChangeLanguage);
+        ViewUtil.useLanguageMenuContent(mFileChangeLanguage);
         mFileDisconnect.textProperty().bind(I18nUtil.createStringBinding(mFileDisconnect.getText()));
         mFileExit.textProperty().bind(I18nUtil.createStringBinding(mFileExit.getText()));
         mFileExit.setAccelerator(KeyCombination.keyCombination("Alt+F4"));
@@ -145,10 +146,10 @@ public class LoginController extends FXMLController {
          * Validate input fields
          */
         username.getValidators().addAll(
-            ViewHelper.useRequiredValidator("gui.login.username.empty")
+            ViewUtil.useRequiredValidator("gui.login.username.empty")
         );
         password.getValidators().addAll(
-            ViewHelper.useRequiredValidator("gui.login.password.empty")
+            ViewUtil.useRequiredValidator("gui.login.password.empty")
         );
     }
 
@@ -212,10 +213,10 @@ public class LoginController extends FXMLController {
                 //root.setMinHeight(newHeight);
                 errorMessage.setPrefHeight(50);
             }
-            Text text = ViewHelper.useText(translatorKey);
+            Text text = ViewUtil.useText(translatorKey);
             text.setFill(Color.RED);
             errorMessage.getChildren().clear();
-            errorMessage.getChildren().addAll(text, ViewHelper.useSpacer(20));
+            errorMessage.getChildren().addAll(text, ViewUtil.useSpacer(20));
         });
     }
 
@@ -224,7 +225,7 @@ public class LoginController extends FXMLController {
         SocketUtil socket = (SocketUtil) ServiceLocator.get("backend");
         socket.close();
         ServiceLocator.remove("backend");
-        ControllerHelper.switchToServerConnectionWindow();
+        WindowUtil.switchToServerConnectionWindow();
     }
 
     @FXML
@@ -266,7 +267,7 @@ public class LoginController extends FXMLController {
                 }
 
                 LoginRepository.setToConnectAutomatically(login); // Make sure it's the only entry
-                ControllerHelper.switchToDashboardWindow();
+                WindowUtil.switchToDashboardWindow();
                 Platform.runLater(() -> this.login.getScene().getWindow().hide()); // Dashboard is still MVC
             } else {
                 enableAll();
@@ -277,7 +278,7 @@ public class LoginController extends FXMLController {
 
     @FXML
     private void clickOnRegister(ActionEvent event) {
-        ControllerHelper.switchToRegisterWindow();
+        WindowUtil.switchToRegisterWindow();
     }
 
     public JFXButton getLogin() {

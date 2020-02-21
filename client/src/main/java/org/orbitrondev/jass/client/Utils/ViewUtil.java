@@ -16,7 +16,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package org.orbitrondev.jass.client.View;
+package org.orbitrondev.jass.client.Utils;
 
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXCheckBox;
@@ -56,7 +56,7 @@ import java.util.Locale;
  * @version %I%, %G%
  * @since 0.0.1
  */
-public class ViewHelper {
+public class ViewUtil {
     /**
      * Shortcuts for UI elements
      */

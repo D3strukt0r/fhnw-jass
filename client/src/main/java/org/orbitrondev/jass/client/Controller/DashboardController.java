@@ -36,7 +36,7 @@ public class DashboardController extends Controller<DashboardModel, DashboardVie
      *
      * @since 0.0.1
      */
-    protected DashboardController(DashboardModel model, DashboardView view) {
+    public DashboardController(DashboardModel model, DashboardView view) {
         super(model, view);
 
         // Register ourselves to handle window-closing event

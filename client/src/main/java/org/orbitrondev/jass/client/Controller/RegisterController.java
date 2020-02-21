@@ -37,7 +37,8 @@ import org.orbitrondev.jass.client.Message.CreateLogin;
 import org.orbitrondev.jass.client.Message.Login;
 import org.orbitrondev.jass.client.Utils.I18nUtil;
 import org.orbitrondev.jass.client.Utils.SocketUtil;
-import org.orbitrondev.jass.client.View.ViewHelper;
+import org.orbitrondev.jass.client.Utils.WindowUtil;
+import org.orbitrondev.jass.client.Utils.ViewUtil;
 import org.orbitrondev.jass.lib.Message.CreateLoginData;
 import org.orbitrondev.jass.lib.Message.LoginData;
 import org.orbitrondev.jass.lib.ServiceLocator.ServiceLocator;
@@ -95,7 +96,7 @@ public class RegisterController extends FXMLController {
          */
         mFile.textProperty().bind(I18nUtil.createStringBinding(mFile.getText()));
         mFileChangeLanguage.textProperty().bind(I18nUtil.createStringBinding(mFileChangeLanguage.getText()));
-        ViewHelper.useLanguageMenuContent(mFileChangeLanguage);
+        ViewUtil.useLanguageMenuContent(mFileChangeLanguage);
         mFileDisconnect.textProperty().bind(I18nUtil.createStringBinding(mFileDisconnect.getText()));
         mFileExit.textProperty().bind(I18nUtil.createStringBinding(mFileExit.getText()));
         mFileExit.setAccelerator(KeyCombination.keyCombination("Alt+F4"));
@@ -153,14 +154,14 @@ public class RegisterController extends FXMLController {
          * Validate input fields
          */
         username.getValidators().addAll(
-            ViewHelper.useRequiredValidator("gui.register.username.empty")
+            ViewUtil.useRequiredValidator("gui.register.username.empty")
         );
         password.getValidators().addAll(
-            ViewHelper.useRequiredValidator("gui.register.password.empty")
+            ViewUtil.useRequiredValidator("gui.register.password.empty")
         );
         repeatPassword.getValidators().addAll(
-            ViewHelper.useRequiredValidator("gui.register.repeatPassword.empty"),
-            ViewHelper.useIsSameValidator(password, "gui.register.repeatPassword.notSame")
+            ViewUtil.useRequiredValidator("gui.register.repeatPassword.empty"),
+            ViewUtil.useIsSameValidator(password, "gui.register.repeatPassword.notSame")
         );
     }
 
@@ -224,10 +225,10 @@ public class RegisterController extends FXMLController {
                 //root.setMinHeight(newHeight);
                 errorMessage.setPrefHeight(50);
             }
-            Text text = ViewHelper.useText(translatorKey);
+            Text text = ViewUtil.useText(translatorKey);
             text.setFill(Color.RED);
             errorMessage.getChildren().clear();
-            errorMessage.getChildren().addAll(text, ViewHelper.useSpacer(20));
+            errorMessage.getChildren().addAll(text, ViewUtil.useSpacer(20));
         });
     }
 
@@ -236,7 +237,7 @@ public class RegisterController extends FXMLController {
         SocketUtil socket = (SocketUtil) ServiceLocator.get("backend");
         socket.close();
         ServiceLocator.remove("backend");
-        ControllerHelper.switchToServerConnectionWindow();
+        WindowUtil.switchToServerConnectionWindow();
     }
 
     @FXML
@@ -270,7 +271,7 @@ public class RegisterController extends FXMLController {
                 if (loginMsg.process(backend)) {
                     login.setToken(loginMsg.getToken());
                     ServiceLocator.add(login);
-                    ControllerHelper.switchToDashboardWindow();
+                    WindowUtil.switchToDashboardWindow();
                     Platform.runLater(() -> this.login.getScene().getWindow().hide()); // Dashboard is still MVC
                 } else {
                     enableAll();
@@ -285,7 +286,7 @@ public class RegisterController extends FXMLController {
 
     @FXML
     private void clickOnLogin(ActionEvent event) {
-        ControllerHelper.switchToLoginWindow();
+        WindowUtil.switchToLoginWindow();
     }
 
     public JFXButton getRegister() {

@@ -26,8 +26,9 @@ import org.orbitrondev.jass.client.Message.DeleteLogin;
 import org.orbitrondev.jass.client.Message.Logout;
 import org.orbitrondev.jass.client.Model.DeleteAccountModel;
 import org.orbitrondev.jass.client.Utils.SocketUtil;
+import org.orbitrondev.jass.client.Utils.WindowUtil;
 import org.orbitrondev.jass.client.View.DeleteAccountView;
-import org.orbitrondev.jass.client.View.ViewHelper;
+import org.orbitrondev.jass.client.Utils.ViewUtil;
 import org.orbitrondev.jass.client.MVC.Controller;
 import org.orbitrondev.jass.lib.Message.DeleteLoginData;
 import org.orbitrondev.jass.lib.Message.LogoutData;
@@ -46,7 +47,7 @@ public class DeleteAccountController extends Controller<DeleteAccountModel, Dele
      *
      * @since 0.0.1
      */
-    protected DeleteAccountController(DeleteAccountModel model, DeleteAccountView view) {
+    public DeleteAccountController(DeleteAccountModel model, DeleteAccountView view) {
         super(model, view);
 
         // Register ourselves to listen for button clicks
@@ -54,7 +55,7 @@ public class DeleteAccountController extends Controller<DeleteAccountModel, Dele
 
         // Register ourselves to listen for button clicks
         view.getBtnCancel().setOnAction(event -> {
-            ControllerHelper.switchToDashboardWindow();
+            WindowUtil.switchToDashboardWindow();
             view.stop();
         });
 
@@ -93,10 +94,10 @@ public class DeleteAccountController extends Controller<DeleteAccountModel, Dele
                 // Make window larger, so it doesn't become crammed, only if we haven't done so yet
                 view.getStage().setHeight(view.getStage().getHeight() + 30);
             }
-            Text text = ViewHelper.useText(translatorKey);
+            Text text = ViewUtil.useText(translatorKey);
             text.setFill(Color.RED);
             view.getErrorMessage().getChildren().clear();
-            view.getErrorMessage().getChildren().addAll(text, ViewHelper.useSpacer(20));
+            view.getErrorMessage().getChildren().addAll(text, ViewUtil.useSpacer(20));
         });
     }
 
@@ -122,7 +123,7 @@ public class DeleteAccountController extends Controller<DeleteAccountModel, Dele
                 // If deleted, try logging out now.
                 if (logoutMsg.process(backend)) {
                     ServiceLocator.remove("login");
-                    ControllerHelper.switchToLoginWindow();
+                    WindowUtil.switchToLoginWindow();
                     view.stop();
                 } else {
                     enableAll();

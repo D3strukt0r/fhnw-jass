@@ -6,7 +6,7 @@ import org.apache.commons.cli.*;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.core.LoggerContext;
-import org.orbitrondev.jass.client.Controller.ControllerHelper;
+import org.orbitrondev.jass.client.Utils.WindowUtil;
 
 /**
  * The main class for the client application.
@@ -53,6 +53,6 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) {
-        ControllerHelper.switchToSplashScreen();
+        WindowUtil.switchToSplashScreen();
     }
 }

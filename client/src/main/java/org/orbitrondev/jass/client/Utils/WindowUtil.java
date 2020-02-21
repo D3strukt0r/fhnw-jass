@@ -16,10 +16,11 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package org.orbitrondev.jass.client.Controller;
+package org.orbitrondev.jass.client.Utils;
 
 import javafx.application.Platform;
 import javafx.stage.Stage;
+import org.orbitrondev.jass.client.Controller.DashboardController;
 import org.orbitrondev.jass.client.View.*;
 import org.orbitrondev.jass.client.Model.DashboardModel;
 
@@ -30,7 +31,7 @@ import org.orbitrondev.jass.client.Model.DashboardModel;
  * @version %I%, %G%
  * @since 0.0.1
  */
-public class ControllerHelper {
+public class WindowUtil {
     // Reuse the same window
     private static Stage stage = new Stage();
 

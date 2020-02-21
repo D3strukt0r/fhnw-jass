@@ -27,6 +27,7 @@ import javafx.stage.Stage;
 import org.orbitrondev.jass.client.Model.DeleteAccountModel;
 import org.orbitrondev.jass.client.Utils.I18nUtil;
 import org.orbitrondev.jass.client.MVC.View;
+import org.orbitrondev.jass.client.Utils.ViewUtil;
 
 /**
  * The delete account view.
@@ -65,31 +66,31 @@ public class DeleteAccountView extends View<DeleteAccountModel> {
         btnRow.setSpacing(4); // Otherwise the login and register are right beside each other
 
         // Create button to register
-        btnDelete = ViewHelper.usePrimaryButton("gui.deleteAccount.delete");
+        btnDelete = ViewUtil.usePrimaryButton("gui.deleteAccount.delete");
 
         // Create button to change
-        btnCancel = ViewHelper.useSecondaryButton("gui.deleteAccount.cancel");
+        btnCancel = ViewUtil.useSecondaryButton("gui.deleteAccount.cancel");
 
         // Add buttons to btnRow
         btnRow.getChildren().addAll(
             btnDelete,
-            ViewHelper.useHorizontalSpacer(1),
+            ViewUtil.useHorizontalSpacer(1),
             btnCancel
         );
 
         // Add body content to body
         body.getChildren().addAll(
             errorMessage,
-            ViewHelper.useSpacer(10),
-            ViewHelper.useText("gui.deleteAccount.message", stage),
-            ViewHelper.useSpacer(25),
+            ViewUtil.useSpacer(10),
+            ViewUtil.useText("gui.deleteAccount.message", stage),
+            ViewUtil.useSpacer(25),
             btnRow
         );
 
         // Add body to root
         root.getChildren().addAll(
-            ViewHelper.useDefaultMenuBar(),
-            ViewHelper.useNavBar("gui.changePassword.title"),
+            ViewUtil.useDefaultMenuBar(),
+            ViewUtil.useNavBar("gui.changePassword.title"),
             body
         );
 

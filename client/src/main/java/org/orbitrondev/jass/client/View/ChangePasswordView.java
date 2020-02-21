@@ -28,6 +28,7 @@ import javafx.stage.Stage;
 import org.orbitrondev.jass.client.Model.ChangePasswordModel;
 import org.orbitrondev.jass.client.Utils.I18nUtil;
 import org.orbitrondev.jass.client.MVC.View;
+import org.orbitrondev.jass.client.Utils.ViewUtil;
 
 /**
  * The change password view.
@@ -65,21 +66,21 @@ public class ChangePasswordView extends View<ChangePasswordModel> {
         errorMessage = new VBox();
 
         // Create old password input field
-        oldPassword = ViewHelper.usePasswordField("gui.changePassword.oldPassword");
+        oldPassword = ViewUtil.usePasswordField("gui.changePassword.oldPassword");
         oldPassword.getValidators().addAll(
-            ViewHelper.useRequiredValidator("gui.changePassword.oldPassword.empty")
+            ViewUtil.useRequiredValidator("gui.changePassword.oldPassword.empty")
         );
 
         // Create password input field
-        newPassword = ViewHelper.usePasswordField("gui.changePassword.newPassword");
+        newPassword = ViewUtil.usePasswordField("gui.changePassword.newPassword");
         newPassword.getValidators().addAll(
-            ViewHelper.useRequiredValidator("gui.changePassword.newPassword.empty")
+            ViewUtil.useRequiredValidator("gui.changePassword.newPassword.empty")
         );
 
-        repeatNewPassword = ViewHelper.usePasswordField("gui.changePassword.repeatNewPassword");
+        repeatNewPassword = ViewUtil.usePasswordField("gui.changePassword.repeatNewPassword");
         repeatNewPassword.getValidators().addAll(
-            ViewHelper.useRequiredValidator("gui.changePassword.repeatNewPassword.empty"),
-            ViewHelper.useIsSameValidator(newPassword, "gui.changePassword.repeatNewPassword.notSame")
+            ViewUtil.useRequiredValidator("gui.changePassword.repeatNewPassword.empty"),
+            ViewUtil.useIsSameValidator(newPassword, "gui.changePassword.repeatNewPassword.notSame")
         );
 
         // Create body
@@ -87,36 +88,36 @@ public class ChangePasswordView extends View<ChangePasswordModel> {
         btnRow.setSpacing(4); // Otherwise the login and register are right beside each other
 
         // Create button to register
-        btnChange = ViewHelper.usePrimaryButton("gui.changePassword.change");
+        btnChange = ViewUtil.usePrimaryButton("gui.changePassword.change");
         btnChange.setDisable(true);
 
         // Create button to change
-        btnCancel = ViewHelper.useSecondaryButton("gui.changePassword.cancel");
+        btnCancel = ViewUtil.useSecondaryButton("gui.changePassword.cancel");
 
         // Add buttons to btnRow
         btnRow.getChildren().addAll(
             btnChange,
-            ViewHelper.useHorizontalSpacer(1),
+            ViewUtil.useHorizontalSpacer(1),
             btnCancel
         );
 
         // Add body content to body
         body.getChildren().addAll(
             errorMessage,
-            ViewHelper.useSpacer(10),
+            ViewUtil.useSpacer(10),
             oldPassword,
-            ViewHelper.useSpacer(25),
+            ViewUtil.useSpacer(25),
             newPassword,
-            ViewHelper.useSpacer(25),
+            ViewUtil.useSpacer(25),
             repeatNewPassword,
-            ViewHelper.useSpacer(25),
+            ViewUtil.useSpacer(25),
             btnRow
         );
 
         // Add body to root
         root.getChildren().addAll(
-            ViewHelper.useDefaultMenuBar(),
-            ViewHelper.useNavBar("gui.changePassword.title"),
+            ViewUtil.useDefaultMenuBar(),
+            ViewUtil.useNavBar("gui.changePassword.title"),
             body
         );
 
