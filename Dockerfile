@@ -1,13 +1,13 @@
-FROM gradle:jdk11 AS build
+FROM gradle:jdk8 AS build
 COPY --chown=gradle:gradle . /home/gradle/src
 WORKDIR /home/gradle/src
 RUN gradle lib:jar --no-daemon
 RUN gradle server:build --no-daemon
 
-FROM openjdk:11
+FROM openjdk:8
 EXPOSE 1024
 VOLUME ["/app/data"]
 RUN mkdir -p /app
-COPY --from=build /home/gradle/src/server/build/libs/jass-server.jar /app/jass-server.jar
+COPY --from=build /home/gradle/src/server/build/libs/server-0.0.1.jar /app/jass-server.jar
 ENTRYPOINT ["java", "-jar", "/app/jass-server.jar"]
 CMD ["-s", "-v"]
