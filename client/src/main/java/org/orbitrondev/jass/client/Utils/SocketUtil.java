@@ -166,15 +166,14 @@ public class SocketUtil extends Thread implements Service, Closeable {
             } catch (InterruptedException e) { /* Ignore */ }
         }
     }
-
-
+    
     /**
      * Send a message to this server. In case of an exception, log the client out.
      */
     public void send(Message msg) {
         try {
             OutputStreamWriter out = new OutputStreamWriter(socket.getOutputStream());
-            logger.info("Sending message: " + this.toString());
+            logger.info("Sending message: " + msg.toString());
             out.write(msg.toString() + "\n"); // This will send the serialized MessageData object
             out.flush();
         } catch (IOException e) {
