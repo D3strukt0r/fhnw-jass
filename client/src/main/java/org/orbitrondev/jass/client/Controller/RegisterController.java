@@ -32,6 +32,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import org.orbitrondev.jass.client.Entity.LoginEntity;
+import org.orbitrondev.jass.client.EventListener.DisconnectEventListener;
 import org.orbitrondev.jass.client.FXML.FXMLController;
 import org.orbitrondev.jass.client.Message.CreateLogin;
 import org.orbitrondev.jass.client.Message.Login;
@@ -54,7 +55,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * @version %I%, %G%
  * @since 0.0.1
  */
-public class RegisterController extends FXMLController {
+public class RegisterController extends FXMLController implements DisconnectEventListener {
     @FXML
     public Menu mFile;
     @FXML
@@ -91,6 +92,14 @@ public class RegisterController extends FXMLController {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        /*
+         * Register oneself for disconnect events
+         */
+        SocketUtil socket = (SocketUtil) ServiceLocator.get("backend");
+        if (socket != null) { // Not necessary but keeps IDE happy
+            socket.addDisconnectListener(this);
+        }
+
         /*
          * Bind all texts
          */
@@ -235,7 +244,9 @@ public class RegisterController extends FXMLController {
     @FXML
     private void clickOnDisconnect(ActionEvent event) {
         SocketUtil socket = (SocketUtil) ServiceLocator.get("backend");
-        socket.close();
+        if (socket != null) { // Not necessary but keeps IDE happy
+            socket.close();
+        }
         ServiceLocator.remove("backend");
         WindowUtil.switchToServerConnectionWindow();
     }
@@ -291,5 +302,10 @@ public class RegisterController extends FXMLController {
 
     public JFXButton getRegister() {
         return register;
+    }
+
+    @Override
+    public void onDisconnectEvent() {
+        WindowUtil.switchToServerConnectionWindow();
     }
 }

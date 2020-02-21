@@ -32,6 +32,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.orbitrondev.jass.client.Entity.LoginEntity;
 import org.orbitrondev.jass.client.Entity.LoginRepository;
+import org.orbitrondev.jass.client.EventListener.DisconnectEventListener;
 import org.orbitrondev.jass.client.FXML.FXMLController;
 import org.orbitrondev.jass.client.Message.Login;
 import org.orbitrondev.jass.client.Utils.DatabaseUtil;
@@ -54,7 +55,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * @version %I%, %G%
  * @since 0.0.1
  */
-public class LoginController extends FXMLController {
+public class LoginController extends FXMLController implements DisconnectEventListener {
     private static final Logger logger = LogManager.getLogger(LoginController.class);
 
     @FXML
@@ -91,6 +92,14 @@ public class LoginController extends FXMLController {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        /*
+         * Register oneself for disconnect events
+         */
+        SocketUtil socket = (SocketUtil) ServiceLocator.get("backend");
+        if (socket != null) { // Not necessary but keeps IDE happy
+            socket.addDisconnectListener(this);
+        }
+
         /*
          * Bind all texts
          */
@@ -223,7 +232,9 @@ public class LoginController extends FXMLController {
     @FXML
     private void clickOnDisconnect(ActionEvent event) {
         SocketUtil socket = (SocketUtil) ServiceLocator.get("backend");
-        socket.close();
+        if (socket != null) { // Not necessary but keeps IDE happy
+            socket.close();
+        }
         ServiceLocator.remove("backend");
         WindowUtil.switchToServerConnectionWindow();
     }
@@ -283,5 +294,10 @@ public class LoginController extends FXMLController {
 
     public JFXButton getLogin() {
         return login;
+    }
+
+    @Override
+    public void onDisconnectEvent() {
+        WindowUtil.switchToServerConnectionWindow();
     }
 }

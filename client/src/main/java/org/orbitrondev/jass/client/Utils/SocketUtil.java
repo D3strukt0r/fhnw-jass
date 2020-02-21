@@ -21,6 +21,7 @@ package org.orbitrondev.jass.client.Utils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.orbitrondev.jass.client.Entity.LoginEntity;
+import org.orbitrondev.jass.client.EventListener.DisconnectEventListener;
 import org.orbitrondev.jass.client.Message.Message;
 import org.orbitrondev.jass.lib.Message.MessageData;
 import org.orbitrondev.jass.lib.ServiceLocator.Service;
@@ -47,6 +48,7 @@ public class SocketUtil extends Thread implements Service, Closeable {
 
     private Socket socket;
     private volatile boolean serverReachable = true;
+    private ArrayList<DisconnectEventListener> disconnectListener = new ArrayList<>();
 
     private ArrayList<Message> lastMessages = new ArrayList<>();
 
@@ -110,40 +112,42 @@ public class SocketUtil extends Thread implements Service, Closeable {
 
     @Override
     public void run() {
-        while (serverReachable) {
-            Message msg = null;
-            try {
-                // TODO: Why does try-with-resources not work?
-                BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+        try (BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()))) {
+            while (serverReachable) {
                 String msgText = in.readLine(); // Will wait here for complete line
-                if (msgText == null) break; // In case the server closes the socket
 
-                logger.info("Receiving message: " + msgText);
+                // In case the server closes the socket
+                if (msgText == null) {
+                    logger.info("Server disconnected");
+                    break;
+                }
 
                 // Break message into individual parts, and remove extra spaces
+                logger.info("Receiving message: " + msgText);
                 MessageData msgData = MessageData.unserialize(msgText);
 
                 // Create a message object of the correct class, using reflection
                 if (msgData == null) {
                     logger.error("Received invalid message");
-                    continue;
                 } else {
-                    msg = Message.fromDataObject(msgData);
+                    Message msg = Message.fromDataObject(msgData);
                     if (msg == null) {
                         logger.error("Received invalid message of type " + msgData.getMessageType());
                     } else {
                         logger.info("Received message of type " + msgData.getMessageType());
+                        lastMessages.add(msg);
                     }
                 }
-            } catch (SocketException e) {
-                logger.info("Server disconnected");
-                close();
-                continue;
-            } catch (IOException e) {
-                logger.error(e.toString());
             }
+        } catch (IOException e) {
+            logger.error(e.toString());
+        }
 
-            lastMessages.add(msg);
+        close();
+        if (disconnectListener != null) {
+            for (DisconnectEventListener listener : disconnectListener) {
+                listener.onDisconnectEvent();
+            }
         }
     }
 
@@ -186,7 +190,7 @@ public class SocketUtil extends Thread implements Service, Closeable {
     /**
      * @return "true" if logged in, otherwise "false"
      *
-     * @since 0.0.2
+     * @since 0.0.1
      */
     public boolean isLoggedIn() {
         return ServiceLocator.get("login") != null;
@@ -195,7 +199,7 @@ public class SocketUtil extends Thread implements Service, Closeable {
     /**
      * @return A string containing the token if logged in, otherwise "null"
      *
-     * @since 0.0.2
+     * @since 0.0.1
      */
     public String getToken() {
         LoginEntity login = (LoginEntity) ServiceLocator.get("login");
@@ -203,6 +207,15 @@ public class SocketUtil extends Thread implements Service, Closeable {
             return login.getToken();
         }
         return null;
+    }
+
+    /**
+     * @param listener An DisconnectEventListener object
+     *
+     * @since 0.0.1
+     */
+    public void addDisconnectListener(DisconnectEventListener listener) {
+        this.disconnectListener.add(listener);
     }
 
     /**
