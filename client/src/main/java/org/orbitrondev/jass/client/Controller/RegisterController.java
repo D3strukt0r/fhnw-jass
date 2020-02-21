@@ -59,6 +59,8 @@ public class RegisterController extends FXMLController {
     @FXML
     public Menu mFileChangeLanguage;
     @FXML
+    public MenuItem mFileDisconnect;
+    @FXML
     public MenuItem mFileExit;
     @FXML
     public Menu mEdit;
@@ -94,6 +96,7 @@ public class RegisterController extends FXMLController {
         mFile.textProperty().bind(I18nUtil.createStringBinding(mFile.getText()));
         mFileChangeLanguage.textProperty().bind(I18nUtil.createStringBinding(mFileChangeLanguage.getText()));
         ViewHelper.useLanguageMenuContent(mFileChangeLanguage);
+        mFileDisconnect.textProperty().bind(I18nUtil.createStringBinding(mFileDisconnect.getText()));
         mFileExit.textProperty().bind(I18nUtil.createStringBinding(mFileExit.getText()));
         mFileExit.setAccelerator(KeyCombination.keyCombination("Alt+F4"));
 
@@ -226,6 +229,14 @@ public class RegisterController extends FXMLController {
             errorMessage.getChildren().clear();
             errorMessage.getChildren().addAll(text, ViewHelper.useSpacer(20));
         });
+    }
+
+    @FXML
+    private void clickOnDisconnect(ActionEvent event) {
+        SocketUtil socket = (SocketUtil) ServiceLocator.get("backend");
+        socket.close();
+        ServiceLocator.remove("backend");
+        ControllerHelper.switchToServerConnectionWindow();
     }
 
     @FXML
