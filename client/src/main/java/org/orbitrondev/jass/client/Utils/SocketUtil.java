@@ -166,7 +166,7 @@ public class SocketUtil extends Thread implements Service, Closeable {
             } catch (InterruptedException e) { /* Ignore */ }
         }
     }
-    
+
     /**
      * Send a message to this server. In case of an exception, log the client out.
      */
