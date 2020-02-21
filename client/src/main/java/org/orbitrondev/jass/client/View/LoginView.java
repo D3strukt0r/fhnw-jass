@@ -63,7 +63,6 @@ public class LoginView extends FXMLView {
                     }
                 }
             });
-            scene.getStylesheets().add(getClass().getResource("/css/app.css").toExternalForm());
             return scene;
         } catch (IOException e) {
             return null;
