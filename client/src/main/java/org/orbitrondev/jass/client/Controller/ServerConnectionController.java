@@ -266,6 +266,19 @@ public class ServerConnectionController extends FXMLController {
     }
 
     /**
+     * Enables all the form fields in the view, if it's a new entry.
+     *
+     * @since 0.0.1
+     */
+    public void enableAllIfNew() {
+        ServerEntity server = chooseServer.getSelectionModel().getSelectedItem();
+        if (server == null || server.getIp() == null) {
+            enableInputs();
+        }
+        connect.setDisable(false);
+    }
+
+    /**
      * As the view contains an error message field, this updates the text and the window appropriately.
      *
      * @since 0.0.1
@@ -346,13 +359,13 @@ public class ServerConnectionController extends FXMLController {
                 ServiceLocator.add(socket);
                 ServerRepository.setToConnectAutomatically(server); // Make sure it's the only entry
             } catch (ConnectException e) {
-                enableAll();
+                enableAllIfNew();
                 setErrorMessage("gui.serverConnection.connect.connection");
             } catch (IOException e) {
-                enableAll();
+                enableAllIfNew();
                 setErrorMessage("gui.serverConnection.connect.failed");
             } catch (CertificateException | NoSuchAlgorithmException | UnrecoverableKeyException | KeyStoreException | KeyManagementException e) {
-                enableAll();
+                enableAllIfNew();
                 setErrorMessage("gui.serverConnection.connect.ssl");
             }
 
