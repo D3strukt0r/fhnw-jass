@@ -27,7 +27,6 @@ import javafx.beans.binding.Bindings;
 import javafx.beans.binding.NumberBinding;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
@@ -46,6 +45,7 @@ import org.orbitrondev.jass.client.Utils.DatabaseUtil;
 import org.orbitrondev.jass.client.Utils.I18nUtil;
 import org.orbitrondev.jass.client.Utils.WindowUtil;
 import org.orbitrondev.jass.client.Utils.ViewUtil;
+import org.orbitrondev.jass.client.View.ServerConnectionView;
 import org.orbitrondev.jass.lib.ServiceLocator.ServiceLocator;
 
 import java.io.IOException;
@@ -69,6 +69,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
  */
 public class ServerConnectionController extends FXMLController {
     private static final Logger logger = LogManager.getLogger(ServerConnectionController.class);
+    private ServerConnectionView view;
 
     @FXML
     public Menu mFile;
@@ -256,16 +257,6 @@ public class ServerConnectionController extends FXMLController {
     }
 
     /**
-     * Enables all the form fields in the view.
-     *
-     * @since 0.0.1
-     */
-    public void enableAll() {
-        enableInputs();
-        connect.setDisable(false);
-    }
-
-    /**
      * Enables all the form fields in the view, if it's a new entry.
      *
      * @since 0.0.1
@@ -287,12 +278,8 @@ public class ServerConnectionController extends FXMLController {
         Platform.runLater(() -> {
             if (errorMessage.getChildren().size() == 0) {
                 // Make window larger, so it doesn't become crammed, only if we haven't done so yet
-                // TODO: Don't use root, use the stage (view.getStage().setHeight(x))
-                //double newHeight = root.getHeight() + 30;
-                //root.setMaxHeight(newHeight);
-                //root.setPrefHeight(newHeight);
-                //root.setMinHeight(newHeight);
-                errorMessage.setPrefHeight(50);
+                view.getStage().setHeight(view.getStage().getHeight() + 30);
+                errorMessage.setPrefHeight(30);
             }
             Text text = ViewUtil.useText(translatorKey);
             text.setFill(Color.RED);
@@ -302,7 +289,7 @@ public class ServerConnectionController extends FXMLController {
     }
 
     @FXML
-    private void clickOnExit(ActionEvent event) {
+    private void clickOnExit() {
         Platform.exit();
     }
 
@@ -312,7 +299,7 @@ public class ServerConnectionController extends FXMLController {
      * @since 0.0.1
      */
     @FXML
-    private void clickOnChooseServer(ActionEvent event) {
+    private void clickOnChooseServer() {
         ServerEntity server = chooseServer.getSelectionModel().getSelectedItem();
         if (server == null || server.getIp() == null) {
             enableInputs();
@@ -336,7 +323,7 @@ public class ServerConnectionController extends FXMLController {
      * @since 0.0.1
      */
     @FXML
-    private void clickOnConnect(ActionEvent event) {
+    private void clickOnConnect() {
         // Disable everything to prevent something while working on the data
         disableAll();
 
@@ -386,5 +373,9 @@ public class ServerConnectionController extends FXMLController {
 
     public JFXButton getConnect() {
         return connect;
+    }
+
+    public void setView(ServerConnectionView view) {
+        this.view = view;
     }
 }

@@ -53,6 +53,7 @@ public class RegisterView extends FXMLView {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/register.fxml"));
             Parent root = loader.load();
             RegisterController controller = loader.getController();
+            controller.setView(this);
 
             Scene scene = new Scene(root);
             scene.setOnKeyPressed(event -> {

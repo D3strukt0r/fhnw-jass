@@ -40,6 +40,7 @@ import org.orbitrondev.jass.client.Utils.I18nUtil;
 import org.orbitrondev.jass.client.Utils.SocketUtil;
 import org.orbitrondev.jass.client.Utils.WindowUtil;
 import org.orbitrondev.jass.client.Utils.ViewUtil;
+import org.orbitrondev.jass.client.View.LoginView;
 import org.orbitrondev.jass.lib.Message.LoginData;
 import org.orbitrondev.jass.lib.ServiceLocator.ServiceLocator;
 
@@ -57,6 +58,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
  */
 public class LoginController extends FXMLController implements DisconnectEventListener {
     private static final Logger logger = LogManager.getLogger(LoginController.class);
+    private LoginView view;
 
     @FXML
     public Menu mFile;
@@ -215,12 +217,8 @@ public class LoginController extends FXMLController implements DisconnectEventLi
         Platform.runLater(() -> {
             if (errorMessage.getChildren().size() == 0) {
                 // Make window larger, so it doesn't become crammed, only if we haven't done so yet
-                // TODO: Don't use root, use the stage (view.getStage().setHeight(x))
-                //double newHeight = root.getHeight() + 30;
-                //root.setMaxHeight(newHeight);
-                //root.setPrefHeight(newHeight);
-                //root.setMinHeight(newHeight);
-                errorMessage.setPrefHeight(50);
+                view.getStage().setHeight(view.getStage().getHeight() + 30);
+                errorMessage.setPrefHeight(30);
             }
             Text text = ViewUtil.useText(translatorKey);
             text.setFill(Color.RED);
@@ -230,7 +228,7 @@ public class LoginController extends FXMLController implements DisconnectEventLi
     }
 
     @FXML
-    private void clickOnDisconnect(ActionEvent event) {
+    private void clickOnDisconnect() {
         SocketUtil socket = (SocketUtil) ServiceLocator.get("backend");
         if (socket != null) { // Not necessary but keeps IDE happy
             socket.close();
@@ -240,7 +238,7 @@ public class LoginController extends FXMLController implements DisconnectEventLi
     }
 
     @FXML
-    private void clickOnExit(ActionEvent event) {
+    private void clickOnExit() {
         Platform.exit();
     }
 
@@ -251,7 +249,7 @@ public class LoginController extends FXMLController implements DisconnectEventLi
      * @since 0.0.1
      */
     @FXML
-    private void clickOnLogin(ActionEvent event) {
+    private void clickOnLogin() {
         // Disable everything to prevent something while working on the data
         disableAll();
 
@@ -287,18 +285,22 @@ public class LoginController extends FXMLController implements DisconnectEventLi
         }).start();
     }
 
+    public JFXButton getLogin() {
+        return login;
+    }
+
     @FXML
     private void clickOnRegister(ActionEvent event) {
         WindowUtil.switchToRegisterWindow();
-    }
-
-    public JFXButton getLogin() {
-        return login;
     }
 
     @Override
     public void onDisconnectEvent() {
         ServiceLocator.remove("backend");
         WindowUtil.switchToServerConnectionWindow();
+    }
+
+    public void setView(LoginView view) {
+        this.view = view;
     }
 }

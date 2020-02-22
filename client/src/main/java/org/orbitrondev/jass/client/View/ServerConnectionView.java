@@ -53,6 +53,7 @@ public class ServerConnectionView extends FXMLView {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/server_connection.fxml"));
             Parent root = loader.load();
             ServerConnectionController controller = loader.getController();
+            controller.setView(this);
 
             Scene scene = new Scene(root);
             scene.setOnKeyPressed(event -> {

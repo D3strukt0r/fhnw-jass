@@ -53,6 +53,7 @@ public class LoginView extends FXMLView {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/login.fxml"));
             Parent root = loader.load();
             LoginController controller = loader.getController();
+            controller.setView(this);
 
             Scene scene = new Scene(root);
             scene.setOnKeyPressed(event -> {
