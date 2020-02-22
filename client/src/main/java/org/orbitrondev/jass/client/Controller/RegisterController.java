@@ -306,6 +306,7 @@ public class RegisterController extends FXMLController implements DisconnectEven
 
     @Override
     public void onDisconnectEvent() {
+        ServiceLocator.remove("backend");
         WindowUtil.switchToServerConnectionWindow();
     }
 }

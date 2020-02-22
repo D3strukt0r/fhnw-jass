@@ -31,7 +31,6 @@ import javax.net.SocketFactory;
 import javax.net.ssl.*;
 import java.io.*;
 import java.net.Socket;
-import java.net.SocketException;
 import java.security.*;
 import java.security.cert.CertificateException;
 import java.util.ArrayList;
@@ -122,14 +121,14 @@ public class SocketUtil extends Thread implements Service, Closeable {
                     break;
                 }
 
-                // Break message into individual parts, and remove extra spaces
+                // Create a message object of the correct class, using reflection
                 logger.info("Receiving message: " + msgText);
                 MessageData msgData = MessageData.unserialize(msgText);
 
-                // Create a message object of the correct class, using reflection
                 if (msgData == null) {
                     logger.error("Received invalid message");
                 } else {
+                    // Create a message object of the correct class, using reflection
                     Message msg = Message.fromDataObject(msgData);
                     if (msg == null) {
                         logger.error("Received invalid message of type " + msgData.getMessageType());

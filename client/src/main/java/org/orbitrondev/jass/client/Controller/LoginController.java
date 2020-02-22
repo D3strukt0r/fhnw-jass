@@ -298,6 +298,7 @@ public class LoginController extends FXMLController implements DisconnectEventLi
 
     @Override
     public void onDisconnectEvent() {
+        ServiceLocator.remove("backend");
         WindowUtil.switchToServerConnectionWindow();
     }
 }
