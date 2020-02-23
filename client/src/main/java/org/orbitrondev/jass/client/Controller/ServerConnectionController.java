@@ -278,7 +278,8 @@ public class ServerConnectionController extends FXMLController {
         Platform.runLater(() -> {
             if (errorMessage.getChildren().size() == 0) {
                 // Make window larger, so it doesn't become crammed, only if we haven't done so yet
-                view.getStage().setHeight(view.getStage().getHeight() + 30);
+                // TODO: This keeps the window size even after switching to e.g. login
+                //view.getStage().setHeight(view.getStage().getHeight() + 30);
                 errorMessage.setPrefHeight(30);
             }
             Text text = ViewUtil.useText(translatorKey);
