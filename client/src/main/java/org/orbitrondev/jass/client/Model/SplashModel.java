@@ -113,17 +113,17 @@ public class SplashModel extends Model {
                 tasks.get(i).run();
 
                 // Loading is currently very fast, to appreciate the loading bar, wait a little
-                try {
-                    Thread.sleep(200);
-                } catch (InterruptedException e) { /* Ignore */ }
+                //try {
+                //    Thread.sleep(200);
+                //} catch (InterruptedException e) { /* Ignore */ }
 
                 this.updateProgress(i + 2, tasks.size() + 1);
             }
 
             // For better UX, let the user see the full progress bar
-            try {
-                Thread.sleep(500);
-            } catch (InterruptedException e) { /* Ignore */ }
+            //try {
+            //    Thread.sleep(500);
+            //} catch (InterruptedException e) { /* Ignore */ }
             return null;
         }
     };
