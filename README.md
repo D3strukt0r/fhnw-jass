@@ -70,10 +70,10 @@ We use [SemVer](http://semver.org/) for versioning. For the versions available, 
 
 ## Authors
 
-* **Manuele Vaccari** - *Initial work* - [D3strukt0r](https://github.com/D3strukt0r)
-* **Victor Hargrave** - *Initial work*
-* **Sasa Trajkova** - *Initial work* - [sasatrajkova](https://github.com/sasatrajkova)
-* **Thomas Weber** - *Initial work*
+* **Manuele Vaccari** - *Initial work, Basic Client and Server App, JSON Messaging* - [D3strukt0r](https://github.com/D3strukt0r)
+* **Victor Hargrave**
+* **Sasa Trajkova** - [sasatrajkova](https://github.com/sasatrajkova)
+* **Thomas Weber**
 
 See also the list of [contributors](https://github.com/D3strukt0r/fhnw-jass/contributors) who participated in this project.
 
