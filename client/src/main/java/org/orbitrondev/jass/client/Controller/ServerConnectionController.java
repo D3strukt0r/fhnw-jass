@@ -95,7 +95,7 @@ public class ServerConnectionController extends FXMLController {
     @FXML
     private JFXComboBox<ServerEntity> chooseServer;
     @FXML
-    private JFXTextField ip;
+    private JFXTextField ipOrDomain;
     @FXML
     public Text ipHint;
     @FXML
@@ -132,7 +132,7 @@ public class ServerConnectionController extends FXMLController {
         //navbar.textProperty().bind(I18nUtil.createStringBinding(() -> I18nUtil.get(navbar.getText()).toUpperCase()));
         navbar.textProperty().bind(I18nUtil.createStringBinding(navbar.getText()));
 
-        ip.promptTextProperty().bind(I18nUtil.createStringBinding(ip.getPromptText()));
+        ipOrDomain.promptTextProperty().bind(I18nUtil.createStringBinding(ipOrDomain.getPromptText()));
         ipHint.textProperty().bind(I18nUtil.createStringBinding(ipHint.getText()));
         // https://stackoverflow.com/questions/51199903/how-to-bind-a-value-to-the-result-of-a-calculation
         // Check the css at .custom-container (padding left and right = 40)
@@ -195,9 +195,9 @@ public class ServerConnectionController extends FXMLController {
                 connect.setDisable(false);
             }
         };
-        ip.textProperty().addListener((o, oldVal, newVal) -> {
+        ipOrDomain.textProperty().addListener((o, oldVal, newVal) -> {
             if (!oldVal.equals(newVal)) {
-                serverIpValid.set(ip.validate());
+                serverIpValid.set(ipOrDomain.validate());
                 updateButtonClickable.run();
             }
         });
@@ -211,9 +211,8 @@ public class ServerConnectionController extends FXMLController {
         /*
          * Validate input fields
          */
-        ip.getValidators().addAll(
-            ViewUtil.useRequiredValidator("gui.serverConnection.ip.empty"),
-            ViewUtil.useIsValidIpValidator("gui.serverConnection.ip.notIp")
+        ipOrDomain.getValidators().addAll(
+            ViewUtil.useRequiredValidator("gui.serverConnection.ip.empty")
         );
         port.getValidators().addAll(
             ViewUtil.useRequiredValidator("gui.serverConnection.port.empty"),
@@ -228,7 +227,7 @@ public class ServerConnectionController extends FXMLController {
      * @since 0.0.1
      */
     public void disableInputs() {
-        ip.setDisable(true);
+        ipOrDomain.setDisable(true);
         port.setDisable(true);
         secure.setDisable(true);
         connectAutomatically.setDisable(true);
@@ -250,7 +249,7 @@ public class ServerConnectionController extends FXMLController {
      * @since 0.0.1
      */
     public void enableInputs() {
-        ip.setDisable(false);
+        ipOrDomain.setDisable(false);
         port.setDisable(false);
         secure.setDisable(false);
         connectAutomatically.setDisable(false);
@@ -304,13 +303,13 @@ public class ServerConnectionController extends FXMLController {
         ServerEntity server = chooseServer.getSelectionModel().getSelectedItem();
         if (server == null || server.getIp() == null) {
             enableInputs();
-            ip.setText("");
+            ipOrDomain.setText("");
             port.setText("");
             secure.setSelected(false);
             connectAutomatically.setSelected(false);
         } else {
             disableInputs();
-            ip.setText(server.getIp());
+            ipOrDomain.setText(server.getIp());
             port.setText(Integer.toString(server.getPort()));
             secure.setSelected(server.isSecure());
             connectAutomatically.setSelected(server.isConnectAutomatically());
@@ -333,7 +332,7 @@ public class ServerConnectionController extends FXMLController {
             DatabaseUtil db = (DatabaseUtil) ServiceLocator.get("db");
 
             ServerEntity server = new ServerEntity(
-                ip.getText(),
+                ipOrDomain.getText(),
                 Integer.parseInt(port.getText()),
                 secure.isSelected(),
                 connectAutomatically.isSelected()

@@ -44,7 +44,7 @@
         <JFXComboBox fx:id="chooseServer" onAction="#clickOnChooseServer" />
         <Region prefHeight="25.0" VBox.vgrow="ALWAYS" />
 
-        <JFXTextField fx:id="ip" labelFloat="true" promptText="gui.serverConnection.ip" />
+        <JFXTextField fx:id="ipOrDomain" labelFloat="true" promptText="gui.serverConnection.ipOrDomain" />
         <Region prefHeight="35.0" VBox.vgrow="ALWAYS" />
         <Text fx:id="ipHint" strokeType="OUTSIDE" strokeWidth="0.0" text="gui.serverConnection.ip.hint" />
         <Region prefHeight="15.0" VBox.vgrow="ALWAYS" />
