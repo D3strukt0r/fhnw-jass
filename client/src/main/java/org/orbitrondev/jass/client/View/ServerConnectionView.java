@@ -42,6 +42,7 @@ public class ServerConnectionView extends FXMLView {
         super(stage);
         stage.titleProperty().bind(I18nUtil.createStringBinding("gui.serverConnection.title"));
         stage.setResizable(false);
+        stage.setWidth(scene.getWidth()); // Fixes weird width when returning to server connection windows
 
         // Register ourselves to handle window-closing event
         stage.setOnCloseRequest(event -> Platform.exit());
