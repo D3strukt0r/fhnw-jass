@@ -20,9 +20,7 @@ cache:
     - $HOME/.gradle/wrapper/
 
 # Main run
-before_install:
-  - chmod +x gradlew
-  - chmod +x docker_push.sh
+# CHMOD already done according to https://stackoverflow.com/questions/33820638
 install:
   - ./gradlew :lib:assemble
   - ./gradlew :server:assemble
