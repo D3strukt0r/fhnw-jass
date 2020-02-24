@@ -58,7 +58,17 @@ Add additional notes about how to deploy this on a live system
 
 ## Built With
 
+* [Java](https://www.java.com/de/) - Programming Language
 * [Gradle](https://gradle.org/) - Dependency Management
+* [JUnit5](https://junit.org/junit5/) - Testing the Java Code
+* [SQLite3](https://www.sqlite.org/index.html) - Data Storage
+* [ORMLite](http://ormlite.com/) - ORM for Data Storage
+* [JSON](https://www.json.org/json-en.html) - Data Model for Transmission between Server <-> Client
+* [Apache Commons Cli](https://commons.apache.org/proper/commons-cli/) - Handle CLI arguments
+* [Apache Log4J](https://logging.apache.org/log4j/2.x/) - Handle logging uniquely
+* [JFoenix](http://www.jfoenix.com/) - Theme for the GUI
+* [Travis CI](https://travis-ci.com/) - Automatic CI (Testing) / CD (Deployment)
+* [Docker](https://www.docker.com/) - Building a Container for the Server
 
 ## Contributing
 
@@ -70,10 +80,10 @@ We use [SemVer](http://semver.org/) for versioning. For the versions available, 
 
 ## Authors
 
-* **Manuele Vaccari** - *Initial work* - [D3strukt0r](https://github.com/D3strukt0r)
-* **Victor Hargrave** - *Initial work*
-* **Sasa Trajkova** - *Initial work* - [sasatrajkova](https://github.com/sasatrajkova)
-* **Thomas Weber** - *Initial work*
+* **Manuele Vaccari** - *Initial work, Basic Client and Server App, JSON Messaging* - [D3strukt0r](https://github.com/D3strukt0r)
+* **Victor Hargrave**
+* **Sasa Trajkova** - [sasatrajkova](https://github.com/sasatrajkova)
+* **Thomas Weber**
 
 See also the list of [contributors](https://github.com/D3strukt0r/fhnw-jass/contributors) who participated in this project.
 

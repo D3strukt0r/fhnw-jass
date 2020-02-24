@@ -40,6 +40,7 @@ import org.orbitrondev.jass.client.Utils.I18nUtil;
 import org.orbitrondev.jass.client.Utils.SocketUtil;
 import org.orbitrondev.jass.client.Utils.WindowUtil;
 import org.orbitrondev.jass.client.Utils.ViewUtil;
+import org.orbitrondev.jass.client.View.RegisterView;
 import org.orbitrondev.jass.lib.Message.CreateLoginData;
 import org.orbitrondev.jass.lib.Message.LoginData;
 import org.orbitrondev.jass.lib.ServiceLocator.ServiceLocator;
@@ -56,6 +57,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * @since 0.0.1
  */
 public class RegisterController extends FXMLController implements DisconnectEventListener {
+    private RegisterView view;
+
     @FXML
     public Menu mFile;
     @FXML
@@ -227,12 +230,9 @@ public class RegisterController extends FXMLController implements DisconnectEven
         Platform.runLater(() -> {
             if (errorMessage.getChildren().size() == 0) {
                 // Make window larger, so it doesn't become crammed, only if we haven't done so yet
-                // TODO: Don't use root, use the stage (view.getStage().setHeight(x))
-                //double newHeight = root.getHeight() + 30;
-                //root.setMaxHeight(newHeight);
-                //root.setPrefHeight(newHeight);
-                //root.setMinHeight(newHeight);
-                errorMessage.setPrefHeight(50);
+                // TODO: This keeps the window size even after switching to e.g. login
+                //view.getStage().setHeight(view.getStage().getHeight() + 30);
+                errorMessage.setPrefHeight(40);
             }
             Text text = ViewUtil.useText(translatorKey);
             text.setFill(Color.RED);
@@ -242,7 +242,7 @@ public class RegisterController extends FXMLController implements DisconnectEven
     }
 
     @FXML
-    private void clickOnDisconnect(ActionEvent event) {
+    private void clickOnDisconnect() {
         SocketUtil socket = (SocketUtil) ServiceLocator.get("backend");
         if (socket != null) { // Not necessary but keeps IDE happy
             socket.close();
@@ -252,7 +252,7 @@ public class RegisterController extends FXMLController implements DisconnectEven
     }
 
     @FXML
-    private void clickOnExit(ActionEvent event) {
+    private void clickOnExit() {
         Platform.exit();
     }
 
@@ -263,7 +263,7 @@ public class RegisterController extends FXMLController implements DisconnectEven
      * @since 0.0.1
      */
     @FXML
-    private void clickOnRegister(ActionEvent event) {
+    private void clickOnRegister() {
         // Disable everything to prevent something while working on the data
         disableAll();
 
@@ -295,17 +295,22 @@ public class RegisterController extends FXMLController implements DisconnectEven
         }).start();
     }
 
+    public JFXButton getRegister() {
+        return register;
+    }
+
     @FXML
     private void clickOnLogin(ActionEvent event) {
         WindowUtil.switchToLoginWindow();
     }
 
-    public JFXButton getRegister() {
-        return register;
-    }
-
     @Override
     public void onDisconnectEvent() {
+        ServiceLocator.remove("backend");
         WindowUtil.switchToServerConnectionWindow();
+    }
+
+    public void setView(RegisterView view) {
+        this.view = view;
     }
 }

@@ -42,6 +42,7 @@ public class LoginView extends FXMLView {
         super(stage);
         stage.titleProperty().bind(I18nUtil.createStringBinding("gui.login.title"));
         stage.setResizable(false);
+        stage.setWidth(350);
 
         // Register ourselves to handle window-closing event
         stage.setOnCloseRequest(event -> Platform.exit());
@@ -53,6 +54,7 @@ public class LoginView extends FXMLView {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/login.fxml"));
             Parent root = loader.load();
             LoginController controller = loader.getController();
+            controller.setView(this);
 
             Scene scene = new Scene(root);
             scene.setOnKeyPressed(event -> {

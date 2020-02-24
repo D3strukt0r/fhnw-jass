@@ -27,7 +27,6 @@ import javafx.beans.binding.Bindings;
 import javafx.beans.binding.NumberBinding;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
@@ -46,6 +45,7 @@ import org.orbitrondev.jass.client.Utils.DatabaseUtil;
 import org.orbitrondev.jass.client.Utils.I18nUtil;
 import org.orbitrondev.jass.client.Utils.WindowUtil;
 import org.orbitrondev.jass.client.Utils.ViewUtil;
+import org.orbitrondev.jass.client.View.ServerConnectionView;
 import org.orbitrondev.jass.lib.ServiceLocator.ServiceLocator;
 
 import java.io.IOException;
@@ -69,6 +69,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
  */
 public class ServerConnectionController extends FXMLController {
     private static final Logger logger = LogManager.getLogger(ServerConnectionController.class);
+    private ServerConnectionView view;
 
     @FXML
     public Menu mFile;
@@ -94,7 +95,7 @@ public class ServerConnectionController extends FXMLController {
     @FXML
     private JFXComboBox<ServerEntity> chooseServer;
     @FXML
-    private JFXTextField ip;
+    private JFXTextField ipOrDomain;
     @FXML
     public Text ipHint;
     @FXML
@@ -131,7 +132,7 @@ public class ServerConnectionController extends FXMLController {
         //navbar.textProperty().bind(I18nUtil.createStringBinding(() -> I18nUtil.get(navbar.getText()).toUpperCase()));
         navbar.textProperty().bind(I18nUtil.createStringBinding(navbar.getText()));
 
-        ip.promptTextProperty().bind(I18nUtil.createStringBinding(ip.getPromptText()));
+        ipOrDomain.promptTextProperty().bind(I18nUtil.createStringBinding(ipOrDomain.getPromptText()));
         ipHint.textProperty().bind(I18nUtil.createStringBinding(ipHint.getText()));
         // https://stackoverflow.com/questions/51199903/how-to-bind-a-value-to-the-result-of-a-calculation
         // Check the css at .custom-container (padding left and right = 40)
@@ -194,9 +195,9 @@ public class ServerConnectionController extends FXMLController {
                 connect.setDisable(false);
             }
         };
-        ip.textProperty().addListener((o, oldVal, newVal) -> {
+        ipOrDomain.textProperty().addListener((o, oldVal, newVal) -> {
             if (!oldVal.equals(newVal)) {
-                serverIpValid.set(ip.validate());
+                serverIpValid.set(ipOrDomain.validate());
                 updateButtonClickable.run();
             }
         });
@@ -210,9 +211,8 @@ public class ServerConnectionController extends FXMLController {
         /*
          * Validate input fields
          */
-        ip.getValidators().addAll(
-            ViewUtil.useRequiredValidator("gui.serverConnection.ip.empty"),
-            ViewUtil.useIsValidIpValidator("gui.serverConnection.ip.notIp")
+        ipOrDomain.getValidators().addAll(
+            ViewUtil.useRequiredValidator("gui.serverConnection.ip.empty")
         );
         port.getValidators().addAll(
             ViewUtil.useRequiredValidator("gui.serverConnection.port.empty"),
@@ -227,7 +227,7 @@ public class ServerConnectionController extends FXMLController {
      * @since 0.0.1
      */
     public void disableInputs() {
-        ip.setDisable(true);
+        ipOrDomain.setDisable(true);
         port.setDisable(true);
         secure.setDisable(true);
         connectAutomatically.setDisable(true);
@@ -249,19 +249,22 @@ public class ServerConnectionController extends FXMLController {
      * @since 0.0.1
      */
     public void enableInputs() {
-        ip.setDisable(false);
+        ipOrDomain.setDisable(false);
         port.setDisable(false);
         secure.setDisable(false);
         connectAutomatically.setDisable(false);
     }
 
     /**
-     * Enables all the form fields in the view.
+     * Enables all the form fields in the view, if it's a new entry.
      *
      * @since 0.0.1
      */
-    public void enableAll() {
-        enableInputs();
+    public void enableAllIfNew() {
+        ServerEntity server = chooseServer.getSelectionModel().getSelectedItem();
+        if (server == null || server.getIp() == null) {
+            enableInputs();
+        }
         connect.setDisable(false);
     }
 
@@ -274,12 +277,9 @@ public class ServerConnectionController extends FXMLController {
         Platform.runLater(() -> {
             if (errorMessage.getChildren().size() == 0) {
                 // Make window larger, so it doesn't become crammed, only if we haven't done so yet
-                // TODO: Don't use root, use the stage (view.getStage().setHeight(x))
-                //double newHeight = root.getHeight() + 30;
-                //root.setMaxHeight(newHeight);
-                //root.setPrefHeight(newHeight);
-                //root.setMinHeight(newHeight);
-                errorMessage.setPrefHeight(50);
+                // TODO: This keeps the window size even after switching to e.g. login
+                //view.getStage().setHeight(view.getStage().getHeight() + 30);
+                errorMessage.setPrefHeight(30);
             }
             Text text = ViewUtil.useText(translatorKey);
             text.setFill(Color.RED);
@@ -289,7 +289,7 @@ public class ServerConnectionController extends FXMLController {
     }
 
     @FXML
-    private void clickOnExit(ActionEvent event) {
+    private void clickOnExit() {
         Platform.exit();
     }
 
@@ -299,17 +299,17 @@ public class ServerConnectionController extends FXMLController {
      * @since 0.0.1
      */
     @FXML
-    private void clickOnChooseServer(ActionEvent event) {
+    private void clickOnChooseServer() {
         ServerEntity server = chooseServer.getSelectionModel().getSelectedItem();
         if (server == null || server.getIp() == null) {
             enableInputs();
-            ip.setText("");
+            ipOrDomain.setText("");
             port.setText("");
             secure.setSelected(false);
             connectAutomatically.setSelected(false);
         } else {
             disableInputs();
-            ip.setText(server.getIp());
+            ipOrDomain.setText(server.getIp());
             port.setText(Integer.toString(server.getPort()));
             secure.setSelected(server.isSecure());
             connectAutomatically.setSelected(server.isConnectAutomatically());
@@ -323,7 +323,7 @@ public class ServerConnectionController extends FXMLController {
      * @since 0.0.1
      */
     @FXML
-    private void clickOnConnect(ActionEvent event) {
+    private void clickOnConnect() {
         // Disable everything to prevent something while working on the data
         disableAll();
 
@@ -332,7 +332,7 @@ public class ServerConnectionController extends FXMLController {
             DatabaseUtil db = (DatabaseUtil) ServiceLocator.get("db");
 
             ServerEntity server = new ServerEntity(
-                ip.getText(),
+                ipOrDomain.getText(),
                 Integer.parseInt(port.getText()),
                 secure.isSelected(),
                 connectAutomatically.isSelected()
@@ -346,13 +346,13 @@ public class ServerConnectionController extends FXMLController {
                 ServiceLocator.add(socket);
                 ServerRepository.setToConnectAutomatically(server); // Make sure it's the only entry
             } catch (ConnectException e) {
-                enableAll();
+                enableAllIfNew();
                 setErrorMessage("gui.serverConnection.connect.connection");
             } catch (IOException e) {
-                enableAll();
+                enableAllIfNew();
                 setErrorMessage("gui.serverConnection.connect.failed");
             } catch (CertificateException | NoSuchAlgorithmException | UnrecoverableKeyException | KeyStoreException | KeyManagementException e) {
-                enableAll();
+                enableAllIfNew();
                 setErrorMessage("gui.serverConnection.connect.ssl");
             }
 
@@ -373,5 +373,9 @@ public class ServerConnectionController extends FXMLController {
 
     public JFXButton getConnect() {
         return connect;
+    }
+
+    public void setView(ServerConnectionView view) {
+        this.view = view;
     }
 }

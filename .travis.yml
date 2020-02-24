@@ -1,0 +1,42 @@
+os: linux
+dist: trusty
+language: java
+jdk:
+  - oraclejdk8
+services:
+  - docker
+
+notifications:
+  email: false
+
+# A peculiarity of dependency caching in Gradle means that to avoid uploading the cache after every build you need to
+# add the following lines to your .travis.yml:
+before_cache:
+  - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
+  - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
+cache:
+  directories:
+    - $HOME/.gradle/caches/
+    - $HOME/.gradle/wrapper/
+
+# Main run
+# CHMOD already done according to https://stackoverflow.com/questions/33820638
+install:
+  - ./gradlew :lib:assemble
+  - ./gradlew :server:assemble
+  - ./gradlew :client:assemble
+script:
+  - ./gradlew :lib:check
+  - ./gradlew :server:check
+  - ./gradlew :client:check
+
+deploy:
+  - provider: script
+    script: bash docker_push.sh
+    on:
+      branch: master
+
+  - provider: script
+    script: bash docker_push.sh
+    on:
+      branch: develop

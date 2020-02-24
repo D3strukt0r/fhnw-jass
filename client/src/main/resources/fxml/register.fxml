@@ -14,9 +14,8 @@
 <?import javafx.scene.control.SeparatorMenuItem?>
 <VBox xmlns="http://javafx.com/javafx/8.0.171"
       xmlns:fx="http://javafx.com/fxml/1"
-      styleClass="background-white"
       stylesheets="@../css/app.css"
-      prefWidth="350"
+      styleClass="background-white"
       fx:controller="org.orbitrondev.jass.client.Controller.RegisterController">
     <MenuBar>
         <Menu fx:id="mFile" text="gui.menu.file">
