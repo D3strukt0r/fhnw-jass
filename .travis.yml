@@ -31,12 +31,29 @@ script:
   - ./gradlew :client:check
 
 deploy:
+  # "latest" build
   - provider: script
     script: bash docker_push.sh
     on:
       branch: master
 
+  # "nightly" build
   - provider: script
     script: bash docker_push.sh
     on:
       branch: develop
+
+  # Versioned build
+  - provider: releases
+    api_key: $GITHUB_TOKEN
+    file_glob: true
+    file:
+      - "client/build/libs/*"
+      - "server/build/libs/*"
+    skip_cleanup: true
+    on:
+      tags: true
+  - provider: script
+    script: bash docker_push.sh
+    on:
+      tags: true

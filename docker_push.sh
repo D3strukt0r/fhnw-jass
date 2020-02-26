@@ -7,11 +7,12 @@ echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
 docker build -t jass .
 
 # Upload
-if [ "$TRAVIS_BRANCH" == "master" ]
-then
-      DOCKER_PUSH_TAG="latest"
+if [ "$TRAVIS_BRANCH" == "master" ]; then
+    DOCKER_PUSH_TAG="latest"
+elif [ "$TRAVIS_TAG" != "" ]; then
+    DOCKER_PUSH_TAG=$TRAVIS_TAG
 else
-      DOCKER_PUSH_TAG="nightly"
+    DOCKER_PUSH_TAG="nightly"
 fi
 
 docker tag jass "$DOCKER_USERNAME"/fhnw-jass:"$DOCKER_PUSH_TAG"
