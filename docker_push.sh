@@ -7,15 +7,16 @@ echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
 docker build -t jass .
 
 # Upload
+echo "Choosing tag to upload to... (Branch: '$TRAVIS_BRANCH' | Tag: '$TRAVIS_TAG')"
 if [ "$TRAVIS_BRANCH" == "master" ]; then
     DOCKER_PUSH_TAG="latest"
-elif [ "$TRAVIS_BRANCH" != "develop" ]; then
+elif [ "$TRAVIS_BRANCH" == "develop" ]; then
     DOCKER_PUSH_TAG="nightly"
 elif [ "$TRAVIS_TAG" != "" ]; then
     DOCKER_PUSH_TAG=$TRAVIS_TAG
 else
     echo "Skipping deployment because it's neither master, develop or a versioned build"
-    exit 0;
+    exit 1;
 fi
 
 docker tag jass "$DOCKER_USERNAME"/fhnw-jass:"$DOCKER_PUSH_TAG"
