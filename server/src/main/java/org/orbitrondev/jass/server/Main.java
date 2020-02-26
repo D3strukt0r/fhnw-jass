@@ -64,7 +64,7 @@ public class Main {
         }
 
         // Check for the ports argument
-        int port = 1024;
+        int port = 2000;
         if (cmd.hasOption("port")) {
             try {
                 port = Integer.parseInt(cmd.getOptionValue("port"));

@@ -20,5 +20,5 @@ COPY --from=build /home/gradle/src/server/build/libs/server-0.0.1.jar /app/jass-
 
 WORKDIR /app
 VOLUME ["/app/data"]
-EXPOSE 1024
+EXPOSE 2000
 ENTRYPOINT ["java", "-jar", "jass-server.jar"]
