@@ -9,10 +9,13 @@ docker build -t jass .
 # Upload
 if [ "$TRAVIS_BRANCH" == "master" ]; then
     DOCKER_PUSH_TAG="latest"
+elif [ "$TRAVIS_BRANCH" != "develop" ]; then
+    DOCKER_PUSH_TAG="nightly"
 elif [ "$TRAVIS_TAG" != "" ]; then
     DOCKER_PUSH_TAG=$TRAVIS_TAG
 else
-    DOCKER_PUSH_TAG="nightly"
+    echo "Skipping deployment because it's neither master, develop or a versioned build"
+    exit 0;
 fi
 
 docker tag jass "$DOCKER_USERNAME"/fhnw-jass:"$DOCKER_PUSH_TAG"
