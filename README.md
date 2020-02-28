@@ -10,31 +10,45 @@ These instructions will get you a copy of the project up and running on your loc
 
 What things you need to install the software and how to install them
 
-```
-Give examples
-```
+* [Oracle JDK 8](https://www.oracle.com/java/technologies/javase/javase-jdk8-downloads.html)
+* [JetBrains IntelliJ IDEA](https://www.jetbrains.com/de-de/idea/) (Preferred)
 
 ### Installing
 
-A step by step series of examples that tell you how to get a development env running
-
-Say what the step will be
-
+Get the project (through the console):
+```shell script
+$ git clone https://github.com/D3strukt0r/fhnw-jass.git
 ```
-Give the example
-```
-
-And repeat
-
-```
-until finished
+In case you want to change to the develop branch for the latest and greatest:
+```shell script
+$ git checkout develop
 ```
 
-End with an example of getting some data out of the system or using it for a little demo
+Now import the project to IntelliJ (from the start screen):
+1. `Import Project`
+2. Select the directory of the downloaded project
+3. `[OK]`
+4. `(o) Import project from external model`
+5. `Gradle`
+6. `[Finish]`
+In the popup that appears on the bottom right:
+7. `Import Gradle Project`
+
+(On Windows) If a message appears concerning "Windows Defender might be impacting your build performance":
+8. `Fix...` -> `Configure Automatically`
 
 ## Running the tests
 
-Explain how to run the automated tests for this system
+Through the terminal
+```shell script
+$ ./gradlew :lib:check
+$ ./gradlew :client:check
+$ ./gradlew :server:check
+```
+
+Through IntelliJ
+1. Click on the "Gradle" Tab on the top right
+2. Go to: `fhnw-jass` -> `client` (or `server`) -> `Tasks` -> `verification` -> `check`. And double-click.
 
 ### Break down into end to end tests
 
@@ -54,7 +68,29 @@ Give an example
 
 ## Deployment
 
-Add additional notes about how to deploy this on a live system
+### Docker
+
+This project uses Docker for easy deployment.
+
+Therefore you can use a `docker-compose.yml` file and then run `docker-compose up -d`
+```yaml
+version: '2'
+
+services:
+  jass:
+    image: d3strukt0r/fhnw-jass
+    restart: on-failure
+    command: --ssl --verbose
+    ports:
+      - 2000:2000
+    volumes:
+      - ./data:/app/data
+```
+Or just s simple command: `docker run -p 2000:2000 -v ./data:/app/data d3strukt0r/fhnw-jass`
+
+### `.jar` file
+
+Download the jar from the releases page and enter `java -jar server.jar` in the command line
 
 ## Built With
 
@@ -80,10 +116,10 @@ We use [SemVer](http://semver.org/) for versioning. For the versions available, 
 
 ## Authors
 
-* **Manuele Vaccari** - *Initial work, Basic Client and Server App, JSON Messaging* - [D3strukt0r](https://github.com/D3strukt0r)
-* **Victor Hargrave**
+* **Manuele Vaccari** - [D3strukt0r](https://github.com/D3strukt0r) - *Initial work, Basic Client and Server App (Server connection, Login, Register), JSON Messaging, CI/CD setup*
+* **Victor Hargrave** - [jokerengine](https://github.com/jokerengine)
 * **Sasa Trajkova** - [sasatrajkova](https://github.com/sasatrajkova)
-* **Thomas Weber**
+* **Thomas Weber** - [tjw52](https://github.com/tjw52)
 
 See also the list of [contributors](https://github.com/D3strukt0r/fhnw-jass/contributors) who participated in this project.
 
