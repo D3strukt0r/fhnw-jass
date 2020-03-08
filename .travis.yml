@@ -45,7 +45,7 @@ deploy:
 
   # Versioned build
   - provider: releases
-    api_key: $GITHUB_TOKEN
+    token: $GITHUB_TOKEN
     file_glob: true
     file:
       - "client/build/libs/*"
