@@ -35,6 +35,7 @@ In the popup that appears on the bottom right:
 7. `Import Gradle Project`
 
 (On Windows) If a message appears concerning "Windows Defender might be impacting your build performance":
+
 8. `Fix...` -> `Configure Automatically`
 
 ## Running the tests
