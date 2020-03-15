@@ -14,7 +14,7 @@
       stylesheets="@../css/app.css"
       xmlns="http://javafx.com/javafx/8.0.171"
       xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="org.orbitrondev.jass.client.FXML.DeleteAccountController">
+      fx:controller="jass.client.fxml.DeleteAccountController">
     <MenuBar>
         <Menu fx:id="mFile" text="gui.menu.file">
             <Menu fx:id="mFileChangeLanguage" text="gui.menu.file.changeLanguage" />

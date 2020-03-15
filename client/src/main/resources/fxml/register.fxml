@@ -16,7 +16,7 @@
       xmlns:fx="http://javafx.com/fxml/1"
       stylesheets="@../css/app.css"
       styleClass="background-white"
-      fx:controller="org.orbitrondev.jass.client.Controller.RegisterController">
+      fx:controller="jass.client.controller.RegisterController">
     <MenuBar>
         <Menu fx:id="mFile" text="gui.menu.file">
             <Menu fx:id="mFileChangeLanguage" text="gui.menu.file.changeLanguage" />

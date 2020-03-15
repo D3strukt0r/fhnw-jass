@@ -28,7 +28,7 @@ dependencies {
 
 // When running :server:run, where should it start?
 application {
-    mainClassName('org.orbitrondev.jass.server.Main')
+    mainClassName('jass.server.Main')
 }
 
 // When running :server:run, these arguments are included

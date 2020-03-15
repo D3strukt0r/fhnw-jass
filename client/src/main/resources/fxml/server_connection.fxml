@@ -17,7 +17,7 @@
       stylesheets="@../css/app.css"
       styleClass="background-white"
       fx:id="root"
-      fx:controller="org.orbitrondev.jass.client.Controller.ServerConnectionController">
+      fx:controller="jass.client.controller.ServerConnectionController">
     <MenuBar>
         <Menu fx:id="mFile" text="gui.menu.file">
             <Menu fx:id="mFileChangeLanguage" text="gui.menu.file.changeLanguage" />
