@@ -19,7 +19,7 @@
 package jass.client.view;
 
 import jass.client.controller.SplashController;
-import jass.client.fxml.FXMLView;
+import jass.client.mvc.View;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -35,7 +35,7 @@ import java.io.IOException;
  * @version %I%, %G%
  * @since 0.0.1
  */
-public class SplashView extends FXMLView {
+public class SplashView extends View {
     public SplashView(Stage stage) {
         super(stage);
         stage.initStyle(StageStyle.TRANSPARENT); // Also undecorated

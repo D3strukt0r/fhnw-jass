@@ -18,8 +18,8 @@
 
 package jass.client.utils;
 
-import jass.client.controller.DashboardController;
-import jass.client.model.DashboardModel;
+import jass.client.controller.LobbyController;
+import jass.client.model.LobbyModel;
 import jass.client.view.*;
 import javafx.application.Platform;
 import javafx.stage.Stage;
@@ -67,11 +67,8 @@ public class WindowUtil {
     public static void switchToDashboardWindow() {
         Platform.runLater(() -> {
             Stage stage = new Stage();
-            DashboardModel model = new DashboardModel();
-            DashboardView newView = new DashboardView(stage, model);
-            new DashboardController(model, newView);
-
-            newView.start();
+            LobbyView view = new LobbyView(stage);
+            view.start();
         });
     }
 }

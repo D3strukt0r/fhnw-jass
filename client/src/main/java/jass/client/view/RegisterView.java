@@ -25,7 +25,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
-import jass.client.fxml.FXMLView;
+import jass.client.mvc.View;
 import jass.client.utils.I18nUtil;
 
 import java.io.IOException;
@@ -37,7 +37,7 @@ import java.io.IOException;
  * @version %I%, %G%
  * @since 0.0.1
  */
-public class RegisterView extends FXMLView {
+public class RegisterView extends View {
     public RegisterView(Stage stage) {
         super(stage);
         stage.titleProperty().bind(I18nUtil.createStringBinding("gui.login.title"));

@@ -14,12 +14,14 @@
       stylesheets="@../css/app.css"
       xmlns="http://javafx.com/javafx/8.0.171"
       xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="jass.client.fxml.DeleteAccountController">
+      fx:controller="jass.client.controller.DeleteAccountController">
     <MenuBar>
         <Menu fx:id="mFile" text="gui.menu.file">
             <Menu fx:id="mFileChangeLanguage" text="gui.menu.file.changeLanguage" />
             <SeparatorMenuItem />
-            <MenuItem fx:id="mFileExit" text="gui.menu.file.exit" />
+            <MenuItem fx:id="mFileDisconnect" text="gui.menu.file.disconnect" onAction="#clickOnDisconnect" />
+            <SeparatorMenuItem />
+            <MenuItem fx:id="mFileExit" text="gui.menu.file.exit" onAction="#clickOnExit" />
         </Menu>
         <Menu fx:id="mEdit" text="gui.menu.edit">
             <MenuItem fx:id="mEditDelete" text="gui.menu.edit.delete" />
@@ -31,20 +33,19 @@
 
     <!-- navbar -->
     <HBox styleClass="navbar">
-        <Text fx:id="navbar" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="gui.deleteAccount.title" />
+        <Text fx:id="navbar" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="gui.deleteAccount.title2" />
     </HBox>
 
     <!-- body -->
     <VBox styleClass="custom-container">
         <VBox fx:id="errorMessage" prefHeight="0.0" />
-        <Region prefHeight="10.0" VBox.vgrow="ALWAYS" />
 
         <Text fx:id="message" strokeType="OUTSIDE" strokeWidth="0.0" text="gui.deleteAccount.message" />
         <Region prefHeight="20.0" VBox.vgrow="ALWAYS" />
 
-        <HBox>
-            <JFXButton fx:id="change" disable="true" styleClass="primary" text="gui.deleteAccount.delete" />
-            <JFXButton fx:id="cancel" styleClass="secondary" text="gui.deleteAccount.cancel" />
+        <HBox spacing="4">
+            <JFXButton fx:id="delete" disable="true" styleClass="primary" text="gui.deleteAccount.delete" onAction="#clickOnDelete" />
+            <JFXButton fx:id="cancel" styleClass="secondary" text="gui.deleteAccount.cancel" onAction="#clickOnCancel" />
         </HBox>
     </VBox>
 </VBox>
