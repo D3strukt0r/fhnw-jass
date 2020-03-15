@@ -18,13 +18,15 @@
 
 package jass.client.view;
 
-import jass.client.mvc.View;
-import jass.client.model.DashboardModel;
+import jass.client.fxml.FXMLView;
 import jass.client.utils.I18nUtil;
+import javafx.application.Platform;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.layout.*;
-import javafx.scene.text.Text;
 import javafx.stage.Stage;
+
+import java.io.IOException;
 
 /**
  * The dashboard view.
@@ -33,21 +35,25 @@ import javafx.stage.Stage;
  * @version %I%, %G%
  * @since 0.0.1
  */
-public class DashboardView extends View<DashboardModel> {
-    public DashboardView(Stage stage, DashboardModel model) {
-        super(stage, model);
+public class LobbyView extends FXMLView {
+    public LobbyView(Stage stage) {
+        super(stage);
         stage.titleProperty().bind(I18nUtil.createStringBinding("gui.dashboard.title"));
         stage.setMinHeight(300);
         stage.setMinWidth(400);
+
+        // Register ourselves to handle window-closing event
+        stage.setOnCloseRequest(event -> Platform.exit());
     }
 
     @Override
     protected Scene create_GUI() {
-        VBox root = new VBox();
-        Text text = new Text("Here will be the game...");
-        root.getChildren().addAll(text);
-        Scene scene = new Scene(root);
-        scene.getStylesheets().add(getClass().getResource("/css/app.css").toExternalForm());
-        return scene;
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/lobby.fxml"));
+            Parent root = loader.load();
+            return new Scene(root);
+        } catch (IOException e) {
+            return null;
+        }
     }
 }

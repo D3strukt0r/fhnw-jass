@@ -18,10 +18,10 @@
 
 package jass.client.controller;
 
-import jass.client.mvc.Controller;
-import jass.client.model.DashboardModel;
-import jass.client.view.DashboardView;
-import javafx.application.Platform;
+import jass.client.fxml.FXMLController;
+
+import java.net.URL;
+import java.util.ResourceBundle;
 
 /**
  * The controller for the dashboard (game) view.
@@ -30,16 +30,9 @@ import javafx.application.Platform;
  * @version %I%, %G%
  * @since 0.0.1
  */
-public class DashboardController extends Controller<DashboardModel, DashboardView> {
-    /**
-     * Initializes all event listeners for the view.
-     *
-     * @since 0.0.1
-     */
-    public DashboardController(DashboardModel model, DashboardView view) {
-        super(model, view);
-
-        // Register ourselves to handle window-closing event
-        view.getStage().setOnCloseRequest(event -> Platform.exit());
+public class LobbyController extends FXMLController {
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        // TODO: Do something
     }
 }
