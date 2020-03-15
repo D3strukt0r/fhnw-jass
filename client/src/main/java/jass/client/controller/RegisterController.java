@@ -34,14 +34,14 @@ import javafx.scene.text.Text;
 import jass.client.entity.LoginEntity;
 import jass.client.eventlistener.DisconnectEventListener;
 import jass.client.fxml.FXMLController;
-import jass.client.message.CreateLogin;
+import jass.client.message.Register;
 import jass.client.message.Login;
 import jass.client.utils.I18nUtil;
 import jass.client.utils.SocketUtil;
 import jass.client.utils.WindowUtil;
 import jass.client.utils.ViewUtil;
 import jass.client.view.RegisterView;
-import jass.lib.message.CreateLoginData;
+import jass.lib.message.RegisterData;
 import jass.lib.message.LoginData;
 import jass.lib.servicelocator.ServiceLocator;
 
@@ -272,10 +272,10 @@ public class RegisterController extends FXMLController implements DisconnectEven
             LoginEntity login = new LoginEntity(username.getText(), password.getText());
 
             SocketUtil backend = (SocketUtil) ServiceLocator.get("backend");
-            CreateLogin createLoginMsg = new CreateLogin(new CreateLoginData(login.getUsername(), login.getPassword()));
+            Register registerMsg = new Register(new RegisterData(login.getUsername(), login.getPassword()));
 
             // Try sending the register command.
-            if (createLoginMsg.process(backend)) {
+            if (registerMsg.process(backend)) {
                 Login loginMsg = new Login(new LoginData(login.getUsername(), login.getPassword()));
 
                 // If registered, try logging in now.
