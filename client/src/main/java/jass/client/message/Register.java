@@ -16,38 +16,38 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package jass.lib.message;
+package jass.client.message;
 
-import org.json.JSONObject;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import jass.client.utils.SocketUtil;
+import jass.lib.message.RegisterData;
+import jass.lib.message.MessageData;
+import jass.lib.message.ResultData;
 
 /**
- * The data model for the create login message.
+ * Register a user on the the server.
  *
  * @author Manuele Vaccari
  * @version %I%, %G%
  * @since 0.0.1
  */
-public class CreateLoginData extends MessageData {
-    private final String username;
-    private final String password;
+public class Register extends Message {
+    private static final Logger logger = LogManager.getLogger(Register.class);
+    private RegisterData data;
 
-    public CreateLoginData(String username, String password) {
-        super("CreateLogin");
-        this.username = username;
-        this.password = password;
+    public Register(MessageData rawData) {
+        super(rawData);
+        data = (RegisterData) rawData;
     }
 
-    public CreateLoginData(JSONObject data) {
-        super(data);
-        username = data.getString("username");
-        password = data.getString("password");
-    }
+    @Override
+    public boolean process(SocketUtil socket) {
+        socket.send(this);
 
-    public String getUsername() {
-        return username;
-    }
+        Message result = socket.waitForResultResponse(data.getId());
+        ResultData resultData = (ResultData) result.getRawData();
 
-    public String getPassword() {
-        return password;
+        return resultData.getResult();
     }
 }

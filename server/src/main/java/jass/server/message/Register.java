@@ -23,7 +23,7 @@ import jass.server.entity.UserRepository;
 import jass.server.utils.ClientUtil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import jass.lib.message.CreateLoginData;
+import jass.lib.message.RegisterData;
 import jass.lib.message.MessageData;
 import jass.lib.message.ResultData;
 
@@ -34,13 +34,13 @@ import jass.lib.message.ResultData;
  * @version %I%, %G%
  * @since 0.0.1
  */
-public class CreateLogin extends Message {
-    private static final Logger logger = LogManager.getLogger(CreateLogin.class);
-    private CreateLoginData data;
+public class Register extends Message {
+    private static final Logger logger = LogManager.getLogger(Register.class);
+    private RegisterData data;
 
-    public CreateLogin(MessageData rawData) {
+    public Register(MessageData rawData) {
         super(rawData);
-        data = (CreateLoginData) rawData;
+        data = (RegisterData) rawData;
     }
 
     /**
