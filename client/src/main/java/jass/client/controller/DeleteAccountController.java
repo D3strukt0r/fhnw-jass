@@ -18,14 +18,24 @@
 
 package jass.client.controller;
 
+import com.jfoenix.controls.JFXButton;
 import jass.client.entity.LoginEntity;
-import jass.client.mvc.Controller;
+import jass.client.fxml.FXMLController;
 import jass.client.message.DeleteLogin;
 import jass.client.message.Logout;
-import jass.client.model.DeleteAccountModel;
+import jass.client.utils.I18nUtil;
 import jass.client.utils.SocketUtil;
 import jass.client.view.DeleteAccountView;
 import javafx.application.Platform;
+import javafx.beans.binding.Bindings;
+import javafx.beans.binding.NumberBinding;
+import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.SimpleDoubleProperty;
+import javafx.fxml.FXML;
+import javafx.scene.control.Menu;
+import javafx.scene.control.MenuItem;
+import javafx.scene.input.KeyCombination;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import jass.client.utils.WindowUtil;
@@ -33,6 +43,11 @@ import jass.client.utils.ViewUtil;
 import jass.lib.message.DeleteLoginData;
 import jass.lib.message.LogoutData;
 import jass.lib.servicelocator.ServiceLocator;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import java.net.URL;
+import java.util.ResourceBundle;
 
 /**
  * The controller for the delete account view.
@@ -41,26 +56,69 @@ import jass.lib.servicelocator.ServiceLocator;
  * @version %I%, %G%
  * @since 0.0.1
  */
-public class DeleteAccountController extends Controller<DeleteAccountModel, DeleteAccountView> {
-    /**
-     * Initializes all event listeners for the view.
-     *
-     * @since 0.0.1
-     */
-    public DeleteAccountController(DeleteAccountModel model, DeleteAccountView view) {
-        super(model, view);
+public class DeleteAccountController extends FXMLController {
+    private static final Logger logger = LogManager.getLogger(DeleteAccountController.class);
+    private DeleteAccountView view;
 
-        // Register ourselves to listen for button clicks
-        view.getBtnDelete().setOnAction(event -> clickOnDelete());
+    @FXML
+    private VBox root;
 
-        // Register ourselves to listen for button clicks
-        view.getBtnCancel().setOnAction(event -> {
-            WindowUtil.switchToDashboardWindow();
-            view.stop();
-        });
+    @FXML
+    public Menu mFile;
+    @FXML
+    public Menu mFileChangeLanguage;
+    @FXML
+    public MenuItem mFileDisconnect;
+    @FXML
+    public MenuItem mFileExit;
+    @FXML
+    public Menu mEdit;
+    @FXML
+    public MenuItem mEditDelete;
+    @FXML
+    public Menu mHelp;
+    @FXML
+    public MenuItem mHelpAbout;
 
-        // Register ourselves to handle window-closing event
-        view.getStage().setOnCloseRequest(event -> Platform.exit());
+    @FXML
+    private Text navbar;
+
+    @FXML
+    private VBox errorMessage;
+    @FXML
+    private Text message;
+    @FXML
+    private JFXButton delete;
+    @FXML
+    private JFXButton cancel;
+
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        /*
+         * Bind all texts
+         */
+        mFile.textProperty().bind(I18nUtil.createStringBinding(mFile.getText()));
+        mFileChangeLanguage.textProperty().bind(I18nUtil.createStringBinding(mFileChangeLanguage.getText()));
+        ViewUtil.useLanguageMenuContent(mFileChangeLanguage);
+        mFileDisconnect.textProperty().bind(I18nUtil.createStringBinding(mFileDisconnect.getText()));
+        mFileExit.textProperty().bind(I18nUtil.createStringBinding(mFileExit.getText()));
+        mFileExit.setAccelerator(KeyCombination.keyCombination("Alt+F4"));
+
+        mEdit.textProperty().bind(I18nUtil.createStringBinding(mEdit.getText()));
+        mEditDelete.textProperty().bind(I18nUtil.createStringBinding(mEditDelete.getText()));
+
+        mHelp.textProperty().bind(I18nUtil.createStringBinding(mHelp.getText()));
+        mHelpAbout.textProperty().bind(I18nUtil.createStringBinding(mHelpAbout.getText()));
+
+        navbar.textProperty().bind(I18nUtil.createStringBinding(navbar.getText()));
+
+        message.textProperty().bind(I18nUtil.createStringBinding(message.getText()));
+        DoubleProperty padding = new SimpleDoubleProperty(40.0);
+        NumberBinding wrapping = Bindings.subtract(root.widthProperty(), padding);
+        message.wrappingWidthProperty().bind(wrapping);
+
+        delete.textProperty().bind(I18nUtil.createStringBinding(delete.getText()));
+        cancel.textProperty().bind(I18nUtil.createStringBinding(cancel.getText()));
     }
 
     /**
@@ -69,8 +127,8 @@ public class DeleteAccountController extends Controller<DeleteAccountModel, Dele
      * @since 0.0.1
      */
     public void disableAll() {
-        view.getBtnDelete().setDisable(true);
-        view.getBtnCancel().setDisable(true);
+        delete.setDisable(true);
+        cancel.setDisable(true);
     }
 
     /**
@@ -79,8 +137,8 @@ public class DeleteAccountController extends Controller<DeleteAccountModel, Dele
      * @since 0.0.1
      */
     public void enableAll() {
-        view.getBtnDelete().setDisable(false);
-        view.getBtnCancel().setDisable(false);
+        delete.setDisable(false);
+        cancel.setDisable(false);
     }
 
     /**
@@ -90,15 +148,30 @@ public class DeleteAccountController extends Controller<DeleteAccountModel, Dele
      */
     public void setErrorMessage(String translatorKey) {
         Platform.runLater(() -> {
-            if (view.getErrorMessage().getChildren().size() == 0) {
+            if (errorMessage.getChildren().size() == 0) {
                 // Make window larger, so it doesn't become crammed, only if we haven't done so yet
                 view.getStage().setHeight(view.getStage().getHeight() + 30);
             }
             Text text = ViewUtil.useText(translatorKey);
             text.setFill(Color.RED);
-            view.getErrorMessage().getChildren().clear();
-            view.getErrorMessage().getChildren().addAll(text, ViewUtil.useSpacer(20));
+            errorMessage.getChildren().clear();
+            errorMessage.getChildren().addAll(text, ViewUtil.useSpacer(20));
         });
+    }
+
+    @FXML
+    private void clickOnDisconnect() {
+        SocketUtil socket = (SocketUtil) ServiceLocator.get("backend");
+        if (socket != null) { // Not necessary but keeps IDE happy
+            socket.close();
+        }
+        ServiceLocator.remove("backend");
+        WindowUtil.switchToServerConnectionWindow();
+    }
+
+    @FXML
+    private void clickOnExit() {
+        Platform.exit();
     }
 
     /**
@@ -106,6 +179,7 @@ public class DeleteAccountController extends Controller<DeleteAccountModel, Dele
      *
      * @since 0.0.1
      */
+    @FXML
     public void clickOnDelete() {
         // Disable everything to prevent something while working on the data
         disableAll();
@@ -134,5 +208,19 @@ public class DeleteAccountController extends Controller<DeleteAccountModel, Dele
                 setErrorMessage("gui.deleteAccount.deleteFailed");
             }
         }).start();
+    }
+
+    @FXML
+    public void clickOnCancel() {
+        WindowUtil.switchToDashboardWindow();
+        view.stop();
+    }
+
+    public void setView(DeleteAccountView view) {
+        this.view = view;
+    }
+
+    public JFXButton getDelete() {
+        return delete;
     }
 }

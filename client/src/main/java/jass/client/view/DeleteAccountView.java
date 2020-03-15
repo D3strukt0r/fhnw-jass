@@ -18,16 +18,17 @@
 
 package jass.client.view;
 
-import com.jfoenix.controls.JFXButton;
-import jass.client.mvc.View;
-import jass.client.model.DeleteAccountModel;
+import jass.client.controller.DeleteAccountController;
+import jass.client.fxml.FXMLView;
 import jass.client.utils.I18nUtil;
+import javafx.application.Platform;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import jass.client.utils.ViewUtil;
+
+import java.io.IOException;
 
 /**
  * The delete account view.
@@ -36,87 +37,37 @@ import jass.client.utils.ViewUtil;
  * @version %I%, %G%
  * @since 0.0.1
  */
-public class DeleteAccountView extends View<DeleteAccountModel> {
-    private VBox errorMessage;
-    private JFXButton btnDelete;
-    private JFXButton btnCancel;
-
-    public DeleteAccountView(Stage stage, DeleteAccountModel model) {
-        super(stage, model);
+public class DeleteAccountView extends FXMLView {
+    public DeleteAccountView(Stage stage) {
+        super(stage);
         stage.titleProperty().bind(I18nUtil.createStringBinding("gui.deleteAccount.title"));
-        stage.setWidth(300);
         stage.setResizable(false);
+        stage.setWidth(300);
+
+        // Register ourselves to handle window-closing event
+        stage.setOnCloseRequest(event -> Platform.exit());
     }
 
     @Override
     protected Scene create_GUI() {
-        // Create root
-        VBox root = new VBox();
-        root.getStyleClass().add("background-white");
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/delete_account.fxml"));
+            Parent root = loader.load();
+            DeleteAccountController controller = loader.getController();
+            controller.setView(this);
 
-        // Create body
-        VBox body = new VBox();
-        body.getStyleClass().add("custom-container");
-
-        // Create error message container
-        errorMessage = new VBox();
-
-        // Create body
-        HBox btnRow = new HBox();
-        btnRow.setSpacing(4); // Otherwise the login and register are right beside each other
-
-        // Create button to register
-        btnDelete = ViewUtil.usePrimaryButton("gui.deleteAccount.delete");
-
-        // Create button to change
-        btnCancel = ViewUtil.useSecondaryButton("gui.deleteAccount.cancel");
-
-        // Add buttons to btnRow
-        btnRow.getChildren().addAll(
-            btnDelete,
-            ViewUtil.useHorizontalSpacer(1),
-            btnCancel
-        );
-
-        // Add body content to body
-        body.getChildren().addAll(
-            errorMessage,
-            ViewUtil.useSpacer(10),
-            ViewUtil.useText("gui.deleteAccount.message", stage),
-            ViewUtil.useSpacer(25),
-            btnRow
-        );
-
-        // Add body to root
-        root.getChildren().addAll(
-            ViewUtil.useDefaultMenuBar(),
-            ViewUtil.useNavBar("gui.changePassword.title"),
-            body
-        );
-
-        Scene scene = new Scene(root);
-        // https://stackoverflow.com/questions/29962395/how-to-write-a-keylistener-for-javafx
-        scene.setOnKeyPressed(event -> {
-            // Click the connect button by clicking ENTER
-            if (event.getCode() == KeyCode.ENTER) {
-                if (!btnDelete.isDisable()) {
-                    btnDelete.fire();
+            Scene scene = new Scene(root);
+            scene.setOnKeyPressed(event -> {
+                // Click the delete button by clicking ENTER
+                if (event.getCode() == KeyCode.ENTER) {
+                    if (!controller.getDelete().isDisable()) {
+                        controller.getDelete().fire();
+                    }
                 }
-            }
-        });
-        scene.getStylesheets().add(getClass().getResource("/css/app.css").toExternalForm());
-        return scene;
-    }
-
-    public VBox getErrorMessage() {
-        return errorMessage;
-    }
-
-    public JFXButton getBtnDelete() {
-        return btnDelete;
-    }
-
-    public JFXButton getBtnCancel() {
-        return btnCancel;
+            });
+            return scene;
+        } catch (IOException e) {
+            return null;
+        }
     }
 }
