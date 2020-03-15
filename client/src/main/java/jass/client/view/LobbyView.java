@@ -18,7 +18,7 @@
 
 package jass.client.view;
 
-import jass.client.fxml.FXMLView;
+import jass.client.mvc.View;
 import jass.client.utils.I18nUtil;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
@@ -35,7 +35,7 @@ import java.io.IOException;
  * @version %I%, %G%
  * @since 0.0.1
  */
-public class LobbyView extends FXMLView {
+public class LobbyView extends View {
     public LobbyView(Stage stage) {
         super(stage);
         stage.titleProperty().bind(I18nUtil.createStringBinding("gui.dashboard.title"));

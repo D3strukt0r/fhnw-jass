@@ -20,7 +20,7 @@ package jass.client.controller;
 
 import com.jfoenix.controls.JFXButton;
 import jass.client.entity.LoginEntity;
-import jass.client.fxml.FXMLController;
+import jass.client.mvc.Controller;
 import jass.client.message.DeleteLogin;
 import jass.client.message.Logout;
 import jass.client.utils.I18nUtil;
@@ -56,7 +56,7 @@ import java.util.ResourceBundle;
  * @version %I%, %G%
  * @since 0.0.1
  */
-public class DeleteAccountController extends FXMLController {
+public class DeleteAccountController extends Controller {
     private static final Logger logger = LogManager.getLogger(DeleteAccountController.class);
     private DeleteAccountView view;
 

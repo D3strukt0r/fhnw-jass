@@ -21,7 +21,7 @@ package jass.client.controller;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXPasswordField;
 import jass.client.entity.LoginEntity;
-import jass.client.fxml.FXMLController;
+import jass.client.mvc.Controller;
 import jass.client.message.ChangePassword;
 import jass.client.utils.I18nUtil;
 import jass.client.utils.SocketUtil;
@@ -52,7 +52,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * @version %I%, %G%
  * @since 0.0.1
  */
-public class ChangePasswordController extends FXMLController {
+public class ChangePasswordController extends Controller {
     private static final Logger logger = LogManager.getLogger(ChangePasswordController.class);
     private ChangePasswordView view;
 

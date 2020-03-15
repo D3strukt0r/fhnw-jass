@@ -3,7 +3,7 @@ package jass.client.controller;
 import com.jfoenix.controls.JFXProgressBar;
 import javafx.concurrent.Worker;
 import javafx.fxml.FXML;
-import jass.client.fxml.FXMLController;
+import jass.client.mvc.Controller;
 import jass.client.model.SplashModel;
 import jass.client.utils.WindowUtil;
 import jass.client.view.SplashView;
@@ -16,7 +16,7 @@ import java.util.ResourceBundle;
  *
  * @author Brad Richards
  */
-public class SplashController extends FXMLController {
+public class SplashController extends Controller {
     private SplashModel model;
     private SplashView view;
 

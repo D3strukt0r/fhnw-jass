@@ -18,7 +18,7 @@
 
 package jass.client.controller;
 
-import jass.client.fxml.FXMLController;
+import jass.client.mvc.Controller;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -30,7 +30,7 @@ import java.util.ResourceBundle;
  * @version %I%, %G%
  * @since 0.0.1
  */
-public class LobbyController extends FXMLController {
+public class LobbyController extends Controller {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         // TODO: Do something

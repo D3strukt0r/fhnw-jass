@@ -33,7 +33,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import jass.client.entity.LoginEntity;
 import jass.client.eventlistener.DisconnectEventListener;
-import jass.client.fxml.FXMLController;
+import jass.client.mvc.Controller;
 import jass.client.message.Register;
 import jass.client.message.Login;
 import jass.client.utils.I18nUtil;
@@ -56,7 +56,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * @version %I%, %G%
  * @since 0.0.1
  */
-public class RegisterController extends FXMLController implements DisconnectEventListener {
+public class RegisterController extends Controller implements DisconnectEventListener {
     private RegisterView view;
 
     @FXML

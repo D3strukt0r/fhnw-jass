@@ -39,7 +39,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import jass.client.entity.ServerEntity;
 import jass.client.entity.ServerRepository;
-import jass.client.fxml.FXMLController;
+import jass.client.mvc.Controller;
 import jass.client.utils.SocketUtil;
 import jass.client.utils.DatabaseUtil;
 import jass.client.utils.I18nUtil;
@@ -67,7 +67,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * @version %I%, %G%
  * @since 0.0.1
  */
-public class ServerConnectionController extends FXMLController {
+public class ServerConnectionController extends Controller {
     private static final Logger logger = LogManager.getLogger(ServerConnectionController.class);
     private ServerConnectionView view;
 

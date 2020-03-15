@@ -33,7 +33,7 @@ import org.apache.logging.log4j.Logger;
 import jass.client.entity.LoginEntity;
 import jass.client.entity.LoginRepository;
 import jass.client.eventlistener.DisconnectEventListener;
-import jass.client.fxml.FXMLController;
+import jass.client.mvc.Controller;
 import jass.client.message.Login;
 import jass.client.utils.DatabaseUtil;
 import jass.client.utils.I18nUtil;
@@ -56,7 +56,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * @version %I%, %G%
  * @since 0.0.1
  */
-public class LoginController extends FXMLController implements DisconnectEventListener {
+public class LoginController extends Controller implements DisconnectEventListener {
     private static final Logger logger = LogManager.getLogger(LoginController.class);
     private LoginView view;
 
