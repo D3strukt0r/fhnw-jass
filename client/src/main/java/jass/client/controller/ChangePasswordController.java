@@ -18,20 +18,31 @@
 
 package jass.client.controller;
 
+import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXPasswordField;
 import jass.client.entity.LoginEntity;
-import jass.client.mvc.Controller;
+import jass.client.fxml.FXMLController;
 import jass.client.message.ChangePassword;
-import jass.client.model.ChangePasswordModel;
+import jass.client.utils.I18nUtil;
 import jass.client.utils.SocketUtil;
 import jass.client.view.ChangePasswordView;
 import javafx.application.Platform;
+import javafx.fxml.FXML;
+import javafx.scene.control.Menu;
+import javafx.scene.control.MenuItem;
+import javafx.scene.input.KeyCombination;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import jass.client.utils.WindowUtil;
 import jass.client.utils.ViewUtil;
 import jass.lib.message.ChangePasswordData;
 import jass.lib.servicelocator.ServiceLocator;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
+import java.net.URL;
+import java.util.ResourceBundle;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
@@ -41,54 +52,114 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * @version %I%, %G%
  * @since 0.0.1
  */
-public class ChangePasswordController extends Controller<ChangePasswordModel, ChangePasswordView> {
-    /**
-     * Initializes all event listeners for the view.
-     *
-     * @since 0.0.1
-     */
-    public ChangePasswordController(ChangePasswordModel model, ChangePasswordView view) {
-        super(model, view);
+public class ChangePasswordController extends FXMLController {
+    private static final Logger logger = LogManager.getLogger(ChangePasswordController.class);
+    private ChangePasswordView view;
 
-        // Register ourselves to listen for button clicks
-        view.getBtnChange().setOnAction(event -> clickOnChange());
-        view.getBtnCancel().setOnAction(event -> {
-            WindowUtil.switchToDashboardWindow();
-            view.stop();
-        });
+    @FXML
+    public Menu mFile;
+    @FXML
+    public Menu mFileChangeLanguage;
+    @FXML
+    public MenuItem mFileDisconnect;
+    @FXML
+    public MenuItem mFileExit;
+    @FXML
+    public Menu mEdit;
+    @FXML
+    public MenuItem mEditDelete;
+    @FXML
+    public Menu mHelp;
+    @FXML
+    public MenuItem mHelpAbout;
 
-        // Disable/Enable the login button depending on if the inputs are valid
+    @FXML
+    private Text navbar;
+    @FXML
+    private VBox errorMessage;
+    @FXML
+    private JFXPasswordField oldPassword;
+    @FXML
+    private JFXPasswordField newPassword;
+    @FXML
+    private JFXPasswordField repeatNewPassword;
+    @FXML
+    private JFXButton change;
+    @FXML
+    private JFXButton cancel;
+
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        /*
+         * Bind all texts
+         */
+        mFile.textProperty().bind(I18nUtil.createStringBinding(mFile.getText()));
+        mFileChangeLanguage.textProperty().bind(I18nUtil.createStringBinding(mFileChangeLanguage.getText()));
+        ViewUtil.useLanguageMenuContent(mFileChangeLanguage);
+        mFileDisconnect.textProperty().bind(I18nUtil.createStringBinding(mFileDisconnect.getText()));
+        mFileExit.textProperty().bind(I18nUtil.createStringBinding(mFileExit.getText()));
+        mFileExit.setAccelerator(KeyCombination.keyCombination("Alt+F4"));
+
+        mEdit.textProperty().bind(I18nUtil.createStringBinding(mEdit.getText()));
+        mEditDelete.textProperty().bind(I18nUtil.createStringBinding(mEditDelete.getText()));
+
+        mHelp.textProperty().bind(I18nUtil.createStringBinding(mHelp.getText()));
+        mHelpAbout.textProperty().bind(I18nUtil.createStringBinding(mHelpAbout.getText()));
+
+        navbar.textProperty().bind(I18nUtil.createStringBinding(navbar.getText()));
+
+        oldPassword.promptTextProperty().bind(I18nUtil.createStringBinding(oldPassword.getPromptText()));
+        newPassword.promptTextProperty().bind(I18nUtil.createStringBinding(newPassword.getPromptText()));
+        repeatNewPassword.promptTextProperty().bind(I18nUtil.createStringBinding(repeatNewPassword.getPromptText()));
+
+        change.textProperty().bind(I18nUtil.createStringBinding(change.getText()));
+        cancel.textProperty().bind(I18nUtil.createStringBinding(cancel.getText()));
+
+        /*
+         * Disable/Enable the "Change"-button depending on if the inputs are valid
+         */
         AtomicBoolean oldPasswordValid = new AtomicBoolean(false);
         AtomicBoolean newPasswordValid = new AtomicBoolean(false);
         AtomicBoolean repeatNewPasswordValid = new AtomicBoolean(false);
         Runnable updateButtonClickable = () -> {
             if (!oldPasswordValid.get() || !newPasswordValid.get() || !repeatNewPasswordValid.get()) {
-                view.getBtnChange().setDisable(true);
+                change.setDisable(true);
             } else {
-                view.getBtnChange().setDisable(false);
+                change.setDisable(false);
             }
         };
-        view.getOldPassword().textProperty().addListener((o, oldVal, newVal) -> {
+        oldPassword.textProperty().addListener((o, oldVal, newVal) -> {
             if (!oldVal.equals(newVal)) {
-                oldPasswordValid.set(view.getOldPassword().validate());
+                oldPasswordValid.set(oldPassword.validate());
                 updateButtonClickable.run();
             }
         });
-        view.getNewPassword().textProperty().addListener((o, oldVal, newVal) -> {
+        newPassword.textProperty().addListener((o, oldVal, newVal) -> {
             if (!oldVal.equals(newVal)) {
-                newPasswordValid.set(view.getNewPassword().validate());
+                newPasswordValid.set(newPassword.validate());
                 updateButtonClickable.run();
             }
         });
-        view.getRepeatNewPassword().textProperty().addListener((o, oldVal, newVal) -> {
+        repeatNewPassword.textProperty().addListener((o, oldVal, newVal) -> {
             if (!oldVal.equals(newVal)) {
-                repeatNewPasswordValid.set(view.getRepeatNewPassword().validate());
+                repeatNewPasswordValid.set(repeatNewPassword.validate());
                 updateButtonClickable.run();
             }
         });
 
-        // Register ourselves to handle window-closing event
-        view.getStage().setOnCloseRequest(event -> Platform.exit());
+        /*
+         * Validate input fields
+         */
+        oldPassword.getValidators().addAll(
+            ViewUtil.useRequiredValidator("gui.changePassword.oldPassword.empty")
+        );
+        newPassword.getValidators().addAll(
+            ViewUtil.useRequiredValidator("gui.changePassword.newPassword.empty")
+        );
+        repeatNewPassword.getValidators().addAll(
+            ViewUtil.useRequiredValidator("gui.changePassword.repeatNewPassword.empty"),
+            ViewUtil.useIsSameValidator(newPassword, "gui.changePassword.repeatNewPassword.notSame")
+        );
     }
 
     /**
@@ -97,9 +168,9 @@ public class ChangePasswordController extends Controller<ChangePasswordModel, Ch
      * @since 0.0.1
      */
     public void disableInputs() {
-        view.getOldPassword().setDisable(true);
-        view.getNewPassword().setDisable(true);
-        view.getRepeatNewPassword().setDisable(true);
+        oldPassword.setDisable(true);
+        newPassword.setDisable(true);
+        repeatNewPassword.setDisable(true);
     }
 
     /**
@@ -109,8 +180,8 @@ public class ChangePasswordController extends Controller<ChangePasswordModel, Ch
      */
     public void disableAll() {
         disableInputs();
-        view.getBtnChange().setDisable(true);
-        view.getBtnCancel().setDisable(true);
+        change.setDisable(true);
+        cancel.setDisable(true);
     }
 
     /**
@@ -119,9 +190,9 @@ public class ChangePasswordController extends Controller<ChangePasswordModel, Ch
      * @since 0.0.1
      */
     public void enableInputs() {
-        view.getOldPassword().setDisable(false);
-        view.getNewPassword().setDisable(false);
-        view.getRepeatNewPassword().setDisable(false);
+        oldPassword.setDisable(false);
+        newPassword.setDisable(false);
+        repeatNewPassword.setDisable(false);
     }
 
     /**
@@ -131,8 +202,8 @@ public class ChangePasswordController extends Controller<ChangePasswordModel, Ch
      */
     public void enableAll() {
         enableInputs();
-        view.getBtnChange().setDisable(false);
-        view.getBtnCancel().setDisable(false);
+        change.setDisable(false);
+        cancel.setDisable(false);
     }
 
     /**
@@ -142,15 +213,30 @@ public class ChangePasswordController extends Controller<ChangePasswordModel, Ch
      */
     public void setErrorMessage(String translatorKey) {
         Platform.runLater(() -> {
-            if (view.getErrorMessage().getChildren().size() == 0) {
+            if (errorMessage.getChildren().size() == 0) {
                 // Make window larger, so it doesn't become crammed, only if we haven't done so yet
-                view.getStage().setHeight(view.getStage().getHeight() + 30);
+                errorMessage.setPrefHeight(50);
             }
             Text text = ViewUtil.useText(translatorKey);
             text.setFill(Color.RED);
-            view.getErrorMessage().getChildren().clear();
-            view.getErrorMessage().getChildren().addAll(text, ViewUtil.useSpacer(20));
+            errorMessage.getChildren().clear();
+            errorMessage.getChildren().addAll(text, ViewUtil.useSpacer(20));
         });
+    }
+
+    @FXML
+    private void clickOnDisconnect() {
+        SocketUtil socket = (SocketUtil) ServiceLocator.get("backend");
+        if (socket != null) { // Not necessary but keeps IDE happy
+            socket.close();
+        }
+        ServiceLocator.remove("backend");
+        WindowUtil.switchToServerConnectionWindow();
+    }
+
+    @FXML
+    private void clickOnExit() {
+        Platform.exit();
     }
 
     /**
@@ -159,6 +245,7 @@ public class ChangePasswordController extends Controller<ChangePasswordModel, Ch
      *
      * @since 0.0.1
      */
+    @FXML
     public void clickOnChange() {
         // Disable everything to prevent changing data while working on the data
         disableAll();
@@ -166,7 +253,7 @@ public class ChangePasswordController extends Controller<ChangePasswordModel, Ch
         // Connection would freeze window (and the animations) so do it in a different thread.
         new Thread(() -> {
             LoginEntity login = (LoginEntity) ServiceLocator.get("login");
-            LoginEntity newLogin = new LoginEntity(login.getUsername(), view.getNewPassword().getText(), login.getToken());
+            LoginEntity newLogin = new LoginEntity(login.getUsername(), newPassword.getText(), login.getToken());
 
             SocketUtil backend = (SocketUtil) ServiceLocator.get("backend");
             ChangePassword changePasswordMsg = new ChangePassword(new ChangePasswordData(login.getToken(), newLogin.getPassword()));
@@ -182,5 +269,19 @@ public class ChangePasswordController extends Controller<ChangePasswordModel, Ch
                 setErrorMessage("gui.changePassword.changeFailed");
             }
         }).start();
+    }
+
+    @FXML
+    public void clickOnCancel() {
+        WindowUtil.switchToDashboardWindow();
+        view.stop();
+    }
+
+    public void setView(ChangePasswordView view) {
+        this.view = view;
+    }
+
+    public JFXButton getChange() {
+        return change;
     }
 }
