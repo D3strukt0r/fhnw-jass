@@ -1,4 +1,4 @@
-package jass.server.utils;
+package jass.server.util;
 
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;

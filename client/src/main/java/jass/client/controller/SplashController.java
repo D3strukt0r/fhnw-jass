@@ -5,7 +5,7 @@ import javafx.concurrent.Worker;
 import javafx.fxml.FXML;
 import jass.client.mvc.Controller;
 import jass.client.model.SplashModel;
-import jass.client.utils.WindowUtil;
+import jass.client.util.WindowUtil;
 import jass.client.view.SplashView;
 
 import java.net.URL;

@@ -20,7 +20,7 @@ package jass.client.view;
 
 import jass.client.controller.ChangePasswordController;
 import jass.client.mvc.View;
-import jass.client.utils.I18nUtil;
+import jass.client.util.I18nUtil;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;

@@ -16,7 +16,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package jass.client.utils;
+package jass.client.util;
 
 import jass.client.message.Message;
 import org.apache.logging.log4j.LogManager;

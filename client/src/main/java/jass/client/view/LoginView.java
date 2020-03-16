@@ -26,7 +26,7 @@ import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
 import jass.client.mvc.View;
-import jass.client.utils.I18nUtil;
+import jass.client.util.I18nUtil;
 
 import java.io.IOException;
 

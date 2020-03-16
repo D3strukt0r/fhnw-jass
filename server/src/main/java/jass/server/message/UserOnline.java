@@ -21,8 +21,8 @@ package jass.server.message;
 import jass.lib.message.MessageData;
 import jass.lib.message.ResultData;
 import jass.lib.message.UserOnlineData;
-import jass.server.utils.ClientUtil;
-import jass.server.utils.ServerSocketUtil;
+import jass.server.util.ClientUtil;
+import jass.server.util.ServerSocketUtil;
 
 /**
  * Checks if a user is currently connected.

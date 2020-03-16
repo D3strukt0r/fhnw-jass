@@ -6,7 +6,7 @@ import org.apache.commons.cli.*;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.core.LoggerContext;
-import jass.client.utils.WindowUtil;
+import jass.client.util.WindowUtil;
 
 /**
  * The main class for the client application.

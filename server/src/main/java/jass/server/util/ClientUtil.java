@@ -16,7 +16,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package jass.server.utils;
+package jass.server.util;
 
 import jass.server.entity.UserEntity;
 import jass.server.message.Message;
@@ -131,6 +131,8 @@ public class ClientUtil extends Thread {
         clientReachable = false;
         token = null;
         user = null;
+
+        // TODO: Remove the user from searching games or close down the whole game if inside.
 
         // Free up RAM by deleting disconnected clients.
         ServerSocketUtil.remove(this);

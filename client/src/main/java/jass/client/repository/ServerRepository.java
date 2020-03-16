@@ -16,44 +16,45 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package jass.client.entity;
+package jass.client.repository;
 
-import jass.client.utils.DatabaseUtil;
+import jass.client.entity.ServerEntity;
+import jass.client.util.DatabaseUtil;
 import jass.lib.servicelocator.ServiceLocator;
 
 import java.sql.SQLException;
 
 /**
- * Helper functions concerning the LoginEntity class.
+ * Helper functions concerning the ServerEntity class.
  *
  * @author Manuele Vaccari
  * @version %I%, %G%
  * @since 0.0.1
  */
-public class LoginRepository {
+public class ServerRepository {
     /**
-     * Sets the given login to connect automatically and disables all other logins.
+     * Sets the given server to connect automatically and disables all other connections.
      *
-     * @param login A LoginEntity object
+     * @param server A ServerEntity object
      *
      * @return "true" if everything went alright, "false" if something failed.
      */
-    public static boolean setToConnectAutomatically(LoginEntity login) {
+    public static boolean setToConnectAutomatically(ServerEntity server) {
         DatabaseUtil db = (DatabaseUtil) ServiceLocator.get("db");
         if (db == null) {
             return false;
         }
         try {
-            for (LoginEntity l : db.getLoginDao()) {
+            for (ServerEntity s : db.getServerDao()) {
                 // Disable the other entry (should be only one)
-                if (l.isConnectAutomatically()) {
-                    l.setConnectAutomatically(false);
-                    db.getLoginDao().update(l);
+                if (s.isConnectAutomatically()) {
+                    s.setConnectAutomatically(false);
+                    db.getServerDao().update(s);
                 }
                 // Set the new entry to connect automatically (if it is already in the db)
-                if (l.getId() == login.getId()) {
-                    login.setConnectAutomatically(true);
-                    db.getLoginDao().update(login);
+                if (s.getId() == server.getId()) {
+                    server.setConnectAutomatically(true);
+                    db.getServerDao().update(server);
                 }
             }
             return true;
@@ -62,14 +63,14 @@ public class LoginRepository {
         }
     }
 
-    public static LoginEntity findConnectAutomatically() {
+    public static ServerEntity findConnectAutomatically() {
         DatabaseUtil db = (DatabaseUtil) ServiceLocator.get("db");
         if (db == null) {
             return null;
         }
-        for (LoginEntity l : db.getLoginDao()) {
-            if (l.isConnectAutomatically()) {
-                return l;
+        for (ServerEntity s : db.getServerDao()) {
+            if (s.isConnectAutomatically()) {
+                return s;
             }
         }
         return null;

@@ -19,7 +19,7 @@
 package jass.client.message;
 
 import jass.client.entity.LoginEntity;
-import jass.client.utils.SocketUtil;
+import jass.client.util.SocketUtil;
 import jass.lib.message.LoginData;
 import jass.lib.message.MessageData;
 import jass.lib.message.ResultData;

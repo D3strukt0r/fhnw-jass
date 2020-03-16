@@ -20,7 +20,7 @@ package jass.server.message;
 
 import jass.lib.message.MessageData;
 import jass.lib.message.MessageErrorData;
-import jass.server.utils.ClientUtil;
+import jass.server.util.ClientUtil;
 
 /**
  * Empty error message, because of inexisting command.

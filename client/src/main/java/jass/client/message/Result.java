@@ -18,7 +18,7 @@
 
 package jass.client.message;
 
-import jass.client.utils.SocketUtil;
+import jass.client.util.SocketUtil;
 import jass.lib.message.MessageData;
 
 /**

@@ -16,10 +16,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package jass.client.utils;
+package jass.client.util;
 
-import jass.client.controller.LobbyController;
-import jass.client.model.LobbyModel;
 import jass.client.view.*;
 import javafx.application.Platform;
 import javafx.stage.Stage;

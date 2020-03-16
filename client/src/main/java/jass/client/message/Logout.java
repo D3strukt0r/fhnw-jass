@@ -20,7 +20,7 @@ package jass.client.message;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import jass.client.utils.SocketUtil;
+import jass.client.util.SocketUtil;
 import jass.lib.message.MessageData;
 import jass.lib.message.ResultData;
 

@@ -20,7 +20,7 @@ package jass.server.message;
 
 import jass.lib.message.MessageData;
 import jass.lib.message.ResultData;
-import jass.server.utils.ClientUtil;
+import jass.server.util.ClientUtil;
 
 /**
  * Logs out a user from the current connection.

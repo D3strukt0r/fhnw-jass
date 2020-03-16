@@ -18,8 +18,8 @@
 
 package jass.server;
 
-import jass.server.utils.DatabaseUtil;
-import jass.server.utils.ServerSocketUtil;
+import jass.server.util.DatabaseUtil;
+import jass.server.util.ServerSocketUtil;
 import org.apache.commons.cli.*;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;

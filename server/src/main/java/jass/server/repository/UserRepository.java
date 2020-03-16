@@ -16,10 +16,11 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package jass.server.entity;
+package jass.server.repository;
 
 import jass.lib.servicelocator.ServiceLocator;
-import jass.server.utils.DatabaseUtil;
+import jass.server.entity.UserEntity;
+import jass.server.util.DatabaseUtil;
 
 import java.sql.SQLException;
 import java.util.List;

@@ -16,16 +16,15 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package jass.client.utils;
+package jass.server.util;
 
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.dao.DaoManager;
 import com.j256.ormlite.jdbc.JdbcConnectionSource;
 import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.TableUtils;
-import jass.client.entity.LoginEntity;
-import jass.client.entity.ServerEntity;
 import jass.lib.servicelocator.Service;
+import jass.server.entity.UserEntity;
 
 import java.io.Closeable;
 import java.io.IOException;
@@ -34,6 +33,9 @@ import java.sql.SQLException;
 /**
  * A class to create a database connection.
  *
+ * Also contains a lot of code from following example code:
+ * https://github.com/j256/ormlite-jdbc/blob/master/src/test/java/com/j256/ormlite/examples/manytomany/ManyToManyMain.java
+ *
  * @author Manuele Vaccari
  * @version %I%, %G%
  * @since 0.0.1
@@ -41,8 +43,7 @@ import java.sql.SQLException;
 public class DatabaseUtil implements Service, Closeable {
     private ConnectionSource connectionSource;
 
-    private Dao<LoginEntity, String> loginDao;
-    private Dao<ServerEntity, String> serverDao;
+    private Dao<UserEntity, String> userDao;
 
     /**
      * Create a database connection
@@ -52,13 +53,13 @@ public class DatabaseUtil implements Service, Closeable {
      * @since 0.0.1
      */
     public DatabaseUtil(String databaseLocation) throws SQLException {
-        // this uses h2 but you can change it to match your database
+        // This uses h2 but you can change it to match your database
         String databaseUrl = "jdbc:sqlite:" + databaseLocation;
 
-        // create our data-source for the database
+        // Create our data-source for the database
         connectionSource = new JdbcConnectionSource(databaseUrl);
 
-        // setup our database and DAOs
+        // Setup our database and DAOs
         setupDatabase();
     }
 
@@ -73,14 +74,12 @@ public class DatabaseUtil implements Service, Closeable {
         /*
          * Create our DAOs. One for each class and associated table.
          */
-        loginDao = DaoManager.createDao(connectionSource, LoginEntity.class);
-        serverDao = DaoManager.createDao(connectionSource, ServerEntity.class);
+        userDao = DaoManager.createDao(connectionSource, UserEntity.class);
 
         /*
          * Create the tables, if they don't exist yet.
          */
-        TableUtils.createTableIfNotExists(connectionSource, LoginEntity.class);
-        TableUtils.createTableIfNotExists(connectionSource, ServerEntity.class);
+        TableUtils.createTableIfNotExists(connectionSource, UserEntity.class);
     }
 
     /**
@@ -92,29 +91,19 @@ public class DatabaseUtil implements Service, Closeable {
     public void close() {
         if (connectionSource != null) try {
             connectionSource.close();
-        } catch (IOException e) {
-            // we don't care
-        }
+        } catch (IOException e) { /* Ignore */ }
     }
 
     /**
-     * @return DAO object for the saved logins
+     * @return DAO object for the users
      *
-     * @since 0.0.2
+     * @since 0.0.1
      */
-    public Dao<LoginEntity, String> getLoginDao() {
-        return loginDao;
+    public Dao<UserEntity, String> getUserDao() {
+        return userDao;
     }
 
-    /**
-     * @return DAO object for the saved servers
-     *
-     * @since 0.0.2
-     */
-    public Dao<ServerEntity, String> getServerDao() {
-        return serverDao;
-    }
-
+    // For the ServiceLocator
     @Override
     public String getServiceName() {
         return "db";
