@@ -104,7 +104,7 @@ public class UserEntity {
 
     public void setPassword(String password) {
         try {
-            this.password = HashUtil.generateStorngPasswordHash(password);
+            this.password = HashUtil.generateStrongPasswordHash(password);
         } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
             logger.fatal("Secure password hashing not possible - stopping server");
             System.exit(0);
