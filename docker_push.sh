@@ -19,5 +19,5 @@ else
     exit 1;
 fi
 
-docker tag jass "$DOCKER_USERNAME"/fhnw-jass:"$DOCKER_PUSH_TAG"
-docker push "$DOCKER_USERNAME"/fhnw-jass:"$DOCKER_PUSH_TAG"
+docker tag jass "$DOCKER_USERNAME"/fhnw-jass-server:"$DOCKER_PUSH_TAG"
+docker push "$DOCKER_USERNAME"/fhnw-jass-server:"$DOCKER_PUSH_TAG"
