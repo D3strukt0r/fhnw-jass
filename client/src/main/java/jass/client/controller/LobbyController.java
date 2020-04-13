@@ -19,6 +19,7 @@
 package jass.client.controller;
 
 import jass.client.mvc.Controller;
+import javafx.event.ActionEvent;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -34,5 +35,9 @@ public class LobbyController extends Controller {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         // TODO: Do something
+    }
+
+    public void clickOnSearchGame(ActionEvent actionEvent) {
+        System.out.println("search");
     }
 }
