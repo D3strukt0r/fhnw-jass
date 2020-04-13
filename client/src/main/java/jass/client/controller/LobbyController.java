@@ -40,7 +40,7 @@ import java.util.ResourceBundle;
  * @since 0.0.1
  */
 public class LobbyController extends Controller {
-    private static final Logger logger = LogManager.getLogger(LoginController.class);
+    private static final Logger logger = LogManager.getLogger(LobbyController.class);
     // GameService gameService
 
 
@@ -53,7 +53,8 @@ public class LobbyController extends Controller {
         // Get token and initialize SearchGame Message
         LoginEntity login = (LoginEntity) ServiceLocator.get("login");
         String token = login.getToken();
-        SearchGame searchGameMsg = new SearchGame(new SearchGameData(token));
+        String userName = login.getUsername();
+        SearchGame searchGameMsg = new SearchGame(new SearchGameData(token, userName));
         SocketUtil backend = (SocketUtil) ServiceLocator.get("backend");
 
         // Send SearchGame Message to Server

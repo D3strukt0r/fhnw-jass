@@ -5,7 +5,10 @@ import jass.lib.message.SearchGameData;
 import jass.lib.message.MessageData;
 import jass.lib.message.ResultData;
 import jass.lib.message.SearchGameData;
+import jass.lib.servicelocator.ServiceLocator;
 import jass.server.util.ClientUtil;
+import jass.server.util.SearchGameUtil;
+import jass.server.util.ServerSocketUtil;
 
 /**
  * Adds a client to the lobby waiting list
@@ -30,7 +33,11 @@ public class SearchGame extends Message {
         // Only continue if the user has the right token.
         if (client.getToken() != null && client.getToken().equals(data.getToken())) {
             // Check if there is anyone connected with the given username.
-            System.out.println(client.getToken());
+            result = ServerSocketUtil.exists(data.getUsername());
+            if(result) {
+                SearchGameUtil sGU = (SearchGameUtil) ServiceLocator.get("SearchGameUtil");
+                sGU.addClientToSearchGame(client);
+            }
         }
 
         client.send(new Result(new ResultData(data.getId(), result)));

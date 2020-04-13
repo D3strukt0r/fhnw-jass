@@ -10,18 +10,25 @@ import org.json.JSONObject;
 
 public class SearchGameData extends MessageData {
     private final String token;
+    private final String username;
 
-    public SearchGameData(String token) {
+    public SearchGameData(String token, String username) {
         super("SearchGame");
         this.token = token;
+        this.username = username;
     }
 
     public SearchGameData(JSONObject data) {
         super(data);
         token = data.getString("token");
+        username = data.getString("username");
     }
 
     public String getToken() {
         return token;
+    }
+
+    public String getUsername() {
+        return username;
     }
 }
