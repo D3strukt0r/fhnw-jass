@@ -49,11 +49,24 @@ import java.sql.SQLException;
  * @since 0.0.1
  */
 public class Main {
+    /**
+     * The logger to print to console and save in a .log file.
+     */
     private static final Logger logger = LogManager.getLogger(Main.class);
+
+    /**
+     * The location of the database storage.
+     */
     public static String dbLocation = "data/jass_server.sqlite3";
 
+    /**
+     * The default port of the server.
+     */
     public static final int DEFAULT_PORT = 2000;
 
+    /**
+     * @param args The arguments passed in the console.
+     */
     public static void main(final String[] args) {
         // Create all arguments for the command line interface
         Options options = new Options();

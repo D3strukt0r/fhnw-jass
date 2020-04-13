@@ -35,24 +35,45 @@ import java.net.Socket;
 import java.net.SocketException;
 
 /**
- * Copyright 2015, FHNW, Prof. Dr. Brad Richards. All rights reserved. This code is licensed under the terms of the BSD
- * 3-clause license (see the file license.txt).
+ * Copyright 2015, FHNW, Prof. Dr. Brad Richards. All rights reserved. This code
+ * is licensed under the terms of the BSD 3-clause license (see the file
+ * license.txt).
  *
  * @author Brad Richards
  * @author Manuele Vaccari (to work with Json messaging)
  */
-public class ClientUtil extends Thread {
+public final class ClientUtil extends Thread {
+    /**
+     * The logger to print to console and save in a .log file.
+     */
     private static final Logger logger = LogManager.getLogger(ClientUtil.class);
 
+    /**
+     * The socket of the client.
+     */
     private final Socket socket;
+
+    /**
+     * Whether the client is currently reachable. Shuts down everything when
+     * false.
+     */
     private volatile boolean clientReachable = true;
 
+    /**
+     * The user of the current connection.
+     */
     private UserEntity user = null;
+
+    /**
+     * The token of the current connection.
+     */
     private String token = null;
 
     /**
-     * Create a new client object, communicating over the given socket. Immediately start a thread to receive messages
-     * from the client.
+     * Create a new client object, communicating over the given socket.
+     * Immediately start a thread to receive messages from the client.
+     *
+     * @param socket The socket of the client.
      */
     public ClientUtil(final Socket socket) {
         super();
@@ -113,7 +134,10 @@ public class ClientUtil extends Thread {
     }
 
     /**
-     * Send a message to this client. In case of an exception, log the client out.
+     * Send a message to this client. In case of an exception, log the client
+     * out.
+     *
+     * @param msg The message to be sent.
      */
     public void send(final Message msg) {
         try {
@@ -127,6 +151,9 @@ public class ClientUtil extends Thread {
         }
     }
 
+    /**
+     * Shuts down all connections.
+     */
     public void disconnect() {
         clientReachable = false;
         token = null;
@@ -138,10 +165,18 @@ public class ClientUtil extends Thread {
         ServerSocketUtil.remove(this);
     }
 
+    /**
+     * @return Returns the current user of the connection. Returns null if the
+     * user is not logged in.
+     */
     public UserEntity getUser() {
         return user;
     }
 
+    /**
+     * @return Returns the user's username. Returns null if the user is not
+     * logged in.
+     */
     public String getUsername() {
         String name = "<undefined>";
         if (user != null) {
@@ -150,14 +185,25 @@ public class ClientUtil extends Thread {
         return name;
     }
 
+    /**
+     * Sets the user of the current connection.
+     *
+     * @param user The user.
+     */
     public void setUser(final UserEntity user) {
         this.user = user;
     }
 
+    /**
+     * @return Returns the token of the current session.
+     */
     public String getToken() {
         return token;
     }
 
+    /**
+     * @param token The token.
+     */
     public void setToken(final String token) {
         this.token = token;
     }

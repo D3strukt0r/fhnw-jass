@@ -28,16 +28,16 @@ import jass.server.util.ClientUtil;
  * @version %I%, %G%
  * @since 0.0.1
  */
-public class Result extends Message {
-
+public final class Result extends Message {
+    /**
+     * @param rawData The data (still not casted)
+     */
     public Result(final MessageData rawData) {
         super(rawData);
     }
 
-    /**
-     * This message type does no processing at all.
-     */
     @Override
     public void process(final ClientUtil client) {
+        // No processing is required on the server.
     }
 }

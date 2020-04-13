@@ -28,28 +28,42 @@ import jass.lib.message.MessageData;
 import jass.lib.message.ResultData;
 
 /**
- * Create a completely new login. After creating an account, the user must still login!
+ * Create a completely new login. After creating an account, the user must still
+ * login!
  *
  * @author Manuele Vaccari
  * @version %I%, %G%
  * @since 0.0.1
  */
-public class Register extends Message {
+public final class Register extends Message {
+    /**
+     * The logger to print to console and save in a .log file.
+     */
     private static final Logger logger = LogManager.getLogger(Register.class);
+
+    /**
+     * The data of the message.
+     */
     private final RegisterData data;
 
+    /**
+     * The minimum required length of the username.
+     */
     private static final int USERNAME_MIN_LENGTH = 3;
+
+    /**
+     * The minimum required length of the password.
+     */
     private static final int PASSWORD_MIN_LENGTH = 3;
 
+    /**
+     * @param rawData The data (still not casted)
+     */
     public Register(final MessageData rawData) {
         super(rawData);
         data = (RegisterData) rawData;
     }
 
-    /**
-     * We can only create a new account if the name is at least 3 characters, and is not in use either as a user or as a
-     * chatroom.
-     */
     @Override
     public void process(final ClientUtil client) {
         boolean result = false;

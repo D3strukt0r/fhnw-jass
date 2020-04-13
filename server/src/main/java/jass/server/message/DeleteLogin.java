@@ -33,10 +33,20 @@ import jass.lib.message.ResultData;
  * @version %I%, %G%
  * @since 0.0.1
  */
-public class DeleteLogin extends Message {
+public final class DeleteLogin extends Message {
+    /**
+     * The logger to print to console and save in a .log file.
+     */
     private static final Logger logger = LogManager.getLogger(DeleteLogin.class);
+
+    /**
+     * The data of the message.
+     */
     private final DeleteLoginData data;
 
+    /**
+     * @param rawData The data (still not casted)
+     */
     public DeleteLogin(final MessageData rawData) {
         super(rawData);
         data = (DeleteLoginData) rawData;
