@@ -28,25 +28,45 @@ import org.json.JSONObject;
  * @since 0.0.1
  */
 public class LoginData extends MessageData {
+    /**
+     * The username.
+     */
     private final String username;
+
+    /**
+     * The password.
+     */
     private final String password;
 
+    /**
+     * @param username The username.
+     * @param password The password.
+     */
     public LoginData(final String username, final String password) {
         super("Login");
         this.username = username;
         this.password = password;
     }
 
+    /**
+     * @param data The message containing all the data.
+     */
     public LoginData(final JSONObject data) {
         super(data);
         username = data.getString("username");
         password = data.getString("password");
     }
 
+    /**
+     * @return Returns the username.
+     */
     public String getUsername() {
         return username;
     }
 
+    /**
+     * @return Returns the password.
+     */
     public String getPassword() {
         return password;
     }

@@ -28,11 +28,19 @@ import org.json.JSONObject;
  * @since 0.0.1
  */
 public class ResultData extends MessageData {
+    /**
+     * The result.
+     */
     private final boolean result;
+
+    /**
+     * Additional data for the result.
+     */
     private final JSONObject resultData;
 
     /**
-     * This constructor is used by most messages.
+     * @param id     The ID of the message to respond to.
+     * @param result The result of the message to respond to.
      */
     public ResultData(final int id, final boolean result) {
         super(id, "Result");
@@ -40,22 +48,36 @@ public class ResultData extends MessageData {
         resultData = new JSONObject();
     }
 
+    /**
+     * @param id         The ID of the message to respond to.
+     * @param result     The result of the message to respond to.
+     * @param resultData Additional data for the returning message.
+     */
     public ResultData(final int id, final boolean result, final JSONObject resultData) {
         super(id, "Result");
         this.result = result;
         this.resultData = resultData;
     }
 
+    /**
+     * @param data The message containing all the data.
+     */
     public ResultData(final JSONObject data) {
         super(data);
         result = data.getBoolean("result");
         resultData = data.getJSONObject("resultData");
     }
 
+    /**
+     * @return Returns the result.
+     */
     public boolean getResult() {
         return result;
     }
 
+    /**
+     * @return Returns the additional data.
+     */
     public JSONObject getResultData() {
         return resultData;
     }

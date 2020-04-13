@@ -28,25 +28,45 @@ import org.json.JSONObject;
  * @since 0.0.1
  */
 public class ChangePasswordData extends MessageData {
+    /**
+     * The token for the current session.
+     */
     private final String token;
+
+    /**
+     * The new password.
+     */
     private final String newPassword;
 
+    /**
+     * @param token       The token for the current session.
+     * @param newPassword The new password.
+     */
     public ChangePasswordData(final String token, final String newPassword) {
         super("ChangePassword");
         this.token = token;
         this.newPassword = newPassword;
     }
 
+    /**
+     * @param data The message containing all the data.
+     */
     public ChangePasswordData(final JSONObject data) {
         super(data);
         token = data.getString("token");
         newPassword = data.getString("newPassword");
     }
 
+    /**
+     * @return Returns the token.
+     */
     public String getToken() {
         return token;
     }
 
+    /**
+     * @return Returns the new password.
+     */
     public String getNewPassword() {
         return newPassword;
     }

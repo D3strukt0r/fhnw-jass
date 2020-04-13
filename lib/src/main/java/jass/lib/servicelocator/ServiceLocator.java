@@ -29,8 +29,16 @@ import java.util.List;
  * @since 0.0.1
  */
 public class ServiceLocator {
-    private static List<Service> services = new ArrayList<>();
+    /**
+     * A list of all the services available.
+     */
+    private static final List<Service> services = new ArrayList<>();
 
+    /**
+     * @param serviceName The name of the service requested
+     *
+     * @return Return the service object or null if not found.
+     */
     public static Service get(final String serviceName) {
         for (Service service : services) {
             if (service.getServiceName().equalsIgnoreCase(serviceName)) {
@@ -40,6 +48,9 @@ public class ServiceLocator {
         return null;
     }
 
+    /**
+     * @param newService The service to be added to the list.
+     */
     public static void add(final Service newService) {
         boolean exists = false;
         for (Service service : services) {
@@ -52,6 +63,9 @@ public class ServiceLocator {
         }
     }
 
+    /**
+     * @param serviceName The service to be removed from the list.
+     */
     public static void remove(final String serviceName) {
         Service objectFound = null;
         for (Service service : services) {

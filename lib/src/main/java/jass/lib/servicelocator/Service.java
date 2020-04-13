@@ -26,5 +26,8 @@ package jass.lib.servicelocator;
  * @since 0.0.1
  */
 public interface Service {
+    /**
+     * @return Returns the name of the service.
+     */
     String getServiceName();
 }

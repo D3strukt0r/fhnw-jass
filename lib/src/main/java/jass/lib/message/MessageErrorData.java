@@ -28,22 +28,37 @@ import org.json.JSONObject;
  * @since 0.0.1
  */
 public class MessageErrorData extends MessageData {
+    /**
+     * The error type that occurred.
+     */
     private final ErrorType errorMessage;
 
     public enum ErrorType {
+        /**
+         * The command is not known.
+         */
         INVALID_COMMAND
     }
 
+    /**
+     * @param errorMessage The error type that occurred.
+     */
     public MessageErrorData(final ErrorType errorMessage) {
         super("MessageError");
         this.errorMessage = errorMessage;
     }
 
+    /**
+     * @param data The message containing all the data.
+     */
     public MessageErrorData(final JSONObject data) {
         super(data);
         errorMessage = data.getEnum(ErrorType.class, "errorMessage");
     }
 
+    /**
+     * @return Returns the error type that occurred.
+     */
     public ErrorType getErrorMessage() {
         return errorMessage;
     }

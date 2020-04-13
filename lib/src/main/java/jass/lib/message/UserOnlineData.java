@@ -28,25 +28,45 @@ import org.json.JSONObject;
  * @since 0.0.1
  */
 public class UserOnlineData extends MessageData {
+    /**
+     * The token of the current session.
+     */
     private final String token;
+
+    /**
+     * The username of the target.
+     */
     private final String username;
 
+    /**
+     * @param token    The token of the current session.
+     * @param username The username of the target.
+     */
     public UserOnlineData(final String token, final String username) {
         super("UserOnline");
         this.token = token;
         this.username = username;
     }
 
+    /**
+     * @param data The message containing all the data.
+     */
     public UserOnlineData(final JSONObject data) {
         super(data);
         token = data.getString("token");
         username = data.getString("username");
     }
 
+    /**
+     * @return Returns the token.
+     */
     public String getToken() {
         return token;
     }
 
+    /**
+     * @return Returns the username.
+     */
     public String getUsername() {
         return username;
     }

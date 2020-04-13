@@ -28,18 +28,30 @@ import org.json.JSONObject;
  * @since 0.0.1
  */
 public class DeleteLoginData extends MessageData {
+    /**
+     * The token for the current session.
+     */
     private final String token;
 
+    /**
+     * @param token The token for the current session.
+     */
     public DeleteLoginData(final String token) {
         super("DeleteLogin");
         this.token = token;
     }
 
+    /**
+     * @param data The message containing all the data.
+     */
     public DeleteLoginData(final JSONObject data) {
         super(data);
         token = data.getString("token");
     }
 
+    /**
+     * @return Returns the token.
+     */
     public String getToken() {
         return token;
     }
