@@ -20,7 +20,12 @@ package jass.server;
 
 import jass.server.util.DatabaseUtil;
 import jass.server.util.ServerSocketUtil;
-import org.apache.commons.cli.*;
+import org.apache.commons.cli.CommandLine;
+import org.apache.commons.cli.DefaultParser;
+import org.apache.commons.cli.HelpFormatter;
+import org.apache.commons.cli.Option;
+import org.apache.commons.cli.Options;
+import org.apache.commons.cli.ParseException;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -28,7 +33,11 @@ import org.apache.logging.log4j.core.LoggerContext;
 import jass.lib.servicelocator.ServiceLocator;
 
 import java.io.IOException;
-import java.security.*;
+import java.security.GeneralSecurityException;
+import java.security.KeyManagementException;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.UnrecoverableKeyException;
 import java.security.cert.CertificateException;
 import java.sql.SQLException;
 
@@ -43,7 +52,9 @@ public class Main {
     private static final Logger logger = LogManager.getLogger(Main.class);
     public static String dbLocation = "data/jass_server.sqlite3";
 
-    public static void main(String[] args) {
+    public static final int DEFAULT_PORT = 2000;
+
+    public static void main(final String[] args) {
         // Create all arguments for the command line interface
         Options options = new Options();
         options
@@ -64,7 +75,7 @@ public class Main {
         }
 
         // Check for the ports argument
-        int port = 2000;
+        int port = DEFAULT_PORT;
         if (cmd.hasOption("port")) {
             try {
                 port = Integer.parseInt(cmd.getOptionValue("port"));

@@ -32,9 +32,9 @@ import jass.server.util.ServerSocketUtil;
  * @since 0.0.1
  */
 public class UserOnline extends Message {
-    private UserOnlineData data;
+    private final UserOnlineData data;
 
-    public UserOnline(MessageData rawData) {
+    public UserOnline(final MessageData rawData) {
         super(rawData);
         data = (UserOnlineData) rawData;
     }
@@ -46,7 +46,7 @@ public class UserOnline extends Message {
      * question.
      */
     @Override
-    public void process(ClientUtil client) {
+    public void process(final ClientUtil client) {
         boolean result = false;
 
         // Only continue if the user has the right token.

@@ -19,7 +19,6 @@
 package jass.server.message;
 
 import jass.lib.message.MessageData;
-import jass.lib.message.MessageErrorData;
 import jass.server.util.ClientUtil;
 
 /**
@@ -30,17 +29,14 @@ import jass.server.util.ClientUtil;
  * @since 0.0.1
  */
 public class MessageError extends Message {
-    private MessageErrorData data;
-
-    public MessageError(MessageData rawData) {
+    public MessageError(final MessageData rawData) {
         super(rawData);
-        data = (MessageErrorData) rawData;
     }
 
     /**
-     * This message type does no processing at all
+     * This message type does no processing at all.
      */
     @Override
-    public void process(ClientUtil client) {
+    public void process(final ClientUtil client) {
     }
 }

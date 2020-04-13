@@ -19,12 +19,12 @@
 package jass.lib.servicelocator;
 
 /**
- * The interface which has to implemented to be part of the ServiceLocator
+ * The interface which has to implemented to be part of the ServiceLocator.
  *
  * @author https://www.geeksforgeeks.org/service-locator-pattern/
  * @version %I%, %G%
  * @since 0.0.1
  */
 public interface Service {
-    public String getServiceName();
+    String getServiceName();
 }

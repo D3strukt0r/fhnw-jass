@@ -31,7 +31,7 @@ import java.util.List;
 public class ServiceLocator {
     private static List<Service> services = new ArrayList<>();
 
-    public static Service get(String serviceName) {
+    public static Service get(final String serviceName) {
         for (Service service : services) {
             if (service.getServiceName().equalsIgnoreCase(serviceName)) {
                 return service;
@@ -40,7 +40,7 @@ public class ServiceLocator {
         return null;
     }
 
-    public static void add(Service newService) {
+    public static void add(final Service newService) {
         boolean exists = false;
         for (Service service : services) {
             if (service.getServiceName().equalsIgnoreCase(newService.getServiceName())) {
@@ -52,7 +52,7 @@ public class ServiceLocator {
         }
     }
 
-    public static void remove(String serviceName) {
+    public static void remove(final String serviceName) {
         Service objectFound = null;
         for (Service service : services) {
             if (service.getServiceName().equalsIgnoreCase(serviceName)) {

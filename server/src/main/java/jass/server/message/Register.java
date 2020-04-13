@@ -36,31 +36,34 @@ import jass.lib.message.ResultData;
  */
 public class Register extends Message {
     private static final Logger logger = LogManager.getLogger(Register.class);
-    private RegisterData data;
+    private final RegisterData data;
 
-    public Register(MessageData rawData) {
+    private static final int USERNAME_MIN_LENGTH = 3;
+    private static final int PASSWORD_MIN_LENGTH = 3;
+
+    public Register(final MessageData rawData) {
         super(rawData);
         data = (RegisterData) rawData;
     }
 
     /**
      * We can only create a new account if the name is at least 3 characters, and is not in use either as a user or as a
-     * chatroom
+     * chatroom.
      */
     @Override
-    public void process(ClientUtil client) {
+    public void process(final ClientUtil client) {
         boolean result = false;
 
         // Check for a valid username
-        if (data.getUsername() != null && data.getUsername().length() >= 3) {
+        if (data.getUsername() != null && data.getUsername().length() >= USERNAME_MIN_LENGTH) {
             // Check for a valid password (lax password requirements)
-            if (data.getPassword() != null && data.getPassword().length() >= 3) {
+            if (data.getPassword() != null && data.getPassword().length() >= PASSWORD_MIN_LENGTH) {
                 // Check whether the username is not already taken
-                if (!UserRepository.usernameExists(data.getUsername())) {
+                if (!UserRepository.getSingleton(null).usernameExists(data.getUsername())) {
                     UserEntity newUser = new UserEntity(data.getUsername(), data.getPassword());
 
                     // Add the new user to the database, and only return true if it was saved successfully
-                    if (UserRepository.create(newUser)) {
+                    if (UserRepository.getSingleton(null).add(newUser)) {
                         logger.info("User " + newUser.getUsername() + " created");
                         result = true;
                     }

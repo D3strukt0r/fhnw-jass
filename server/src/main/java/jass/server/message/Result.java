@@ -30,14 +30,14 @@ import jass.server.util.ClientUtil;
  */
 public class Result extends Message {
 
-    public Result(MessageData rawData) {
+    public Result(final MessageData rawData) {
         super(rawData);
     }
-	
-	/**
-	 * This message type does no processing at all
-	 */
-	@Override
-	public void process(ClientUtil client) {
-	}
+
+    /**
+     * This message type does no processing at all.
+     */
+    @Override
+    public void process(final ClientUtil client) {
+    }
 }

@@ -32,21 +32,21 @@ public class ResultData extends MessageData {
     private final JSONObject resultData;
 
     /**
-     * This constructor is used by most messages
+     * This constructor is used by most messages.
      */
-    public ResultData(int id, boolean result) {
+    public ResultData(final int id, final boolean result) {
         super(id, "Result");
         this.result = result;
         resultData = new JSONObject();
     }
 
-    public ResultData(int id, boolean result, JSONObject resultData) {
+    public ResultData(final int id, final boolean result, final JSONObject resultData) {
         super(id, "Result");
         this.result = result;
         this.resultData = resultData;
     }
 
-    public ResultData(JSONObject data) {
+    public ResultData(final JSONObject data) {
         super(data);
         result = data.getBoolean("result");
         resultData = data.getJSONObject("resultData");

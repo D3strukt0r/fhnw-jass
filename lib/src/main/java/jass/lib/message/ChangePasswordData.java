@@ -31,13 +31,13 @@ public class ChangePasswordData extends MessageData {
     private final String token;
     private final String newPassword;
 
-    public ChangePasswordData(String token, String newPassword) {
+    public ChangePasswordData(final String token, final String newPassword) {
         super("ChangePassword");
         this.token = token;
         this.newPassword = newPassword;
     }
 
-    public ChangePasswordData(JSONObject data) {
+    public ChangePasswordData(final JSONObject data) {
         super(data);
         token = data.getString("token");
         newPassword = data.getString("newPassword");

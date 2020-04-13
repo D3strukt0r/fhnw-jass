@@ -25,6 +25,7 @@ import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.TableUtils;
 import jass.lib.servicelocator.Service;
 import jass.server.entity.UserEntity;
+import jass.server.repository.UserRepository;
 
 import java.io.Closeable;
 import java.io.IOException;
@@ -41,18 +42,18 @@ import java.sql.SQLException;
  * @since 0.0.1
  */
 public class DatabaseUtil implements Service, Closeable {
-    private ConnectionSource connectionSource;
+    private final ConnectionSource connectionSource;
 
     private Dao<UserEntity, String> userDao;
 
     /**
-     * Create a database connection
+     * Create a database connection.
      *
      * @param databaseLocation A string containing the location of the file to be accessed (and if necessary created)
      *
      * @since 0.0.1
      */
-    public DatabaseUtil(String databaseLocation) throws SQLException {
+    public DatabaseUtil(final String databaseLocation) throws SQLException {
         // This uses h2 but you can change it to match your database
         String databaseUrl = "jdbc:sqlite:" + databaseLocation;
 
@@ -75,6 +76,7 @@ public class DatabaseUtil implements Service, Closeable {
          * Create our DAOs. One for each class and associated table.
          */
         userDao = DaoManager.createDao(connectionSource, UserEntity.class);
+        UserRepository.getSingleton(userDao);
 
         /*
          * Create the tables, if they don't exist yet.
@@ -89,9 +91,11 @@ public class DatabaseUtil implements Service, Closeable {
      */
     @Override
     public void close() {
-        if (connectionSource != null) try {
-            connectionSource.close();
-        } catch (IOException e) { /* Ignore */ }
+        if (connectionSource != null) {
+            try {
+                connectionSource.close();
+            } catch (IOException e) { /* Ignore */ }
+        }
     }
 
     /**

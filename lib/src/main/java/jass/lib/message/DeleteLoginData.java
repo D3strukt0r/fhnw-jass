@@ -30,12 +30,12 @@ import org.json.JSONObject;
 public class DeleteLoginData extends MessageData {
     private final String token;
 
-    public DeleteLoginData(String token) {
+    public DeleteLoginData(final String token) {
         super("DeleteLogin");
         this.token = token;
     }
 
-    public DeleteLoginData(JSONObject data) {
+    public DeleteLoginData(final JSONObject data) {
         super(data);
         token = data.getString("token");
     }

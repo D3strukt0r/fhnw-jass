@@ -36,15 +36,15 @@ import jass.lib.message.ResultData;
  */
 public class ChangePassword extends Message {
     private static final Logger logger = LogManager.getLogger(ChangePassword.class);
-    private ChangePasswordData data;
+    private final ChangePasswordData data;
 
-    public ChangePassword(MessageData rawData) {
+    public ChangePassword(final MessageData rawData) {
         super(rawData);
         data = (ChangePasswordData) rawData;
     }
 
     @Override
-    public void process(ClientUtil client) {
+    public void process(final ClientUtil client) {
         boolean result = false;
 
         // Only continue if the user has the right token.
@@ -53,7 +53,7 @@ public class ChangePassword extends Message {
             user.setPassword(data.getNewPassword());
 
             // Update inside the db, and only return true, if that was also successful.
-            if (UserRepository.update(user)) {
+            if (UserRepository.getSingleton(null).update(user)) {
                 logger.info("User " + user.getUsername() + " changed his password.");
                 result = true;
             }

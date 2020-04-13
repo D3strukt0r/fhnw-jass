@@ -32,7 +32,7 @@ public class LogoutData extends MessageData {
         super("Logout");
     }
 
-    public LogoutData(JSONObject data) {
+    public LogoutData(final JSONObject data) {
         super(data);
     }
 }

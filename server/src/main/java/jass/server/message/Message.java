@@ -32,11 +32,20 @@ import java.lang.reflect.InvocationTargetException;
  * @since 0.0.1
  */
 public abstract class Message {
-    protected final MessageData rawData;
 
-    public Message(MessageData rawData) {
+    private final MessageData rawData;
+
+    public MessageData getRawData() {
+        return rawData;
+    }
+
+    ///////////////////////////////////////
+
+    public Message(final MessageData rawData) {
         this.rawData = rawData;
     }
+
+    ///////////////////////////////////////
 
     /**
      * Perform whatever actions are required for this particular type of message.
@@ -56,7 +65,7 @@ public abstract class Message {
      *
      * @author Bradley Richards
      */
-    public static Message fromDataObject(MessageData messageData) {
+    public static Message fromDataObject(final MessageData messageData) {
         String messageClassName = Message.class.getPackage().getName() + "." + messageData.getMessageType();
         try {
             Class<?> messageClass = Class.forName(messageClassName);
@@ -68,7 +77,7 @@ public abstract class Message {
     }
 
     /**
-     * A message is really just a bunch of strings separated by vertical bars
+     * A message is really just a bunch of strings separated by vertical bars.
      */
     @Override
     public String toString() {

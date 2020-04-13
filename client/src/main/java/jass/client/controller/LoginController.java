@@ -276,7 +276,7 @@ public class LoginController extends Controller implements DisconnectEventListen
                     logger.error("Couldn't save login data to local database.");
                 }
 
-                LoginRepository.setToConnectAutomatically(login); // Make sure it's the only entry
+                LoginRepository.getSingleton(null).setToConnectAutomatically(login); // Make sure it's the only entry
                 WindowUtil.switchToDashboardWindow();
                 Platform.runLater(() -> this.login.getScene().getWindow().hide()); // Dashboard is still MVC
             } else {

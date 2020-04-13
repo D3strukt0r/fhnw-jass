@@ -44,7 +44,7 @@ import java.net.SocketException;
 public class ClientUtil extends Thread {
     private static final Logger logger = LogManager.getLogger(ClientUtil.class);
 
-    private Socket socket;
+    private final Socket socket;
     private volatile boolean clientReachable = true;
 
     private UserEntity user = null;
@@ -54,7 +54,7 @@ public class ClientUtil extends Thread {
      * Create a new client object, communicating over the given socket. Immediately start a thread to receive messages
      * from the client.
      */
-    public ClientUtil(Socket socket) {
+    public ClientUtil(final Socket socket) {
         super();
         this.setName("ClientThread");
         this.socket = socket;
@@ -104,9 +104,9 @@ public class ClientUtil extends Thread {
 
             // Note the syntax "Client.this" - writing "this" would reference the Runnable
             // object
-            if (msg != null)
+            if (msg != null) {
                 msg.process(ClientUtil.this);
-            else { // Invalid message or broken socket
+            } else { // Invalid message or broken socket
                 send(new MessageError(new MessageErrorData(MessageErrorData.ErrorType.INVALID_COMMAND)));
             }
         }
@@ -115,7 +115,7 @@ public class ClientUtil extends Thread {
     /**
      * Send a message to this client. In case of an exception, log the client out.
      */
-    public void send(Message msg) {
+    public void send(final Message msg) {
         try {
             OutputStreamWriter out = new OutputStreamWriter(socket.getOutputStream());
             logger.info("Sending message: " + msg.toString());
@@ -144,11 +144,13 @@ public class ClientUtil extends Thread {
 
     public String getUsername() {
         String name = "<undefined>";
-        if (user != null) name = user.getUsername();
+        if (user != null) {
+            name = user.getUsername();
+        }
         return name;
     }
 
-    public void setUser(UserEntity user) {
+    public void setUser(final UserEntity user) {
         this.user = user;
     }
 
@@ -156,7 +158,7 @@ public class ClientUtil extends Thread {
         return token;
     }
 
-    public void setToken(String token) {
+    public void setToken(final String token) {
         this.token = token;
     }
 }

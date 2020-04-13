@@ -344,7 +344,7 @@ public class ServerConnectionController extends Controller {
                 // Try to connect to the server
                 socket = new SocketUtil(server.getIp(), server.getPort(), server.isSecure());
                 ServiceLocator.add(socket);
-                ServerRepository.setToConnectAutomatically(server); // Make sure it's the only entry
+                ServerRepository.getSingleton(null).setToConnectAutomatically(server); // Make sure it's the only entry
             } catch (ConnectException e) {
                 enableAllIfNew();
                 setErrorMessage("gui.serverConnection.connect.connection");

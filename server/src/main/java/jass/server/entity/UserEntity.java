@@ -20,6 +20,7 @@ package jass.server.entity;
 
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
+import jass.lib.database.Entity;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import jass.server.util.HashUtil;
@@ -38,12 +39,13 @@ import java.util.Date;
  * @since 0.0.1
  */
 @DatabaseTable(tableName = "users")
-public class UserEntity {
+public class UserEntity implements Entity {
     private static final Logger logger = LogManager.getLogger(UserEntity.class);
 
     /**
-     * Fields (Columns)
+     * Fields (Columns).
      */
+
     @DatabaseField(generatedId = true)
     private int id;
 
@@ -66,26 +68,28 @@ public class UserEntity {
     private boolean blocked = false;
 
     /**
-     * Constructors
+     * Constructors.
      */
+
     UserEntity() {
         // For ORMLite
         // all persisted classes must define a no-arg constructor
         // with at least package visibility
     }
 
-    public UserEntity(String username) {
+    public UserEntity(final String username) {
         this.username = username;
     }
 
-    public UserEntity(String username, String password) {
+    public UserEntity(final String username, final String password) {
         this.username = username;
         setPassword(password);
     }
 
     /**
-     * Methods
+     * Methods.
      */
+
     public int getId() {
         return id;
     }
@@ -94,7 +98,7 @@ public class UserEntity {
         return username;
     }
 
-    public void setUsername(String username) {
+    public void setUsername(final String username) {
         this.username = username;
     }
 
@@ -102,7 +106,7 @@ public class UserEntity {
         return password;
     }
 
-    public void setPassword(String password) {
+    public void setPassword(final String password) {
         try {
             this.password = HashUtil.generateStrongPasswordHash(password);
         } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
@@ -111,7 +115,7 @@ public class UserEntity {
         }
     }
 
-    public boolean checkPassword(String password) {
+    public boolean checkPassword(final String password) {
         boolean matched = false;
 
         try {
@@ -121,7 +125,9 @@ public class UserEntity {
             System.exit(0);
         }
 
-        if (matched) setLastLogin(Date.from(Instant.now()));
+        if (matched) {
+            setLastLogin(Date.from(Instant.now()));
+        }
         return matched;
     }
 
@@ -150,7 +156,7 @@ public class UserEntity {
         return dateTimeFormatter.format(lastLogin);
     }
 
-    public void setLastLogin(Date lastLogin) {
+    public void setLastLogin(final Date lastLogin) {
         this.lastLogin = lastLogin;
     }
 
@@ -158,7 +164,7 @@ public class UserEntity {
         return friend;
     }
 
-    public void setFriend(boolean friend) {
+    public void setFriend(final boolean friend) {
         this.friend = friend;
     }
 
@@ -166,7 +172,7 @@ public class UserEntity {
         return blocked;
     }
 
-    public void setBlocked(boolean blocked) {
+    public void setBlocked(final boolean blocked) {
         this.blocked = blocked;
     }
 

@@ -75,7 +75,7 @@ public class SplashModel extends Model {
             });
             // Check whether we can already connect to the server automatically
             tasks.add(() -> {
-                ServerEntity server = ServerRepository.findConnectAutomatically();
+                ServerEntity server = ServerRepository.getSingleton(null).findConnectAutomatically();
                 if (server != null) {
                     logger.info("Server to connect automatically found");
                     try {
@@ -88,7 +88,7 @@ public class SplashModel extends Model {
             });
             // Check whether we can already login
             tasks.add(() -> {
-                LoginEntity login = LoginRepository.findConnectAutomatically();
+                LoginEntity login = LoginRepository.getSingleton(null).findConnectAutomatically();
                 if (login != null) {
                     logger.info("Automatic login found");
                     SocketUtil backend = (SocketUtil) ServiceLocator.get("backend");
