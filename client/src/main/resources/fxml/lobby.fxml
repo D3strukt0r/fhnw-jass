@@ -2,10 +2,13 @@
 
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Text?>
+<?import com.jfoenix.controls.JFXButton?>
+
 <VBox xmlns="http://javafx.com/javafx/8.0.171"
       xmlns:fx="http://javafx.com/fxml/1"
       stylesheets="@../css/app.css"
       styleClass="background-white"
       fx:controller="jass.client.controller.LobbyController">
     <Text text="Here will be the game..." />
+    <JFXButton fx:id="register" styleClass="secondary" text="gui.login.register" onAction="#startSearchForGame" />
 </VBox>

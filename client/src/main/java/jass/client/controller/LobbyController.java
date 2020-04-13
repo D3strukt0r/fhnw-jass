@@ -18,8 +18,16 @@
 
 package jass.client.controller;
 
+import jass.client.entity.LoginEntity;
+import jass.client.message.SearchGame;
 import jass.client.mvc.Controller;
+import jass.client.util.DatabaseUtil;
+import jass.client.util.SocketUtil;
+import jass.lib.message.SearchGameData;
+import jass.lib.servicelocator.ServiceLocator;
 import javafx.event.ActionEvent;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -27,17 +35,45 @@ import java.util.ResourceBundle;
 /**
  * The controller for the dashboard (game) view.
  *
- * @author Manuele Vaccari
+ * @author Thomas Weber
  * @version %I%, %G%
  * @since 0.0.1
  */
 public class LobbyController extends Controller {
+    private static final Logger logger = LogManager.getLogger(LoginController.class);
+    // GameService gameService
+
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         // TODO: Do something
     }
 
-    public void clickOnSearchGame(ActionEvent actionEvent) {
-        System.out.println("search");
+    public void startSearchForGame(ActionEvent actionEvent) {
+        // Get token and initialize SearchGame Message
+        LoginEntity login = (LoginEntity) ServiceLocator.get("login");
+        String token = login.getToken();
+        SearchGame searchGameMsg = new SearchGame(new SearchGameData(token));
+        SocketUtil backend = (SocketUtil) ServiceLocator.get("backend");
+
+        // Send SearchGame Message to Server
+        if (searchGameMsg.process(backend)) {
+            System.out.println(searchGameMsg.getRawData());
+        } else {
+            //enableAll();
+            logger.error("Error starting search for game");
+        }
+    }
+
+    public void cancelSearchForGame() {
+
+    }
+
+    public void onGameFound() {
+
+    }
+
+    public void goToGameView() {
+
     }
 }
