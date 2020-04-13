@@ -31,13 +31,13 @@ public class RegisterData extends MessageData {
     private final String username;
     private final String password;
 
-    public RegisterData(String username, String password) {
+    public RegisterData(final String username, final String password) {
         super("Register");
         this.username = username;
         this.password = password;
     }
 
-    public RegisterData(JSONObject data) {
+    public RegisterData(final JSONObject data) {
         super(data);
         username = data.getString("username");
         password = data.getString("password");

@@ -26,7 +26,7 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
 public abstract class MessageData implements Serializable {
-    public static MessageData unserialize(String jsonString) {
+    public static MessageData unserialize(final String jsonString) {
         JSONObject data;
         try {
             data = new JSONObject(jsonString);
@@ -47,7 +47,7 @@ public abstract class MessageData implements Serializable {
         }
     }
 
-    public static String serialize(MessageData messageData) {
+    public static String serialize(final MessageData messageData) {
         JSONObject data = new JSONObject(messageData);
         return data.toString();
     }
@@ -59,17 +59,17 @@ public abstract class MessageData implements Serializable {
 
     private final String messageType;
 
-    public MessageData(String messageType) {
+    public MessageData(final String messageType) {
         id = createId();
         this.messageType = messageType;
     }
 
-    public MessageData(int id, String messageType) {
+    public MessageData(final int id, final String messageType) {
         this.id = id;
         this.messageType = messageType;
     }
 
-    public MessageData(JSONObject data) {
+    public MessageData(final JSONObject data) {
         id = data.getInt("id");
         messageType = data.getString("messageType");
     }

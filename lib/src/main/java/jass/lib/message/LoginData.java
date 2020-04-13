@@ -31,13 +31,13 @@ public class LoginData extends MessageData {
     private final String username;
     private final String password;
 
-    public LoginData(String username, String password) {
+    public LoginData(final String username, final String password) {
         super("Login");
         this.username = username;
         this.password = password;
     }
 
-    public LoginData(JSONObject data) {
+    public LoginData(final JSONObject data) {
         super(data);
         username = data.getString("username");
         password = data.getString("password");

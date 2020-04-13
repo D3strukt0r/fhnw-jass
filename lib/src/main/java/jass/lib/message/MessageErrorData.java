@@ -34,12 +34,12 @@ public class MessageErrorData extends MessageData {
         INVALID_COMMAND
     }
 
-    public MessageErrorData(ErrorType errorMessage) {
+    public MessageErrorData(final ErrorType errorMessage) {
         super("MessageError");
         this.errorMessage = errorMessage;
     }
 
-    public MessageErrorData(JSONObject data) {
+    public MessageErrorData(final JSONObject data) {
         super(data);
         errorMessage = data.getEnum(ErrorType.class, "errorMessage");
     }

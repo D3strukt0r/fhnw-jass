@@ -31,13 +31,13 @@ public class UserOnlineData extends MessageData {
     private final String token;
     private final String username;
 
-    public UserOnlineData(String token, String username) {
+    public UserOnlineData(final String token, final String username) {
         super("UserOnline");
         this.token = token;
         this.username = username;
     }
 
-    public UserOnlineData(JSONObject data) {
+    public UserOnlineData(final JSONObject data) {
         super(data);
         token = data.getString("token");
         username = data.getString("username");
