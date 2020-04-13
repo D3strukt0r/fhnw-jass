@@ -18,8 +18,10 @@
 
 package jass.client.repository;
 
+import com.j256.ormlite.dao.Dao;
 import jass.client.entity.LoginEntity;
 import jass.client.util.DatabaseUtil;
+import jass.lib.database.Repository;
 import jass.lib.servicelocator.ServiceLocator;
 
 import java.sql.SQLException;
@@ -31,7 +33,23 @@ import java.sql.SQLException;
  * @version %I%, %G%
  * @since 0.0.1
  */
-public class LoginRepository {
+public class LoginRepository extends Repository<Dao<LoginEntity, String>, LoginEntity> {
+
+    private static LoginRepository singleton = null;
+
+    public static LoginRepository getSingleton(Dao<LoginEntity, String> dao) {
+        if (singleton == null) {
+            singleton = new LoginRepository(dao);
+        }
+        return singleton;
+    }
+
+    ///////////////////////////////////////
+
+    public LoginRepository(final Dao<LoginEntity, String> dao) {
+        super(dao);
+    }
+
     /**
      * Sets the given login to connect automatically and disables all other logins.
      *
@@ -39,36 +57,33 @@ public class LoginRepository {
      *
      * @return "true" if everything went alright, "false" if something failed.
      */
-    public static boolean setToConnectAutomatically(LoginEntity login) {
-        DatabaseUtil db = (DatabaseUtil) ServiceLocator.get("db");
-        if (db == null) {
-            return false;
-        }
-        try {
-            for (LoginEntity l : db.getLoginDao()) {
-                // Disable the other entry (should be only one)
-                if (l.isConnectAutomatically()) {
-                    l.setConnectAutomatically(false);
-                    db.getLoginDao().update(l);
-                }
-                // Set the new entry to connect automatically (if it is already in the db)
-                if (l.getId() == login.getId()) {
-                    login.setConnectAutomatically(true);
-                    db.getLoginDao().update(login);
+    public boolean setToConnectAutomatically(final LoginEntity login) {
+        boolean result;
+        for (LoginEntity l : getDao()) {
+            // Disable the other entry (should be only one)
+            if (l.isConnectAutomatically()) {
+                l.setConnectAutomatically(false);
+                result = update(l);
+
+                if (!result) {
+                    return false;
                 }
             }
-            return true;
-        } catch (SQLException e) {
-            return false;
+            // Set the new entry to connect automatically (if it is already in the db)
+            if (l.getId() == login.getId()) {
+                login.setConnectAutomatically(true);
+                result = update(login);
+
+                if (!result) {
+                    return false;
+                }
+            }
         }
+        return true;
     }
 
-    public static LoginEntity findConnectAutomatically() {
-        DatabaseUtil db = (DatabaseUtil) ServiceLocator.get("db");
-        if (db == null) {
-            return null;
-        }
-        for (LoginEntity l : db.getLoginDao()) {
+    public LoginEntity findConnectAutomatically() {
+        for (LoginEntity l : getDao()) {
             if (l.isConnectAutomatically()) {
                 return l;
             }
