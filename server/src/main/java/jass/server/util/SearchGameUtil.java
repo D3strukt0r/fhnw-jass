@@ -4,6 +4,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 
 import jass.lib.servicelocator.Service;
@@ -23,20 +24,37 @@ public class SearchGameUtil implements Service {
 
     public SearchGameUtil() {}
 
-    // Add new client to waiting list for games
+    // Add new client to search list
     public void addClientToSearchGame(ClientUtil client) {
         clients.add(client);
-        logger.info("Added new client to waiting list");
+        logger.info("Added new client " + client.getUsername() +  " to waiting list");
         this.checkForNewGame();
+    }
+
+    public void removeClientFromSearchingGame(ClientUtil client) {
+        synchronized (clients) {
+            Boolean removedSuccessfully = false;
+            Iterator<ClientUtil> iterator = clients.iterator();
+            while (iterator.hasNext()) {
+                ClientUtil c = (ClientUtil) iterator.next();
+                if (c.getToken().equals(client.getToken())) {
+                    iterator.remove();
+                    logger.info("Removed client " + client.getUsername() +  " from waiting list");
+                    break;
+                }
+            }
+        }
     }
 
     // Check if new game can be started
     private void checkForNewGame() {
         System.out.println(clients.size());
         if(clients.size() >= 4) {
-            // Create new game
+            // TODO: Create new game
         }
     }
+
+
 
     @Override
     public String getServiceName() {

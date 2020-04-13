@@ -18,6 +18,7 @@
 
 package jass.server.util;
 
+import jass.lib.servicelocator.ServiceLocator;
 import jass.server.entity.UserEntity;
 import jass.server.message.Message;
 import org.apache.logging.log4j.LogManager;
@@ -128,11 +129,14 @@ public class ClientUtil extends Thread {
     }
 
     public void disconnect() {
+        SearchGameUtil sGU = (SearchGameUtil) ServiceLocator.get("SearchGameUtil");
+        sGU.removeClientFromSearchingGame(this);
+
+        // TODO: Close down the game if client was inside.
+
         clientReachable = false;
         token = null;
         user = null;
-
-        // TODO: Remove the user from searching games or close down the whole game if inside.
 
         // Free up RAM by deleting disconnected clients.
         ServerSocketUtil.remove(this);
