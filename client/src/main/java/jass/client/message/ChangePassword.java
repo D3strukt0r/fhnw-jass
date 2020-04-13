@@ -36,9 +36,19 @@ import jass.lib.servicelocator.ServiceLocator;
  * @since 0.0.1
  */
 public class ChangePassword extends Message {
+    /**
+     * The logger to print to console and save in a .log file.
+     */
     private static final Logger logger = LogManager.getLogger(ChangePassword.class);
+
+    /**
+     * The data of the message.
+     */
     private final ChangePasswordData data;
 
+    /**
+     * @param rawData The data (still not casted)
+     */
     public ChangePassword(final MessageData rawData) {
         super(rawData);
         data = (ChangePasswordData) rawData;

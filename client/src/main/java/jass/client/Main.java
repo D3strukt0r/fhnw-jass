@@ -16,9 +16,14 @@ import jass.client.util.WindowUtil;
  * @since 0.0.1
  */
 public class Main extends Application {
+    /**
+     * The location of the database storage.
+     */
     public static String dbLocation = "data/jass.sqlite3";
 
     public static void main(String[] args) {
+     * @param args The arguments passed in the console.
+     */
         // Create all arguments for the command line interface
         Options options = new Options();
         options

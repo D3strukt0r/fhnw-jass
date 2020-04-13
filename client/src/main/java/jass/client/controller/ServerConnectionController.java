@@ -67,44 +67,121 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * @since 0.0.1
  */
 public class ServerConnectionController extends Controller {
+    /**
+     * The logger to print to console and save in a .log file.
+     */
     private static final Logger logger = LogManager.getLogger(ServerConnectionController.class);
+
+    /**
+     * The view.
+     */
     private ServerConnectionView view;
 
+    /**
+     * The "File" element.
+     */
     @FXML
     private Menu mFile;
+
+    /**
+     * The "File -> Change Language" element.
+     */
     @FXML
     private Menu mFileChangeLanguage;
+
+    /**
+     * The "File -> Exit" element.
+     */
     @FXML
     private MenuItem mFileExit;
+
+    /**
+     * The "Edit" element.
+     */
     @FXML
     private Menu mEdit;
+
+    /**
+     * The "Edit -> Delete" element.
+     */
     @FXML
     private MenuItem mEditDelete;
+
+    /**
+     * The "Help" element.
+     */
     @FXML
     private Menu mHelp;
+
+    /**
+     * The "Help -> About" element.
+     */
     @FXML
     private MenuItem mHelpAbout;
 
+    /**
+     * The root element of the view.
+     */
     @FXML
     private VBox root;
+
+    /**
+     * The navbar.
+     */
     @FXML
     private Text navbar;
+
+    /**
+     * The error message.
+     */
     @FXML
     private VBox errorMessage;
+
+    /**
+     * The saved server lists.
+     */
     @FXML
     private JFXComboBox<ServerEntity> chooseServer;
+
+    /**
+     * The text field for ip or domain.
+     */
     @FXML
     private JFXTextField ipOrDomain;
+
+    /**
+     * The IP hint text.
+     */
     @FXML
     private Text ipHint;
+
+    /**
+     * The port text field.
+     */
     @FXML
     private JFXTextField port;
+
+    /**
+     * The port hint text.
+     */
     @FXML
     private Text portHint;
+
+    /**
+     * The SSL checkbox.
+     */
     @FXML
     private JFXCheckBox secure;
+
+    /**
+     * The "remember me" checkbox.
+     */
     @FXML
     private JFXCheckBox connectAutomatically;
+
+    /**
+     * The connect button.
+     */
     @FXML
     private JFXButton connect;
 
@@ -270,7 +347,10 @@ public class ServerConnectionController extends Controller {
     }
 
     /**
-     * As the view contains an error message field, this updates the text and the window appropriately.
+     * As the view contains an error message field, this updates the text and
+     * the window appropriately.
+     *
+     * @param translatorKey The key of the translation.
      *
      * @since 0.0.1
      */
@@ -289,13 +369,17 @@ public class ServerConnectionController extends Controller {
         });
     }
 
+    /**
+     * Shuts down the application.
+     */
     @FXML
     private void clickOnExit() {
         Platform.exit();
     }
 
     /**
-     * Updates the view depending if we create a new element or choose an existing one.
+     * Updates the view depending if we create a new element or choose an
+     * existing one.
      *
      * @since 0.0.1
      */
@@ -318,8 +402,8 @@ public class ServerConnectionController extends Controller {
     }
 
     /**
-     * Handles the click on the connect button. Inputs should already be checked. This will try to connect to the
-     * server.
+     * Handles the click on the connect button. Inputs should already be
+     * checked. This will try to connect to the server.
      *
      * @since 0.0.1
      */
@@ -368,10 +452,16 @@ public class ServerConnectionController extends Controller {
         }).start();
     }
 
+    /**
+     * @return Returns the connect button
+     */
     public JFXButton getConnect() {
         return connect;
     }
 
+    /**
+     * @param view The view.
+     */
     public void setView(final ServerConnectionView view) {
         this.view = view;
     }

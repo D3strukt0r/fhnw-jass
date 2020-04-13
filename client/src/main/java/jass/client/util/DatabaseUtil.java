@@ -42,14 +42,24 @@ import java.sql.SQLException;
  */
 public class DatabaseUtil implements Service, Closeable {
     private ConnectionSource connectionSource;
+     * The database connection.
+     */
 
+    /**
+     * The DAO for the logins.
+     */
     private Dao<LoginEntity, String> loginDao;
+
+    /**
+     * The DAO for the servers.
+     */
     private Dao<ServerEntity, String> serverDao;
 
     /**
      * Create a database connection.
      *
-     * @param databaseLocation A string containing the location of the file to be accessed (and if necessary created)
+     * @param databaseLocation A string containing the location of the file to
+     *                         be accessed (and if necessary created).
      *
      * @since 0.0.1
      */
@@ -104,7 +114,7 @@ public class DatabaseUtil implements Service, Closeable {
     /**
      * @return DAO object for the saved logins
      *
-     * @since 0.0.2
+     * @since 0.0.1
      */
     public Dao<LoginEntity, String> getLoginDao() {
         return loginDao;
@@ -113,12 +123,15 @@ public class DatabaseUtil implements Service, Closeable {
     /**
      * @return DAO object for the saved servers
      *
-     * @since 0.0.2
+     * @since 0.0.1
      */
     public Dao<ServerEntity, String> getServerDao() {
         return serverDao;
     }
 
+    /**
+     * For the ServiceLocator.
+     */
     @Override
     public String getServiceName() {
         return "db";

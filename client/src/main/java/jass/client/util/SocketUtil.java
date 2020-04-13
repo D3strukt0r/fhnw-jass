@@ -48,19 +48,38 @@ import java.security.cert.CertificateException;
 import java.util.ArrayList;
 
 /**
- * Backend utility class. Acts as an interface between the program and the server.
+ * Backend utility class. Acts as an interface between the program and the
+ * server.
  *
  * @author Manuele Vaccari
  * @version %I%, %G%
  * @since 0.0.1
  */
 public class SocketUtil extends Thread implements Service, Closeable {
+    /**
+     * The logger to print to console and save in a .log file.
+     */
     private static final Logger logger = LogManager.getLogger(SocketUtil.class);
 
+    /**
+     * The socket of the server.
+     */
     private final Socket socket;
+
+    /**
+     * Whether the server is currently reachable. Shuts down everything when
+     * false.
+     */
     private volatile boolean serverReachable = true;
+
+    /**
+     * A list of all objects listening to a disconnect event.
+     */
     private final ArrayList<DisconnectEventListener> disconnectListener = new ArrayList<>();
 
+    /**
+     * A list of all messages coming from the server.
+     */
     private final ArrayList<Message> lastMessages = new ArrayList<>();
 
     /**
@@ -165,6 +184,10 @@ public class SocketUtil extends Thread implements Service, Closeable {
     /**
      * Wait until the corresponding "Result" response arrives from the server.
      *
+     * @param id The ID of the message.
+     *
+     * @return Returns the result message.
+     *
      * @since 0.0.1
      */
     public Message waitForResultResponse(final int id) {
@@ -184,7 +207,10 @@ public class SocketUtil extends Thread implements Service, Closeable {
     }
 
     /**
-     * Send a message to this server. In case of an exception, log the client out.
+     * Send a message to this server. In case of an exception, log the client
+     * out.
+     *
+     * @param msg The message to send to the server.
      */
     public void send(final Message msg) {
         try {
@@ -199,7 +225,7 @@ public class SocketUtil extends Thread implements Service, Closeable {
     }
 
     /**
-     * @return "true" if logged in, otherwise "false"
+     * @return Returns true if logged in, otherwise false
      *
      * @since 0.0.1
      */
@@ -208,7 +234,8 @@ public class SocketUtil extends Thread implements Service, Closeable {
     }
 
     /**
-     * @return A string containing the token if logged in, otherwise "null"
+     * @return Returns a string containing the token if logged in, otherwise
+     * null
      *
      * @since 0.0.1
      */
@@ -221,7 +248,7 @@ public class SocketUtil extends Thread implements Service, Closeable {
     }
 
     /**
-     * @param listener An DisconnectEventListener object
+     * @param listener A DisconnectEventListener object
      *
      * @since 0.0.1
      */
@@ -234,7 +261,7 @@ public class SocketUtil extends Thread implements Service, Closeable {
      *
      * @param ipAddress A String containing the ip address.
      *
-     * @return "true" if valid, "false" if not.
+     * @return Returns true if valid, otherwise false.
      *
      * @author https://stackoverflow.com/questions/5667371/validate-ipv4-address-in-java
      * @since 0.0.1
@@ -248,7 +275,7 @@ public class SocketUtil extends Thread implements Service, Closeable {
      *
      * @param port An integer containing the port.
      *
-     * @return "true" if valid, "false" if not.
+     * @return Returns true if valid, otherwise false.
      *
      * @since 0.0.1
      */

@@ -19,7 +19,7 @@
 package jass.client.mvc;
 
 /**
- * The abstract Model for the MVC
+ * The abstract Model for the MVC.
  *
  * @author Manuele Vaccari
  * @version %I%, %G%

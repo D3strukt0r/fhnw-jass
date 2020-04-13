@@ -23,13 +23,17 @@ import jass.lib.message.MessageData;
 import jass.lib.message.ResultData;
 
 /**
- * Logs the current user out from the server. After successful logout, token becomes invalid.
+ * Logs the current user out from the server. After successful logout, token
+ * becomes invalid.
  *
  * @author Manuele Vaccari
  * @version %I%, %G%
  * @since 0.0.1
  */
 public class Logout extends Message {
+    /**
+     * @param rawData The data (still not casted)
+     */
     public Logout(final MessageData rawData) {
         super(rawData);
     }

@@ -33,43 +33,68 @@ import jass.lib.servicelocator.Service;
 @DatabaseTable(tableName = "server")
 public class ServerEntity implements Service, Entity {
     /**
-     * Fields (Columns)
+     * The ID.
      */
     @DatabaseField(generatedId = true)
     private int id;
 
+    /**
+     * The IP address of the server.
+     */
     @DatabaseField
     private String ip;
 
+    /**
+     * The port of the server.
+     */
     @DatabaseField
     private int port;
 
+    /**
+     * Whether to use SSL or not.
+     */
     @DatabaseField(defaultValue = "false")
     private boolean secure = false;
 
+    /**
+     * Whether to connect automatically at startup or not.
+     */
     @DatabaseField(defaultValue = "false")
     private boolean connectAutomatically = false;
 
     /**
-     * Constructors
+     * For ORMLite all persisted classes must define a no-arg constructor with
+     * at least package visibility.
      */
     ServerEntity() {
-        // For ORMLite
-        // all persisted classes must define a no-arg constructor
-        // with at least package visibility
     }
 
+    /**
+     * @param ip   The IP address.
+     * @param port The port.
+     */
     public ServerEntity(final String ip, final int port) {
         this.ip = ip;
         this.port = port;
     }
 
+    /**
+     * @param ip     The IP address.
+     * @param port   The port.
+     * @param secure Whether to use SSL.
+     */
     public ServerEntity(final String ip, final int port, final boolean secure) {
         this.ip = ip;
         this.port = port;
         this.secure = secure;
     }
 
+    /**
+     * @param ip                   The IP address.
+     * @param port                 The port.
+     * @param secure               Whether to use SSL.
+     * @param connectAutomatically Whether to connect automatically.
+     */
     public ServerEntity(final String ip, final int port, final boolean secure, final boolean connectAutomatically) {
         this.ip = ip;
         this.port = port;
@@ -78,46 +103,70 @@ public class ServerEntity implements Service, Entity {
     }
 
     /**
-     * Methods
+     * @return Returns the ID.
      */
-    @Override
-    public String getServiceName() {
-        return "server";
-    }
-
     public int getId() {
         return id;
     }
 
+    /**
+     * @return Returns the IP address.
+     */
     public String getIp() {
         return ip;
     }
 
+    /**
+     * @param ip The IP address.
+     */
     public void setIp(final String ip) {
         this.ip = ip;
     }
 
+    /**
+     * @return Returns the port.
+     */
     public int getPort() {
         return port;
     }
 
+    /**
+     * @param port The port.
+     */
     public void setPort(final int port) {
         this.port = port;
     }
 
+    /**
+     * @return Returns whether to use SSL or not.
+     */
     public boolean isSecure() {
         return secure;
     }
 
+    /**
+     * @param secure Whether to use SSL or not.
+     */
     public void setSecure(final boolean secure) {
         this.secure = secure;
     }
 
+    /**
+     * @return Returns whether to connect automatically.
+     */
     public boolean isConnectAutomatically() {
         return connectAutomatically;
     }
 
+    /**
+     * @param connectAutomatically Whether to connect automatically.
+     */
     public void setConnectAutomatically(final boolean connectAutomatically) {
         this.connectAutomatically = connectAutomatically;
+    }
+
+    @Override
+    public String getServiceName() {
+        return "server";
     }
 }

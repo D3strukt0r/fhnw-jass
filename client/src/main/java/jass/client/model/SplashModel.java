@@ -50,11 +50,24 @@ import java.util.ArrayList;
  * @since 0.0.1
  */
 public class SplashModel extends Model {
+    /**
+     * The logger to print to console and save in a .log file.
+     */
     private static final Logger logger = LogManager.getLogger(SplashModel.class);
 
+    /**
+     * Whether the client is already connected to the server or not.
+     */
     private boolean connected = false;
+
+    /**
+     * Whether the client is already logged in or not.
+     */
     private boolean loggedIn = false;
 
+    /**
+     * All the tasks to be done at startup.
+     */
     private final Task<Void> initializer = new Task<Void>() {
         @Override
         protected Void call() {
@@ -128,18 +141,30 @@ public class SplashModel extends Model {
         }
     };
 
+    /**
+     * Initialized the loader.
+     */
     public void initialize() {
         new Thread(initializer).start();
     }
 
+    /**
+     * @return Returns the initializer.
+     */
     public Task<Void> getInitializer() {
         return initializer;
     }
 
+    /**
+     * @return Returns whether we are already connected or not.
+     */
     public boolean isConnected() {
         return connected;
     }
 
+    /**
+     * @return Returns whether we are already logged in or not.
+     */
     public boolean isLoggedIn() {
         return loggedIn;
     }

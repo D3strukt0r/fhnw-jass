@@ -17,9 +17,19 @@ import java.util.ResourceBundle;
  * @author Brad Richards
  */
 public class SplashController extends Controller {
+    /**
+     * The model.
+     */
     private SplashModel model;
+
+    /**
+     * The view.
+     */
     private SplashView view;
 
+    /**
+     * The loading bar.
+     */
     @FXML
     private JFXProgressBar loadingProgress;
 
@@ -46,6 +56,9 @@ public class SplashController extends Controller {
         model.initialize();
     }
 
+    /**
+     * @param view The view.
+     */
     public void setView(final SplashView view) {
         this.view = view;
     }

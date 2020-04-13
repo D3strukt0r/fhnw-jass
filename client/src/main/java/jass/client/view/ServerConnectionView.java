@@ -38,6 +38,9 @@ import java.io.IOException;
  * @since 0.0.1
  */
 public class ServerConnectionView extends View {
+    /**
+     * @param stage The stage of the window.
+     */
     public ServerConnectionView(final Stage stage) {
         super(stage);
         stage.titleProperty().bind(I18nUtil.createStringBinding("gui.serverConnection.title"));

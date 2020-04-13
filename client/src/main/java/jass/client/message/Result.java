@@ -22,7 +22,8 @@ import jass.client.util.SocketUtil;
 import jass.lib.message.MessageData;
 
 /**
- * The result response coming from the server for a specific command that the client sent.
+ * The result response coming from the server for a specific command that the
+ * client sent.
  *
  * @author Manuele Vaccari
  * @version %I%, %G%
@@ -30,6 +31,8 @@ import jass.lib.message.MessageData;
  */
 public class Result extends Message {
 
+     * @param rawData The data (still not casted)
+     */
     public Result(final MessageData rawData) {
         super(rawData);
     }

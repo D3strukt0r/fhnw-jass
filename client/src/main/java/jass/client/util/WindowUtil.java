@@ -34,9 +34,14 @@ import javafx.stage.Stage;
  * @since 0.0.1
  */
 public class WindowUtil {
-    // Reuse the same window
+    /**
+     * A defined stage (window) to be reused.
+     */
     private static final Stage stage = new Stage();
 
+    /**
+     * Switch to splash screen window.
+     */
     public static void switchToSplashScreen() {
         Platform.runLater(() -> {
             Stage stage = new Stage();
@@ -45,6 +50,9 @@ public class WindowUtil {
         });
     }
 
+    /**
+     * Switch to server chooser window.
+     */
     public static void switchToServerConnectionWindow() {
         Platform.runLater(() -> {
             ServerConnectionView view = new ServerConnectionView(stage);
@@ -52,6 +60,9 @@ public class WindowUtil {
         });
     }
 
+    /**
+     * Switch to login window.
+     */
     public static void switchToLoginWindow() {
         Platform.runLater(() -> {
             LoginView view = new LoginView(stage);
@@ -59,6 +70,9 @@ public class WindowUtil {
         });
     }
 
+    /**
+     * Switch to register window.
+     */
     public static void switchToRegisterWindow() {
         Platform.runLater(() -> {
             RegisterView view = new RegisterView(stage);
@@ -66,6 +80,9 @@ public class WindowUtil {
         });
     }
 
+    /**
+     * Switch to dashboard window.
+     */
     public static void switchToDashboardWindow() {
         Platform.runLater(() -> {
             Stage stage = new Stage();

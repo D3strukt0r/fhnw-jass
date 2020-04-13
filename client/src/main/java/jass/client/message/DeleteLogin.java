@@ -29,16 +29,27 @@ import jass.lib.message.ResultData;
 import jass.lib.servicelocator.ServiceLocator;
 
 /**
- * Delete the currently logged in user from the server. After successful deletion, token becomes invalid.
+ * Delete the currently logged in user from the server. After successful
+ * deletion, token becomes invalid.
  *
  * @author Manuele Vaccari
  * @version %I%, %G%
  * @since 0.0.1
  */
 public class DeleteLogin extends Message {
+    /**
+     * The logger to print to console and save in a .log file.
+     */
     private static final Logger logger = LogManager.getLogger(DeleteLogin.class);
+
+    /**
+     * The data of the message.
+     */
     private final LoginData data;
 
+    /**
+     * @param rawData The data (still not casted)
+     */
     public DeleteLogin(final MessageData rawData) {
         super(rawData);
         data = (LoginData) rawData;

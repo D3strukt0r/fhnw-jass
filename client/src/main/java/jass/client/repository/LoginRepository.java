@@ -34,9 +34,18 @@ import java.sql.SQLException;
  * @since 0.0.1
  */
 public class LoginRepository extends Repository<Dao<LoginEntity, String>, LoginEntity> {
-
+    /**
+     * The singleton.
+     */
     private static LoginRepository singleton = null;
 
+    /**
+     * Creates a new singleton or returns the existing one.
+     *
+     * @param dao The DAO to edit inside the database.
+     *
+     * @return Returns the Repository.
+     */
     public static LoginRepository getSingleton(final Dao<LoginEntity, String> dao) {
         if (singleton == null) {
             singleton = new LoginRepository(dao);
@@ -44,12 +53,16 @@ public class LoginRepository extends Repository<Dao<LoginEntity, String>, LoginE
         return singleton;
     }
 
+    /**
+     * @param dao The DAO to edit inside the database.
+     */
     public LoginRepository(final Dao<LoginEntity, String> dao) {
         super(dao);
     }
 
     /**
-     * Sets the given login to connect automatically and disables all other logins.
+     * Sets the given login to connect automatically and disables all other
+     * logins.
      *
      * @param login A LoginEntity object
      *
@@ -80,6 +93,9 @@ public class LoginRepository extends Repository<Dao<LoginEntity, String>, LoginE
         return true;
     }
 
+    /**
+     * @return Returns the login which is set as connect automatically.
+     */
     public LoginEntity findConnectAutomatically() {
         for (LoginEntity l : getDao()) {
             if (l.isConnectAutomatically()) {
