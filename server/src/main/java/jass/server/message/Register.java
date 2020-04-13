@@ -56,11 +56,11 @@ public class Register extends Message {
             // Check for a valid password (lax password requirements)
             if (data.getPassword() != null && data.getPassword().length() >= 3) {
                 // Check whether the username is not already taken
-                if (!UserRepository.usernameExists(data.getUsername())) {
+                if (!UserRepository.getSingleton(null).usernameExists(data.getUsername())) {
                     UserEntity newUser = new UserEntity(data.getUsername(), data.getPassword());
 
                     // Add the new user to the database, and only return true if it was saved successfully
-                    if (UserRepository.create(newUser)) {
+                    if (UserRepository.getSingleton(null).add(newUser)) {
                         logger.info("User " + newUser.getUsername() + " created");
                         result = true;
                     }

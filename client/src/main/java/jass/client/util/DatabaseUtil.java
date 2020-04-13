@@ -25,6 +25,8 @@ import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.TableUtils;
 import jass.client.entity.LoginEntity;
 import jass.client.entity.ServerEntity;
+import jass.client.repository.LoginRepository;
+import jass.client.repository.ServerRepository;
 import jass.lib.servicelocator.Service;
 
 import java.io.Closeable;
@@ -74,7 +76,9 @@ public class DatabaseUtil implements Service, Closeable {
          * Create our DAOs. One for each class and associated table.
          */
         loginDao = DaoManager.createDao(connectionSource, LoginEntity.class);
+        LoginRepository.getSingleton(loginDao);
         serverDao = DaoManager.createDao(connectionSource, ServerEntity.class);
+        ServerRepository.getSingleton(serverDao);
 
         /*
          * Create the tables, if they don't exist yet.

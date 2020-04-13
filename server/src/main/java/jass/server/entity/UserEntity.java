@@ -20,6 +20,7 @@ package jass.server.entity;
 
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
+import jass.lib.database.Entity;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import jass.server.util.HashUtil;
@@ -38,7 +39,7 @@ import java.util.Date;
  * @since 0.0.1
  */
 @DatabaseTable(tableName = "users")
-public class UserEntity {
+public class UserEntity implements Entity {
     private static final Logger logger = LogManager.getLogger(UserEntity.class);
 
     /**

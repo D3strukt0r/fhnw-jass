@@ -20,6 +20,7 @@ package jass.client.entity;
 
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
+import jass.lib.database.Entity;
 import jass.lib.servicelocator.Service;
 
 /**
@@ -30,7 +31,7 @@ import jass.lib.servicelocator.Service;
  * @since 0.0.1
  */
 @DatabaseTable(tableName = "login")
-public class LoginEntity implements Service {
+public class LoginEntity implements Service, Entity {
     /**
      * Fields (Columns)
      */

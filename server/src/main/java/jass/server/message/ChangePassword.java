@@ -53,7 +53,7 @@ public class ChangePassword extends Message {
             user.setPassword(data.getNewPassword());
 
             // Update inside the db, and only return true, if that was also successful.
-            if (UserRepository.update(user)) {
+            if (UserRepository.getSingleton(null).update(user)) {
                 logger.info("User " + user.getUsername() + " changed his password.");
                 result = true;
             }

@@ -51,9 +51,9 @@ public class Login extends Message {
     public void process(ClientUtil client) {
         // Find existing login matching the username.
         UserEntity user;
-        if (UserRepository.usernameExists(data.getUsername())) {
+        if (UserRepository.getSingleton(null).usernameExists(data.getUsername())) {
             logger.info("User " + data.getUsername() + " exists");
-            user = UserRepository.getByUsername(data.getUsername());
+            user = UserRepository.getSingleton(null).getByUsername(data.getUsername());
         } else {
             logger.info("User " + data.getUsername() + " does not exist");
             client.send(new Result(new ResultData(data.getId(), false)));

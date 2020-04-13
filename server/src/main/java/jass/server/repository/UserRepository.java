@@ -18,72 +18,36 @@
 
 package jass.server.repository;
 
-import jass.lib.servicelocator.ServiceLocator;
+import com.j256.ormlite.dao.Dao;
+import jass.lib.database.Repository;
 import jass.server.entity.UserEntity;
-import jass.server.util.DatabaseUtil;
 
 import java.sql.SQLException;
 import java.util.List;
 
-public class UserRepository {
-    public static boolean create(UserEntity user) {
-        DatabaseUtil db = (DatabaseUtil) ServiceLocator.get("db");
-        // Check that database is available, otherwise fail.
-        if (db == null) {
-            return false;
-        }
+public final class UserRepository extends Repository<Dao<UserEntity, String>, UserEntity> {
 
-        try {
-            // Add the user to the db
-            db.getUserDao().create(user);
-            return true;
-        } catch (SQLException e) {
-            return false;
+    private static UserRepository singleton = null;
+
+    public static UserRepository getSingleton(Dao<UserEntity, String> dao) {
+        if (singleton == null) {
+            singleton = new UserRepository(dao);
         }
+        return singleton;
     }
 
-    public static boolean remove(UserEntity user) {
-        DatabaseUtil db = (DatabaseUtil) ServiceLocator.get("db");
-        // Check that database is available, otherwise fail.
-        if (db == null) {
-            return false;
-        }
+    ///////////////////////////////////////
 
-        try {
-            // Remove the user from the db
-            db.getUserDao().delete(user);
-            return true;
-        } catch (SQLException e) {
-            return false;
-        }
+    public UserRepository(final Dao<UserEntity, String> dao) {
+        super(dao);
     }
 
-    public static boolean update(UserEntity user) {
-        DatabaseUtil db = (DatabaseUtil) ServiceLocator.get("db");
-        // Check that database is available, otherwise fail.
-        if (db == null) {
-            return false;
-        }
+    ///////////////////////////////////////
 
-        try {
-            // Update the user object in the db
-            db.getUserDao().update(user);
-            return true;
-        } catch (SQLException e) {
-            return false;
-        }
-    }
-
-    public static UserEntity getByUsername(String username) {
-        DatabaseUtil db = (DatabaseUtil) ServiceLocator.get("db");
-        // Check that database is available, otherwise fail.
-        if (db == null) {
-            return null;
-        }
-
+    public UserEntity getByUsername(final String username) {
         try {
             // Find all users with the given username (only one)
-            List<UserEntity> results = db.getUserDao().queryBuilder().where().eq("username", username).query();
+            List<UserEntity> results = getDao().queryBuilder().where().eq("username", username).query();
             if (results.size() != 0) {
                 return results.get(0);
             } else {
@@ -94,16 +58,10 @@ public class UserRepository {
         }
     }
 
-    public static boolean usernameExists(String username) {
-        DatabaseUtil db = (DatabaseUtil) ServiceLocator.get("db");
-        // Check that database is available, otherwise fail.
-        if (db == null) {
-            return false;
-        }
-
+    public boolean usernameExists(final String username) {
         try {
             // Check if there is somebody in the db already using the given username.
-            List<UserEntity> results = db.getUserDao().queryBuilder().where().eq("username", username).query();
+            List<UserEntity> results = getDao().queryBuilder().where().eq("username", username).query();
             return results.size() != 0;
         } catch (SQLException e) {
             return false;

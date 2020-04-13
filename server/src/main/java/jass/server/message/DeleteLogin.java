@@ -48,7 +48,7 @@ public class DeleteLogin extends Message {
 
         // Only continue if the user has the right token.
         if (client.getToken() != null && client.getToken().equals(data.getToken())) {
-            if (UserRepository.remove(client.getUser())) {
+            if (UserRepository.getSingleton(null).remove(client.getUser())) {
                 logger.info("User " + client.getUser().getUsername() + " was deleted");
                 client.setToken(null);
                 client.setUser(null);
