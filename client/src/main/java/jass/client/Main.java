@@ -2,7 +2,12 @@ package jass.client;
 
 import javafx.application.Application;
 import javafx.stage.Stage;
-import org.apache.commons.cli.*;
+import org.apache.commons.cli.CommandLine;
+import org.apache.commons.cli.DefaultParser;
+import org.apache.commons.cli.HelpFormatter;
+import org.apache.commons.cli.Option;
+import org.apache.commons.cli.Options;
+import org.apache.commons.cli.ParseException;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.core.LoggerContext;
@@ -15,15 +20,16 @@ import jass.client.util.WindowUtil;
  * @version %I%, %G%
  * @since 0.0.1
  */
-public class Main extends Application {
+public final class Main extends Application {
     /**
      * The location of the database storage.
      */
     public static String dbLocation = "data/jass.sqlite3";
 
-    public static void main(String[] args) {
+    /**
      * @param args The arguments passed in the console.
      */
+    public static void main(final String[] args) {
         // Create all arguments for the command line interface
         Options options = new Options();
         options
@@ -57,7 +63,7 @@ public class Main extends Application {
     }
 
     @Override
-    public void start(Stage primaryStage) {
+    public void start(final Stage primaryStage) {
         WindowUtil.switchToSplashScreen();
     }
 }

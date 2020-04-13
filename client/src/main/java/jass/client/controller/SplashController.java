@@ -16,7 +16,7 @@ import java.util.ResourceBundle;
  *
  * @author Brad Richards
  */
-public class SplashController extends Controller {
+public final class SplashController extends Controller {
     /**
      * The model.
      */

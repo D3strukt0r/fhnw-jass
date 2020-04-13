@@ -43,8 +43,6 @@ import jass.client.util.ViewUtil;
 import jass.lib.message.DeleteLoginData;
 import jass.lib.message.LogoutData;
 import jass.lib.servicelocator.ServiceLocator;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -56,8 +54,8 @@ import java.util.ResourceBundle;
  * @version %I%, %G%
  * @since 0.0.1
  */
-public class DeleteAccountController extends Controller {
-    private static final Logger logger = LogManager.getLogger(DeleteAccountController.class);
+public final class DeleteAccountController extends Controller {
+    /**
      * The view.
      */
     private DeleteAccountView view;

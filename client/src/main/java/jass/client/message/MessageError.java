@@ -33,7 +33,7 @@ import jass.lib.message.MessageErrorData;
  * @version %I%, %G%
  * @since 0.0.1
  */
-public class MessageError extends Message {
+public final class MessageError extends Message {
     /**
      * The data of the message.
      */

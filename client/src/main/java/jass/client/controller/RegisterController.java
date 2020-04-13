@@ -23,7 +23,6 @@ import com.jfoenix.controls.JFXCheckBox;
 import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
 import javafx.application.Platform;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
@@ -56,7 +55,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * @version %I%, %G%
  * @since 0.0.1
  */
-public class RegisterController extends Controller implements DisconnectEventListener {
+public final class RegisterController extends Controller implements DisconnectEventListener {
     /**
      * The view.
      */
@@ -375,7 +374,7 @@ public class RegisterController extends Controller implements DisconnectEventLis
      * After clicking on login, switch to the login window.
      */
     @FXML
-    private void clickOnLogin(final ActionEvent event) {
+    private void clickOnLogin() {
         WindowUtil.switchToLoginWindow();
     }
 

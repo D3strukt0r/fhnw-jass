@@ -32,7 +32,7 @@ import jass.lib.servicelocator.ServiceLocator;
  * @version %I%, %G%
  * @since 0.0.1
  */
-public class Login extends Message {
+public final class Login extends Message {
     /**
      * The data of the message.
      */

@@ -66,7 +66,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * @version %I%, %G%
  * @since 0.0.1
  */
-public class ServerConnectionController extends Controller {
+public final class ServerConnectionController extends Controller {
     /**
      * The logger to print to console and save in a .log file.
      */

@@ -20,11 +20,7 @@ package jass.client.repository;
 
 import com.j256.ormlite.dao.Dao;
 import jass.client.entity.LoginEntity;
-import jass.client.util.DatabaseUtil;
 import jass.lib.database.Repository;
-import jass.lib.servicelocator.ServiceLocator;
-
-import java.sql.SQLException;
 
 /**
  * Helper functions concerning the LoginEntity class.

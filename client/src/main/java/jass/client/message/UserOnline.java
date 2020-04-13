@@ -30,7 +30,7 @@ import jass.lib.message.UserOnlineData;
  * @version %I%, %G%
  * @since 0.0.1
  */
-public class UserOnline extends Message {
+public final class UserOnline extends Message {
     /**
      * The data of the message.
      */

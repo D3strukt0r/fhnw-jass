@@ -35,7 +35,7 @@ import java.io.IOException;
  * @version %I%, %G%
  * @since 0.0.1
  */
-public class SplashView extends View {
+public final class SplashView extends View {
     /**
      * @param stage The stage of the window.
      */

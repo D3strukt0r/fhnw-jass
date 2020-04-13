@@ -33,7 +33,7 @@ import javafx.stage.Stage;
  * @version %I%, %G%
  * @since 0.0.1
  */
-public class WindowUtil {
+public final class WindowUtil {
     /**
      * A defined stage (window) to be reused.
      */

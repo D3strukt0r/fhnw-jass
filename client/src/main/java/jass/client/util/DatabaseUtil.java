@@ -40,10 +40,11 @@ import java.sql.SQLException;
  * @version %I%, %G%
  * @since 0.0.1
  */
-public class DatabaseUtil implements Service, Closeable {
-    private ConnectionSource connectionSource;
+public final class DatabaseUtil implements Service, Closeable {
+    /**
      * The database connection.
      */
+    private final ConnectionSource connectionSource;
 
     /**
      * The DAO for the logins.
@@ -63,7 +64,7 @@ public class DatabaseUtil implements Service, Closeable {
      *
      * @since 0.0.1
      */
-    public DatabaseUtil(String databaseLocation) throws SQLException {
+    public DatabaseUtil(final String databaseLocation) throws SQLException {
         // this uses h2 but you can change it to match your database
         String databaseUrl = "jdbc:sqlite:" + databaseLocation;
 
@@ -104,10 +105,12 @@ public class DatabaseUtil implements Service, Closeable {
      */
     @Override
     public void close() {
-        if (connectionSource != null) try {
-            connectionSource.close();
-        } catch (IOException e) {
-            // we don't care
+        if (connectionSource != null) {
+            try {
+                connectionSource.close();
+            } catch (IOException e) {
+                // we don't care
+            }
         }
     }
 

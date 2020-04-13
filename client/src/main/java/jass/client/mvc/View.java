@@ -30,14 +30,15 @@ import javafx.stage.Stage;
  * @since 0.0.1
  */
 public abstract class View {
-    protected Stage stage;
-    protected Scene scene;
+    /**
+     * The stage.
      */
     private final Stage stage;
 
     /**
      * The scene.
      */
+    private final Scene scene;
 
     /**
      * Set any options for the stage in the subclass constructor.
@@ -74,6 +75,9 @@ public abstract class View {
     /**
      * @return Returns the scene.
      */
+    public Scene getScene() {
+        return scene;
+    }
 
     /**
      * Getter for the stage, so that the controller can access window events.

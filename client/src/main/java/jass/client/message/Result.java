@@ -29,8 +29,8 @@ import jass.lib.message.MessageData;
  * @version %I%, %G%
  * @since 0.0.1
  */
-public class Result extends Message {
-
+public final class Result extends Message {
+    /**
      * @param rawData The data (still not casted)
      */
     public Result(final MessageData rawData) {

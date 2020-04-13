@@ -33,12 +33,16 @@ import java.lang.reflect.InvocationTargetException;
  * @since 0.0.1
  */
 public abstract class Message {
-    protected final MessageData rawData;
+    /**
      * The data of the message (still not casted).
      */
+    private final MessageData rawData;
 
-    public Message(final MessageData data) {
-        this.rawData = data;
+    /**
+     * @param rawData The data (still not casted)
+     */
+    public Message(final MessageData rawData) {
+        this.rawData = rawData;
     }
 
     /**

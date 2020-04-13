@@ -23,7 +23,6 @@ import com.jfoenix.controls.JFXCheckBox;
 import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
 import javafx.application.Platform;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
@@ -57,7 +56,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * @version %I%, %G%
  * @since 0.0.1
  */
-public class LoginController extends Controller implements DisconnectEventListener {
+public final class LoginController extends Controller implements DisconnectEventListener {
     /**
      * The logger to print to console and save in a .log file.
      */
@@ -363,7 +362,7 @@ public class LoginController extends Controller implements DisconnectEventListen
      * After clicking on register, switch to the register window.
      */
     @FXML
-    private void clickOnRegister(final ActionEvent event) {
+    private void clickOnRegister() {
         WindowUtil.switchToRegisterWindow();
     }
 

@@ -35,7 +35,7 @@ import jass.lib.servicelocator.ServiceLocator;
  * @version %I%, %G%
  * @since 0.0.1
  */
-public class ChangePassword extends Message {
+public final class ChangePassword extends Message {
     /**
      * The logger to print to console and save in a .log file.
      */

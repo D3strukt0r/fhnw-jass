@@ -35,7 +35,7 @@ import java.io.IOException;
  * @version %I%, %G%
  * @since 0.0.1
  */
-public class LobbyView extends View {
+public final class LobbyView extends View {
     /**
      * @param stage The stage of the window.
      */

@@ -30,7 +30,7 @@ import jass.lib.message.ResultData;
  * @version %I%, %G%
  * @since 0.0.1
  */
-public class Logout extends Message {
+public final class Logout extends Message {
     /**
      * @param rawData The data (still not casted)
      */
@@ -42,7 +42,7 @@ public class Logout extends Message {
     public boolean process(final SocketUtil socket) {
         socket.send(this);
 
-        Message result = socket.waitForResultResponse(rawData.getId());
+        Message result = socket.waitForResultResponse(getRawData().getId());
         ResultData resultData = (ResultData) result.getRawData();
 
         return resultData.getResult();

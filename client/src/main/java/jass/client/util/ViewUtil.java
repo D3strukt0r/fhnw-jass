@@ -60,7 +60,7 @@ import java.util.Locale;
  * @version %I%, %G%
  * @since 0.0.1
  */
-public class ViewUtil {
+public final class ViewUtil {
     /**
      * @param space The space to create.
      *

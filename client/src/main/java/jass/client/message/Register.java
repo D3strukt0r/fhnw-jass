@@ -30,7 +30,7 @@ import jass.lib.message.ResultData;
  * @version %I%, %G%
  * @since 0.0.1
  */
-public class Register extends Message {
+public final class Register extends Message {
     /**
      * The data of the message.
      */
