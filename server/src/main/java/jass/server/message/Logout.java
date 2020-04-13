@@ -30,14 +30,14 @@ import jass.server.util.ClientUtil;
  * @since 0.0.1
  */
 public class Logout extends Message {
-    public Logout(MessageData rawData) {
+    public Logout(final MessageData rawData) {
         super(rawData);
     }
 
     @Override
-    public void process(ClientUtil client) {
+    public void process(final ClientUtil client) {
         client.setToken(null); // Destroy authentication token
         client.setUser(null); // Destroy account information
-        client.send(new Result(new ResultData(rawData.getId(), true)));
+        client.send(new Result(new ResultData(getRawData().getId(), true)));
     }
 }

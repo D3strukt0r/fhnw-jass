@@ -35,15 +35,15 @@ import jass.lib.message.ResultData;
  */
 public class DeleteLogin extends Message {
     private static final Logger logger = LogManager.getLogger(DeleteLogin.class);
-    private DeleteLoginData data;
+    private final DeleteLoginData data;
 
-    public DeleteLogin(MessageData rawData) {
+    public DeleteLogin(final MessageData rawData) {
         super(rawData);
         data = (DeleteLoginData) rawData;
     }
 
     @Override
-    public void process(ClientUtil client) {
+    public void process(final ClientUtil client) {
         boolean result = false;
 
         // Only continue if the user has the right token.

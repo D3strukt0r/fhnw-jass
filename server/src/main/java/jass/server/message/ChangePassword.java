@@ -36,15 +36,15 @@ import jass.lib.message.ResultData;
  */
 public class ChangePassword extends Message {
     private static final Logger logger = LogManager.getLogger(ChangePassword.class);
-    private ChangePasswordData data;
+    private final ChangePasswordData data;
 
-    public ChangePassword(MessageData rawData) {
+    public ChangePassword(final MessageData rawData) {
         super(rawData);
         data = (ChangePasswordData) rawData;
     }
 
     @Override
-    public void process(ClientUtil client) {
+    public void process(final ClientUtil client) {
         boolean result = false;
 
         // Only continue if the user has the right token.

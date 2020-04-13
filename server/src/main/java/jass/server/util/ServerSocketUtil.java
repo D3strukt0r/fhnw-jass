@@ -28,12 +28,17 @@ import javax.net.ssl.TrustManagerFactory;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.security.*;
+import java.security.KeyManagementException;
+import java.security.KeyStore;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
+import java.security.UnrecoverableKeyException;
 import java.security.cert.CertificateException;
 import java.util.ArrayList;
 
 /**
- * Creates a server socket (with or without SSL)
+ * Creates a server socket (with or without SSL).
  *
  * @author Manuele Vaccari
  * @author https://stackoverflow.com/questions/53323855/sslserversocket-and-certificate-setup
@@ -48,7 +53,7 @@ public class ServerSocketUtil extends Thread {
 
     private static final ArrayList<ClientUtil> clients = new ArrayList<>();
 
-    public ServerSocketUtil(int port, boolean secure) throws IOException, KeyStoreException, CertificateException, NoSuchAlgorithmException, UnrecoverableKeyException, KeyManagementException {
+    public ServerSocketUtil(final int port, final boolean secure) throws IOException, KeyStoreException, CertificateException, NoSuchAlgorithmException, UnrecoverableKeyException, KeyManagementException {
         super();
         this.port = port;
         this.setName("ServerSocketThread");
@@ -117,9 +122,11 @@ public class ServerSocketUtil extends Thread {
      *
      * @return "true" if a client is connected, otherwise "false"
      */
-    public synchronized static boolean exists(String username) {
+    public static synchronized boolean exists(final String username) {
         for (ClientUtil c : clients) {
-            if (c.getUser() != null && c.getUser().getUsername().equals(username)) return true;
+            if (c.getUser() != null && c.getUser().getUsername().equals(username)) {
+                return true;
+            }
         }
         return false;
     }
@@ -129,7 +136,7 @@ public class ServerSocketUtil extends Thread {
      *
      * @param client A client object
      */
-    public synchronized static void remove(ClientUtil client) {
+    public static synchronized void remove(final ClientUtil client) {
         clients.remove(client);
     }
 }

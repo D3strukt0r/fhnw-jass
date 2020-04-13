@@ -39,16 +39,16 @@ import java.security.SecureRandom;
  */
 public class Login extends Message {
     private static final Logger logger = LogManager.getLogger(Login.class);
-    private LoginData data;
+    private final LoginData data;
     private static final SecureRandom rand = new SecureRandom();
 
-    public Login(MessageData rawData) {
+    public Login(final MessageData rawData) {
         super(rawData);
         data = (LoginData) rawData;
     }
 
     @Override
-    public void process(ClientUtil client) {
+    public void process(final ClientUtil client) {
         // Find existing login matching the username.
         UserEntity user;
         if (UserRepository.getSingleton(null).usernameExists(data.getUsername())) {
@@ -88,9 +88,9 @@ public class Login extends Message {
 
     // From:
     // https://stackoverflow.com/questions/9655181/how-to-convert-a-byte-array-to-a-hex-string-in-java
-    private final static char[] hexArray = "0123456789ABCDEF".toCharArray();
+    private static final char[] hexArray = "0123456789ABCDEF".toCharArray();
 
-    public static String bytesToHex(byte[] bytes) {
+    public static String bytesToHex(final byte[] bytes) {
         char[] hexChars = new char[bytes.length * 2];
         for (int j = 0; j < bytes.length; j++) {
             int v = bytes[j] & 0xFF;

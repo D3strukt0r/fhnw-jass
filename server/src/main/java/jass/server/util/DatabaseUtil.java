@@ -42,18 +42,18 @@ import java.sql.SQLException;
  * @since 0.0.1
  */
 public class DatabaseUtil implements Service, Closeable {
-    private ConnectionSource connectionSource;
+    private final ConnectionSource connectionSource;
 
     private Dao<UserEntity, String> userDao;
 
     /**
-     * Create a database connection
+     * Create a database connection.
      *
      * @param databaseLocation A string containing the location of the file to be accessed (and if necessary created)
      *
      * @since 0.0.1
      */
-    public DatabaseUtil(String databaseLocation) throws SQLException {
+    public DatabaseUtil(final String databaseLocation) throws SQLException {
         // This uses h2 but you can change it to match your database
         String databaseUrl = "jdbc:sqlite:" + databaseLocation;
 
@@ -91,9 +91,11 @@ public class DatabaseUtil implements Service, Closeable {
      */
     @Override
     public void close() {
-        if (connectionSource != null) try {
-            connectionSource.close();
-        } catch (IOException e) { /* Ignore */ }
+        if (connectionSource != null) {
+            try {
+                connectionSource.close();
+            } catch (IOException e) { /* Ignore */ }
+        }
     }
 
     /**
