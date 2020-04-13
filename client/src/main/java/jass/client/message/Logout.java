@@ -18,8 +18,6 @@
 
 package jass.client.message;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import jass.client.util.SocketUtil;
 import jass.lib.message.MessageData;
 import jass.lib.message.ResultData;
@@ -32,8 +30,6 @@ import jass.lib.message.ResultData;
  * @since 0.0.1
  */
 public class Logout extends Message {
-    private static final Logger logger = LogManager.getLogger(Logout.class);
-
     public Logout(final MessageData rawData) {
         super(rawData);
     }

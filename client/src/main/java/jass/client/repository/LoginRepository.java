@@ -37,7 +37,7 @@ public class LoginRepository extends Repository<Dao<LoginEntity, String>, LoginE
 
     private static LoginRepository singleton = null;
 
-    public static LoginRepository getSingleton(Dao<LoginEntity, String> dao) {
+    public static LoginRepository getSingleton(final Dao<LoginEntity, String> dao) {
         if (singleton == null) {
             singleton = new LoginRepository(dao);
         }

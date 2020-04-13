@@ -33,12 +33,12 @@ public class Result extends Message {
     public Result(final MessageData rawData) {
         super(rawData);
     }
-	
-	/**
-	 * This message type does no processing at all (only the server)
-	 */
-	@Override
-	public boolean process(final SocketUtil socket) {
-	    return true;
-	}
+
+    /**
+     * This message type does no processing at all (only the server).
+     */
+    @Override
+    public boolean process(final SocketUtil socket) {
+        return true;
+    }
 }

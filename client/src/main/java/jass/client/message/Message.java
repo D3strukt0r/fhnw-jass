@@ -52,7 +52,7 @@ public abstract class Message {
     public abstract boolean process(SocketUtil socket);
 
     /**
-     * Create a message object of the correct class, using reflection
+     * Create a message object of the correct class, using reflection.
      *
      * @author Bradley Richards
      */
@@ -68,7 +68,7 @@ public abstract class Message {
     }
 
     /**
-     * A message is really just a bunch of strings separated by vertical bars
+     * A message is really just a bunch of strings separated by vertical bars.
      */
     @Override
     public String toString() {

@@ -29,7 +29,7 @@ public final class UserRepository extends Repository<Dao<UserEntity, String>, Us
 
     private static UserRepository singleton = null;
 
-    public static UserRepository getSingleton(Dao<UserEntity, String> dao) {
+    public static UserRepository getSingleton(final Dao<UserEntity, String> dao) {
         if (singleton == null) {
             singleton = new UserRepository(dao);
         }

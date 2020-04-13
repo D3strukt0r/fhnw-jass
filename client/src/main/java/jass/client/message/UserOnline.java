@@ -31,7 +31,7 @@ import jass.lib.message.UserOnlineData;
  * @since 0.0.1
  */
 public class UserOnline extends Message {
-    private UserOnlineData data;
+    private final UserOnlineData data;
 
     public UserOnline(final MessageData rawData) {
         super(rawData);

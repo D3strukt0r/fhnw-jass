@@ -33,7 +33,7 @@ public class ServerRepository extends Repository<Dao<ServerEntity, String>, Serv
 
     private static ServerRepository singleton = null;
 
-    public static ServerRepository getSingleton(Dao<ServerEntity, String> dao) {
+    public static ServerRepository getSingleton(final Dao<ServerEntity, String> dao) {
         if (singleton == null) {
             singleton = new ServerRepository(dao);
         }

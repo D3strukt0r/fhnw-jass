@@ -18,17 +18,15 @@
 
 package jass.client.message;
 
+import jass.client.repository.LoginRepository;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import jass.client.entity.LoginEntity;
 import jass.client.util.SocketUtil;
-import jass.client.util.DatabaseUtil;
 import jass.lib.message.LoginData;
 import jass.lib.message.MessageData;
 import jass.lib.message.ResultData;
 import jass.lib.servicelocator.ServiceLocator;
-
-import java.sql.SQLException;
 
 /**
  * Delete the currently logged in user from the server. After successful deletion, token becomes invalid.
@@ -39,7 +37,7 @@ import java.sql.SQLException;
  */
 public class DeleteLogin extends Message {
     private static final Logger logger = LogManager.getLogger(DeleteLogin.class);
-    private LoginData data;
+    private final LoginData data;
 
     public DeleteLogin(final MessageData rawData) {
         super(rawData);
@@ -56,10 +54,7 @@ public class DeleteLogin extends Message {
         if (resultData.getResult()) {
             LoginEntity login = (LoginEntity) ServiceLocator.get("login");
 
-            DatabaseUtil db = (DatabaseUtil) ServiceLocator.get("db");
-            try {
-                db.getLoginDao().delete(login);
-            } catch (SQLException e) {
+            if (!LoginRepository.getSingleton(null).remove(login)) {
                 logger.error("Couldn't save login data to local database.");
             }
         }

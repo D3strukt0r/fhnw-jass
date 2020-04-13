@@ -34,7 +34,7 @@ import jass.lib.message.MessageErrorData;
  * @since 0.0.1
  */
 public class MessageError extends Message {
-    private MessageErrorData data;
+    private final MessageErrorData data;
 
     public MessageError(final MessageData rawData) {
         super(rawData);
@@ -49,7 +49,7 @@ public class MessageError extends Message {
         Platform.runLater(() -> {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error");
-            alert.setHeaderText("Ooops, the server sent an error message!");
+            alert.setHeaderText("Oops, the server sent an error message!");
 
             switch (data.getErrorMessage()) {
                 case INVALID_COMMAND:
@@ -59,7 +59,7 @@ public class MessageError extends Message {
                     alert.setContentText("Unknown error message received.");
                     break;
             }
-            alert.setContentText("Ooops, there was an error!");
+            alert.setContentText("Oops, there was an error!");
 
             Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
             stage.getIcons().add(new Image(getClass().getResource("/images/icon.png").toString()));

@@ -19,16 +19,14 @@
 package jass.client.message;
 
 import jass.client.entity.LoginEntity;
+import jass.client.repository.LoginRepository;
 import jass.client.util.SocketUtil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import jass.client.util.DatabaseUtil;
 import jass.lib.message.ChangePasswordData;
 import jass.lib.message.MessageData;
 import jass.lib.message.ResultData;
 import jass.lib.servicelocator.ServiceLocator;
-
-import java.sql.SQLException;
 
 /**
  * Overwrite the password of the currently logged in user.
@@ -39,15 +37,15 @@ import java.sql.SQLException;
  */
 public class ChangePassword extends Message {
     private static final Logger logger = LogManager.getLogger(ChangePassword.class);
-    private ChangePasswordData data;
+    private final ChangePasswordData data;
 
-    public ChangePassword(MessageData rawData) {
+    public ChangePassword(final MessageData rawData) {
         super(rawData);
         data = (ChangePasswordData) rawData;
     }
 
     @Override
-    public boolean process(SocketUtil socket) {
+    public boolean process(final SocketUtil socket) {
         socket.send(this);
 
         Message result = socket.waitForResultResponse(data.getId());
@@ -63,11 +61,7 @@ public class ChangePassword extends Message {
             ServiceLocator.add(newLogin);
 
             // Also remove the old login from the database and replace with the new one.
-            DatabaseUtil db = (DatabaseUtil) ServiceLocator.get("db");
-            try {
-                db.getLoginDao().delete(login);
-                db.getLoginDao().create(newLogin);
-            } catch (SQLException e) {
+            if (!LoginRepository.getSingleton(null).remove(login) || LoginRepository.getSingleton(null).add(newLogin)) {
                 logger.error("Couldn't save login data to local database.");
             }
         }
