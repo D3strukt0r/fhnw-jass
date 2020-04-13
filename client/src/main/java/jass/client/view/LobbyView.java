@@ -36,7 +36,7 @@ import java.io.IOException;
  * @since 0.0.1
  */
 public class LobbyView extends View {
-    public LobbyView(Stage stage) {
+    public LobbyView(final Stage stage) {
         super(stage);
         stage.titleProperty().bind(I18nUtil.createStringBinding("gui.dashboard.title"));
         stage.setMinHeight(300);

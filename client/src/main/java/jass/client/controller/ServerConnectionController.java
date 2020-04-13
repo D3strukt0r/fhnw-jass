@@ -56,7 +56,6 @@ import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.UnrecoverableKeyException;
 import java.security.cert.CertificateException;
-import java.sql.SQLException;
 import java.util.ResourceBundle;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -72,19 +71,19 @@ public class ServerConnectionController extends Controller {
     private ServerConnectionView view;
 
     @FXML
-    public Menu mFile;
+    private Menu mFile;
     @FXML
-    public Menu mFileChangeLanguage;
+    private Menu mFileChangeLanguage;
     @FXML
-    public MenuItem mFileExit;
+    private MenuItem mFileExit;
     @FXML
-    public Menu mEdit;
+    private Menu mEdit;
     @FXML
-    public MenuItem mEditDelete;
+    private MenuItem mEditDelete;
     @FXML
-    public Menu mHelp;
+    private Menu mHelp;
     @FXML
-    public MenuItem mHelpAbout;
+    private MenuItem mHelpAbout;
 
     @FXML
     private VBox root;
@@ -97,7 +96,7 @@ public class ServerConnectionController extends Controller {
     @FXML
     private JFXTextField ipOrDomain;
     @FXML
-    public Text ipHint;
+    private Text ipHint;
     @FXML
     private JFXTextField port;
     @FXML
@@ -110,7 +109,7 @@ public class ServerConnectionController extends Controller {
     private JFXButton connect;
 
     @Override
-    public void initialize(URL location, ResourceBundle resources) {
+    public void initialize(final URL location, final ResourceBundle resources) {
         DatabaseUtil db = (DatabaseUtil) ServiceLocator.get("db");
 
         /*
@@ -156,20 +155,28 @@ public class ServerConnectionController extends Controller {
          */
         chooseServer.setConverter(new StringConverter<ServerEntity>() {
             @Override
-            public String toString(ServerEntity server) {
-                return server == null || server.getIp() == null
-                    ? I18nUtil.get("gui.serverConnection.create")
-                    : (server.isSecure()
-                        ? (server.isConnectAutomatically()
-                            ? I18nUtil.get("gui.serverConnection.entry.ssl.default", server.getIp(), Integer.toString(server.getPort()))
-                            : I18nUtil.get("gui.serverConnection.entry.ssl", server.getIp(), Integer.toString(server.getPort())))
-                        : (server.isConnectAutomatically()
-                            ? I18nUtil.get("gui.serverConnection.entry.default", server.getIp(), Integer.toString(server.getPort()))
-                            : I18nUtil.get("gui.serverConnection.entry", server.getIp(), Integer.toString(server.getPort()))));
+            public String toString(final ServerEntity server) {
+                if (server == null || server.getIp() == null) {
+                    return I18nUtil.get("gui.serverConnection.create");
+                } else {
+                    if (server.isSecure()) {
+                        if (server.isConnectAutomatically()) {
+                            return I18nUtil.get("gui.serverConnection.entry.ssl.default", server.getIp(), Integer.toString(server.getPort()));
+                        } else {
+                            return I18nUtil.get("gui.serverConnection.entry.ssl", server.getIp(), Integer.toString(server.getPort()));
+                        }
+                    } else {
+                        if (server.isConnectAutomatically()) {
+                            return I18nUtil.get("gui.serverConnection.entry.default", server.getIp(), Integer.toString(server.getPort()));
+                        } else {
+                            return I18nUtil.get("gui.serverConnection.entry", server.getIp(), Integer.toString(server.getPort()));
+                        }
+                    }
+                }
             }
 
             @Override
-            public ServerEntity fromString(String string) {
+            public ServerEntity fromString(final String string) {
                 return null;
             }
         });
@@ -188,13 +195,7 @@ public class ServerConnectionController extends Controller {
          */
         AtomicBoolean serverIpValid = new AtomicBoolean(false);
         AtomicBoolean portValid = new AtomicBoolean(false);
-        Runnable updateButtonClickable = () -> {
-            if (!serverIpValid.get() || !portValid.get()) {
-                connect.setDisable(true);
-            } else {
-                connect.setDisable(false);
-            }
-        };
+        Runnable updateButtonClickable = () -> connect.setDisable(!serverIpValid.get() || !portValid.get());
         ipOrDomain.textProperty().addListener((o, oldVal, newVal) -> {
             if (!oldVal.equals(newVal)) {
                 serverIpValid.set(ipOrDomain.validate());
@@ -273,7 +274,7 @@ public class ServerConnectionController extends Controller {
      *
      * @since 0.0.1
      */
-    public void setErrorMessage(String translatorKey) {
+    public void setErrorMessage(final String translatorKey) {
         Platform.runLater(() -> {
             if (errorMessage.getChildren().size() == 0) {
                 // Make window larger, so it doesn't become crammed, only if we haven't done so yet
@@ -294,7 +295,7 @@ public class ServerConnectionController extends Controller {
     }
 
     /**
-     * Updates the view depending if we create a new element or choose an existing one
+     * Updates the view depending if we create a new element or choose an existing one.
      *
      * @since 0.0.1
      */
@@ -329,8 +330,6 @@ public class ServerConnectionController extends Controller {
 
         // Connection would freeze window (and the animations) so do it in a different thread.
         new Thread(() -> {
-            DatabaseUtil db = (DatabaseUtil) ServiceLocator.get("db");
-
             ServerEntity server = new ServerEntity(
                 ipOrDomain.getText(),
                 Integer.parseInt(port.getText()),
@@ -360,9 +359,7 @@ public class ServerConnectionController extends Controller {
                 // If the user selected "Create new connection" add it to the DB
                 ServerEntity selectedItem = chooseServer.getSelectionModel().getSelectedItem();
                 if (selectedItem != null && selectedItem.getIp() == null) {
-                    try {
-                        db.getServerDao().create(server);
-                    } catch (SQLException e) {
+                    if (!ServerRepository.getSingleton(null).add(server)) {
                         logger.error("Server connection not saved to database");
                     }
                 }
@@ -375,7 +372,7 @@ public class ServerConnectionController extends Controller {
         return connect;
     }
 
-    public void setView(ServerConnectionView view) {
+    public void setView(final ServerConnectionView view) {
         this.view = view;
     }
 }

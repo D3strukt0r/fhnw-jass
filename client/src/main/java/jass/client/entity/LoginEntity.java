@@ -24,7 +24,7 @@ import jass.lib.database.Entity;
 import jass.lib.servicelocator.Service;
 
 /**
- * A model containing all locally saved login informations.
+ * A model containing all locally saved login information.
  *
  * @author Manuele Vaccari
  * @version %I%, %G%
@@ -33,8 +33,9 @@ import jass.lib.servicelocator.Service;
 @DatabaseTable(tableName = "login")
 public class LoginEntity implements Service, Entity {
     /**
-     * Fields (Columns)
+     * Fields (Columns).
      */
+
     @DatabaseField(generatedId = true)
     private int id;
 
@@ -51,32 +52,33 @@ public class LoginEntity implements Service, Entity {
     private boolean connectAutomatically = false;
 
     /**
-     * Constructors
+     * Constructors.
      */
+
     LoginEntity() {
         // For ORMLite
         // all persisted classes must define a no-arg constructor
         // with at least package visibility
     }
 
-    public LoginEntity(String username, String password) {
+    public LoginEntity(final String username, final String password) {
         this.username = username;
         this.password = password;
     }
 
-    public LoginEntity(String username, String password, boolean connectAutomatically) {
+    public LoginEntity(final String username, final String password, final boolean connectAutomatically) {
         this.username = username;
         this.password = password;
         this.connectAutomatically = connectAutomatically;
     }
 
-    public LoginEntity(String username, String password, String token) {
+    public LoginEntity(final String username, final String password, final String token) {
         this.username = username;
         this.password = password;
         this.token = token;
     }
 
-    public LoginEntity(String username, String password, String token, boolean connectAutomatically) {
+    public LoginEntity(final String username, final String password, final String token, final boolean connectAutomatically) {
         this.username = username;
         this.password = password;
         this.token = token;
@@ -84,8 +86,9 @@ public class LoginEntity implements Service, Entity {
     }
 
     /**
-     * Methods
+     * Methods.
      */
+
     @Override
     public String getServiceName() {
         return "login";
@@ -99,7 +102,7 @@ public class LoginEntity implements Service, Entity {
         return username;
     }
 
-    public void setUsername(String username) {
+    public void setUsername(final String username) {
         this.username = username;
     }
 
@@ -107,7 +110,7 @@ public class LoginEntity implements Service, Entity {
         return password;
     }
 
-    public void setPassword(String password) {
+    public void setPassword(final String password) {
         this.password = password;
     }
 
@@ -115,7 +118,7 @@ public class LoginEntity implements Service, Entity {
         return token;
     }
 
-    public void setToken(String token) {
+    public void setToken(final String token) {
         this.token = token;
     }
 
@@ -123,7 +126,7 @@ public class LoginEntity implements Service, Entity {
         return connectAutomatically;
     }
 
-    public void setConnectAutomatically(boolean connectAutomatically) {
+    public void setConnectAutomatically(final boolean connectAutomatically) {
         this.connectAutomatically = connectAutomatically;
     }
 }

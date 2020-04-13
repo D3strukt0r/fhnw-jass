@@ -36,7 +36,7 @@ import jass.lib.message.MessageErrorData;
 public class MessageError extends Message {
     private MessageErrorData data;
 
-    public MessageError(MessageData rawData) {
+    public MessageError(final MessageData rawData) {
         super(rawData);
         data = (MessageErrorData) rawData;
     }
@@ -45,7 +45,7 @@ public class MessageError extends Message {
      * This message type does no processing at all (only the server)
      */
     @Override
-    public boolean process(SocketUtil socket) {
+    public boolean process(final SocketUtil socket) {
         Platform.runLater(() -> {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error");

@@ -18,7 +18,10 @@
 
 package jass.client.controller;
 
-import com.jfoenix.controls.*;
+import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXCheckBox;
+import com.jfoenix.controls.JFXPasswordField;
+import com.jfoenix.controls.JFXTextField;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -35,7 +38,6 @@ import jass.client.repository.LoginRepository;
 import jass.client.eventlistener.DisconnectEventListener;
 import jass.client.mvc.Controller;
 import jass.client.message.Login;
-import jass.client.util.DatabaseUtil;
 import jass.client.util.I18nUtil;
 import jass.client.util.SocketUtil;
 import jass.client.util.WindowUtil;
@@ -45,7 +47,6 @@ import jass.lib.message.LoginData;
 import jass.lib.servicelocator.ServiceLocator;
 
 import java.net.URL;
-import java.sql.SQLException;
 import java.util.ResourceBundle;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -61,21 +62,21 @@ public class LoginController extends Controller implements DisconnectEventListen
     private LoginView view;
 
     @FXML
-    public Menu mFile;
+    private Menu mFile;
     @FXML
-    public Menu mFileChangeLanguage;
+    private Menu mFileChangeLanguage;
     @FXML
-    public MenuItem mFileDisconnect;
+    private MenuItem mFileDisconnect;
     @FXML
-    public MenuItem mFileExit;
+    private MenuItem mFileExit;
     @FXML
-    public Menu mEdit;
+    private Menu mEdit;
     @FXML
-    public MenuItem mEditDelete;
+    private MenuItem mEditDelete;
     @FXML
-    public Menu mHelp;
+    private Menu mHelp;
     @FXML
-    public MenuItem mHelpAbout;
+    private MenuItem mHelpAbout;
 
     @FXML
     private Text navbar;
@@ -93,7 +94,7 @@ public class LoginController extends Controller implements DisconnectEventListen
     private JFXButton register;
 
     @Override
-    public void initialize(URL location, ResourceBundle resources) {
+    public void initialize(final URL location, final ResourceBundle resources) {
         /*
          * Register oneself for disconnect events
          */
@@ -133,13 +134,7 @@ public class LoginController extends Controller implements DisconnectEventListen
          */
         AtomicBoolean usernameValid = new AtomicBoolean(false);
         AtomicBoolean passwordValid = new AtomicBoolean(false);
-        Runnable updateButtonClickable = () -> {
-            if (!usernameValid.get() || !passwordValid.get()) {
-                login.setDisable(true);
-            } else {
-                login.setDisable(false);
-            }
-        };
+        Runnable updateButtonClickable = () -> login.setDisable(!usernameValid.get() || !passwordValid.get());
         username.textProperty().addListener((o, oldVal, newVal) -> {
             if (!oldVal.equals(newVal)) {
                 usernameValid.set(username.validate());
@@ -213,7 +208,7 @@ public class LoginController extends Controller implements DisconnectEventListen
      *
      * @since 0.0.1
      */
-    public void setErrorMessage(String translatorKey) {
+    public void setErrorMessage(final String translatorKey) {
         Platform.runLater(() -> {
             if (errorMessage.getChildren().size() == 0) {
                 // Make window larger, so it doesn't become crammed, only if we haven't done so yet
@@ -269,10 +264,7 @@ public class LoginController extends Controller implements DisconnectEventListen
                 login.setToken(loginMsg.getToken());
 
                 // Save the login in the db
-                DatabaseUtil db = (DatabaseUtil) ServiceLocator.get("db");
-                try {
-                    db.getLoginDao().create(login);
-                } catch (SQLException e) {
+                if (!LoginRepository.getSingleton(null).add(login)) {
                     logger.error("Couldn't save login data to local database.");
                 }
 
@@ -291,7 +283,7 @@ public class LoginController extends Controller implements DisconnectEventListen
     }
 
     @FXML
-    private void clickOnRegister(ActionEvent event) {
+    private void clickOnRegister(final ActionEvent event) {
         WindowUtil.switchToRegisterWindow();
     }
 
@@ -301,7 +293,7 @@ public class LoginController extends Controller implements DisconnectEventListen
         WindowUtil.switchToServerConnectionWindow();
     }
 
-    public void setView(LoginView view) {
+    public void setView(final LoginView view) {
         this.view = view;
     }
 }

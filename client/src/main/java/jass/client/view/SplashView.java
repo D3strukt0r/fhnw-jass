@@ -36,7 +36,7 @@ import java.io.IOException;
  * @since 0.0.1
  */
 public class SplashView extends View {
-    public SplashView(Stage stage) {
+    public SplashView(final Stage stage) {
         super(stage);
         stage.initStyle(StageStyle.TRANSPARENT); // Also undecorated
     }

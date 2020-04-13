@@ -60,21 +60,21 @@ public class RegisterController extends Controller implements DisconnectEventLis
     private RegisterView view;
 
     @FXML
-    public Menu mFile;
+    private Menu mFile;
     @FXML
-    public Menu mFileChangeLanguage;
+    private Menu mFileChangeLanguage;
     @FXML
-    public MenuItem mFileDisconnect;
+    private MenuItem mFileDisconnect;
     @FXML
-    public MenuItem mFileExit;
+    private MenuItem mFileExit;
     @FXML
-    public Menu mEdit;
+    private Menu mEdit;
     @FXML
-    public MenuItem mEditDelete;
+    private MenuItem mEditDelete;
     @FXML
-    public Menu mHelp;
+    private Menu mHelp;
     @FXML
-    public MenuItem mHelpAbout;
+    private MenuItem mHelpAbout;
 
     @FXML
     private Text navbar;
@@ -94,7 +94,7 @@ public class RegisterController extends Controller implements DisconnectEventLis
     private JFXButton login;
 
     @Override
-    public void initialize(URL location, ResourceBundle resources) {
+    public void initialize(final URL location, final ResourceBundle resources) {
         /*
          * Register oneself for disconnect events
          */
@@ -136,13 +136,7 @@ public class RegisterController extends Controller implements DisconnectEventLis
         AtomicBoolean usernameValid = new AtomicBoolean(false);
         AtomicBoolean passwordValid = new AtomicBoolean(false);
         AtomicBoolean repeatPasswordValid = new AtomicBoolean(false);
-        Runnable updateButtonClickable = () -> {
-            if (!usernameValid.get() || !passwordValid.get() || !repeatPasswordValid.get()) {
-                register.setDisable(true);
-            } else {
-                register.setDisable(false);
-            }
-        };
+        Runnable updateButtonClickable = () -> register.setDisable(!usernameValid.get() || !passwordValid.get() || !repeatPasswordValid.get());
         username.textProperty().addListener((o, oldVal, newVal) -> {
             if (!oldVal.equals(newVal)) {
                 usernameValid.set(username.validate());
@@ -226,7 +220,7 @@ public class RegisterController extends Controller implements DisconnectEventLis
      *
      * @since 0.0.1
      */
-    public void setErrorMessage(String translatorKey) {
+    public void setErrorMessage(final String translatorKey) {
         Platform.runLater(() -> {
             if (errorMessage.getChildren().size() == 0) {
                 // Make window larger, so it doesn't become crammed, only if we haven't done so yet
@@ -300,7 +294,7 @@ public class RegisterController extends Controller implements DisconnectEventLis
     }
 
     @FXML
-    private void clickOnLogin(ActionEvent event) {
+    private void clickOnLogin(final ActionEvent event) {
         WindowUtil.switchToLoginWindow();
     }
 
@@ -310,7 +304,7 @@ public class RegisterController extends Controller implements DisconnectEventLis
         WindowUtil.switchToServerConnectionWindow();
     }
 
-    public void setView(RegisterView view) {
+    public void setView(final RegisterView view) {
         this.view = view;
     }
 }

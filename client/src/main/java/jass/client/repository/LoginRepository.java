@@ -44,8 +44,6 @@ public class LoginRepository extends Repository<Dao<LoginEntity, String>, LoginE
         return singleton;
     }
 
-    ///////////////////////////////////////
-
     public LoginRepository(final Dao<LoginEntity, String> dao) {
         super(dao);
     }

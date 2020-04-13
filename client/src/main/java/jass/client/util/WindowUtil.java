@@ -18,7 +18,11 @@
 
 package jass.client.util;
 
-import jass.client.view.*;
+import jass.client.view.LobbyView;
+import jass.client.view.LoginView;
+import jass.client.view.RegisterView;
+import jass.client.view.ServerConnectionView;
+import jass.client.view.SplashView;
 import javafx.application.Platform;
 import javafx.stage.Stage;
 
@@ -31,7 +35,7 @@ import javafx.stage.Stage;
  */
 public class WindowUtil {
     // Reuse the same window
-    private static Stage stage = new Stage();
+    private static final Stage stage = new Stage();
 
     public static void switchToSplashScreen() {
         Platform.runLater(() -> {

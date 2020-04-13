@@ -33,13 +33,13 @@ import jass.lib.message.UserOnlineData;
 public class UserOnline extends Message {
     private UserOnlineData data;
 
-    public UserOnline(MessageData rawData) {
+    public UserOnline(final MessageData rawData) {
         super(rawData);
         data = (UserOnlineData) rawData;
     }
 
     @Override
-    public boolean process(SocketUtil socket) {
+    public boolean process(final SocketUtil socket) {
         socket.send(this);
 
         Message result = socket.waitForResultResponse(data.getId());

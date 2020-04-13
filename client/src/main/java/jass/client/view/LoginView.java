@@ -38,7 +38,7 @@ import java.io.IOException;
  * @since 0.0.1
  */
 public class LoginView extends View {
-    public LoginView(Stage stage) {
+    public LoginView(final Stage stage) {
         super(stage);
         stage.titleProperty().bind(I18nUtil.createStringBinding("gui.login.title"));
         stage.setResizable(false);

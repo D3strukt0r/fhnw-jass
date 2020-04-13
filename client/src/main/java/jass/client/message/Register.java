@@ -33,16 +33,15 @@ import jass.lib.message.ResultData;
  * @since 0.0.1
  */
 public class Register extends Message {
-    private static final Logger logger = LogManager.getLogger(Register.class);
     private RegisterData data;
 
-    public Register(MessageData rawData) {
+    public Register(final MessageData rawData) {
         super(rawData);
         data = (RegisterData) rawData;
     }
 
     @Override
-    public boolean process(SocketUtil socket) {
+    public boolean process(final SocketUtil socket) {
         socket.send(this);
 
         Message result = socket.waitForResultResponse(data.getId());

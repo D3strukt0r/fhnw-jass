@@ -38,7 +38,7 @@ public abstract class View {
      *
      * @param stage An object containing a Stage
      */
-    protected View(Stage stage) {
+    protected View(final Stage stage) {
         this.stage = stage;
 
         scene = create_GUI(); // Create all controls within "root"

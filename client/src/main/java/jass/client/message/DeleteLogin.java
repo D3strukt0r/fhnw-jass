@@ -41,13 +41,13 @@ public class DeleteLogin extends Message {
     private static final Logger logger = LogManager.getLogger(DeleteLogin.class);
     private LoginData data;
 
-    public DeleteLogin(MessageData rawData) {
+    public DeleteLogin(final MessageData rawData) {
         super(rawData);
         data = (LoginData) rawData;
     }
 
     @Override
-    public boolean process(SocketUtil socket) {
+    public boolean process(final SocketUtil socket) {
         socket.send(this);
 
         Message result = socket.waitForResultResponse(data.getId());

@@ -37,13 +37,13 @@ public class Login extends Message {
 
     private String token = null;
 
-	public Login(MessageData rawData) {
-		super(rawData);
+    public Login(MessageData rawData) {
+        super(rawData);
         data = (LoginData) rawData;
-	}
+    }
 
-	@Override
-	public boolean process(SocketUtil socket) {
+    @Override
+    public boolean process(SocketUtil socket) {
         socket.send(this);
 
         Message result = socket.waitForResultResponse(data.getId());
@@ -57,7 +57,7 @@ public class Login extends Message {
             ServiceLocator.add(login);
         }
         return resultData.getResult();
-	}
+    }
 
     public String getToken() {
         return token;

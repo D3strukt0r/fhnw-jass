@@ -55,7 +55,7 @@ public class SplashModel extends Model {
     private boolean connected = false;
     private boolean loggedIn = false;
 
-    public final Task<Void> initializer = new Task<Void>() {
+    private final Task<Void> initializer = new Task<Void>() {
         @Override
         protected Void call() {
             // Create the service locator to hold our resources
@@ -130,6 +130,10 @@ public class SplashModel extends Model {
 
     public void initialize() {
         new Thread(initializer).start();
+    }
+
+    public Task<Void> getInitializer() {
+        return initializer;
     }
 
     public boolean isConnected() {

@@ -40,8 +40,6 @@ public class ServerRepository extends Repository<Dao<ServerEntity, String>, Serv
         return singleton;
     }
 
-    ///////////////////////////////////////
-
     public ServerRepository(final Dao<ServerEntity, String> dao) {
         super(dao);
     }

@@ -28,10 +28,22 @@ import jass.lib.servicelocator.Service;
 import jass.lib.servicelocator.ServiceLocator;
 
 import javax.net.SocketFactory;
-import javax.net.ssl.*;
-import java.io.*;
+import javax.net.ssl.KeyManagerFactory;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSocket;
+import javax.net.ssl.TrustManagerFactory;
+import java.io.BufferedReader;
+import java.io.Closeable;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.net.Socket;
-import java.security.*;
+import java.security.KeyManagementException;
+import java.security.KeyStore;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
+import java.security.UnrecoverableKeyException;
 import java.security.cert.CertificateException;
 import java.util.ArrayList;
 
@@ -45,11 +57,11 @@ import java.util.ArrayList;
 public class SocketUtil extends Thread implements Service, Closeable {
     private static final Logger logger = LogManager.getLogger(SocketUtil.class);
 
-    private Socket socket;
+    private final Socket socket;
     private volatile boolean serverReachable = true;
-    private ArrayList<DisconnectEventListener> disconnectListener = new ArrayList<>();
+    private final ArrayList<DisconnectEventListener> disconnectListener = new ArrayList<>();
 
-    private ArrayList<Message> lastMessages = new ArrayList<>();
+    private final ArrayList<Message> lastMessages = new ArrayList<>();
 
     /**
      * Creates a Socket (insecure or secure) to the backend.
@@ -60,7 +72,7 @@ public class SocketUtil extends Thread implements Service, Closeable {
      *
      * @since 0.0.1
      */
-    public SocketUtil(String ipAddress, int port, boolean secure) throws IOException, KeyStoreException, CertificateException, NoSuchAlgorithmException, UnrecoverableKeyException, KeyManagementException {
+    public SocketUtil(final String ipAddress, final int port, final boolean secure) throws IOException, KeyStoreException, CertificateException, NoSuchAlgorithmException, UnrecoverableKeyException, KeyManagementException {
         super();
         this.setName("SocketThread");
         this.setDaemon(true);
@@ -155,7 +167,7 @@ public class SocketUtil extends Thread implements Service, Closeable {
      *
      * @since 0.0.1
      */
-    public Message waitForResultResponse(int id) {
+    public Message waitForResultResponse(final int id) {
         while (true) {
             if (lastMessages.size() != 0) {
                 for (Message m : lastMessages) {
@@ -174,7 +186,7 @@ public class SocketUtil extends Thread implements Service, Closeable {
     /**
      * Send a message to this server. In case of an exception, log the client out.
      */
-    public void send(Message msg) {
+    public void send(final Message msg) {
         try {
             OutputStreamWriter out = new OutputStreamWriter(socket.getOutputStream());
             logger.info("Sending message: " + msg.toString());
@@ -213,7 +225,7 @@ public class SocketUtil extends Thread implements Service, Closeable {
      *
      * @since 0.0.1
      */
-    public void addDisconnectListener(DisconnectEventListener listener) {
+    public void addDisconnectListener(final DisconnectEventListener listener) {
         this.disconnectListener.add(listener);
     }
 
@@ -227,7 +239,7 @@ public class SocketUtil extends Thread implements Service, Closeable {
      * @author https://stackoverflow.com/questions/5667371/validate-ipv4-address-in-java
      * @since 0.0.1
      */
-    public static boolean isValidIpAddress(String ipAddress) {
+    public static boolean isValidIpAddress(final String ipAddress) {
         return ipAddress.matches("^((0|1\\d?\\d?|2[0-4]?\\d?|25[0-5]?|[3-9]\\d?)\\.){3}(0|1\\d?\\d?|2[0-4]?\\d?|25[0-5]?|[3-9]\\d?)$");
     }
 
@@ -240,7 +252,7 @@ public class SocketUtil extends Thread implements Service, Closeable {
      *
      * @since 0.0.1
      */
-    public static boolean isValidPortNumber(int port) {
+    public static boolean isValidPortNumber(final int port) {
         return port >= 1024 && port <= 65535;
     }
 

@@ -34,7 +34,7 @@ import java.lang.reflect.InvocationTargetException;
 public abstract class Message {
     protected final MessageData rawData;
 
-    public Message(MessageData data) {
+    public Message(final MessageData data) {
         this.rawData = data;
     }
 
@@ -56,7 +56,7 @@ public abstract class Message {
      *
      * @author Bradley Richards
      */
-    public static Message fromDataObject(MessageData messageData) {
+    public static Message fromDataObject(final MessageData messageData) {
         String messageClassName = Message.class.getPackage().getName() + "." + messageData.getMessageType();
         try {
             Class<?> messageClass = Class.forName(messageClassName);

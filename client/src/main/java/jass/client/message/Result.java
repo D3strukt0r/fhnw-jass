@@ -30,7 +30,7 @@ import jass.lib.message.MessageData;
  */
 public class Result extends Message {
 
-    public Result(MessageData rawData) {
+    public Result(final MessageData rawData) {
         super(rawData);
     }
 	
@@ -38,7 +38,7 @@ public class Result extends Message {
 	 * This message type does no processing at all (only the server)
 	 */
 	@Override
-	public boolean process(SocketUtil socket) {
+	public boolean process(final SocketUtil socket) {
 	    return true;
 	}
 }

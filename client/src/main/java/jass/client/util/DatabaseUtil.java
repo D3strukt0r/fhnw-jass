@@ -47,7 +47,7 @@ public class DatabaseUtil implements Service, Closeable {
     private Dao<ServerEntity, String> serverDao;
 
     /**
-     * Create a database connection
+     * Create a database connection.
      *
      * @param databaseLocation A string containing the location of the file to be accessed (and if necessary created)
      *

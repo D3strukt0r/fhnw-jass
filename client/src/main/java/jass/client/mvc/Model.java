@@ -26,7 +26,5 @@ package jass.client.mvc;
  * @since 0.0.1
  */
 public abstract class Model {
-    protected Model() {
-        // Not much going on here
-    }
+    protected Model() { }
 }

@@ -31,12 +31,12 @@ import javafx.scene.control.TextInputControl;
 public class IsSameValidator extends ValidatorBase {
     TextInputControl validateTo;
 
-    public IsSameValidator(TextInputControl validateTo) {
+    public IsSameValidator(final TextInputControl validateTo) {
         this.setMessage("Values are not the same");
         this.validateTo = validateTo;
     }
 
-    public IsSameValidator(TextInputControl validateTo, String message) {
+    public IsSameValidator(final TextInputControl validateTo, final String message) {
         super(message);
         this.validateTo = validateTo;
     }

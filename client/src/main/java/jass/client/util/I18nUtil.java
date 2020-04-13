@@ -24,7 +24,11 @@ import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 
 import java.text.MessageFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Locale;
+import java.util.ResourceBundle;
 import java.util.concurrent.Callable;
 
 /**
@@ -80,7 +84,7 @@ public final class I18nUtil {
         return locale.get();
     }
 
-    public static void setLocale(Locale locale) {
+    public static void setLocale(final Locale locale) {
         localeProperty().set(locale);
         Locale.setDefault(locale);
     }
@@ -106,7 +110,7 @@ public final class I18nUtil {
     }
 
     /**
-     * creates a String Binding to a localized String that is computed by calling the given func
+     * creates a String Binding to a localized String that is computed by calling the given func.
      *
      * @param func function called on every change
      *
@@ -114,12 +118,12 @@ public final class I18nUtil {
      *
      * @since 0.0.1
      */
-    public static StringBinding createStringBinding(Callable<String> func) {
+    public static StringBinding createStringBinding(final Callable<String> func) {
         return Bindings.createStringBinding(func, locale);
     }
 
     /**
-     * creates a String binding to a localized String for the given message bundle key
+     * creates a String binding to a localized String for the given message bundle key.
      *
      * @param key key
      *
@@ -127,7 +131,7 @@ public final class I18nUtil {
      *
      * @since 0.0.1
      */
-    public static StringBinding createStringBinding(final String key, Object... args) {
+    public static StringBinding createStringBinding(final String key, final Object... args) {
         return createStringBinding(() -> get(key, args));
     }
 }

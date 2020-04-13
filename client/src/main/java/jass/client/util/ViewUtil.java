@@ -33,7 +33,12 @@ import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.beans.value.ObservableValue;
-import javafx.scene.control.*;
+import javafx.scene.control.Label;
+import javafx.scene.control.Menu;
+import javafx.scene.control.MenuBar;
+import javafx.scene.control.MenuItem;
+import javafx.scene.control.SeparatorMenuItem;
+import javafx.scene.control.TextInputControl;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
@@ -57,29 +62,29 @@ import java.util.Locale;
  */
 public class ViewUtil {
     /**
-     * Shortcuts for UI elements
+     * Shortcuts for UI elements.
      */
-    public static Region useSpacer(int space) {
+    public static Region useSpacer(final int space) {
         Region spacer = new Region();
         spacer.setPrefHeight(space);
         VBox.setVgrow(spacer, Priority.ALWAYS);
         return spacer;
     }
 
-    public static Region useHorizontalSpacer(int space) {
+    public static Region useHorizontalSpacer(final int space) {
         Region spacer = new Region();
         spacer.setPrefWidth(space);
         HBox.setHgrow(spacer, Priority.ALWAYS);
         return spacer;
     }
 
-    public static Text useText(String translatorKey) {
+    public static Text useText(final String translatorKey) {
         Text textField = new Text();
         textField.textProperty().bind(I18nUtil.createStringBinding(translatorKey));
         return textField;
     }
 
-    public static Text useText(String translatorKey, Stage paneToBindWidth) {
+    public static Text useText(final String translatorKey, final Stage paneToBindWidth) {
         Text textField = useText(translatorKey);
         // https://stackoverflow.com/questions/51199903/how-to-bind-a-value-to-the-result-of-a-calculation
         DoubleProperty padding = new SimpleDoubleProperty(40.0); // Check the css at .custom-container (padding left and right = 40)
@@ -88,39 +93,39 @@ public class ViewUtil {
         return textField;
     }
 
-    public static Label useLabel(String translatorKey) {
+    public static Label useLabel(final String translatorKey) {
         Label label = new Label();
         label.textProperty().bind(I18nUtil.createStringBinding(translatorKey));
         return label;
     }
 
-    public static Label useLabel(String translatorKey, IconNode icon) {
+    public static Label useLabel(final String translatorKey, final IconNode icon) {
         Label label = useLabel(translatorKey);
         label.setGraphic(icon);
         return label;
     }
 
-    public static JFXTextField useTextField(String translatorKey) {
+    public static JFXTextField useTextField(final String translatorKey) {
         JFXTextField textField = new JFXTextField();
         textField.setLabelFloat(true);
         textField.promptTextProperty().bind(I18nUtil.createStringBinding(translatorKey));
         return textField;
     }
 
-    public static JFXPasswordField usePasswordField(String translatorKey) {
+    public static JFXPasswordField usePasswordField(final String translatorKey) {
         JFXPasswordField passwordField = new JFXPasswordField();
         passwordField.setLabelFloat(true);
         passwordField.promptTextProperty().bind(I18nUtil.createStringBinding(translatorKey));
         return passwordField;
     }
 
-    public static JFXCheckBox useCheckBox(String translatorKey) {
+    public static JFXCheckBox useCheckBox(final String translatorKey) {
         JFXCheckBox checkBox = new JFXCheckBox();
         checkBox.textProperty().bind(I18nUtil.createStringBinding(translatorKey));
         return checkBox;
     }
 
-    public static JFXButton usePrimaryButton(String translatorKey) {
+    public static JFXButton usePrimaryButton(final String translatorKey) {
         JFXButton primaryButton = new JFXButton();
         primaryButton.textProperty().bind(I18nUtil.createStringBinding(() -> I18nUtil.get(translatorKey).toUpperCase()));
         primaryButton.setButtonType(JFXButton.ButtonType.RAISED);
@@ -130,7 +135,7 @@ public class ViewUtil {
         return primaryButton;
     }
 
-    public static JFXButton useSecondaryButton(String translatorKey) {
+    public static JFXButton useSecondaryButton(final String translatorKey) {
         JFXButton secondaryButton = new JFXButton();
         secondaryButton.textProperty().bind(I18nUtil.createStringBinding(() -> I18nUtil.get(translatorKey).toUpperCase()));
         secondaryButton.setButtonType(JFXButton.ButtonType.RAISED);
@@ -140,7 +145,7 @@ public class ViewUtil {
         return secondaryButton;
     }
 
-    public static HBox useNavBar(String translatorKey) {
+    public static HBox useNavBar(final String translatorKey) {
         HBox navBar = new HBox();
         Text title = new Text();
         title.textProperty().bind(I18nUtil.createStringBinding(() -> I18nUtil.get(translatorKey).toUpperCase()));
@@ -150,7 +155,7 @@ public class ViewUtil {
         return navBar;
     }
 
-    public static HBox useStaticNavBar(String text) {
+    public static HBox useStaticNavBar(final String text) {
         HBox navBar = new HBox();
         Text title = new Text(text.toUpperCase());
         title.setFill(Color.WHITE);
@@ -159,7 +164,7 @@ public class ViewUtil {
         return navBar;
     }
 
-    public static HBox useVariableNavBar(ObservableValue<String> text) {
+    public static HBox useVariableNavBar(final ObservableValue<String> text) {
         HBox navBar = new HBox();
         Text title = new Text();
         title.textProperty().bind(text);
@@ -172,32 +177,32 @@ public class ViewUtil {
     /**
      * Shortcuts for validator with UI input elements
      */
-    public static RequiredFieldValidator useRequiredValidator(String translatorKey) {
+    public static RequiredFieldValidator useRequiredValidator(final String translatorKey) {
         RequiredFieldValidator requiredValidator = new RequiredFieldValidator();
         requiredValidator.messageProperty().bind(I18nUtil.createStringBinding(translatorKey));
         return requiredValidator;
     }
 
-    public static IntegerValidator useIsIntegerValidator(String translatorKey) {
+    public static IntegerValidator useIsIntegerValidator(final String translatorKey) {
         IntegerValidator isIntValidator = new IntegerValidator();
         isIntValidator.messageProperty().bind(I18nUtil.createStringBinding(translatorKey));
         return isIntValidator;
     }
 
-    public static IsSameValidator useIsSameValidator(TextInputControl validateTo, String translatorKey) {
+    public static IsSameValidator useIsSameValidator(final TextInputControl validateTo, final String translatorKey) {
         IsSameValidator isSameValidator = new IsSameValidator(validateTo);
         isSameValidator.messageProperty().bind(I18nUtil.createStringBinding(translatorKey));
         return isSameValidator;
     }
 
-    public static RegexValidator useIsValidIpValidator(String translatorKey) {
+    public static RegexValidator useIsValidIpValidator(final String translatorKey) {
         RegexValidator isValidIpValidator = new RegexValidator();
         isValidIpValidator.messageProperty().bind(I18nUtil.createStringBinding(translatorKey));
         isValidIpValidator.setRegexPattern("^((0|1\\d?\\d?|2[0-4]?\\d?|25[0-5]?|[3-9]\\d?)\\.){3}(0|1\\d?\\d?|2[0-4]?\\d?|25[0-5]?|[3-9]\\d?)$");
         return isValidIpValidator;
     }
 
-    public static RegexValidator useIsValidPortValidator(String translatorKey) {
+    public static RegexValidator useIsValidPortValidator(final String translatorKey) {
         RegexValidator isValidPortValidator = new RegexValidator();
         isValidPortValidator.messageProperty().bind(I18nUtil.createStringBinding(translatorKey));
         isValidPortValidator.setRegexPattern("^([0-9]{1,4}|[1-5][0-9]{4}|6[0-4][0-9]{3}|65[0-4][0-9]{2}|655[0-2][0-9]|6553[0-5])$");
@@ -205,8 +210,9 @@ public class ViewUtil {
     }
 
     /**
-     * Shortcuts for UI menus
+     * Shortcuts for UI menus.
      */
+
     public static MenuBar useDefaultMenuBar() {
         MenuBar menuBar = new MenuBar();
 
@@ -229,7 +235,7 @@ public class ViewUtil {
         return menuBar;
     }
 
-    public static Menu useMenu(String translatorKey) {
+    public static Menu useMenu(final String translatorKey) {
         Menu menu = new Menu();
         menu.textProperty().bind(I18nUtil.createStringBinding(translatorKey));
         return menu;
@@ -241,7 +247,7 @@ public class ViewUtil {
         return changeLanguageMenu;
     }
 
-    public static void useLanguageMenuContent(Menu changeLanguageMenu) {
+    public static void useLanguageMenuContent(final Menu changeLanguageMenu) {
         for (Locale locale : I18nUtil.getSupportedLocales()) {
             StringProperty langInLocale = new SimpleStringProperty();
             String lang;
@@ -271,7 +277,7 @@ public class ViewUtil {
         }
     }
 
-    public static MenuItem useMenuItem(String translatorKey) {
+    public static MenuItem useMenuItem(final String translatorKey) {
         MenuItem item = new MenuItem();
         item.textProperty().bind(I18nUtil.createStringBinding(translatorKey));
         return item;
@@ -285,39 +291,39 @@ public class ViewUtil {
     }
 
     /**
-     * Shortcuts for the icons
+     * Shortcuts for the icons.
      */
-    public static IconNode useIcon(IconCode iconCode, Color color) {
+    public static IconNode useIcon(final IconCode iconCode, final Color color) {
         IconNode icon = new IconNode(iconCode);
         icon.setFill(color);
         return icon;
     }
 
-    public static IconNode useIconAdd(Color color) {
+    public static IconNode useIconAdd(final Color color) {
         return useIcon(GoogleMaterialDesignIcons.ADD, color);
     }
 
-    public static IconNode useIconContact(Color color) {
+    public static IconNode useIconContact(final Color color) {
         return useIcon(GoogleMaterialDesignIcons.CONTACTS, color);
     }
 
-    public static IconNode useIconChat(Color color) {
+    public static IconNode useIconChat(final Color color) {
         return useIcon(GoogleMaterialDesignIcons.FORUM, color);
     }
 
-    public static IconNode useIconSend(Color color) {
+    public static IconNode useIconSend(final Color color) {
         return useIcon(GoogleMaterialDesignIcons.SEND, color);
     }
 
-    public static IconNode useIconExit(Color color) {
+    public static IconNode useIconExit(final Color color) {
         return useIcon(GoogleMaterialDesignIcons.EXIT_TO_APP, color);
     }
 
-    public static IconNode useIconDelete(Color color) {
+    public static IconNode useIconDelete(final Color color) {
         return useIcon(GoogleMaterialDesignIcons.DELETE, color);
     }
 
-    public static IconNode useIconEdit(Color color) {
+    public static IconNode useIconEdit(final Color color) {
         return useIcon(GoogleMaterialDesignIcons.MODE_EDIT, color);
     }
 }

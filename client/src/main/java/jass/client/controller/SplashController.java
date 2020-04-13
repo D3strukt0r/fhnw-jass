@@ -24,11 +24,11 @@ public class SplashController extends Controller {
     private JFXProgressBar loadingProgress;
 
     @Override
-    public void initialize(URL location, ResourceBundle resources) {
+    public void initialize(final URL location, final ResourceBundle resources) {
         model = new SplashModel();
 
-        loadingProgress.progressProperty().bind(model.initializer.progressProperty());
-        model.initializer.stateProperty().addListener((o, oldValue, newValue) -> {
+        loadingProgress.progressProperty().bind(model.getInitializer().progressProperty());
+        model.getInitializer().stateProperty().addListener((o, oldValue, newValue) -> {
             if (newValue == Worker.State.SUCCEEDED) {
                 // If already logged in go to the game directly, if at least connected, go to login screen, otherwise
                 // to server connection
@@ -46,7 +46,7 @@ public class SplashController extends Controller {
         model.initialize();
     }
 
-    public void setView(SplashView view) {
+    public void setView(final SplashView view) {
         this.view = view;
     }
 }

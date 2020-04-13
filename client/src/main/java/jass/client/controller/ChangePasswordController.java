@@ -57,21 +57,21 @@ public class ChangePasswordController extends Controller {
     private ChangePasswordView view;
 
     @FXML
-    public Menu mFile;
+    private Menu mFile;
     @FXML
-    public Menu mFileChangeLanguage;
+    private Menu mFileChangeLanguage;
     @FXML
-    public MenuItem mFileDisconnect;
+    private MenuItem mFileDisconnect;
     @FXML
-    public MenuItem mFileExit;
+    private MenuItem mFileExit;
     @FXML
-    public Menu mEdit;
+    private Menu mEdit;
     @FXML
-    public MenuItem mEditDelete;
+    private MenuItem mEditDelete;
     @FXML
-    public Menu mHelp;
+    private Menu mHelp;
     @FXML
-    public MenuItem mHelpAbout;
+    private MenuItem mHelpAbout;
 
     @FXML
     private Text navbar;
@@ -89,7 +89,7 @@ public class ChangePasswordController extends Controller {
     private JFXButton cancel;
 
     @Override
-    public void initialize(URL location, ResourceBundle resources) {
+    public void initialize(final URL location, final ResourceBundle resources) {
         /*
          * Bind all texts
          */
@@ -121,13 +121,7 @@ public class ChangePasswordController extends Controller {
         AtomicBoolean oldPasswordValid = new AtomicBoolean(false);
         AtomicBoolean newPasswordValid = new AtomicBoolean(false);
         AtomicBoolean repeatNewPasswordValid = new AtomicBoolean(false);
-        Runnable updateButtonClickable = () -> {
-            if (!oldPasswordValid.get() || !newPasswordValid.get() || !repeatNewPasswordValid.get()) {
-                change.setDisable(true);
-            } else {
-                change.setDisable(false);
-            }
-        };
+        Runnable updateButtonClickable = () -> change.setDisable(!oldPasswordValid.get() || !newPasswordValid.get() || !repeatNewPasswordValid.get());
         oldPassword.textProperty().addListener((o, oldVal, newVal) -> {
             if (!oldVal.equals(newVal)) {
                 oldPasswordValid.set(oldPassword.validate());
@@ -211,7 +205,7 @@ public class ChangePasswordController extends Controller {
      *
      * @since 0.0.1
      */
-    public void setErrorMessage(String translatorKey) {
+    public void setErrorMessage(final String translatorKey) {
         Platform.runLater(() -> {
             if (errorMessage.getChildren().size() == 0) {
                 // Make window larger, so it doesn't become crammed, only if we haven't done so yet
@@ -277,7 +271,7 @@ public class ChangePasswordController extends Controller {
         view.stop();
     }
 
-    public void setView(ChangePasswordView view) {
+    public void setView(final ChangePasswordView view) {
         this.view = view;
     }
 

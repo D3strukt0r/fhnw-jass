@@ -34,12 +34,12 @@ import jass.lib.message.ResultData;
 public class Logout extends Message {
     private static final Logger logger = LogManager.getLogger(Logout.class);
 
-    public Logout(MessageData rawData) {
+    public Logout(final MessageData rawData) {
         super(rawData);
     }
 
     @Override
-    public boolean process(SocketUtil socket) {
+    public boolean process(final SocketUtil socket) {
         socket.send(this);
 
         Message result = socket.waitForResultResponse(rawData.getId());

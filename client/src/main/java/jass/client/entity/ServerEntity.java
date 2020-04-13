@@ -59,18 +59,18 @@ public class ServerEntity implements Service, Entity {
         // with at least package visibility
     }
 
-    public ServerEntity(String ip, int port) {
+    public ServerEntity(final String ip, final int port) {
         this.ip = ip;
         this.port = port;
     }
 
-    public ServerEntity(String ip, int port, boolean secure) {
+    public ServerEntity(final String ip, final int port, final boolean secure) {
         this.ip = ip;
         this.port = port;
         this.secure = secure;
     }
 
-    public ServerEntity(String ip, int port, boolean secure, boolean connectAutomatically) {
+    public ServerEntity(final String ip, final int port, final boolean secure, final boolean connectAutomatically) {
         this.ip = ip;
         this.port = port;
         this.secure = secure;
@@ -93,7 +93,7 @@ public class ServerEntity implements Service, Entity {
         return ip;
     }
 
-    public void setIp(String ip) {
+    public void setIp(final String ip) {
         this.ip = ip;
     }
 
@@ -101,7 +101,7 @@ public class ServerEntity implements Service, Entity {
         return port;
     }
 
-    public void setPort(int port) {
+    public void setPort(final int port) {
         this.port = port;
     }
 
@@ -109,7 +109,7 @@ public class ServerEntity implements Service, Entity {
         return secure;
     }
 
-    public void setSecure(boolean secure) {
+    public void setSecure(final boolean secure) {
         this.secure = secure;
     }
 
@@ -117,7 +117,7 @@ public class ServerEntity implements Service, Entity {
         return connectAutomatically;
     }
 
-    public void setConnectAutomatically(boolean connectAutomatically) {
+    public void setConnectAutomatically(final boolean connectAutomatically) {
         this.connectAutomatically = connectAutomatically;
     }
 }
