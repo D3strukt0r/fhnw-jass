@@ -24,7 +24,11 @@ import com.j256.ormlite.jdbc.JdbcConnectionSource;
 import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.TableUtils;
 import jass.lib.servicelocator.Service;
+import jass.server.entity.GameEntity;
+import jass.server.entity.TeamEntity;
 import jass.server.entity.UserEntity;
+import jass.server.repository.GameRepository;
+import jass.server.repository.TeamRepository;
 import jass.server.repository.UserRepository;
 
 import java.io.Closeable;
@@ -51,6 +55,8 @@ public final class DatabaseUtil implements Service, Closeable {
      * The DAO for the users.
      */
     private Dao<UserEntity, String> userDao;
+    private Dao<TeamEntity, String> teamDao;
+    private Dao<GameEntity, String> gameDao;
 
     /**
      * Create a database connection.
@@ -85,11 +91,17 @@ public final class DatabaseUtil implements Service, Closeable {
          */
         userDao = DaoManager.createDao(connectionSource, UserEntity.class);
         UserRepository.getSingleton(userDao);
+        teamDao = DaoManager.createDao(connectionSource, TeamEntity.class);
+        TeamRepository.getSingleton(teamDao);
+        gameDao = DaoManager.createDao(connectionSource, GameEntity.class);
+        GameRepository.getSingleton(gameDao);
 
         /*
          * Create the tables, if they don't exist yet.
          */
         TableUtils.createTableIfNotExists(connectionSource, UserEntity.class);
+        TableUtils.createTableIfNotExists(connectionSource, TeamEntity.class);
+        TableUtils.createTableIfNotExists(connectionSource, GameEntity.class);
     }
 
     /**
@@ -113,6 +125,14 @@ public final class DatabaseUtil implements Service, Closeable {
      */
     public Dao<UserEntity, String> getUserDao() {
         return userDao;
+    }
+
+    public Dao<TeamEntity, String> getTeamDao() {
+        return teamDao;
+    }
+
+    public Dao<GameEntity, String> getGameDao() {
+        return gameDao;
     }
 
     /**
