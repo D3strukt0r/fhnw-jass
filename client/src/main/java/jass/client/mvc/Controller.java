@@ -21,11 +21,10 @@ package jass.client.mvc;
 import javafx.fxml.Initializable;
 
 /**
- * The abstract Controller for the MVC
+ * The abstract Controller for the MVC.
  *
  * @author Manuele Vaccari
  * @version %I%, %G%
  * @since 0.0.1
  */
-public abstract class Controller implements Initializable {
-}
+public abstract class Controller implements Initializable { }

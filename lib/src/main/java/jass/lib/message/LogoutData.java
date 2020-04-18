@@ -28,10 +28,16 @@ import org.json.JSONObject;
  * @since 0.0.1
  */
 public class LogoutData extends MessageData {
+    /**
+     * Creates the logout object.
+     */
     public LogoutData() {
         super("Logout");
     }
 
+    /**
+     * @param data The message containing all the data.
+     */
     public LogoutData(final JSONObject data) {
         super(data);
     }

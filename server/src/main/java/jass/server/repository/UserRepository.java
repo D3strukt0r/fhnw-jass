@@ -26,24 +26,38 @@ import java.sql.SQLException;
 import java.util.List;
 
 public final class UserRepository extends Repository<Dao<UserEntity, String>, UserEntity> {
-
+    /**
+     * The singleton.
+     */
     private static UserRepository singleton = null;
 
-    public static UserRepository getSingleton(Dao<UserEntity, String> dao) {
+    /**
+     * Creates a new singleton or returns the existing one.
+     *
+     * @param dao The DAO to edit inside the database.
+     *
+     * @return Returns the Repository.
+     */
+    public static UserRepository getSingleton(final Dao<UserEntity, String> dao) {
         if (singleton == null) {
             singleton = new UserRepository(dao);
         }
         return singleton;
     }
 
-    ///////////////////////////////////////
-
+    /**
+     * @param dao The DAO to edit inside the database.
+     */
     public UserRepository(final Dao<UserEntity, String> dao) {
         super(dao);
     }
 
-    ///////////////////////////////////////
-
+    /**
+     * @param username The username of the user.
+     *
+     * @return Returns the UserEntity of the user, or null if not found or
+     * something went wrong.
+     */
     public UserEntity getByUsername(final String username) {
         try {
             // Find all users with the given username (only one)
@@ -58,6 +72,11 @@ public final class UserRepository extends Repository<Dao<UserEntity, String>, Us
         }
     }
 
+    /**
+     * @param username The username of the user.
+     *
+     * @return Returns true if the user exists, otherwise false.
+     */
     public boolean usernameExists(final String username) {
         try {
             // Check if there is somebody in the db already using the given username.

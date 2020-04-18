@@ -18,31 +18,31 @@
 
 package jass.client.message;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import jass.client.util.SocketUtil;
 import jass.lib.message.MessageData;
 import jass.lib.message.ResultData;
 
 /**
- * Logs the current user out from the server. After successful logout, token becomes invalid.
+ * Logs the current user out from the server. After successful logout, token
+ * becomes invalid.
  *
  * @author Manuele Vaccari
  * @version %I%, %G%
  * @since 0.0.1
  */
-public class Logout extends Message {
-    private static final Logger logger = LogManager.getLogger(Logout.class);
-
-    public Logout(MessageData rawData) {
+public final class Logout extends Message {
+    /**
+     * @param rawData The data (still not casted)
+     */
+    public Logout(final MessageData rawData) {
         super(rawData);
     }
 
     @Override
-    public boolean process(SocketUtil socket) {
+    public boolean process(final SocketUtil socket) {
         socket.send(this);
 
-        Message result = socket.waitForResultResponse(rawData.getId());
+        Message result = socket.waitForResultResponse(getRawData().getId());
         ResultData resultData = (ResultData) result.getRawData();
 
         return resultData.getResult();

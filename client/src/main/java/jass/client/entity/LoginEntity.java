@@ -24,7 +24,7 @@ import jass.lib.database.Entity;
 import jass.lib.servicelocator.Service;
 
 /**
- * A model containing all locally saved login informations.
+ * A model containing all locally saved login information.
  *
  * @author Manuele Vaccari
  * @version %I%, %G%
@@ -33,50 +33,80 @@ import jass.lib.servicelocator.Service;
 @DatabaseTable(tableName = "login")
 public class LoginEntity implements Service, Entity {
     /**
-     * Fields (Columns)
+     * The ID.
      */
     @DatabaseField(generatedId = true)
     private int id;
 
+    /**
+     * The username.
+     */
     @DatabaseField
     private String username;
 
+    /**
+     * The password.
+     */
     @DatabaseField
     private String password;
 
+    /**
+     * The token.
+     */
     @DatabaseField
     private String token;
 
+    /**
+     * Whether to connect automatically at startup or not.
+     */
     @DatabaseField(defaultValue = "false")
     private boolean connectAutomatically = false;
 
     /**
-     * Constructors
+     * For ORMLite all persisted classes must define a no-arg constructor with
+     * at least package visibility.
      */
     LoginEntity() {
-        // For ORMLite
-        // all persisted classes must define a no-arg constructor
-        // with at least package visibility
     }
 
-    public LoginEntity(String username, String password) {
+    /**
+     * @param username The username.
+     * @param password The password.
+     */
+    public LoginEntity(final String username, final String password) {
         this.username = username;
         this.password = password;
     }
 
-    public LoginEntity(String username, String password, boolean connectAutomatically) {
+    /**
+     * @param username             The username.
+     * @param password             The password.
+     * @param connectAutomatically Whether to connect automatically.
+     */
+    public LoginEntity(final String username, final String password, final boolean connectAutomatically) {
         this.username = username;
         this.password = password;
         this.connectAutomatically = connectAutomatically;
     }
 
-    public LoginEntity(String username, String password, String token) {
+    /**
+     * @param username The username.
+     * @param password The password.
+     * @param token    The token.
+     */
+    public LoginEntity(final String username, final String password, final String token) {
         this.username = username;
         this.password = password;
         this.token = token;
     }
 
-    public LoginEntity(String username, String password, String token, boolean connectAutomatically) {
+    /**
+     * @param username             The username.
+     * @param password             The password.
+     * @param token                The token.
+     * @param connectAutomatically Whether to connect automatically.
+     */
+    public LoginEntity(final String username, final String password, final String token, final boolean connectAutomatically) {
         this.username = username;
         this.password = password;
         this.token = token;
@@ -84,46 +114,70 @@ public class LoginEntity implements Service, Entity {
     }
 
     /**
-     * Methods
+     * @return Returns the ID.
      */
-    @Override
-    public String getServiceName() {
-        return "login";
-    }
-
     public int getId() {
         return id;
     }
 
+    /**
+     * @return Returns the username.
+     */
     public String getUsername() {
         return username;
     }
 
-    public void setUsername(String username) {
+    /**
+     * @param username The username.
+     */
+    public void setUsername(final String username) {
         this.username = username;
     }
 
+    /**
+     * @return Returns the password.
+     */
     public String getPassword() {
         return password;
     }
 
-    public void setPassword(String password) {
+    /**
+     * @param password The password.
+     */
+    public void setPassword(final String password) {
         this.password = password;
     }
 
+    /**
+     * @return Returns the token.
+     */
     public String getToken() {
         return token;
     }
 
-    public void setToken(String token) {
+    /**
+     * @param token The token.
+     */
+    public void setToken(final String token) {
         this.token = token;
     }
 
+    /**
+     * @return Returns whether to connect automatically.
+     */
     public boolean isConnectAutomatically() {
         return connectAutomatically;
     }
 
-    public void setConnectAutomatically(boolean connectAutomatically) {
+    /**
+     * @param connectAutomatically Whether to connect automatically.
+     */
+    public void setConnectAutomatically(final boolean connectAutomatically) {
         this.connectAutomatically = connectAutomatically;
+    }
+
+    @Override
+    public String getServiceName() {
+        return "login";
     }
 }

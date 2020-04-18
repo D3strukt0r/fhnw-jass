@@ -22,31 +22,48 @@ import com.jfoenix.validation.base.ValidatorBase;
 import javafx.scene.control.TextInputControl;
 
 /**
- * Custom validator for the JFoenix library, which checks if the content of two input fields are the same.
+ * Custom validator for the JFoenix library, which checks if the content of two
+ * input fields are the same.
  *
  * @author Manuele Vaccari
  * @version %I%, %G%
  * @since 0.0.1
  */
 public class IsSameValidator extends ValidatorBase {
-    TextInputControl validateTo;
+    /**
+     * The object which is to be validated to.
+     */
+    private final TextInputControl validateTo;
 
-    public IsSameValidator(TextInputControl validateTo) {
+    /**
+     * @param validateTo The object which is to be validated to.
+     */
+    public IsSameValidator(final TextInputControl validateTo) {
         this.setMessage("Values are not the same");
         this.validateTo = validateTo;
     }
 
-    public IsSameValidator(TextInputControl validateTo, String message) {
+    /**
+     * @param validateTo The object which is to be validated to.
+     * @param message    A custom message to display.
+     */
+    public IsSameValidator(final TextInputControl validateTo, final String message) {
         super(message);
         this.validateTo = validateTo;
     }
 
+    /**
+     * Validate the fields.
+     */
     protected void eval() {
         if (this.srcControl.get() instanceof TextInputControl) {
             this.evalTextInputField();
         }
     }
 
+    /**
+     * Compare the two fields.
+     */
     private void evalTextInputField() {
         TextInputControl textField = (TextInputControl) this.srcControl.get();
         String text = textField.getText();

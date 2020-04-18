@@ -37,12 +37,15 @@ import java.io.IOException;
  * @version %I%, %G%
  * @since 0.0.1
  */
-public class ServerConnectionView extends View {
-    public ServerConnectionView(Stage stage) {
+public final class ServerConnectionView extends View {
+    /**
+     * @param stage The stage of the window.
+     */
+    public ServerConnectionView(final Stage stage) {
         super(stage);
         stage.titleProperty().bind(I18nUtil.createStringBinding("gui.serverConnection.title"));
         stage.setResizable(false);
-        stage.setWidth(scene.getWidth()); // Fixes weird width when returning to server connection windows
+        stage.setWidth(getScene().getWidth()); // Fixes weird width when returning to server connection windows
 
         // Register ourselves to handle window-closing event
         stage.setOnCloseRequest(event -> Platform.exit());

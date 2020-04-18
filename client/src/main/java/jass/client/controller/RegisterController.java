@@ -23,7 +23,6 @@ import com.jfoenix.controls.JFXCheckBox;
 import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
 import javafx.application.Platform;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
@@ -56,45 +55,110 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * @version %I%, %G%
  * @since 0.0.1
  */
-public class RegisterController extends Controller implements DisconnectEventListener {
+public final class RegisterController extends Controller implements DisconnectEventListener {
+    /**
+     * The view.
+     */
     private RegisterView view;
 
+    /**
+     * The "File" element.
+     */
     @FXML
-    public Menu mFile;
-    @FXML
-    public Menu mFileChangeLanguage;
-    @FXML
-    public MenuItem mFileDisconnect;
-    @FXML
-    public MenuItem mFileExit;
-    @FXML
-    public Menu mEdit;
-    @FXML
-    public MenuItem mEditDelete;
-    @FXML
-    public Menu mHelp;
-    @FXML
-    public MenuItem mHelpAbout;
+    private Menu mFile;
 
+    /**
+     * The "File -> Change Language" element.
+     */
+    @FXML
+    private Menu mFileChangeLanguage;
+
+    /**
+     * The "File -> Disconnect" element.
+     */
+    @FXML
+    private MenuItem mFileDisconnect;
+
+    /**
+     * The "File -> Exit" element.
+     */
+    @FXML
+    private MenuItem mFileExit;
+
+    /**
+     * The "Edit" element.
+     */
+    @FXML
+    private Menu mEdit;
+
+    /**
+     * The "Edit -> Delete" element.
+     */
+    @FXML
+    private MenuItem mEditDelete;
+
+    /**
+     * The "Help" element.
+     */
+    @FXML
+    private Menu mHelp;
+
+    /**
+     * The "Help -> About" element.
+     */
+    @FXML
+    private MenuItem mHelpAbout;
+
+    /**
+     * The navbar.
+     */
     @FXML
     private Text navbar;
+
+    /**
+     * The error message.
+     */
     @FXML
     private VBox errorMessage;
+
+    /**
+     * The username text field.
+     */
     @FXML
     private JFXTextField username;
+
+    /**
+     * The password field.
+     */
     @FXML
     private JFXPasswordField password;
+
+    /**
+     * The repeat password field.
+     */
     @FXML
     private JFXPasswordField repeatPassword;
+
+    /**
+     * The "remember me" checkbox.
+     */
     @FXML
     private JFXCheckBox connectAutomatically;
+
+    /**
+     * The register button.
+     */
     @FXML
     private JFXButton register;
+
+    /**
+     * The login button.
+     */
     @FXML
     private JFXButton login;
 
     @Override
-    public void initialize(URL location, ResourceBundle resources) {
+    public void initialize(final URL location, final ResourceBundle resources) {
         /*
          * Register oneself for disconnect events
          */
@@ -136,13 +200,7 @@ public class RegisterController extends Controller implements DisconnectEventLis
         AtomicBoolean usernameValid = new AtomicBoolean(false);
         AtomicBoolean passwordValid = new AtomicBoolean(false);
         AtomicBoolean repeatPasswordValid = new AtomicBoolean(false);
-        Runnable updateButtonClickable = () -> {
-            if (!usernameValid.get() || !passwordValid.get() || !repeatPasswordValid.get()) {
-                register.setDisable(true);
-            } else {
-                register.setDisable(false);
-            }
-        };
+        Runnable updateButtonClickable = () -> register.setDisable(!usernameValid.get() || !passwordValid.get() || !repeatPasswordValid.get());
         username.textProperty().addListener((o, oldVal, newVal) -> {
             if (!oldVal.equals(newVal)) {
                 usernameValid.set(username.validate());
@@ -222,11 +280,14 @@ public class RegisterController extends Controller implements DisconnectEventLis
     }
 
     /**
-     * As the view contains an error message field, this updates the text and the window appropriately.
+     * As the view contains an error message field, this updates the text and
+     * the window appropriately.
+     *
+     * @param translatorKey The key of the translation.
      *
      * @since 0.0.1
      */
-    public void setErrorMessage(String translatorKey) {
+    public void setErrorMessage(final String translatorKey) {
         Platform.runLater(() -> {
             if (errorMessage.getChildren().size() == 0) {
                 // Make window larger, so it doesn't become crammed, only if we haven't done so yet
@@ -241,6 +302,9 @@ public class RegisterController extends Controller implements DisconnectEventLis
         });
     }
 
+    /**
+     * Disconnect from the server and returns to the server connection window.
+     */
     @FXML
     private void clickOnDisconnect() {
         SocketUtil socket = (SocketUtil) ServiceLocator.get("backend");
@@ -251,14 +315,18 @@ public class RegisterController extends Controller implements DisconnectEventLis
         WindowUtil.switchToServerConnectionWindow();
     }
 
+    /**
+     * Shuts down the application.
+     */
     @FXML
     private void clickOnExit() {
         Platform.exit();
     }
 
     /**
-     * Handles the click on the register button. Inputs should already be checked. This will send it to the server, and
-     * update local values if successful.
+     * Handles the click on the register button. Inputs should already be
+     * checked. This will send it to the server, and update local values if
+     * successful.
      *
      * @since 0.0.1
      */
@@ -295,12 +363,18 @@ public class RegisterController extends Controller implements DisconnectEventLis
         }).start();
     }
 
+    /**
+     * @return Returns the register button
+     */
     public JFXButton getRegister() {
         return register;
     }
 
+    /**
+     * After clicking on login, switch to the login window.
+     */
     @FXML
-    private void clickOnLogin(ActionEvent event) {
+    private void clickOnLogin() {
         WindowUtil.switchToLoginWindow();
     }
 
@@ -310,7 +384,10 @@ public class RegisterController extends Controller implements DisconnectEventLis
         WindowUtil.switchToServerConnectionWindow();
     }
 
-    public void setView(RegisterView view) {
+    /**
+     * @param view The view.
+     */
+    public void setView(final RegisterView view) {
         this.view = view;
     }
 }

@@ -25,38 +25,60 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
 /**
- * The base model every message that is being sent to the server, needs to implement.
+ * The base model every message that is being sent to the server, needs to
+ * implement.
  *
  * @author Manuele Vaccari
  * @version %I%, %G%
  * @since 0.0.1
  */
 public abstract class Message {
-    protected final MessageData rawData;
+    /**
+     * The data of the message (still not casted).
+     */
+    private final MessageData rawData;
 
-    public Message(MessageData data) {
-        this.rawData = data;
+    /**
+     * @param rawData The data (still not casted)
+     */
+    public Message(final MessageData rawData) {
+        this.rawData = rawData;
     }
 
+    /**
+     * @return Returns the ID of the message.
+     */
     public int getId() {
         return rawData.getId();
     }
 
+    /**
+     * @return Returns the data.
+     */
     public MessageData getRawData() {
         return rawData;
     }
 
     /**
-     * Perform whatever actions are required for this particular type of message.
+     * Perform whatever actions are required for this particular type of
+     * message.
+     *
+     * @param socket The socket object, to perform actions with the server.
+     *
+     * @return Returns true if message succeeded, otherwise false.
      */
     public abstract boolean process(SocketUtil socket);
 
     /**
-     * Create a message object of the correct class, using reflection
+     * Create a message object of the correct class, using reflection.
+     *
+     * @param messageData The data.
+     *
+     * @return Returns a message object using the data.
      *
      * @author Bradley Richards
      */
-    public static Message fromDataObject(MessageData messageData) {
+    public static Message fromDataObject(final MessageData messageData) {
         String messageClassName = Message.class.getPackage().getName() + "." + messageData.getMessageType();
         try {
             Class<?> messageClass = Class.forName(messageClassName);
@@ -68,7 +90,9 @@ public abstract class Message {
     }
 
     /**
-     * A message is really just a bunch of strings separated by vertical bars
+     * A message is really just a bunch of strings separated by vertical bars.
+     *
+     * @return Returns the serialized JSON string.
      */
     @Override
     public String toString() {

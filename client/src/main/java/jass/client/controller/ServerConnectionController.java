@@ -56,7 +56,6 @@ import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.UnrecoverableKeyException;
 import java.security.cert.CertificateException;
-import java.sql.SQLException;
 import java.util.ResourceBundle;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -67,50 +66,127 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * @version %I%, %G%
  * @since 0.0.1
  */
-public class ServerConnectionController extends Controller {
+public final class ServerConnectionController extends Controller {
+    /**
+     * The logger to print to console and save in a .log file.
+     */
     private static final Logger logger = LogManager.getLogger(ServerConnectionController.class);
+
+    /**
+     * The view.
+     */
     private ServerConnectionView view;
 
+    /**
+     * The "File" element.
+     */
     @FXML
-    public Menu mFile;
-    @FXML
-    public Menu mFileChangeLanguage;
-    @FXML
-    public MenuItem mFileExit;
-    @FXML
-    public Menu mEdit;
-    @FXML
-    public MenuItem mEditDelete;
-    @FXML
-    public Menu mHelp;
-    @FXML
-    public MenuItem mHelpAbout;
+    private Menu mFile;
 
+    /**
+     * The "File -> Change Language" element.
+     */
+    @FXML
+    private Menu mFileChangeLanguage;
+
+    /**
+     * The "File -> Exit" element.
+     */
+    @FXML
+    private MenuItem mFileExit;
+
+    /**
+     * The "Edit" element.
+     */
+    @FXML
+    private Menu mEdit;
+
+    /**
+     * The "Edit -> Delete" element.
+     */
+    @FXML
+    private MenuItem mEditDelete;
+
+    /**
+     * The "Help" element.
+     */
+    @FXML
+    private Menu mHelp;
+
+    /**
+     * The "Help -> About" element.
+     */
+    @FXML
+    private MenuItem mHelpAbout;
+
+    /**
+     * The root element of the view.
+     */
     @FXML
     private VBox root;
+
+    /**
+     * The navbar.
+     */
     @FXML
     private Text navbar;
+
+    /**
+     * The error message.
+     */
     @FXML
     private VBox errorMessage;
+
+    /**
+     * The saved server lists.
+     */
     @FXML
     private JFXComboBox<ServerEntity> chooseServer;
+
+    /**
+     * The text field for ip or domain.
+     */
     @FXML
     private JFXTextField ipOrDomain;
+
+    /**
+     * The IP hint text.
+     */
     @FXML
-    public Text ipHint;
+    private Text ipHint;
+
+    /**
+     * The port text field.
+     */
     @FXML
     private JFXTextField port;
+
+    /**
+     * The port hint text.
+     */
     @FXML
     private Text portHint;
+
+    /**
+     * The SSL checkbox.
+     */
     @FXML
     private JFXCheckBox secure;
+
+    /**
+     * The "remember me" checkbox.
+     */
     @FXML
     private JFXCheckBox connectAutomatically;
+
+    /**
+     * The connect button.
+     */
     @FXML
     private JFXButton connect;
 
     @Override
-    public void initialize(URL location, ResourceBundle resources) {
+    public void initialize(final URL location, final ResourceBundle resources) {
         DatabaseUtil db = (DatabaseUtil) ServiceLocator.get("db");
 
         /*
@@ -156,20 +232,28 @@ public class ServerConnectionController extends Controller {
          */
         chooseServer.setConverter(new StringConverter<ServerEntity>() {
             @Override
-            public String toString(ServerEntity server) {
-                return server == null || server.getIp() == null
-                    ? I18nUtil.get("gui.serverConnection.create")
-                    : (server.isSecure()
-                        ? (server.isConnectAutomatically()
-                            ? I18nUtil.get("gui.serverConnection.entry.ssl.default", server.getIp(), Integer.toString(server.getPort()))
-                            : I18nUtil.get("gui.serverConnection.entry.ssl", server.getIp(), Integer.toString(server.getPort())))
-                        : (server.isConnectAutomatically()
-                            ? I18nUtil.get("gui.serverConnection.entry.default", server.getIp(), Integer.toString(server.getPort()))
-                            : I18nUtil.get("gui.serverConnection.entry", server.getIp(), Integer.toString(server.getPort()))));
+            public String toString(final ServerEntity server) {
+                if (server == null || server.getIp() == null) {
+                    return I18nUtil.get("gui.serverConnection.create");
+                } else {
+                    if (server.isSecure()) {
+                        if (server.isConnectAutomatically()) {
+                            return I18nUtil.get("gui.serverConnection.entry.ssl.default", server.getIp(), Integer.toString(server.getPort()));
+                        } else {
+                            return I18nUtil.get("gui.serverConnection.entry.ssl", server.getIp(), Integer.toString(server.getPort()));
+                        }
+                    } else {
+                        if (server.isConnectAutomatically()) {
+                            return I18nUtil.get("gui.serverConnection.entry.default", server.getIp(), Integer.toString(server.getPort()));
+                        } else {
+                            return I18nUtil.get("gui.serverConnection.entry", server.getIp(), Integer.toString(server.getPort()));
+                        }
+                    }
+                }
             }
 
             @Override
-            public ServerEntity fromString(String string) {
+            public ServerEntity fromString(final String string) {
                 return null;
             }
         });
@@ -188,13 +272,7 @@ public class ServerConnectionController extends Controller {
          */
         AtomicBoolean serverIpValid = new AtomicBoolean(false);
         AtomicBoolean portValid = new AtomicBoolean(false);
-        Runnable updateButtonClickable = () -> {
-            if (!serverIpValid.get() || !portValid.get()) {
-                connect.setDisable(true);
-            } else {
-                connect.setDisable(false);
-            }
-        };
+        Runnable updateButtonClickable = () -> connect.setDisable(!serverIpValid.get() || !portValid.get());
         ipOrDomain.textProperty().addListener((o, oldVal, newVal) -> {
             if (!oldVal.equals(newVal)) {
                 serverIpValid.set(ipOrDomain.validate());
@@ -269,11 +347,14 @@ public class ServerConnectionController extends Controller {
     }
 
     /**
-     * As the view contains an error message field, this updates the text and the window appropriately.
+     * As the view contains an error message field, this updates the text and
+     * the window appropriately.
+     *
+     * @param translatorKey The key of the translation.
      *
      * @since 0.0.1
      */
-    public void setErrorMessage(String translatorKey) {
+    public void setErrorMessage(final String translatorKey) {
         Platform.runLater(() -> {
             if (errorMessage.getChildren().size() == 0) {
                 // Make window larger, so it doesn't become crammed, only if we haven't done so yet
@@ -288,13 +369,17 @@ public class ServerConnectionController extends Controller {
         });
     }
 
+    /**
+     * Shuts down the application.
+     */
     @FXML
     private void clickOnExit() {
         Platform.exit();
     }
 
     /**
-     * Updates the view depending if we create a new element or choose an existing one
+     * Updates the view depending if we create a new element or choose an
+     * existing one.
      *
      * @since 0.0.1
      */
@@ -317,8 +402,8 @@ public class ServerConnectionController extends Controller {
     }
 
     /**
-     * Handles the click on the connect button. Inputs should already be checked. This will try to connect to the
-     * server.
+     * Handles the click on the connect button. Inputs should already be
+     * checked. This will try to connect to the server.
      *
      * @since 0.0.1
      */
@@ -329,8 +414,6 @@ public class ServerConnectionController extends Controller {
 
         // Connection would freeze window (and the animations) so do it in a different thread.
         new Thread(() -> {
-            DatabaseUtil db = (DatabaseUtil) ServiceLocator.get("db");
-
             ServerEntity server = new ServerEntity(
                 ipOrDomain.getText(),
                 Integer.parseInt(port.getText()),
@@ -360,9 +443,7 @@ public class ServerConnectionController extends Controller {
                 // If the user selected "Create new connection" add it to the DB
                 ServerEntity selectedItem = chooseServer.getSelectionModel().getSelectedItem();
                 if (selectedItem != null && selectedItem.getIp() == null) {
-                    try {
-                        db.getServerDao().create(server);
-                    } catch (SQLException e) {
+                    if (!ServerRepository.getSingleton(null).add(server)) {
                         logger.error("Server connection not saved to database");
                     }
                 }
@@ -371,11 +452,17 @@ public class ServerConnectionController extends Controller {
         }).start();
     }
 
+    /**
+     * @return Returns the connect button
+     */
     public JFXButton getConnect() {
         return connect;
     }
 
-    public void setView(ServerConnectionView view) {
+    /**
+     * @param view The view.
+     */
+    public void setView(final ServerConnectionView view) {
         this.view = view;
     }
 }

@@ -38,8 +38,6 @@ import jass.client.util.WindowUtil;
 import jass.client.util.ViewUtil;
 import jass.lib.message.ChangePasswordData;
 import jass.lib.servicelocator.ServiceLocator;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -52,44 +50,104 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * @version %I%, %G%
  * @since 0.0.1
  */
-public class ChangePasswordController extends Controller {
-    private static final Logger logger = LogManager.getLogger(ChangePasswordController.class);
+public final class ChangePasswordController extends Controller {
+    /**
+     * The view.
+     */
     private ChangePasswordView view;
 
+    /**
+     * The "File" element.
+     */
     @FXML
-    public Menu mFile;
-    @FXML
-    public Menu mFileChangeLanguage;
-    @FXML
-    public MenuItem mFileDisconnect;
-    @FXML
-    public MenuItem mFileExit;
-    @FXML
-    public Menu mEdit;
-    @FXML
-    public MenuItem mEditDelete;
-    @FXML
-    public Menu mHelp;
-    @FXML
-    public MenuItem mHelpAbout;
+    private Menu mFile;
 
+    /**
+     * The "File -> Change Language" element.
+     */
+    @FXML
+    private Menu mFileChangeLanguage;
+
+    /**
+     * The "File -> Disconnect" element.
+     */
+    @FXML
+    private MenuItem mFileDisconnect;
+
+    /**
+     * The "File -> Exit" element.
+     */
+    @FXML
+    private MenuItem mFileExit;
+
+    /**
+     * The "Edit" element.
+     */
+    @FXML
+    private Menu mEdit;
+
+    /**
+     * The "Edit -> Delete" element.
+     */
+    @FXML
+    private MenuItem mEditDelete;
+
+    /**
+     * The "Help" element.
+     */
+    @FXML
+    private Menu mHelp;
+
+    /**
+     * The "Help -> About" element.
+     */
+    @FXML
+    private MenuItem mHelpAbout;
+
+    /**
+     * The navbar.
+     */
     @FXML
     private Text navbar;
+
+    /**
+     * The error message.
+     */
     @FXML
     private VBox errorMessage;
+
+    /**
+     * The old password field.
+     */
     @FXML
     private JFXPasswordField oldPassword;
+
+    /**
+     * The new password field.
+     */
     @FXML
     private JFXPasswordField newPassword;
+
+    /**
+     * The repeat new password field.
+     */
     @FXML
     private JFXPasswordField repeatNewPassword;
+
+    /**
+     * The change button.
+     */
     @FXML
     private JFXButton change;
+
+    /**
+     * The cancel button.
+     */
     @FXML
     private JFXButton cancel;
 
     @Override
-    public void initialize(URL location, ResourceBundle resources) {
+    public void initialize(final URL location, final ResourceBundle resources) {
         /*
          * Bind all texts
          */
@@ -121,13 +179,7 @@ public class ChangePasswordController extends Controller {
         AtomicBoolean oldPasswordValid = new AtomicBoolean(false);
         AtomicBoolean newPasswordValid = new AtomicBoolean(false);
         AtomicBoolean repeatNewPasswordValid = new AtomicBoolean(false);
-        Runnable updateButtonClickable = () -> {
-            if (!oldPasswordValid.get() || !newPasswordValid.get() || !repeatNewPasswordValid.get()) {
-                change.setDisable(true);
-            } else {
-                change.setDisable(false);
-            }
-        };
+        Runnable updateButtonClickable = () -> change.setDisable(!oldPasswordValid.get() || !newPasswordValid.get() || !repeatNewPasswordValid.get());
         oldPassword.textProperty().addListener((o, oldVal, newVal) -> {
             if (!oldVal.equals(newVal)) {
                 oldPasswordValid.set(oldPassword.validate());
@@ -207,11 +259,14 @@ public class ChangePasswordController extends Controller {
     }
 
     /**
-     * As the view contains an error message field, this updates the text and the window appropriately.
+     * As the view contains an error message field, this updates the text and
+     * the window appropriately.
+     *
+     * @param translatorKey The key of the translation.
      *
      * @since 0.0.1
      */
-    public void setErrorMessage(String translatorKey) {
+    public void setErrorMessage(final String translatorKey) {
         Platform.runLater(() -> {
             if (errorMessage.getChildren().size() == 0) {
                 // Make window larger, so it doesn't become crammed, only if we haven't done so yet
@@ -224,6 +279,9 @@ public class ChangePasswordController extends Controller {
         });
     }
 
+    /**
+     * Disconnect from the server and returns to the server connection window.
+     */
     @FXML
     private void clickOnDisconnect() {
         SocketUtil socket = (SocketUtil) ServiceLocator.get("backend");
@@ -234,14 +292,17 @@ public class ChangePasswordController extends Controller {
         WindowUtil.switchToServerConnectionWindow();
     }
 
+    /**
+     * Shuts down the application.
+     */
     @FXML
     private void clickOnExit() {
         Platform.exit();
     }
 
     /**
-     * Handles the click on the change button. Inputs should already be checked. This will send it to the server, and
-     * update local values if successful.
+     * Handles the click on the change button. Inputs should already be checked.
+     * This will send it to the server, and update local values if successful.
      *
      * @since 0.0.1
      */
@@ -271,16 +332,25 @@ public class ChangePasswordController extends Controller {
         }).start();
     }
 
+    /**
+     * After clicking on cancel, return to the lobby.
+     */
     @FXML
     public void clickOnCancel() {
         WindowUtil.switchToDashboardWindow();
         view.stop();
     }
 
-    public void setView(ChangePasswordView view) {
+    /**
+     * @param view The view.
+     */
+    public void setView(final ChangePasswordView view) {
         this.view = view;
     }
 
+    /**
+     * @return Returns the change button
+     */
     public JFXButton getChange() {
         return change;
     }

@@ -29,7 +29,10 @@ import jass.server.util.ClientUtil;
  * @version %I%, %G%
  * @since 0.0.1
  */
-public class Logout extends Message {
+public final class Logout extends Message {
+    /**
+     * @param rawData The data (still not casted)
+     */
     public Logout(final MessageData rawData) {
         super(rawData);
     }

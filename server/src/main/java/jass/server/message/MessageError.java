@@ -22,21 +22,22 @@ import jass.lib.message.MessageData;
 import jass.server.util.ClientUtil;
 
 /**
- * Empty error message, because of inexisting command.
+ * Empty error message, because of a command that doesn't exist.
  *
  * @author Manuele Vaccari
  * @version %I%, %G%
  * @since 0.0.1
  */
-public class MessageError extends Message {
+public final class MessageError extends Message {
+    /**
+     * @param rawData The data (still not casted)
+     */
     public MessageError(final MessageData rawData) {
         super(rawData);
     }
 
-    /**
-     * This message type does no processing at all.
-     */
     @Override
     public void process(final ClientUtil client) {
+        // No processing is required on the server.
     }
 }

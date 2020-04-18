@@ -23,22 +23,29 @@ import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 /**
- * The abstract View for the MVC
+ * The abstract View for the MVC.
  *
  * @author Manuele Vaccari
  * @version %I%, %G%
  * @since 0.0.1
  */
 public abstract class View {
-    protected Stage stage;
-    protected Scene scene;
+    /**
+     * The stage.
+     */
+    private final Stage stage;
 
     /**
-     * Set any options for the stage in the subclass constructor
-     *
-     * @param stage An object containing a Stage
+     * The scene.
      */
-    protected View(Stage stage) {
+    private final Scene scene;
+
+    /**
+     * Set any options for the stage in the subclass constructor.
+     *
+     * @param stage An object containing a Stage.
+     */
+    protected View(final Stage stage) {
         this.stage = stage;
 
         scene = create_GUI(); // Create all controls within "root"
@@ -46,24 +53,36 @@ public abstract class View {
         stage.setScene(scene);
     }
 
+    /**
+     * @return Returns a scene with the contents.
+     */
     protected abstract Scene create_GUI();
 
     /**
-     * Display the view
+     * Display the view.
      */
     public void start() {
         stage.show();
     }
 
     /**
-     * Hide the view
+     * Hide the view.
      */
     public void stop() {
         stage.hide();
     }
 
     /**
-     * Getter for the stage, so that the controller can access window events
+     * @return Returns the scene.
+     */
+    public Scene getScene() {
+        return scene;
+    }
+
+    /**
+     * Getter for the stage, so that the controller can access window events.
+     *
+     * @return Returns the stage.
      */
     public Stage getStage() {
         return stage;

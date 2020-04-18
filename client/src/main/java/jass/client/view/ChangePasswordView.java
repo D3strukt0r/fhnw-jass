@@ -37,8 +37,11 @@ import java.io.IOException;
  * @version %I%, %G%
  * @since 0.0.1
  */
-public class ChangePasswordView extends View {
-    public ChangePasswordView(Stage stage) {
+public final class ChangePasswordView extends View {
+    /**
+     * @param stage The stage of the window.
+     */
+    public ChangePasswordView(final Stage stage) {
         super(stage);
         stage.titleProperty().bind(I18nUtil.createStringBinding("gui.changePassword.title"));
         stage.setResizable(false);

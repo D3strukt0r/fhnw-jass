@@ -11,14 +11,22 @@ import java.security.spec.InvalidKeySpecException;
  * There are many sources of info on how to securely hash passwords. I'm not a
  * crypto expert, so I follow the recommendations of the experts. Here are two
  * examples:
- *
+ * <p>
  * https://crackstation.net/hashing-security.htm
  *
  * @author https://howtodoinjava.com/security/how-to-generate-secure-password-hash-md5-sha-pbkdf2-bcrypt-examples/
  * @version %I%, %G%
  * @since 0.0.1
  */
-public class HashUtil {
+public final class HashUtil {
+    /**
+     * @param password The password to hash.
+     *
+     * @return Returns a hashed password.
+     *
+     * @throws NoSuchAlgorithmException Some security error.
+     * @throws InvalidKeySpecException  Some security error.
+     */
     public static String generateStrongPasswordHash(final String password) throws NoSuchAlgorithmException, InvalidKeySpecException {
         int iterations = 1000;
         char[] chars = password.toCharArray();
@@ -30,6 +38,11 @@ public class HashUtil {
         return iterations + ":" + toHex(salt) + ":" + toHex(hash);
     }
 
+    /**
+     * @return Returns the salt.
+     *
+     * @throws NoSuchAlgorithmException Some security error.
+     */
     private static byte[] getSalt() throws NoSuchAlgorithmException {
         SecureRandom sr = SecureRandom.getInstance("SHA1PRNG");
         byte[] salt = new byte[16];
@@ -37,6 +50,11 @@ public class HashUtil {
         return salt;
     }
 
+    /**
+     * @param array The array to stringify.
+     *
+     * @return Returns the hex string.
+     */
     private static String toHex(final byte[] array) {
         BigInteger bi = new BigInteger(1, array);
         String hex = bi.toString(16);
@@ -48,6 +66,15 @@ public class HashUtil {
         }
     }
 
+    /**
+     * @param originalPassword The password to checked.
+     * @param storedPassword   The password to check against.
+     *
+     * @return Returns true if it's the same, otherwise false.
+     *
+     * @throws NoSuchAlgorithmException Some security error.
+     * @throws InvalidKeySpecException  Some security error.
+     */
     public static boolean validatePassword(final String originalPassword, final String storedPassword) throws NoSuchAlgorithmException, InvalidKeySpecException {
         String[] parts = storedPassword.split(":");
         int iterations = Integer.parseInt(parts[0]);
@@ -65,6 +92,11 @@ public class HashUtil {
         return diff == 0;
     }
 
+    /**
+     * @param hex The string to make to a hex string.
+     *
+     * @return Returns a hex string.
+     */
     private static byte[] fromHex(String hex) {
         byte[] bytes = new byte[hex.length() / 2];
         for (int i = 0; i < bytes.length; i++) {

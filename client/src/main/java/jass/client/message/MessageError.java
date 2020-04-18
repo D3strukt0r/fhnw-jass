@@ -33,23 +33,26 @@ import jass.lib.message.MessageErrorData;
  * @version %I%, %G%
  * @since 0.0.1
  */
-public class MessageError extends Message {
-    private MessageErrorData data;
+public final class MessageError extends Message {
+    /**
+     * The data of the message.
+     */
+    private final MessageErrorData data;
 
-    public MessageError(MessageData rawData) {
+    /**
+     * @param rawData The data (still not casted)
+     */
+    public MessageError(final MessageData rawData) {
         super(rawData);
         data = (MessageErrorData) rawData;
     }
 
-    /**
-     * This message type does no processing at all (only the server)
-     */
     @Override
-    public boolean process(SocketUtil socket) {
+    public boolean process(final SocketUtil socket) {
         Platform.runLater(() -> {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error");
-            alert.setHeaderText("Ooops, the server sent an error message!");
+            alert.setHeaderText("Oops, the server sent an error message!");
 
             switch (data.getErrorMessage()) {
                 case INVALID_COMMAND:
@@ -59,7 +62,7 @@ public class MessageError extends Message {
                     alert.setContentText("Unknown error message received.");
                     break;
             }
-            alert.setContentText("Ooops, there was an error!");
+            alert.setContentText("Oops, there was an error!");
 
             Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
             stage.getIcons().add(new Image(getClass().getResource("/images/icon.png").toString()));

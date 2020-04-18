@@ -26,6 +26,11 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
 public abstract class MessageData implements Serializable {
+    /**
+     * @param jsonString The JSON string to be converted.
+     *
+     * @return Returns the object from the JSON string.
+     */
     public static MessageData unserialize(final String jsonString) {
         JSONObject data;
         try {
@@ -47,6 +52,11 @@ public abstract class MessageData implements Serializable {
         }
     }
 
+    /**
+     * @param messageData The message to be converted.
+     *
+     * @return Returns the object serialized as a JSON string.
+     */
     public static String serialize(final MessageData messageData) {
         JSONObject data = new JSONObject(messageData);
         return data.toString();
@@ -54,38 +64,65 @@ public abstract class MessageData implements Serializable {
 
     /* Required data */
 
+    /**
+     * The counter to keep track of IDs. This keeps incrementing and starts at 0
+     * for each new client.
+     */
     private static int idCounter = 0;
+
+    /**
+     * The ID.
+     */
     private final int id;
 
+    /**
+     * The type (object name).
+     */
     private final String messageType;
 
+    /**
+     * @param messageType The type (object name).
+     */
     public MessageData(final String messageType) {
         id = createId();
         this.messageType = messageType;
     }
 
+    /**
+     * @param id          The ID of the message.
+     * @param messageType The type (object name).
+     */
     public MessageData(final int id, final String messageType) {
         this.id = id;
         this.messageType = messageType;
     }
 
+    /**
+     * @param data The message containing all the data.
+     */
     public MessageData(final JSONObject data) {
         id = data.getInt("id");
         messageType = data.getString("messageType");
     }
 
     /**
-     * Create an id for the message to easily identify responses.
+     * @return Returns an ID for the message to easily identify responses.
      */
     public static int createId() {
         idCounter = idCounter + 1;
         return idCounter;
     }
 
+    /**
+     * @return Returns the ID.
+     */
     public int getId() {
         return id;
     }
 
+    /**
+     * @return Returns the message type.
+     */
     public String getMessageType() {
         return messageType;
     }

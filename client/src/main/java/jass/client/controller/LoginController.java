@@ -18,9 +18,11 @@
 
 package jass.client.controller;
 
-import com.jfoenix.controls.*;
+import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXCheckBox;
+import com.jfoenix.controls.JFXPasswordField;
+import com.jfoenix.controls.JFXTextField;
 import javafx.application.Platform;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
@@ -35,7 +37,6 @@ import jass.client.repository.LoginRepository;
 import jass.client.eventlistener.DisconnectEventListener;
 import jass.client.mvc.Controller;
 import jass.client.message.Login;
-import jass.client.util.DatabaseUtil;
 import jass.client.util.I18nUtil;
 import jass.client.util.SocketUtil;
 import jass.client.util.WindowUtil;
@@ -45,7 +46,6 @@ import jass.lib.message.LoginData;
 import jass.lib.servicelocator.ServiceLocator;
 
 import java.net.URL;
-import java.sql.SQLException;
 import java.util.ResourceBundle;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -56,44 +56,109 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * @version %I%, %G%
  * @since 0.0.1
  */
-public class LoginController extends Controller implements DisconnectEventListener {
+public final class LoginController extends Controller implements DisconnectEventListener {
+    /**
+     * The logger to print to console and save in a .log file.
+     */
     private static final Logger logger = LogManager.getLogger(LoginController.class);
+
+    /**
+     * The view.
+     */
     private LoginView view;
 
+    /**
+     * The "File" element.
+     */
     @FXML
-    public Menu mFile;
-    @FXML
-    public Menu mFileChangeLanguage;
-    @FXML
-    public MenuItem mFileDisconnect;
-    @FXML
-    public MenuItem mFileExit;
-    @FXML
-    public Menu mEdit;
-    @FXML
-    public MenuItem mEditDelete;
-    @FXML
-    public Menu mHelp;
-    @FXML
-    public MenuItem mHelpAbout;
+    private Menu mFile;
 
+    /**
+     * The "File -> Change Language" element.
+     */
+    @FXML
+    private Menu mFileChangeLanguage;
+
+    /**
+     * The "File -> Disconnect" element.
+     */
+    @FXML
+    private MenuItem mFileDisconnect;
+
+    /**
+     * The "File -> Exit" element.
+     */
+    @FXML
+    private MenuItem mFileExit;
+
+    /**
+     * The "Edit" element.
+     */
+    @FXML
+    private Menu mEdit;
+
+    /**
+     * The "Edit -> Delete" element.
+     */
+    @FXML
+    private MenuItem mEditDelete;
+
+    /**
+     * The "Help" element.
+     */
+    @FXML
+    private Menu mHelp;
+
+    /**
+     * The "Help -> About" element.
+     */
+    @FXML
+    private MenuItem mHelpAbout;
+
+    /**
+     * The navbar.
+     */
     @FXML
     private Text navbar;
+
+    /**
+     * The error message.
+     */
     @FXML
     private VBox errorMessage;
+
+    /**
+     * The username text field.
+     */
     @FXML
     private JFXTextField username;
+
+    /**
+     * The password field.
+     */
     @FXML
     private JFXPasswordField password;
+
+    /**
+     * The "remember me" checkbox.
+     */
     @FXML
     private JFXCheckBox connectAutomatically;
+
+    /**
+     * The login button.
+     */
     @FXML
     private JFXButton login;
+
+    /**
+     * The register button.
+     */
     @FXML
     private JFXButton register;
 
     @Override
-    public void initialize(URL location, ResourceBundle resources) {
+    public void initialize(final URL location, final ResourceBundle resources) {
         /*
          * Register oneself for disconnect events
          */
@@ -133,13 +198,7 @@ public class LoginController extends Controller implements DisconnectEventListen
          */
         AtomicBoolean usernameValid = new AtomicBoolean(false);
         AtomicBoolean passwordValid = new AtomicBoolean(false);
-        Runnable updateButtonClickable = () -> {
-            if (!usernameValid.get() || !passwordValid.get()) {
-                login.setDisable(true);
-            } else {
-                login.setDisable(false);
-            }
-        };
+        Runnable updateButtonClickable = () -> login.setDisable(!usernameValid.get() || !passwordValid.get());
         username.textProperty().addListener((o, oldVal, newVal) -> {
             if (!oldVal.equals(newVal)) {
                 usernameValid.set(username.validate());
@@ -209,11 +268,14 @@ public class LoginController extends Controller implements DisconnectEventListen
     }
 
     /**
-     * As the view contains an error message field, this updates the text and the window appropriately.
+     * As the view contains an error message field, this updates the text and
+     * the window appropriately.
+     *
+     * @param translatorKey The key of the translation.
      *
      * @since 0.0.1
      */
-    public void setErrorMessage(String translatorKey) {
+    public void setErrorMessage(final String translatorKey) {
         Platform.runLater(() -> {
             if (errorMessage.getChildren().size() == 0) {
                 // Make window larger, so it doesn't become crammed, only if we haven't done so yet
@@ -228,6 +290,9 @@ public class LoginController extends Controller implements DisconnectEventListen
         });
     }
 
+    /**
+     * Disconnect from the server and returns to the server connection window.
+     */
     @FXML
     private void clickOnDisconnect() {
         SocketUtil socket = (SocketUtil) ServiceLocator.get("backend");
@@ -238,14 +303,17 @@ public class LoginController extends Controller implements DisconnectEventListen
         WindowUtil.switchToServerConnectionWindow();
     }
 
+    /**
+     * Shuts down the application.
+     */
     @FXML
     private void clickOnExit() {
         Platform.exit();
     }
 
     /**
-     * Handles the click on the login button. Inputs should already be checked. This will send it to the server, and
-     * update local values if successful.
+     * Handles the click on the login button. Inputs should already be checked.
+     * This will send it to the server, and update local values if successful.
      *
      * @since 0.0.1
      */
@@ -269,10 +337,7 @@ public class LoginController extends Controller implements DisconnectEventListen
                 login.setToken(loginMsg.getToken());
 
                 // Save the login in the db
-                DatabaseUtil db = (DatabaseUtil) ServiceLocator.get("db");
-                try {
-                    db.getLoginDao().create(login);
-                } catch (SQLException e) {
+                if (!LoginRepository.getSingleton(null).add(login)) {
                     logger.error("Couldn't save login data to local database.");
                 }
 
@@ -286,12 +351,18 @@ public class LoginController extends Controller implements DisconnectEventListen
         }).start();
     }
 
+    /**
+     * @return Returns the login button
+     */
     public JFXButton getLogin() {
         return login;
     }
 
+    /**
+     * After clicking on register, switch to the register window.
+     */
     @FXML
-    private void clickOnRegister(ActionEvent event) {
+    private void clickOnRegister() {
         WindowUtil.switchToRegisterWindow();
     }
 
@@ -301,7 +372,10 @@ public class LoginController extends Controller implements DisconnectEventListen
         WindowUtil.switchToServerConnectionWindow();
     }
 
-    public void setView(LoginView view) {
+    /**
+     * @param view The view.
+     */
+    public void setView(final LoginView view) {
         this.view = view;
     }
 }

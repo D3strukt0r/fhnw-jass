@@ -32,18 +32,27 @@ import jass.lib.servicelocator.ServiceLocator;
  * @version %I%, %G%
  * @since 0.0.1
  */
-public class Login extends Message {
-    private LoginData data;
+public final class Login extends Message {
+    /**
+     * The data of the message.
+     */
+    private final LoginData data;
 
+    /**
+     * The token.
+     */
     private String token = null;
 
-	public Login(MessageData rawData) {
-		super(rawData);
+    /**
+     * @param rawData The data (still not casted)
+     */
+    public Login(final MessageData rawData) {
+        super(rawData);
         data = (LoginData) rawData;
-	}
+    }
 
-	@Override
-	public boolean process(SocketUtil socket) {
+    @Override
+    public boolean process(final SocketUtil socket) {
         socket.send(this);
 
         Message result = socket.waitForResultResponse(data.getId());
@@ -57,8 +66,11 @@ public class Login extends Message {
             ServiceLocator.add(login);
         }
         return resultData.getResult();
-	}
+    }
 
+    /**
+     * @return Returns the token.
+     */
     public String getToken() {
         return token;
     }

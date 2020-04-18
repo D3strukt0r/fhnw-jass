@@ -19,14 +19,12 @@
 package jass.client.mvc;
 
 /**
- * The abstract Model for the MVC
+ * The abstract Model for the MVC.
  *
  * @author Manuele Vaccari
  * @version %I%, %G%
  * @since 0.0.1
  */
 public abstract class Model {
-    protected Model() {
-        // Not much going on here
-    }
+    protected Model() { }
 }

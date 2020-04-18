@@ -18,8 +18,6 @@
 
 package jass.client.message;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import jass.client.util.SocketUtil;
 import jass.lib.message.RegisterData;
 import jass.lib.message.MessageData;
@@ -32,17 +30,22 @@ import jass.lib.message.ResultData;
  * @version %I%, %G%
  * @since 0.0.1
  */
-public class Register extends Message {
-    private static final Logger logger = LogManager.getLogger(Register.class);
-    private RegisterData data;
+public final class Register extends Message {
+    /**
+     * The data of the message.
+     */
+    private final RegisterData data;
 
-    public Register(MessageData rawData) {
+    /**
+     * @param rawData The data (still not casted)
+     */
+    public Register(final MessageData rawData) {
         super(rawData);
         data = (RegisterData) rawData;
     }
 
     @Override
-    public boolean process(SocketUtil socket) {
+    public boolean process(final SocketUtil socket) {
         socket.send(this);
 
         Message result = socket.waitForResultResponse(data.getId());

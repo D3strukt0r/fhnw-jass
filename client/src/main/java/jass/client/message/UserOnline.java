@@ -30,16 +30,22 @@ import jass.lib.message.UserOnlineData;
  * @version %I%, %G%
  * @since 0.0.1
  */
-public class UserOnline extends Message {
-    private UserOnlineData data;
+public final class UserOnline extends Message {
+    /**
+     * The data of the message.
+     */
+    private final UserOnlineData data;
 
-    public UserOnline(MessageData rawData) {
+    /**
+     * @param rawData The data (still not casted)
+     */
+    public UserOnline(final MessageData rawData) {
         super(rawData);
         data = (UserOnlineData) rawData;
     }
 
     @Override
-    public boolean process(SocketUtil socket) {
+    public boolean process(final SocketUtil socket) {
         socket.send(this);
 
         Message result = socket.waitForResultResponse(data.getId());

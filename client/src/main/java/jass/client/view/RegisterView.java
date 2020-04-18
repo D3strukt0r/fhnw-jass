@@ -37,8 +37,11 @@ import java.io.IOException;
  * @version %I%, %G%
  * @since 0.0.1
  */
-public class RegisterView extends View {
-    public RegisterView(Stage stage) {
+public final class RegisterView extends View {
+    /**
+     * @param stage The stage of the window.
+     */
+    public RegisterView(final Stage stage) {
         super(stage);
         stage.titleProperty().bind(I18nUtil.createStringBinding("gui.login.title"));
         stage.setResizable(false);

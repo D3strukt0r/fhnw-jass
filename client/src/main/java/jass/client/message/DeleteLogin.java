@@ -18,36 +18,45 @@
 
 package jass.client.message;
 
+import jass.client.repository.LoginRepository;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import jass.client.entity.LoginEntity;
 import jass.client.util.SocketUtil;
-import jass.client.util.DatabaseUtil;
 import jass.lib.message.LoginData;
 import jass.lib.message.MessageData;
 import jass.lib.message.ResultData;
 import jass.lib.servicelocator.ServiceLocator;
 
-import java.sql.SQLException;
-
 /**
- * Delete the currently logged in user from the server. After successful deletion, token becomes invalid.
+ * Delete the currently logged in user from the server. After successful
+ * deletion, token becomes invalid.
  *
  * @author Manuele Vaccari
  * @version %I%, %G%
  * @since 0.0.1
  */
-public class DeleteLogin extends Message {
+public final class DeleteLogin extends Message {
+    /**
+     * The logger to print to console and save in a .log file.
+     */
     private static final Logger logger = LogManager.getLogger(DeleteLogin.class);
-    private LoginData data;
 
-    public DeleteLogin(MessageData rawData) {
+    /**
+     * The data of the message.
+     */
+    private final LoginData data;
+
+    /**
+     * @param rawData The data (still not casted)
+     */
+    public DeleteLogin(final MessageData rawData) {
         super(rawData);
         data = (LoginData) rawData;
     }
 
     @Override
-    public boolean process(SocketUtil socket) {
+    public boolean process(final SocketUtil socket) {
         socket.send(this);
 
         Message result = socket.waitForResultResponse(data.getId());
@@ -56,10 +65,7 @@ public class DeleteLogin extends Message {
         if (resultData.getResult()) {
             LoginEntity login = (LoginEntity) ServiceLocator.get("login");
 
-            DatabaseUtil db = (DatabaseUtil) ServiceLocator.get("db");
-            try {
-                db.getLoginDao().delete(login);
-            } catch (SQLException e) {
+            if (!LoginRepository.getSingleton(null).remove(login)) {
                 logger.error("Couldn't save login data to local database.");
             }
         }

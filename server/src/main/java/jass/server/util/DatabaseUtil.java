@@ -33,7 +33,7 @@ import java.sql.SQLException;
 
 /**
  * A class to create a database connection.
- *
+ * <p>
  * Also contains a lot of code from following example code:
  * https://github.com/j256/ormlite-jdbc/blob/master/src/test/java/com/j256/ormlite/examples/manytomany/ManyToManyMain.java
  *
@@ -41,16 +41,24 @@ import java.sql.SQLException;
  * @version %I%, %G%
  * @since 0.0.1
  */
-public class DatabaseUtil implements Service, Closeable {
+public final class DatabaseUtil implements Service, Closeable {
+    /**
+     * The database connection.
+     */
     private final ConnectionSource connectionSource;
 
+    /**
+     * The DAO for the users.
+     */
     private Dao<UserEntity, String> userDao;
 
     /**
      * Create a database connection.
      *
-     * @param databaseLocation A string containing the location of the file to be accessed (and if necessary created)
+     * @param databaseLocation A string containing the location of the file to
+     *                         be accessed (and if necessary created).
      *
+     * @throws SQLException If an SQL error occurs.
      * @since 0.0.1
      */
     public DatabaseUtil(final String databaseLocation) throws SQLException {
@@ -107,7 +115,9 @@ public class DatabaseUtil implements Service, Closeable {
         return userDao;
     }
 
-    // For the ServiceLocator
+    /**
+     * For the ServiceLocator.
+     */
     @Override
     public String getServiceName() {
         return "db";

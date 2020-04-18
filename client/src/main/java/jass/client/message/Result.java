@@ -22,23 +22,26 @@ import jass.client.util.SocketUtil;
 import jass.lib.message.MessageData;
 
 /**
- * The result response coming from the server for a specific command that the client sent.
+ * The result response coming from the server for a specific command that the
+ * client sent.
  *
  * @author Manuele Vaccari
  * @version %I%, %G%
  * @since 0.0.1
  */
-public class Result extends Message {
-
-    public Result(MessageData rawData) {
+public final class Result extends Message {
+    /**
+     * @param rawData The data (still not casted)
+     */
+    public Result(final MessageData rawData) {
         super(rawData);
     }
-	
-	/**
-	 * This message type does no processing at all (only the server)
-	 */
-	@Override
-	public boolean process(SocketUtil socket) {
-	    return true;
-	}
+
+    /**
+     * This message type does no processing at all (only the server).
+     */
+    @Override
+    public boolean process(final SocketUtil socket) {
+        return true;
+    }
 }

@@ -27,4 +27,4 @@ import jass.client.mvc.Model;
  * @version %I%, %G%
  * @since 0.0.1
  */
-public class LoginModel extends Model {}
+public class LoginModel extends Model { }
