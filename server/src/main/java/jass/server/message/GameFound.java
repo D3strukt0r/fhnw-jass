@@ -1,6 +1,5 @@
 package jass.server.message;
 
-import com.sun.deploy.util.SessionState;
 import jass.lib.message.GameFoundData;
 import jass.lib.message.MessageData;
 import jass.server.util.ClientUtil;
@@ -26,6 +25,6 @@ public class GameFound extends Message {
     public void process(final ClientUtil client) {
         client.send(this);
 
-        // TODO - Validation if client received messsage successfully
+        // TODO - Validation if client received messsage successfully?
     }
 }

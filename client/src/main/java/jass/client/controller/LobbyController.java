@@ -19,6 +19,7 @@
 package jass.client.controller;
 
 import jass.client.entity.LoginEntity;
+import jass.client.message.GameFound;
 import jass.client.message.SearchGame;
 import jass.client.mvc.Controller;
 import jass.client.util.DatabaseUtil;
@@ -59,7 +60,8 @@ public class LobbyController extends Controller {
 
         // Send SearchGame Message to Server
         if (searchGameMsg.process(backend)) {
-            System.out.println(searchGameMsg.getRawData());
+            // TODO - Change Button from "Search Game" to "Cancel Search"
+
         } else {
             //enableAll();
             logger.error("Error starting search for game");

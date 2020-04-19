@@ -83,10 +83,10 @@ public class SearchGameUtil implements Service {
             logger.info("Players searching for a game:  " + this.clients.size());
 
             // Broadcast to all Players
-            broadcastGameFound(playerOne, playerOne.getUser(), playerTwo.getUser(), playerThree.getUser(), playerFour.getUser());
-            broadcastGameFound(playerTwo, playerOne.getUser(), playerTwo.getUser(), playerThree.getUser(), playerFour.getUser());
-            broadcastGameFound(playerThree, playerOne.getUser(), playerTwo.getUser(), playerThree.getUser(), playerFour.getUser());
-            broadcastGameFound(playerFour, playerOne.getUser(), playerTwo.getUser(), playerThree.getUser(), playerFour.getUser());
+            broadcastGameFound(playerOne, newGame, playerOne.getUser(), playerTwo.getUser(), playerThree.getUser(), playerFour.getUser());
+            broadcastGameFound(playerTwo, newGame, playerOne.getUser(), playerTwo.getUser(), playerThree.getUser(), playerFour.getUser());
+            broadcastGameFound(playerThree, newGame, playerOne.getUser(), playerTwo.getUser(), playerThree.getUser(), playerFour.getUser());
+            broadcastGameFound(playerFour, newGame, playerOne.getUser(), playerTwo.getUser(), playerThree.getUser(), playerFour.getUser());
 
             // If there are still enough players searching for a game create new game
             if (clients.size() >= 4) {
@@ -96,8 +96,8 @@ public class SearchGameUtil implements Service {
         }
     }
 
-    private void broadcastGameFound(ClientUtil client, UserEntity p1, UserEntity p2, UserEntity p3, UserEntity p4) {
-        GameFound gameFoundMsg = new GameFound(new GameFoundData(client.getToken(), p1.getId(), p1.getUsername(), p2.getId(), p2.getUsername(), p3.getId(), p3.getUsername(), p4.getId(), p4.getUsername()));
+    private void broadcastGameFound(ClientUtil client, GameEntity game, UserEntity p1, UserEntity p2, UserEntity p3, UserEntity p4) {
+        GameFound gameFoundMsg = new GameFound(new GameFoundData(client.getToken(), game.getId(), p1.getId(), p1.getUsername(), p2.getId(), p2.getUsername(), p3.getId(), p3.getUsername(), p4.getId(), p4.getUsername()));
         client.send(gameFoundMsg);
     }
 
