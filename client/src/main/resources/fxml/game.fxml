@@ -6,13 +6,11 @@
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.SeparatorMenuItem?>
 <?import javafx.scene.control.MenuItem?>
-
-<?import com.jfoenix.controls.JFXButton?>
 <VBox xmlns="http://javafx.com/javafx/8.0.171"
       xmlns:fx="http://javafx.com/fxml/1"
       stylesheets="@../css/app.css"
       styleClass="background-white"
-      fx:controller="jass.client.controller.LobbyController">
+      fx:controller="jass.client.controller.GameController">
     <MenuBar>
         <Menu fx:id="mFile" text="gui.menu.file">
             <Menu fx:id="mFileChangeLanguage" text="gui.menu.file.changeLanguage" />
@@ -29,11 +27,9 @@
         </Menu>
     </MenuBar>
 
+
     <!-- body -->
-    <HBox styleClass="custom-container">
-        <VBox spacing="4">
-            <Text fx:id="searchMessage" textAlignment="CENTER" text="gui.lobby.searching" />
-            <JFXButton fx:id="findMatch" disable="false" styleClass="primary" text="gui.lobby.findMatch" onAction="#clickOnFindMatch" />
-        </VBox>
-    </HBox>
+    <VBox styleClass="custom-container">
+        <Text text="Here will be the game..." />
+    </VBox>
 </VBox>

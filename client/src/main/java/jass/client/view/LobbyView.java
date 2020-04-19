@@ -41,7 +41,7 @@ public final class LobbyView extends View {
      */
     public LobbyView(final Stage stage) {
         super(stage);
-        stage.titleProperty().bind(I18nUtil.createStringBinding("gui.dashboard.title"));
+        stage.titleProperty().bind(I18nUtil.createStringBinding("gui.lobby.title"));
         stage.setMinHeight(300);
         stage.setMinWidth(400);
 
