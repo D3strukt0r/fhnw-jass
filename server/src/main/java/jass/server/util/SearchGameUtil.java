@@ -1,8 +1,10 @@
 package jass.server.util;
 
+import jass.lib.message.GameFoundData;
 import jass.server.entity.GameEntity;
 import jass.server.entity.TeamEntity;
 import jass.server.entity.UserEntity;
+import jass.server.message.GameFound;
 import jass.server.repository.GameRepository;
 import jass.server.repository.TeamRepository;
 import org.apache.logging.log4j.LogManager;
@@ -58,15 +60,15 @@ public class SearchGameUtil implements Service {
     private void createNewGame() {
         if(clients.size() >= 4) {
             // Get players for game
-            UserEntity playerOne = this.clients.get(0).getUser();
-            UserEntity playerTwo = this.clients.get(1).getUser();
-            UserEntity playerThree = this.clients.get(2).getUser();
-            UserEntity playerFour = this.clients.get(3).getUser();
+            ClientUtil playerOne = this.clients.get(0);
+            ClientUtil playerTwo = this.clients.get(1);
+            ClientUtil playerThree = this.clients.get(2);
+            ClientUtil playerFour = this.clients.get(3);
 
             // Assign and create Teams
-            TeamEntity teamOne = new TeamEntity(playerOne, playerThree);
+            TeamEntity teamOne = new TeamEntity(playerOne.getUser(), playerThree.getUser());
             TeamRepository.getSingleton(null).add(teamOne);
-            TeamEntity teamTwo = new TeamEntity(playerTwo, playerFour);
+            TeamEntity teamTwo = new TeamEntity(playerTwo.getUser(), playerFour.getUser());
             TeamRepository.getSingleton(null).add(teamTwo);
 
             // Initialize new Game
@@ -80,6 +82,13 @@ public class SearchGameUtil implements Service {
             this.clients.subList(0, 4).clear();
             logger.info("Players searching for a game:  " + this.clients.size());
 
+            // Broadcast to all Players
+            broadcastGameFound(playerOne, playerOne.getUser(), playerTwo.getUser(), playerThree.getUser(), playerFour.getUser());
+            broadcastGameFound(playerTwo, playerOne.getUser(), playerTwo.getUser(), playerThree.getUser(), playerFour.getUser());
+            broadcastGameFound(playerThree, playerOne.getUser(), playerTwo.getUser(), playerThree.getUser(), playerFour.getUser());
+            broadcastGameFound(playerFour, playerOne.getUser(), playerTwo.getUser(), playerThree.getUser(), playerFour.getUser());
+
+            // If there are still enough players searching for a game create new game
             if (clients.size() >= 4) {
                 this.createNewGame();
             }
@@ -87,6 +96,10 @@ public class SearchGameUtil implements Service {
         }
     }
 
+    private void broadcastGameFound(ClientUtil client, UserEntity p1, UserEntity p2, UserEntity p3, UserEntity p4) {
+        GameFound gameFoundMsg = new GameFound(new GameFoundData(client.getToken(), p1.getId(), p1.getUsername(), p2.getId(), p2.getUsername(), p3.getId(), p3.getUsername(), p4.getId(), p4.getUsername()));
+        client.send(gameFoundMsg);
+    }
 
 
     @Override
