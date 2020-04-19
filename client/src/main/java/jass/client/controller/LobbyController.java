@@ -19,6 +19,7 @@
 package jass.client.controller;
 
 import jass.client.entity.LoginEntity;
+import jass.client.eventlistener.GameFoundEventListener;
 import jass.client.message.GameFound;
 import jass.client.message.SearchGame;
 import jass.client.mvc.Controller;
@@ -40,14 +41,20 @@ import java.util.ResourceBundle;
  * @version %I%, %G%
  * @since 0.0.1
  */
-public class LobbyController extends Controller {
+public class LobbyController extends Controller implements GameFoundEventListener {
     private static final Logger logger = LogManager.getLogger(LobbyController.class);
     // GameService gameService
 
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        // TODO: Do something
+        /*
+         * Register for gamefound event
+         */
+        SocketUtil socket = (SocketUtil) ServiceLocator.get("backend");
+        if (socket != null) { // Not necessary but keeps IDE happy
+            socket.setGameFoundEventListener(this);
+        }
     }
 
     public void startSearchForGame(ActionEvent actionEvent) {
@@ -64,6 +71,7 @@ public class LobbyController extends Controller {
 
         } else {
             //enableAll();
+            // TODO - Show Error Message
             logger.error("Error starting search for game");
         }
     }
@@ -73,7 +81,8 @@ public class LobbyController extends Controller {
     }
 
     public void onGameFound() {
-
+        logger.info("Successfully found game!");
+        goToGameView();
     }
 
     public void goToGameView() {

@@ -36,7 +36,7 @@ public class SearchGame extends Message {
             result = ServerSocketUtil.exists(data.getUsername());
             if(result) {
                 SearchGameUtil sGU = (SearchGameUtil) ServiceLocator.get("SearchGameUtil");
-                sGU.addClientToSearchGame(client);
+                sGU.addOrRemoveClientToSearchGame(client);
             }
         }
 

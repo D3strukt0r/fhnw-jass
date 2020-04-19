@@ -18,6 +18,7 @@
 
 package jass.client.util;
 
+import jass.client.eventlistener.GameFoundEventListener;
 import jass.client.message.Message;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -76,6 +77,11 @@ public final class SocketUtil extends Thread implements Service, Closeable {
      * A list of all objects listening to a disconnect event.
      */
     private final ArrayList<DisconnectEventListener> disconnectListener = new ArrayList<>();
+
+    /**
+     * Object listening to a found game event.
+     */
+    private GameFoundEventListener gameFoundEventListener;
 
     /**
      * A list of all messages coming from the server.
@@ -166,6 +172,13 @@ public final class SocketUtil extends Thread implements Service, Closeable {
                     } else {
                         logger.info("Received message of type " + msgData.getMessageType());
                         lastMessages.add(msg);
+
+                        /**
+                         **  Handling of various EventListeners
+                         */
+                        if (msgData.getMessageType().equals("GameFound")) {
+                            gameFoundEventListener.onGameFound();
+                        }
                     }
                 }
             }
@@ -255,6 +268,8 @@ public final class SocketUtil extends Thread implements Service, Closeable {
     public void addDisconnectListener(final DisconnectEventListener listener) {
         this.disconnectListener.add(listener);
     }
+
+    public void setGameFoundEventListener(GameFoundEventListener gFL) { this.gameFoundEventListener = gFL; }
 
     /**
      * Verifies that the string is a valid ip address.

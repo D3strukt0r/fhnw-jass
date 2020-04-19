@@ -33,11 +33,16 @@ public class SearchGameUtil implements Service {
 
     public SearchGameUtil() {}
 
-    // Add new client to search for game
-    public void addClientToSearchGame(ClientUtil client) {
-        clients.add(client);
-        logger.info("Added new client " + client.getUsername() +  " to waiting list. Total of " + clients.size() + " users searching for a game");
-        this.createNewGame();
+    // Add new client to search for game - if the client already is searching remove the client
+    public void addOrRemoveClientToSearchGame(ClientUtil client) {
+        if (clients.contains(client)) {
+            removeClientFromSearchingGame(client);
+        } else {
+            clients.add(client);
+            logger.info("Added new client " + client.getUsername() +  " to waiting list. Total of " + clients.size() + " users searching for a game");
+            this.createNewGame();
+        }
+
     }
 
     // Remove client from searching a game - either connection lost or game has been found
