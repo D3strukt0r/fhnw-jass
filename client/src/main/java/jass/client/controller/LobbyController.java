@@ -1,38 +1,28 @@
-/*
- * fhnw-jass is jass game programmed in java for a school project.
- * Copyright (C) 2020 Manuele Vaccari
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <https://www.gnu.org/licenses/>.
- */
-
 package jass.client.controller;
 
 import com.jfoenix.controls.JFXButton;
-import jass.client.eventlistener.DisconnectEventListener;
+import com.jfoenix.controls.JFXCheckBox;
+import com.jfoenix.controls.JFXPasswordField;
+import com.jfoenix.controls.JFXTextField;
 import jass.client.mvc.Controller;
 import jass.client.util.I18nUtil;
 import jass.client.util.SocketUtil;
 import jass.client.util.ViewUtil;
 import jass.client.util.WindowUtil;
 import jass.client.view.LobbyView;
+import jass.client.view.LoginView;
 import jass.lib.servicelocator.ServiceLocator;
 import javafx.application.Platform;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.input.KeyCombination;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -70,6 +60,12 @@ public class LobbyController extends Controller {
     private MenuItem mFileDisconnect;
 
     /**
+     * The "File -> Logout" element.
+     */
+    @FXML
+    private MenuItem mFileLogout;
+
+    /**
      * The "File -> Exit" element.
      */
     @FXML
@@ -99,6 +95,7 @@ public class LobbyController extends Controller {
     @FXML
     private MenuItem mHelpAbout;
 
+
     /**
      * The Find Match button.
      */
@@ -106,13 +103,22 @@ public class LobbyController extends Controller {
     private JFXButton findMatch;
 
     /**
-     * The search message.
+     * The Cancel Match button.
      */
     @FXML
-    private Text searchMessage;
+    private JFXButton cancelMatch;
+
+    /**
+     * The searching text.
+     */
+    @FXML
+    private Label searching;
+
 
     @Override
-    public void initialize(final URL location, final ResourceBundle resources) {
+    public void initialize(URL location, ResourceBundle resources) {
+        // TODO: Do something
+
         /*
          * Bind all texts
          */
@@ -120,6 +126,7 @@ public class LobbyController extends Controller {
         mFileChangeLanguage.textProperty().bind(I18nUtil.createStringBinding(mFileChangeLanguage.getText()));
         ViewUtil.useLanguageMenuContent(mFileChangeLanguage);
         mFileDisconnect.textProperty().bind(I18nUtil.createStringBinding(mFileDisconnect.getText()));
+        mFileLogout.textProperty().bind(I18nUtil.createStringBinding(mFileLogout.getText()));
         mFileExit.textProperty().bind(I18nUtil.createStringBinding(mFileExit.getText()));
         mFileExit.setAccelerator(KeyCombination.keyCombination("Alt+F4"));
 
@@ -130,7 +137,8 @@ public class LobbyController extends Controller {
         mHelpAbout.textProperty().bind(I18nUtil.createStringBinding(mHelpAbout.getText()));
 
         findMatch.textProperty().bind(I18nUtil.createStringBinding(findMatch.getText()));
-        searchMessage.textProperty().bind(I18nUtil.createStringBinding(searchMessage.getText()));
+        searching.textProperty().bind(I18nUtil.createStringBinding(searching.getText()));
+
     }
 
     /**
@@ -147,6 +155,14 @@ public class LobbyController extends Controller {
     }
 
     /**
+     * Keeps the server connection but returns to the login window.
+     */
+    @FXML
+    public void clickOnLogout() {
+        WindowUtil.switchToLoginWindow();
+    }
+
+    /**
      * Shuts down the application.
      */
     @FXML
@@ -155,17 +171,24 @@ public class LobbyController extends Controller {
     }
 
     /**
-     * Handles the click on the find match button.
+     * After clicking on Find match, change the button text to "Cancel" and show text "searching"
      */
     @FXML
-    private void clickOnFindMatch() {
-        // TODO: Do something
+    public void clickOnFindMatch() {
+        searching.setVisible(true);
+        cancelMatch.setVisible(true);
+        findMatch.setVisible(false);
+        //TODO
     }
 
     /**
-     * @param view The view.
+     * After clicking on Cancel match, Find match button appears and text "searching" is hidden
      */
-    public void setView(final LobbyView view) {
-        this.view = view;
+    @FXML
+    public void clickOnCancelMatch() {
+        searching.setVisible(false);
+        findMatch.setVisible(true);
+        cancelMatch.setVisible(false);
+        //TODO
     }
 }
