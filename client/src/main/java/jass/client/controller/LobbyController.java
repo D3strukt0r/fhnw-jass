@@ -1,28 +1,20 @@
 package jass.client.controller;
 
 import com.jfoenix.controls.JFXButton;
-import com.jfoenix.controls.JFXCheckBox;
-import com.jfoenix.controls.JFXPasswordField;
-import com.jfoenix.controls.JFXTextField;
 import jass.client.mvc.Controller;
 import jass.client.util.I18nUtil;
 import jass.client.util.SocketUtil;
 import jass.client.util.ViewUtil;
 import jass.client.util.WindowUtil;
 import jass.client.view.LobbyView;
-import jass.client.view.LoginView;
 import jass.lib.servicelocator.ServiceLocator;
 import javafx.application.Platform;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.input.KeyCombination;
-import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -95,7 +87,6 @@ public class LobbyController extends Controller {
     @FXML
     private MenuItem mHelpAbout;
 
-
     /**
      * The Find Match button.
      */
@@ -112,7 +103,7 @@ public class LobbyController extends Controller {
      * The searching text.
      */
     @FXML
-    private Label searching;
+    private Text searching;
 
 
     @Override
@@ -130,13 +121,11 @@ public class LobbyController extends Controller {
         mFileExit.textProperty().bind(I18nUtil.createStringBinding(mFileExit.getText()));
         mFileExit.setAccelerator(KeyCombination.keyCombination("Alt+F4"));
 
-        mEdit.textProperty().bind(I18nUtil.createStringBinding(mEdit.getText()));
-        mEditDelete.textProperty().bind(I18nUtil.createStringBinding(mEditDelete.getText()));
-
         mHelp.textProperty().bind(I18nUtil.createStringBinding(mHelp.getText()));
         mHelpAbout.textProperty().bind(I18nUtil.createStringBinding(mHelpAbout.getText()));
 
         findMatch.textProperty().bind(I18nUtil.createStringBinding(findMatch.getText()));
+        cancelMatch.textProperty().bind(I18nUtil.createStringBinding(cancelMatch.getText()));
         searching.textProperty().bind(I18nUtil.createStringBinding(searching.getText()));
 
     }
@@ -189,6 +178,5 @@ public class LobbyController extends Controller {
         searching.setVisible(false);
         findMatch.setVisible(true);
         cancelMatch.setVisible(false);
-        //TODO
     }
 }
