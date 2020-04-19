@@ -81,7 +81,7 @@ public class SearchGameUtil implements Service {
             logger.info("Players searching for a game:  " + this.clients.size());
 
             if (clients.size() >= 4) {
-                this.checkForNewGame();
+                this.createNewGame();
             }
 
         }
