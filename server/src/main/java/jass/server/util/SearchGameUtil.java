@@ -2,6 +2,9 @@ package jass.server.util;
 
 import jass.server.entity.GameEntity;
 import jass.server.entity.TeamEntity;
+import jass.server.entity.UserEntity;
+import jass.server.repository.GameRepository;
+import jass.server.repository.TeamRepository;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -31,8 +34,8 @@ public class SearchGameUtil implements Service {
     // Add new client to search for game
     public void addClientToSearchGame(ClientUtil client) {
         clients.add(client);
-        logger.info("Added new client " + client.getUsername() +  " to waiting list");
-        this.checkForNewGame();
+        logger.info("Added new client " + client.getUsername() +  " to waiting list. Total of " + clients.size() + " users searching for a game");
+        this.createNewGame();
     }
 
     // Remove client from searching a game - either connection lost or game has been found
@@ -52,16 +55,34 @@ public class SearchGameUtil implements Service {
     }
 
     // Check if new game can be started
-    private void checkForNewGame() {
-        System.out.println(clients.size());
+    private void createNewGame() {
         if(clients.size() >= 4) {
-            TeamEntity teamOne = new TeamEntity(this.clients.get(0).getUser(), clients.get(2).getUser());
-            TeamEntity teamTwo = new TeamEntity(this.clients.get(1).getUser(), clients.get(3).getUser());
+            // Get players for game
+            UserEntity playerOne = this.clients.get(0).getUser();
+            UserEntity playerTwo = this.clients.get(1).getUser();
+            UserEntity playerThree = this.clients.get(2).getUser();
+            UserEntity playerFour = this.clients.get(3).getUser();
+
+            // Assign and create Teams
+            TeamEntity teamOne = new TeamEntity(playerOne, playerThree);
+            TeamRepository.getSingleton(null).add(teamOne);
+            TeamEntity teamTwo = new TeamEntity(playerTwo, playerFour);
+            TeamRepository.getSingleton(null).add(teamTwo);
+
+            // Initialize new Game
             GameEntity newGame = new GameEntity(teamOne, teamTwo);
+            GameRepository.getSingleton(null).add(newGame);
+
+            logger.info("Successfully created game with ID: " + newGame.getId());
             // TODO - Where do we add new Game? GameUtil?
 
-            this.clients.subList(0, 3).clear();
-            System.out.println(this.clients.size());
+            // Remove players from waiting list
+            this.clients.subList(0, 4).clear();
+            logger.info("Players searching for a game:  " + this.clients.size());
+
+            if (clients.size() >= 4) {
+                this.checkForNewGame();
+            }
 
         }
     }
