@@ -1,7 +1,11 @@
 package jass.server.util;
 
+import jass.server.entity.GameEntity;
+import jass.server.entity.TeamEntity;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
+import java.awt.font.TextAttribute;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
@@ -51,7 +55,14 @@ public class SearchGameUtil implements Service {
     private void checkForNewGame() {
         System.out.println(clients.size());
         if(clients.size() >= 4) {
-            // TODO: Create new game
+            TeamEntity teamOne = new TeamEntity(this.clients.get(0).getUser(), clients.get(2).getUser());
+            TeamEntity teamTwo = new TeamEntity(this.clients.get(1).getUser(), clients.get(3).getUser());
+            GameEntity newGame = new GameEntity(teamOne, teamTwo);
+            // TODO - Where do we add new Game? GameUtil?
+
+            this.clients.subList(0, 3).clear();
+            System.out.println(this.clients.size());
+
         }
     }
 

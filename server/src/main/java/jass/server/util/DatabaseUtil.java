@@ -127,6 +127,7 @@ public final class DatabaseUtil implements Service, Closeable {
         return userDao;
     }
 
+
     public Dao<TeamEntity, String> getTeamDao() {
         return teamDao;
     }

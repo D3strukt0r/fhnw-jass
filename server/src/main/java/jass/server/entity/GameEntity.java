@@ -2,7 +2,6 @@ package jass.server.entity;
 
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
-import com.sun.tools.internal.xjc.reader.xmlschema.bindinfo.BIConversion;
 import jass.lib.database.Entity;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -23,10 +22,10 @@ public class GameEntity implements Entity {
     @DatabaseField(generatedId = true)
     private int id;
 
-    @DatabaseField(columnName = "id", foreign = true)
+    @DatabaseField(foreign = true)
     private TeamEntity teamOne;
 
-    @DatabaseField(columnName = "id", foreign = true)
+    @DatabaseField(foreign = true)
     private TeamEntity teamTwo;
 
     /**
@@ -35,7 +34,8 @@ public class GameEntity implements Entity {
      */
     GameEntity() { }
 
-    GameEntity(final TeamEntity teamOne, final TeamEntity teamTwo) {
+
+    public GameEntity(TeamEntity teamOne, TeamEntity teamTwo) {
         this.teamOne = teamOne;
         this.teamTwo = teamTwo;
     }

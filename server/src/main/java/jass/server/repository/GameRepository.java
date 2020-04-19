@@ -12,6 +12,9 @@ import jass.server.entity.GameEntity;
  * @since 0.0.1
  */
 
+/**
+ * Class not needed, as Games not saved to DB
+ */
 public final class GameRepository extends Repository<Dao<GameEntity, String>, GameEntity> {
 
     private static GameRepository singleton = null;

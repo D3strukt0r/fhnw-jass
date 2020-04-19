@@ -12,6 +12,9 @@ import jass.server.entity.TeamEntity;
  * @since 0.0.1
  */
 
+/**
+ * Class not needed, as Teams not saved to DB
+ */
 public final class TeamRepository extends Repository<Dao<TeamEntity, String>, TeamEntity> {
 
     private static TeamRepository singleton = null;
