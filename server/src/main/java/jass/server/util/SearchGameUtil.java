@@ -33,7 +33,7 @@ public class SearchGameUtil implements Service {
 
     public SearchGameUtil() {}
 
-    // Add new client to search for game - if the client already is searching remove the client
+    // Add new client to search for game - if the client already is in the searching list remove the client
     public void addOrRemoveClientToSearchGame(ClientUtil client) {
         if (clients.contains(client)) {
             removeClientFromSearchingGame(client);
