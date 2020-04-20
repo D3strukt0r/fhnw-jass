@@ -1,5 +1,7 @@
 package jass.client.view;
 
+import jass.client.controller.LobbyController;
+import jass.client.controller.LoginController;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -36,6 +38,9 @@ public class LobbyView extends View {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/lobby.fxml"));
             Parent root = loader.load();
+            LobbyController controller = loader.getController();
+            controller.setView(this);
+
             return new Scene(root);
         } catch (IOException e) {
             return null;

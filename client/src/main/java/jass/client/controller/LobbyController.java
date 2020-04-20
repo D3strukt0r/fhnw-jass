@@ -141,6 +141,7 @@ public class LobbyController extends Controller {
         }
         ServiceLocator.remove("backend");
         WindowUtil.switchToServerConnectionWindow();
+        Platform.runLater(() -> this.view.getScene().getWindow().hide());
     }
 
     /**
@@ -148,7 +149,9 @@ public class LobbyController extends Controller {
      */
     @FXML
     public void clickOnLogout() {
+        //TODO handle logout properly
         WindowUtil.switchToLoginWindow();
+        Platform.runLater(() -> this.view.getScene().getWindow().hide());
     }
 
     /**
@@ -178,5 +181,12 @@ public class LobbyController extends Controller {
         searching.setVisible(false);
         findMatch.setVisible(true);
         cancelMatch.setVisible(false);
+    }
+
+    /**
+     * @param view The view.
+     */
+    public void setView(final LobbyView view) {
+        this.view = view;
     }
 }

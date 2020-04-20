@@ -77,7 +77,7 @@ public final class WindowUtil {
     }
 
     /**
-     * Switch to dashboard window.
+     * Switch to dashboard (game) window.
      */
     public static void switchToGameWindow() {
         Platform.runLater(() -> {
