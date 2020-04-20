@@ -323,7 +323,7 @@ public final class ChangePasswordController extends Controller {
             if (changePasswordMsg.process(backend)) {
                 ServiceLocator.remove("login");
                 ServiceLocator.add(newLogin);
-                WindowUtil.switchToDashboardWindow();
+                WindowUtil.switchToLobbyWindow();
                 view.stop();
             } else {
                 enableAll();
@@ -337,7 +337,7 @@ public final class ChangePasswordController extends Controller {
      */
     @FXML
     public void clickOnCancel() {
-        WindowUtil.switchToDashboardWindow();
+        WindowUtil.switchToLobbyWindow();
         view.stop();
     }
 

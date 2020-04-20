@@ -350,7 +350,7 @@ public final class RegisterController extends Controller implements DisconnectEv
                 if (loginMsg.process(backend)) {
                     login.setToken(loginMsg.getToken());
                     ServiceLocator.add(login);
-                    WindowUtil.switchToDashboardWindow();
+                    WindowUtil.switchToLobbyWindow();
                     Platform.runLater(() -> this.login.getScene().getWindow().hide()); // Dashboard is still MVC
                 } else {
                     enableAll();
