@@ -43,7 +43,7 @@ public final class SplashController extends Controller {
                 // If already logged in go to the game directly, if at least connected, go to login screen, otherwise
                 // to server connection
                 if (model.isLoggedIn()) {
-                    WindowUtil.switchToDashboardWindow();
+                    WindowUtil.switchToLobbyWindow();
                 } else if (model.isConnected()) {
                     WindowUtil.switchToLoginWindow();
                 } else {

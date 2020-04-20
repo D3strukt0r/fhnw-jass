@@ -342,7 +342,7 @@ public final class LoginController extends Controller implements DisconnectEvent
                 }
 
                 LoginRepository.getSingleton(null).setToConnectAutomatically(login); // Make sure it's the only entry
-                WindowUtil.switchToDashboardWindow();
+                WindowUtil.switchToLobbyWindow();
                 Platform.runLater(() -> this.login.getScene().getWindow().hide()); // Dashboard is still MVC
             } else {
                 enableAll();

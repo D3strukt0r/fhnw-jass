@@ -1,11 +1,38 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.SeparatorMenuItem?>
+<?import javafx.scene.control.MenuItem?>
+<?import com.jfoenix.controls.JFXButton?>
 <?import javafx.scene.text.Text?>
 <VBox xmlns="http://javafx.com/javafx/8.0.171"
       xmlns:fx="http://javafx.com/fxml/1"
       stylesheets="@../css/app.css"
       styleClass="background-white"
       fx:controller="jass.client.controller.LobbyController">
-    <Text text="Here will be the game..." />
+    <MenuBar>
+        <Menu fx:id="mFile" text="gui.menu.file">
+            <Menu fx:id="mFileChangeLanguage" text="gui.menu.file.changeLanguage" />
+            <SeparatorMenuItem />
+            <MenuItem fx:id="mFileDisconnect" text="gui.menu.file.disconnect" onAction="#clickOnDisconnect" />
+            <SeparatorMenuItem />
+            <MenuItem fx:id="mFileLogout" text="gui.menu.file.logout" onAction="#clickOnLogout" />
+            <SeparatorMenuItem />
+            <MenuItem fx:id="mFileExit" text="gui.menu.file.exit" onAction="#clickOnExit" />
+        </Menu>
+        <Menu fx:id="mHelp" text="gui.menu.help">
+            <MenuItem fx:id="mHelpAbout" text="gui.menu.help.about" />
+        </Menu>
+    </MenuBar>
+    <!-- body -->
+    <VBox styleClass="custom-container" alignment="TOP_CENTER">
+
+        <Text fx:id="searching" styleClass="search-text" visible="false" text="gui.lobby.searching"  />
+        <JFXButton fx:id="findMatch" styleClass="primary" text="gui.lobby.findMatch" onAction="#clickOnFindMatch" />
+        <JFXButton fx:id="cancelMatch" styleClass="secondary" text="gui.lobby.cancelMatch" visible="false" onAction="#clickOnCancelMatch" />
+
+    </VBox>
+
 </VBox>
