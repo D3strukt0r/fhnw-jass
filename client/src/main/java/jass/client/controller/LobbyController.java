@@ -164,25 +164,6 @@ public class LobbyController extends Controller implements GameFoundEventListene
         searching.textProperty().bind(I18nUtil.createStringBinding(searching.getText()));
     }
 
-    public void startSearchForGame(ActionEvent actionEvent) {
-        // Get token and initialize SearchGame Message
-        LoginEntity login = (LoginEntity) ServiceLocator.get("login");
-        String token = login.getToken();
-        String userName = login.getUsername();
-        SearchGame searchGameMsg = new SearchGame(new SearchGameData(token, userName));
-        SocketUtil backend = (SocketUtil) ServiceLocator.get("backend");
-
-        // Send SearchGame Message to Server
-        if (searchGameMsg.process(backend)) {
-            // TODO - Change Button from "Search Game" to "Cancel Search"
-
-        } else {
-            //enableAll();
-            // TODO - Show Error Message
-            logger.error("Error starting search for game");
-        }
-    }
-
     /**
      * After clicking on Find match, change the button text to "Cancel" and show text "searching"
      */
