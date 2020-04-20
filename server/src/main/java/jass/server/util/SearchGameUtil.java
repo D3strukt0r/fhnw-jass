@@ -34,10 +34,8 @@ public class SearchGameUtil implements Service {
     public SearchGameUtil() {}
 
     // Add new client to search for game - if the client already is in the searching list remove the client
-    public void addOrRemoveClientToSearchGame(ClientUtil client) {
-        if (clients.contains(client)) {
-            removeClientFromSearchingGame(client);
-        } else {
+    public void addClientToSearchGame(ClientUtil client) {
+        if (!clients.contains(client)) {
             clients.add(client);
             logger.info("Added new client " + client.getUsername() +  " to waiting list. Total of " + clients.size() + " users searching for a game");
             this.createNewGame();

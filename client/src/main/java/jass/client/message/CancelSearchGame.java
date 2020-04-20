@@ -1,25 +1,16 @@
 package jass.client.message;
 
 import jass.client.util.SocketUtil;
-import jass.lib.message.MessageData;
+import jass.lib.message.CancelSearchGameData;
 import jass.lib.message.MessageData;
 import jass.lib.message.ResultData;
-import jass.lib.message.SearchGameData;
 
-/**
- *  Search for a game
- *
- * @author Thomas Weber
- * @version %I%, %G%
- * @since 0.0.1
- */
+public class CancelSearchGame extends Message {
+    private CancelSearchGameData data;
 
-public class SearchGame extends Message {
-    private SearchGameData data;
-
-    public SearchGame(MessageData rawData) {
+    public CancelSearchGame(MessageData rawData) {
         super(rawData);
-        data = (SearchGameData) rawData;
+        data = (CancelSearchGameData) rawData;
     }
 
     @Override

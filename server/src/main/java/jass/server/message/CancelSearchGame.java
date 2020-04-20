@@ -1,10 +1,8 @@
 package jass.server.message;
 
-import jass.lib.message.SearchGameData;
-
+import jass.lib.message.CancelSearchGameData;
 import jass.lib.message.MessageData;
 import jass.lib.message.ResultData;
-import jass.lib.message.SearchGameData;
 import jass.lib.servicelocator.ServiceLocator;
 import jass.server.util.ClientUtil;
 import jass.server.util.SearchGameUtil;
@@ -18,12 +16,12 @@ import jass.server.util.ServerSocketUtil;
  * @since 0.0.1
  */
 
-public class SearchGame extends Message {
-    private final SearchGameData data;
+public class CancelSearchGame extends Message {
+    private final CancelSearchGameData data;
 
-    public SearchGame(final MessageData rawData) {
+    public CancelSearchGame(final MessageData rawData) {
         super(rawData);
-        data = (SearchGameData) rawData;
+        data = (CancelSearchGameData) rawData;
     }
 
     @Override
@@ -36,7 +34,7 @@ public class SearchGame extends Message {
             result = ServerSocketUtil.exists(data.getUsername());
             if(result) {
                 SearchGameUtil sGU = (SearchGameUtil) ServiceLocator.get("SearchGameUtil");
-                sGU.addClientToSearchGame(client);
+                sGU.removeClientFromSearchingGame(client);
             }
         }
 

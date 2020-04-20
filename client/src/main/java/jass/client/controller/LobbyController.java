@@ -23,9 +23,11 @@ import com.jfoenix.controls.JFXButton;
 
 import jass.client.entity.LoginEntity;
 import jass.client.eventlistener.GameFoundEventListener;
+import jass.client.message.CancelSearchGame;
 import jass.client.message.SearchGame;
 import jass.client.mvc.Controller;
 import jass.client.util.SocketUtil;
+import jass.lib.message.CancelSearchGameData;
 import jass.lib.message.SearchGameData;
 import jass.lib.servicelocator.ServiceLocator;
 import javafx.event.ActionEvent;
@@ -186,7 +188,6 @@ public class LobbyController extends Controller implements GameFoundEventListene
      */
     @FXML
     public void clickOnFindMatch() {
-        findMatch.setDisable(true);
         // Get token and initialize SearchGame Message
         LoginEntity login = (LoginEntity) ServiceLocator.get("login");
         String token = login.getToken();
@@ -199,12 +200,12 @@ public class LobbyController extends Controller implements GameFoundEventListene
             searching.setVisible(true);
             cancelMatch.setVisible(true);
             findMatch.setVisible(false);
-            findMatch.setDisable(false);
         } else {
-            //enableAll();
-            findMatch.setDisable(false);
-            // TODO - Show Error Message
             logger.error("Error starting search for game");
+            Platform.runLater(() -> {
+                Alert alert = new Alert(Alert.AlertType.ERROR, "Error searching for a game. Please try again!");
+                alert.showAndWait();
+            });
         }
 
     }
@@ -214,25 +215,24 @@ public class LobbyController extends Controller implements GameFoundEventListene
      */
     @FXML
     public void clickOnCancelMatch() {
-        cancelMatch.setDisable(true);
         // Get token and initialize SearchGame Message
         LoginEntity login = (LoginEntity) ServiceLocator.get("login");
         String token = login.getToken();
         String userName = login.getUsername();
-        SearchGame searchGameMsg = new SearchGame(new SearchGameData(token, userName));
+        CancelSearchGame cancelSearchGameMsg = new CancelSearchGame(new CancelSearchGameData(token, userName));
         SocketUtil backend = (SocketUtil) ServiceLocator.get("backend");
 
         // Send SearchGame Message to Server
-        if (searchGameMsg.process(backend)) {
+        if (cancelSearchGameMsg.process(backend)) {
             searching.setVisible(false);
             findMatch.setVisible(true);
             cancelMatch.setVisible(false);
-            cancelMatch.setDisable(false);
         } else {
-            //enableAll();
-            cancelMatch.setDisable(false);
-            // TODO - Show Error Message
-            logger.error("Error starting search for game");
+            logger.error("Error cancelling search for game");
+            Platform.runLater(() -> {
+                Alert alert = new Alert(Alert.AlertType.ERROR, "Error cancelling search for a game. Please try again!");
+                alert.showAndWait();
+            });
         }
     }
 

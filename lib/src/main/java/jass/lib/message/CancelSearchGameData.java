@@ -14,7 +14,7 @@ public class CancelSearchGameData extends MessageData {
         private final String username;
 
         public CancelSearchGameData(String token, String username) {
-            super("SearchGame");
+            super("CancelSearchGame");
             this.token = token;
             this.username = username;
         }
