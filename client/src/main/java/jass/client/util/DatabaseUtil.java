@@ -42,6 +42,11 @@ import java.sql.SQLException;
  */
 public final class DatabaseUtil implements Service, Closeable {
     /**
+     * The service name.
+     */
+    public static final String SERVICE_NAME = "db";
+
+    /**
      * The database connection.
      */
     private final ConnectionSource connectionSource;
@@ -137,6 +142,6 @@ public final class DatabaseUtil implements Service, Closeable {
      */
     @Override
     public String getServiceName() {
-        return "db";
+        return SERVICE_NAME;
     }
 }

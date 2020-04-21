@@ -26,6 +26,9 @@ import jass.client.message.Logout;
 import jass.client.util.I18nUtil;
 import jass.client.util.SocketUtil;
 import jass.client.view.DeleteAccountView;
+import jass.client.view.GameView;
+import jass.client.view.LoginView;
+import jass.client.view.ServerConnectionView;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.NumberBinding;
@@ -216,12 +219,12 @@ public final class DeleteAccountController extends Controller {
      */
     @FXML
     private void clickOnDisconnect() {
-        SocketUtil socket = (SocketUtil) ServiceLocator.get("backend");
+        SocketUtil socket = (SocketUtil) ServiceLocator.get(SocketUtil.SERVICE_NAME);
         if (socket != null) { // Not necessary but keeps IDE happy
             socket.close();
         }
         ServiceLocator.remove("backend");
-        WindowUtil.switchToServerConnectionWindow();
+        WindowUtil.switchTo(view, ServerConnectionView.class);
     }
 
     /**
@@ -245,8 +248,8 @@ public final class DeleteAccountController extends Controller {
 
         // Connection would freeze window (and the animations) so do it in a different thread.
         new Thread(() -> {
-            SocketUtil backend = (SocketUtil) ServiceLocator.get("backend");
-            LoginEntity login = (LoginEntity) ServiceLocator.get("login");
+            SocketUtil backend = (SocketUtil) ServiceLocator.get(SocketUtil.SERVICE_NAME);
+            LoginEntity login = (LoginEntity) ServiceLocator.get(LoginEntity.SERVICE_NAME);
             DeleteLogin deleteLoginMsg = new DeleteLogin(new DeleteLoginData(login.getToken()));
 
             // Try to delete the account
@@ -256,7 +259,7 @@ public final class DeleteAccountController extends Controller {
                 // If deleted, try logging out now.
                 if (logoutMsg.process(backend)) {
                     ServiceLocator.remove("login");
-                    WindowUtil.switchToLoginWindow();
+                    WindowUtil.switchTo(view, LoginView.class);
                     view.stop();
                 } else {
                     enableAll();
@@ -274,8 +277,7 @@ public final class DeleteAccountController extends Controller {
      */
     @FXML
     public void clickOnCancel() {
-        WindowUtil.switchToGameWindow();
-        view.stop();
+        WindowUtil.switchTo(view, GameView.class);
     }
 
     /**

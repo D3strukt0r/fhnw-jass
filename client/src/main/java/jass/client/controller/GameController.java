@@ -1,7 +1,10 @@
 package jass.client.controller;
+
 import jass.client.mvc.Controller;
 import jass.client.util.SocketUtil;
 import jass.client.util.WindowUtil;
+import jass.client.view.GameView;
+import jass.client.view.ServerConnectionView;
 import jass.lib.servicelocator.ServiceLocator;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -17,6 +20,11 @@ import java.util.ResourceBundle;
  * @since 0.0.1
  */
 public class GameController extends Controller {
+    /**
+     * The view.
+     */
+    private GameView view;
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         // TODO: Do something
@@ -27,12 +35,12 @@ public class GameController extends Controller {
      */
     @FXML
     private void clickOnDisconnect() {
-        SocketUtil socket = (SocketUtil) ServiceLocator.get("backend");
+        SocketUtil socket = (SocketUtil) ServiceLocator.get(SocketUtil.SERVICE_NAME);
         if (socket != null) { // Not necessary but keeps IDE happy
             socket.close();
         }
         ServiceLocator.remove("backend");
-        WindowUtil.switchToServerConnectionWindow();
+        WindowUtil.switchTo(view, ServerConnectionView.class);
     }
 
     /**
@@ -41,5 +49,12 @@ public class GameController extends Controller {
     @FXML
     private void clickOnExit() {
         Platform.exit();
+    }
+
+    /**
+     * @param view The view.
+     */
+    public void setView(final GameView view) {
+        this.view = view;
     }
 }

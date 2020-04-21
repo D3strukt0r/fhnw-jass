@@ -33,6 +33,11 @@ import jass.lib.servicelocator.Service;
 @DatabaseTable(tableName = "server")
 public class ServerEntity implements Service, Entity {
     /**
+     * The service name.
+     */
+    public static final String SERVICE_NAME = "server";
+
+    /**
      * The ID.
      */
     @DatabaseField(generatedId = true)
@@ -167,6 +172,6 @@ public class ServerEntity implements Service, Entity {
 
     @Override
     public String getServiceName() {
-        return "server";
+        return SERVICE_NAME;
     }
 }

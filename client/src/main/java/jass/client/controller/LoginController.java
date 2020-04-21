@@ -22,6 +22,9 @@ import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXCheckBox;
 import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
+import jass.client.view.LobbyView;
+import jass.client.view.RegisterView;
+import jass.client.view.ServerConnectionView;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Menu;
@@ -162,7 +165,7 @@ public final class LoginController extends Controller implements DisconnectEvent
         /*
          * Register oneself for disconnect events
          */
-        SocketUtil socket = (SocketUtil) ServiceLocator.get("backend");
+        SocketUtil socket = (SocketUtil) ServiceLocator.get(SocketUtil.SERVICE_NAME);
         if (socket != null) { // Not necessary but keeps IDE happy
             socket.addDisconnectListener(this);
         }
@@ -295,12 +298,12 @@ public final class LoginController extends Controller implements DisconnectEvent
      */
     @FXML
     private void clickOnDisconnect() {
-        SocketUtil socket = (SocketUtil) ServiceLocator.get("backend");
+        SocketUtil socket = (SocketUtil) ServiceLocator.get(SocketUtil.SERVICE_NAME);
         if (socket != null) { // Not necessary but keeps IDE happy
             socket.close();
         }
         ServiceLocator.remove("backend");
-        WindowUtil.switchToServerConnectionWindow();
+        WindowUtil.switchTo(view, ServerConnectionView.class);
     }
 
     /**
@@ -329,7 +332,7 @@ public final class LoginController extends Controller implements DisconnectEvent
                 password.getText(),
                 connectAutomatically.isSelected()
             );
-            SocketUtil backend = (SocketUtil) ServiceLocator.get("backend");
+            SocketUtil backend = (SocketUtil) ServiceLocator.get(SocketUtil.SERVICE_NAME);
             Login loginMsg = new Login(new LoginData(login.getUsername(), login.getPassword()));
 
             // Send the login request to the server. Update locally if successful.
@@ -342,8 +345,7 @@ public final class LoginController extends Controller implements DisconnectEvent
                 }
 
                 LoginRepository.getSingleton(null).setToConnectAutomatically(login); // Make sure it's the only entry
-                WindowUtil.switchToLobbyWindow();
-                Platform.runLater(() -> this.login.getScene().getWindow().hide()); // Dashboard is still MVC
+                WindowUtil.switchToNewWindow(view, LobbyView.class);
             } else {
                 enableAll();
                 setErrorMessage("gui.login.login.failed");
@@ -363,13 +365,13 @@ public final class LoginController extends Controller implements DisconnectEvent
      */
     @FXML
     private void clickOnRegister() {
-        WindowUtil.switchToRegisterWindow();
+        WindowUtil.switchTo(view, RegisterView.class);
     }
 
     @Override
     public void onDisconnectEvent() {
         ServiceLocator.remove("backend");
-        WindowUtil.switchToServerConnectionWindow();
+        WindowUtil.switchTo(view, ServerConnectionView.class);
     }
 
     /**

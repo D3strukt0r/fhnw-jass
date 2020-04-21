@@ -1,26 +1,6 @@
-/*
- * fhnw-jass is jass game programmed in java for a school project.
- * Copyright (C) 2020 Manuele Vaccari
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <https://www.gnu.org/licenses/>.
- */
-
 package jass.client.controller;
 
 import com.jfoenix.controls.JFXButton;
-
-
 import jass.client.entity.LoginEntity;
 import jass.client.eventlistener.GameFoundEventListener;
 import jass.client.message.CancelSearchGame;
@@ -38,6 +18,8 @@ import jass.client.util.I18nUtil;
 import jass.client.util.ViewUtil;
 import jass.client.util.WindowUtil;
 import jass.client.view.LobbyView;
+import jass.client.view.LoginView;
+import jass.client.view.ServerConnectionView;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Menu;
@@ -139,7 +121,6 @@ public class LobbyController extends Controller implements GameFoundEventListene
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-
         SocketUtil socket = (SocketUtil) ServiceLocator.get("backend");
         if (socket != null) { // Not necessary but keeps IDE happy
             socket.setGameFoundEventListener(this);
@@ -162,6 +143,65 @@ public class LobbyController extends Controller implements GameFoundEventListene
         findMatch.textProperty().bind(I18nUtil.createStringBinding(findMatch.getText()));
         cancelMatch.textProperty().bind(I18nUtil.createStringBinding(cancelMatch.getText()));
         searching.textProperty().bind(I18nUtil.createStringBinding(searching.getText()));
+
+    }
+
+    /**
+     * Disconnect from the server and returns to the server connection window.
+     */
+    @FXML
+    private void clickOnDisconnect() {
+        SocketUtil socket = (SocketUtil) ServiceLocator.get(SocketUtil.SERVICE_NAME);
+        if (socket != null) { // Not necessary but keeps IDE happy
+            socket.close();
+        }
+        ServiceLocator.remove("backend");
+        WindowUtil.switchTo(view, ServerConnectionView.class);
+    }
+
+    /**
+     * Keeps the server connection but returns to the login window.
+     */
+    @FXML
+    public void clickOnLogout() {
+        //TODO handle logout properly
+        WindowUtil.switchTo(view, LoginView.class);
+    }
+
+    /**
+     * Shuts down the application.
+     */
+    @FXML
+    private void clickOnExit() {
+        Platform.exit();
+    }
+
+    /**
+     * After clicking on Find match, change the button text to "Cancel" and show text "searching"
+     */
+    @FXML
+    public void clickOnFindMatch() {
+        searching.setVisible(true);
+        cancelMatch.setVisible(true);
+        findMatch.setVisible(false);
+        //TODO
+    }
+
+    /**
+     * After clicking on Cancel match, Find match button appears and text "searching" is hidden
+     */
+    @FXML
+    public void clickOnCancelMatch() {
+        searching.setVisible(false);
+        findMatch.setVisible(true);
+        cancelMatch.setVisible(false);
+    }
+
+    /**
+     * @param view The view.
+     */
+    public void setView(final LobbyView view) {
+        this.view = view;
     }
 
     /**

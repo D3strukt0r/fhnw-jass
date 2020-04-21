@@ -26,6 +26,8 @@ import jass.client.message.ChangePassword;
 import jass.client.util.I18nUtil;
 import jass.client.util.SocketUtil;
 import jass.client.view.ChangePasswordView;
+import jass.client.view.LobbyView;
+import jass.client.view.ServerConnectionView;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Menu;
@@ -284,12 +286,12 @@ public final class ChangePasswordController extends Controller {
      */
     @FXML
     private void clickOnDisconnect() {
-        SocketUtil socket = (SocketUtil) ServiceLocator.get("backend");
+        SocketUtil socket = (SocketUtil) ServiceLocator.get(SocketUtil.SERVICE_NAME);
         if (socket != null) { // Not necessary but keeps IDE happy
             socket.close();
         }
         ServiceLocator.remove("backend");
-        WindowUtil.switchToServerConnectionWindow();
+        WindowUtil.switchTo(view, ServerConnectionView.class);
     }
 
     /**
@@ -313,18 +315,17 @@ public final class ChangePasswordController extends Controller {
 
         // Connection would freeze window (and the animations) so do it in a different thread.
         new Thread(() -> {
-            LoginEntity login = (LoginEntity) ServiceLocator.get("login");
+            LoginEntity login = (LoginEntity) ServiceLocator.get(LoginEntity.SERVICE_NAME);
             LoginEntity newLogin = new LoginEntity(login.getUsername(), newPassword.getText(), login.getToken());
 
-            SocketUtil backend = (SocketUtil) ServiceLocator.get("backend");
+            SocketUtil backend = (SocketUtil) ServiceLocator.get(SocketUtil.SERVICE_NAME);
             ChangePassword changePasswordMsg = new ChangePassword(new ChangePasswordData(login.getToken(), newLogin.getPassword()));
 
             // Send the change password request to the server. Update locally if successful.
             if (changePasswordMsg.process(backend)) {
                 ServiceLocator.remove("login");
                 ServiceLocator.add(newLogin);
-                WindowUtil.switchToLobbyWindow();
-                view.stop();
+                WindowUtil.switchTo(view, LobbyView.class);
             } else {
                 enableAll();
                 setErrorMessage("gui.changePassword.changeFailed");
@@ -337,8 +338,7 @@ public final class ChangePasswordController extends Controller {
      */
     @FXML
     public void clickOnCancel() {
-        WindowUtil.switchToLobbyWindow();
-        view.stop();
+        WindowUtil.switchTo(view, LobbyView.class);
     }
 
     /**

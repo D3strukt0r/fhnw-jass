@@ -1,6 +1,9 @@
 package jass.client.controller;
 
 import com.jfoenix.controls.JFXProgressBar;
+import jass.client.view.LobbyView;
+import jass.client.view.LoginView;
+import jass.client.view.ServerConnectionView;
 import javafx.concurrent.Worker;
 import javafx.fxml.FXML;
 import jass.client.mvc.Controller;
@@ -43,11 +46,11 @@ public final class SplashController extends Controller {
                 // If already logged in go to the game directly, if at least connected, go to login screen, otherwise
                 // to server connection
                 if (model.isLoggedIn()) {
-                    WindowUtil.switchToLobbyWindow();
+                    WindowUtil.switchToNewWindow(view, LobbyView.class);
                 } else if (model.isConnected()) {
-                    WindowUtil.switchToLoginWindow();
+                    WindowUtil.switchToNewWindow(view, LoginView.class);
                 } else {
-                    WindowUtil.switchToServerConnectionWindow();
+                    WindowUtil.switchToNewWindow(view, ServerConnectionView.class);
                 }
                 view.getStage().hide();
             }

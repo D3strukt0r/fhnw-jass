@@ -18,9 +18,12 @@
 
 package jass.client.util;
 
-import jass.client.view.*;
+import jass.client.mvc.View;
 import javafx.application.Platform;
 import javafx.stage.Stage;
+
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 
 /**
  * A helper class for the controllers to switch between windows easily.
@@ -31,71 +34,58 @@ import javafx.stage.Stage;
  */
 public final class WindowUtil {
     /**
-     * A defined stage (window) to be reused.
+     * Utility classes, which are collections of static members, are not meant
+     * to be instantiated.
      */
-    private static final Stage stage = new Stage();
+    private WindowUtil() {
+        throw new IllegalStateException("Utility class");
+    }
 
     /**
-     * Switch to splash screen window.
+     * Uses the existing stage and replaces it's contents with the new view.
+     *
+     * @param oldView   The old view.
+     * @param viewClass The new view.
      */
-    public static void switchToSplashScreen() {
+    public static void switchTo(final View oldView, final Class<? extends View> viewClass) {
         Platform.runLater(() -> {
-            Stage stage = new Stage();
-            SplashView view = new SplashView(stage);
-            view.start();
+            try {
+                Constructor<?> constructor = viewClass.getConstructor(Stage.class);
+                Stage existingStage = oldView.getStage();
+                View view = (View) constructor.newInstance(existingStage);
+                view.start();
+            } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
+                e.printStackTrace();
+            }
         });
     }
 
     /**
-     * Switch to server chooser window.
+     * Opens a new window for the new view and closes the previous window.
+     *
+     * @param oldView   The old view.
+     * @param viewClass The new view.
      */
-    public static void switchToServerConnectionWindow() {
-        Platform.runLater(() -> {
-            ServerConnectionView view = new ServerConnectionView(stage);
-            view.start();
-        });
+    public static void switchToNewWindow(final View oldView, final Class<? extends View> viewClass) {
+        openInNewWindow(viewClass);
+        Platform.runLater(oldView::stop);
     }
 
     /**
-     * Switch to login window.
+     * Opens the view in a new window.
+     *
+     * @param viewClass The new view.
      */
-    public static void switchToLoginWindow() {
+    public static void openInNewWindow(final Class<? extends View> viewClass) {
         Platform.runLater(() -> {
-            LoginView view = new LoginView(stage);
-            view.start();
-        });
-    }
-
-    /**
-     * Switch to register window.
-     */
-    public static void switchToRegisterWindow() {
-        Platform.runLater(() -> {
-            RegisterView view = new RegisterView(stage);
-            view.start();
-        });
-    }
-
-    /**
-     * Switch to dashboard (game) window.
-     */
-    public static void switchToGameWindow() {
-        Platform.runLater(() -> {
-            Stage stage = new Stage();
-            GameView view = new GameView(stage);
-            view.start();
-        });
-    }
-
-    /**
-     * Switch to lobby window.
-     * @author Sasa Trajkova
-     */
-    public static void switchToLobbyWindow() {
-        Platform.runLater(() -> {
-            Stage stage = new Stage();
-            LobbyView view = new LobbyView(stage);
-            view.start();
+            try {
+                Constructor<?> constructor = viewClass.getConstructor(Stage.class);
+                Stage newStage = new Stage();
+                View view = (View) constructor.newInstance(newStage);
+                view.start();
+            } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
+                e.printStackTrace();
+            }
         });
     }
 }

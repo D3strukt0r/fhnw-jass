@@ -22,6 +22,9 @@ import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXCheckBox;
 import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
+import jass.client.view.LobbyView;
+import jass.client.view.LoginView;
+import jass.client.view.ServerConnectionView;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Menu;
@@ -162,7 +165,7 @@ public final class RegisterController extends Controller implements DisconnectEv
         /*
          * Register oneself for disconnect events
          */
-        SocketUtil socket = (SocketUtil) ServiceLocator.get("backend");
+        SocketUtil socket = (SocketUtil) ServiceLocator.get(SocketUtil.SERVICE_NAME);
         if (socket != null) { // Not necessary but keeps IDE happy
             socket.addDisconnectListener(this);
         }
@@ -307,12 +310,12 @@ public final class RegisterController extends Controller implements DisconnectEv
      */
     @FXML
     private void clickOnDisconnect() {
-        SocketUtil socket = (SocketUtil) ServiceLocator.get("backend");
+        SocketUtil socket = (SocketUtil) ServiceLocator.get(SocketUtil.SERVICE_NAME);
         if (socket != null) { // Not necessary but keeps IDE happy
             socket.close();
         }
         ServiceLocator.remove("backend");
-        WindowUtil.switchToServerConnectionWindow();
+        WindowUtil.switchTo(view, ServerConnectionView.class);
     }
 
     /**
@@ -339,7 +342,7 @@ public final class RegisterController extends Controller implements DisconnectEv
         new Thread(() -> {
             LoginEntity login = new LoginEntity(username.getText(), password.getText());
 
-            SocketUtil backend = (SocketUtil) ServiceLocator.get("backend");
+            SocketUtil backend = (SocketUtil) ServiceLocator.get(SocketUtil.SERVICE_NAME);
             Register registerMsg = new Register(new RegisterData(login.getUsername(), login.getPassword()));
 
             // Try sending the register command.
@@ -350,8 +353,7 @@ public final class RegisterController extends Controller implements DisconnectEv
                 if (loginMsg.process(backend)) {
                     login.setToken(loginMsg.getToken());
                     ServiceLocator.add(login);
-                    WindowUtil.switchToLobbyWindow();
-                    Platform.runLater(() -> this.login.getScene().getWindow().hide()); // Dashboard is still MVC
+                    WindowUtil.switchTo(view, LobbyView.class);
                 } else {
                     enableAll();
                     setErrorMessage("gui.login.login.failed");
@@ -375,13 +377,13 @@ public final class RegisterController extends Controller implements DisconnectEv
      */
     @FXML
     private void clickOnLogin() {
-        WindowUtil.switchToLoginWindow();
+        WindowUtil.switchTo(view, LoginView.class);
     }
 
     @Override
     public void onDisconnectEvent() {
         ServiceLocator.remove("backend");
-        WindowUtil.switchToServerConnectionWindow();
+        WindowUtil.switchTo(view, ServerConnectionView.class);
     }
 
     /**
