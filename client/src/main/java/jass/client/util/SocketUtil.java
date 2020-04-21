@@ -172,13 +172,6 @@ public final class SocketUtil extends Thread implements Service, Closeable {
                     } else {
                         logger.info("Received message of type " + msgData.getMessageType());
                         lastMessages.add(msg);
-
-                        /**
-                         **  Handling of various EventListeners
-                         */
-                        if (msgData.getMessageType().equals("GameFound")) {
-                            gameFoundEventListener.onGameFound();
-                        }
                     }
                 }
             }
@@ -260,6 +253,8 @@ public final class SocketUtil extends Thread implements Service, Closeable {
         return null;
     }
 
+
+
     /**
      * @param listener A DisconnectEventListener object
      *
@@ -269,7 +264,22 @@ public final class SocketUtil extends Thread implements Service, Closeable {
         this.disconnectListener.add(listener);
     }
 
+    /**
+     * Author Thomas Weber
+     */
+
     public void setGameFoundEventListener(GameFoundEventListener gFL) { this.gameFoundEventListener = gFL; }
+
+    public void handleEventListenerOnMessage(String msgType) {
+        if (msgType.equals("GameFound")) {
+            gameFoundEventListener.onGameFound();
+        }
+    }
+
+
+    /**
+     * End Author Thomas Weber
+     */
 
     /**
      * Verifies that the string is a valid ip address.
