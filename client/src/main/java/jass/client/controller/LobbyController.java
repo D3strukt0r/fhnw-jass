@@ -139,7 +139,7 @@ public class LobbyController extends Controller implements GameFoundEventListene
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        // TODO: Do something
+
         SocketUtil socket = (SocketUtil) ServiceLocator.get("backend");
         if (socket != null) { // Not necessary but keeps IDE happy
             socket.setGameFoundEventListener(this);
@@ -167,6 +167,13 @@ public class LobbyController extends Controller implements GameFoundEventListene
     /**
      * After clicking on Find match, change the button text to "Cancel" and show text "searching"
      */
+
+    /**
+     * The logic for searching for a game (client & server)
+     *
+     * @author Thomas Weber
+     */
+
     @FXML
     public void clickOnFindMatch() {
         // Get token and initialize SearchGame Message

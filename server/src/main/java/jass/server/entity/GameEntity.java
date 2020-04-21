@@ -28,6 +28,9 @@ public class GameEntity implements Entity {
     @DatabaseField(foreign = true)
     private TeamEntity teamTwo;
 
+    @DatabaseField(defaultValue = "true", canBeNull = false)
+    private boolean isActive = true;
+
     /**
      * For ORMLite all persisted classes must define a no-arg constructor with
      * at least package visibility.
@@ -35,9 +38,10 @@ public class GameEntity implements Entity {
     GameEntity() { }
 
 
-    public GameEntity(TeamEntity teamOne, TeamEntity teamTwo) {
+    public GameEntity(TeamEntity teamOne, TeamEntity teamTwo, Boolean isActive) {
         this.teamOne = teamOne;
         this.teamTwo = teamTwo;
+        this.isActive = isActive;
     }
 
     public int getId() {

@@ -75,7 +75,7 @@ public class SearchGameUtil implements Service {
             TeamRepository.getSingleton(null).add(teamTwo);
 
             // Initialize new Game
-            GameEntity newGame = new GameEntity(teamOne, teamTwo);
+            GameEntity newGame = new GameEntity(teamOne, teamTwo, true);
             GameRepository.getSingleton(null).add(newGame);
 
             logger.info("Successfully created game with ID: " + newGame.getId());
@@ -100,7 +100,7 @@ public class SearchGameUtil implements Service {
     }
 
     private void broadcastGameFound(ClientUtil client, GameEntity game, UserEntity p1, UserEntity p2, UserEntity p3, UserEntity p4) {
-        GameFound gameFoundMsg = new GameFound(new GameFoundData(client.getToken(), game.getId(), p1.getId(), p1.getUsername(), p2.getId(), p2.getUsername(), p3.getId(), p3.getUsername(), p4.getId(), p4.getUsername()));
+        GameFound gameFoundMsg = new GameFound(new GameFoundData(game.getId(), p1.getId(), p1.getUsername(), p2.getId(), p2.getUsername(), p3.getId(), p3.getUsername(), p4.getId(), p4.getUsername()));
         client.send(gameFoundMsg);
     }
 

@@ -9,8 +9,6 @@ import org.json.JSONObject;
  */
 
 public class GameFoundData extends MessageData {
-    private final String token;
-
     private final int gameId;
 
     private final int playerOneId;
@@ -25,10 +23,9 @@ public class GameFoundData extends MessageData {
     private final int playerFourId;
     private final String playerFour;
 
-    public GameFoundData(String token, int gameId, int playerOneId, String playerOne, int playerTwoId, String playerTwo, int playerThreeId, String playerThree, int playerFourId, String playerFour) {
+    public GameFoundData(int gameId, int playerOneId, String playerOne, int playerTwoId, String playerTwo, int playerThreeId, String playerThree, int playerFourId, String playerFour) {
         super("GameFound");
 
-        this.token = token;
         this.gameId = gameId;
         this.playerOneId = playerOneId;
         this.playerOne = playerOne;
@@ -42,7 +39,6 @@ public class GameFoundData extends MessageData {
 
     public GameFoundData(JSONObject data) {
         super(data);
-        token = data.getString("token");
         gameId = data.getInt("gameId");
         playerOneId = data.getInt("playerOneId");
         playerOne = data.getString("playerOne");
@@ -53,8 +49,6 @@ public class GameFoundData extends MessageData {
         playerFourId = data.getInt("playerFourId");
         playerFour = data.getString("playerFour");
     }
-
-    public String getToken() { return token; }
 
     public int getGameId() { return gameId; }
 
