@@ -162,7 +162,7 @@ public final class LoginController extends Controller implements DisconnectEvent
         /*
          * Register oneself for disconnect events
          */
-        SocketUtil socket = (SocketUtil) ServiceLocator.get("backend");
+        SocketUtil socket = (SocketUtil) ServiceLocator.get(SocketUtil.SERVICE_NAME);
         if (socket != null) { // Not necessary but keeps IDE happy
             socket.addDisconnectListener(this);
         }
@@ -295,7 +295,7 @@ public final class LoginController extends Controller implements DisconnectEvent
      */
     @FXML
     private void clickOnDisconnect() {
-        SocketUtil socket = (SocketUtil) ServiceLocator.get("backend");
+        SocketUtil socket = (SocketUtil) ServiceLocator.get(SocketUtil.SERVICE_NAME);
         if (socket != null) { // Not necessary but keeps IDE happy
             socket.close();
         }
@@ -329,7 +329,7 @@ public final class LoginController extends Controller implements DisconnectEvent
                 password.getText(),
                 connectAutomatically.isSelected()
             );
-            SocketUtil backend = (SocketUtil) ServiceLocator.get("backend");
+            SocketUtil backend = (SocketUtil) ServiceLocator.get(SocketUtil.SERVICE_NAME);
             Login loginMsg = new Login(new LoginData(login.getUsername(), login.getPassword()));
 
             // Send the login request to the server. Update locally if successful.

@@ -216,7 +216,7 @@ public final class DeleteAccountController extends Controller {
      */
     @FXML
     private void clickOnDisconnect() {
-        SocketUtil socket = (SocketUtil) ServiceLocator.get("backend");
+        SocketUtil socket = (SocketUtil) ServiceLocator.get(SocketUtil.SERVICE_NAME);
         if (socket != null) { // Not necessary but keeps IDE happy
             socket.close();
         }
@@ -245,8 +245,8 @@ public final class DeleteAccountController extends Controller {
 
         // Connection would freeze window (and the animations) so do it in a different thread.
         new Thread(() -> {
-            SocketUtil backend = (SocketUtil) ServiceLocator.get("backend");
-            LoginEntity login = (LoginEntity) ServiceLocator.get("login");
+            SocketUtil backend = (SocketUtil) ServiceLocator.get(SocketUtil.SERVICE_NAME);
+            LoginEntity login = (LoginEntity) ServiceLocator.get(LoginEntity.SERVICE_NAME);
             DeleteLogin deleteLoginMsg = new DeleteLogin(new DeleteLoginData(login.getToken()));
 
             // Try to delete the account

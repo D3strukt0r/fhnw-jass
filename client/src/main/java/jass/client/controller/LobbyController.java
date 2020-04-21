@@ -135,7 +135,7 @@ public class LobbyController extends Controller {
      */
     @FXML
     private void clickOnDisconnect() {
-        SocketUtil socket = (SocketUtil) ServiceLocator.get("backend");
+        SocketUtil socket = (SocketUtil) ServiceLocator.get(SocketUtil.SERVICE_NAME);
         if (socket != null) { // Not necessary but keeps IDE happy
             socket.close();
         }

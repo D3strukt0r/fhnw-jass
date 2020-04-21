@@ -284,7 +284,7 @@ public final class ChangePasswordController extends Controller {
      */
     @FXML
     private void clickOnDisconnect() {
-        SocketUtil socket = (SocketUtil) ServiceLocator.get("backend");
+        SocketUtil socket = (SocketUtil) ServiceLocator.get(SocketUtil.SERVICE_NAME);
         if (socket != null) { // Not necessary but keeps IDE happy
             socket.close();
         }
@@ -313,10 +313,10 @@ public final class ChangePasswordController extends Controller {
 
         // Connection would freeze window (and the animations) so do it in a different thread.
         new Thread(() -> {
-            LoginEntity login = (LoginEntity) ServiceLocator.get("login");
+            LoginEntity login = (LoginEntity) ServiceLocator.get(LoginEntity.SERVICE_NAME);
             LoginEntity newLogin = new LoginEntity(login.getUsername(), newPassword.getText(), login.getToken());
 
-            SocketUtil backend = (SocketUtil) ServiceLocator.get("backend");
+            SocketUtil backend = (SocketUtil) ServiceLocator.get(SocketUtil.SERVICE_NAME);
             ChangePassword changePasswordMsg = new ChangePassword(new ChangePasswordData(login.getToken(), newLogin.getPassword()));
 
             // Send the change password request to the server. Update locally if successful.
