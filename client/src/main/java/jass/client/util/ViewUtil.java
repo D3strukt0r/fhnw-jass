@@ -60,9 +60,11 @@ import java.util.Locale;
  * @version %I%, %G%
  * @since 0.0.1
  */
-public class ViewUtil {
+public final class ViewUtil {
     /**
-     * Shortcuts for UI elements.
+     * @param space The space to create.
+     *
+     * @return Returns a region with a space.
      */
     public static Region useSpacer(final int space) {
         Region spacer = new Region();
@@ -71,6 +73,11 @@ public class ViewUtil {
         return spacer;
     }
 
+    /**
+     * @param space The space to create.
+     *
+     * @return Returns a region with a space.
+     */
     public static Region useHorizontalSpacer(final int space) {
         Region spacer = new Region();
         spacer.setPrefWidth(space);
@@ -78,12 +85,24 @@ public class ViewUtil {
         return spacer;
     }
 
+    /**
+     * @param translatorKey The key of the translation.
+     *
+     * @return Returns a text element which is automatically translated.
+     */
     public static Text useText(final String translatorKey) {
         Text textField = new Text();
         textField.textProperty().bind(I18nUtil.createStringBinding(translatorKey));
         return textField;
     }
 
+    /**
+     * @param translatorKey   The key of the translation.
+     * @param paneToBindWidth The object to bind to.
+     *
+     * @return Returns a text element which is automatically translated and
+     * resized according to the window.
+     */
     public static Text useText(final String translatorKey, final Stage paneToBindWidth) {
         Text textField = useText(translatorKey);
         // https://stackoverflow.com/questions/51199903/how-to-bind-a-value-to-the-result-of-a-calculation
@@ -93,18 +112,35 @@ public class ViewUtil {
         return textField;
     }
 
+    /**
+     * @param translatorKey The key of the translation.
+     *
+     * @return Returns a label element which is automatically translated.
+     */
     public static Label useLabel(final String translatorKey) {
         Label label = new Label();
         label.textProperty().bind(I18nUtil.createStringBinding(translatorKey));
         return label;
     }
 
+    /**
+     * @param translatorKey The key of the translation.
+     * @param icon          The icon.
+     *
+     * @return Returns a label element with and icon and which is automatically
+     * translated.
+     */
     public static Label useLabel(final String translatorKey, final IconNode icon) {
         Label label = useLabel(translatorKey);
         label.setGraphic(icon);
         return label;
     }
 
+    /**
+     * @param translatorKey The key of the translation.
+     *
+     * @return Returns a text field element which is automatically translated.
+     */
     public static JFXTextField useTextField(final String translatorKey) {
         JFXTextField textField = new JFXTextField();
         textField.setLabelFloat(true);
@@ -112,6 +148,12 @@ public class ViewUtil {
         return textField;
     }
 
+    /**
+     * @param translatorKey The key of the translation.
+     *
+     * @return Returns a password field element which is automatically
+     * translated.
+     */
     public static JFXPasswordField usePasswordField(final String translatorKey) {
         JFXPasswordField passwordField = new JFXPasswordField();
         passwordField.setLabelFloat(true);
@@ -119,12 +161,22 @@ public class ViewUtil {
         return passwordField;
     }
 
+    /**
+     * @param translatorKey The key of the translation.
+     *
+     * @return Returns a checkbox field which is automatically translated.
+     */
     public static JFXCheckBox useCheckBox(final String translatorKey) {
         JFXCheckBox checkBox = new JFXCheckBox();
         checkBox.textProperty().bind(I18nUtil.createStringBinding(translatorKey));
         return checkBox;
     }
 
+    /**
+     * @param translatorKey The key of the translation.
+     *
+     * @return Returns a primary button which is automatically translated.
+     */
     public static JFXButton usePrimaryButton(final String translatorKey) {
         JFXButton primaryButton = new JFXButton();
         primaryButton.textProperty().bind(I18nUtil.createStringBinding(() -> I18nUtil.get(translatorKey).toUpperCase()));
@@ -135,6 +187,11 @@ public class ViewUtil {
         return primaryButton;
     }
 
+    /**
+     * @param translatorKey The key of the translation.
+     *
+     * @return Returns a secondary button which is automatically translated.
+     */
     public static JFXButton useSecondaryButton(final String translatorKey) {
         JFXButton secondaryButton = new JFXButton();
         secondaryButton.textProperty().bind(I18nUtil.createStringBinding(() -> I18nUtil.get(translatorKey).toUpperCase()));
@@ -145,6 +202,11 @@ public class ViewUtil {
         return secondaryButton;
     }
 
+    /**
+     * @param translatorKey The key of the translation.
+     *
+     * @return Returns a navbar which is automatically translated.
+     */
     public static HBox useNavBar(final String translatorKey) {
         HBox navBar = new HBox();
         Text title = new Text();
@@ -155,6 +217,11 @@ public class ViewUtil {
         return navBar;
     }
 
+    /**
+     * @param text The text to show.
+     *
+     * @return Returns a navbar.
+     */
     public static HBox useStaticNavBar(final String text) {
         HBox navBar = new HBox();
         Text title = new Text(text.toUpperCase());
@@ -164,6 +231,11 @@ public class ViewUtil {
         return navBar;
     }
 
+    /**
+     * @param text The text to show.
+     *
+     * @return Returns a navbar which can change the text
+     */
     public static HBox useVariableNavBar(final ObservableValue<String> text) {
         HBox navBar = new HBox();
         Text title = new Text();
@@ -175,7 +247,10 @@ public class ViewUtil {
     }
 
     /**
-     * Shortcuts for validator with UI input elements
+     * @param translatorKey The key of the translation.
+     *
+     * @return Returns the "required" validator and which is automatically
+     * translated.
      */
     public static RequiredFieldValidator useRequiredValidator(final String translatorKey) {
         RequiredFieldValidator requiredValidator = new RequiredFieldValidator();
@@ -183,18 +258,37 @@ public class ViewUtil {
         return requiredValidator;
     }
 
+    /**
+     * @param translatorKey The key of the translation.
+     *
+     * @return Returns the "is integer" validator and which is automatically
+     * translated.
+     */
     public static IntegerValidator useIsIntegerValidator(final String translatorKey) {
         IntegerValidator isIntValidator = new IntegerValidator();
         isIntValidator.messageProperty().bind(I18nUtil.createStringBinding(translatorKey));
         return isIntValidator;
     }
 
+    /**
+     * @param validateTo    The element to compare to.
+     * @param translatorKey The key of the translation.
+     *
+     * @return Returns the "is same" validator and which is automatically
+     * translated.
+     */
     public static IsSameValidator useIsSameValidator(final TextInputControl validateTo, final String translatorKey) {
         IsSameValidator isSameValidator = new IsSameValidator(validateTo);
         isSameValidator.messageProperty().bind(I18nUtil.createStringBinding(translatorKey));
         return isSameValidator;
     }
 
+    /**
+     * @param translatorKey The key of the translation.
+     *
+     * @return Returns the "is valid ip" validator and which is automatically
+     * translated.
+     */
     public static RegexValidator useIsValidIpValidator(final String translatorKey) {
         RegexValidator isValidIpValidator = new RegexValidator();
         isValidIpValidator.messageProperty().bind(I18nUtil.createStringBinding(translatorKey));
@@ -202,6 +296,12 @@ public class ViewUtil {
         return isValidIpValidator;
     }
 
+    /**
+     * @param translatorKey The key of the translation.
+     *
+     * @return Returns the "is valid port" validator and which is automatically
+     * translated.
+     */
     public static RegexValidator useIsValidPortValidator(final String translatorKey) {
         RegexValidator isValidPortValidator = new RegexValidator();
         isValidPortValidator.messageProperty().bind(I18nUtil.createStringBinding(translatorKey));
@@ -210,9 +310,8 @@ public class ViewUtil {
     }
 
     /**
-     * Shortcuts for UI menus.
+     * @return Returns the default navbar.
      */
-
     public static MenuBar useDefaultMenuBar() {
         MenuBar menuBar = new MenuBar();
 
@@ -235,18 +334,29 @@ public class ViewUtil {
         return menuBar;
     }
 
+    /**
+     * @param translatorKey The key of the translation.
+     *
+     * @return Returns a menu which is automatically translated.
+     */
     public static Menu useMenu(final String translatorKey) {
         Menu menu = new Menu();
         menu.textProperty().bind(I18nUtil.createStringBinding(translatorKey));
         return menu;
     }
 
+    /**
+     * @return Returns the language menu which is automatically translated.
+     */
     public static Menu useLanguageMenu() {
         Menu changeLanguageMenu = useMenu("gui.menu.file.changeLanguage");
         useLanguageMenuContent(changeLanguageMenu);
         return changeLanguageMenu;
     }
 
+    /**
+     * @param changeLanguageMenu The change language menu element.
+     */
     public static void useLanguageMenuContent(final Menu changeLanguageMenu) {
         for (Locale locale : I18nUtil.getSupportedLocales()) {
             StringProperty langInLocale = new SimpleStringProperty();
@@ -277,12 +387,20 @@ public class ViewUtil {
         }
     }
 
+    /**
+     * @param translatorKey The key of the translation.
+     *
+     * @return Returns a menu item which is automatically translated.
+     */
     public static MenuItem useMenuItem(final String translatorKey) {
         MenuItem item = new MenuItem();
         item.textProperty().bind(I18nUtil.createStringBinding(translatorKey));
         return item;
     }
 
+    /**
+     * @return Returns and exit menu item which is automatically translated.
+     */
     public static MenuItem useExitMenuItem() {
         MenuItem exitItem = useMenuItem("gui.menu.file.exit");
         exitItem.setAccelerator(KeyCombination.keyCombination("Alt+F4"));
@@ -291,7 +409,10 @@ public class ViewUtil {
     }
 
     /**
-     * Shortcuts for the icons.
+     * @param iconCode The icon.
+     * @param color    The color of the icon.
+     *
+     * @return Returns an icon.
      */
     public static IconNode useIcon(final IconCode iconCode, final Color color) {
         IconNode icon = new IconNode(iconCode);
@@ -299,30 +420,65 @@ public class ViewUtil {
         return icon;
     }
 
+    /**
+     * @param color The color.
+     *
+     * @return Returns the "add" icon.
+     */
     public static IconNode useIconAdd(final Color color) {
         return useIcon(GoogleMaterialDesignIcons.ADD, color);
     }
 
+    /**
+     * @param color The color.
+     *
+     * @return Returns the "contact" icon.
+     */
     public static IconNode useIconContact(final Color color) {
         return useIcon(GoogleMaterialDesignIcons.CONTACTS, color);
     }
 
+    /**
+     * @param color The color.
+     *
+     * @return Returns the "chat" icon.
+     */
     public static IconNode useIconChat(final Color color) {
         return useIcon(GoogleMaterialDesignIcons.FORUM, color);
     }
 
+    /**
+     * @param color The color.
+     *
+     * @return Returns the "send" icon.
+     */
     public static IconNode useIconSend(final Color color) {
         return useIcon(GoogleMaterialDesignIcons.SEND, color);
     }
 
+    /**
+     * @param color The color.
+     *
+     * @return Returns the "exit" icon.
+     */
     public static IconNode useIconExit(final Color color) {
         return useIcon(GoogleMaterialDesignIcons.EXIT_TO_APP, color);
     }
 
+    /**
+     * @param color The color.
+     *
+     * @return Returns the "delete" icon.
+     */
     public static IconNode useIconDelete(final Color color) {
         return useIcon(GoogleMaterialDesignIcons.DELETE, color);
     }
 
+    /**
+     * @param color The color.
+     *
+     * @return Returns the "edit" icon.
+     */
     public static IconNode useIconEdit(final Color color) {
         return useIcon(GoogleMaterialDesignIcons.MODE_EDIT, color);
     }

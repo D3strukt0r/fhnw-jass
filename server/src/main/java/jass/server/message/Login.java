@@ -31,17 +31,32 @@ import jass.lib.message.ResultData;
 import java.security.SecureRandom;
 
 /**
- * Login to an existing account. If successful, return an authentication token to the client.
+ * Login to an existing account. If successful, return an authentication token
+ * to the client.
  *
  * @author Manuele Vaccari
  * @version %I%, %G%
  * @since 0.0.1
  */
-public class Login extends Message {
+public final class Login extends Message {
+    /**
+     * The logger to print to console and save in a .log file.
+     */
     private static final Logger logger = LogManager.getLogger(Login.class);
+
+    /**
+     * The data of the message.
+     */
     private final LoginData data;
+
+    /**
+     * To generate random numbers.
+     */
     private static final SecureRandom rand = new SecureRandom();
 
+    /**
+     * @param rawData The data (still not casted)
+     */
     public Login(final MessageData rawData) {
         super(rawData);
         data = (LoginData) rawData;
@@ -79,18 +94,27 @@ public class Login extends Message {
         }
     }
 
-    // Code by Bradley
+    /**
+     * @return Returns a generated token.
+     *
+     * @author Bradley Richards
+     */
     public static String createToken() {
         byte[] token = new byte[16];
         rand.nextBytes(token);
         return bytesToHex(token);
     }
 
-    // From:
-    // https://stackoverflow.com/questions/9655181/how-to-convert-a-byte-array-to-a-hex-string-in-java
-    private static final char[] hexArray = "0123456789ABCDEF".toCharArray();
-
+    /**
+     * @param bytes The bytes to convert.
+     *
+     * @return Returns a converted string.
+     *
+     * @author https://stackoverflow.com/questions/9655181/how-to-convert-a-byte-array-to-a-hex-string-in-java
+     */
     public static String bytesToHex(final byte[] bytes) {
+        final char[] hexArray = "0123456789ABCDEF".toCharArray();
+
         char[] hexChars = new char[bytes.length * 2];
         for (int j = 0; j < bytes.length; j++) {
             int v = bytes[j] & 0xFF;

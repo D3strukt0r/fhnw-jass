@@ -31,9 +31,15 @@ import jass.server.util.ServerSocketUtil;
  * @version %I%, %G%
  * @since 0.0.1
  */
-public class UserOnline extends Message {
+public final class UserOnline extends Message {
+    /**
+     * The data of the message.
+     */
     private final UserOnlineData data;
 
+    /**
+     * @param rawData The data (still not casted)
+     */
     public UserOnline(final MessageData rawData) {
         super(rawData);
         data = (UserOnlineData) rawData;
@@ -42,8 +48,8 @@ public class UserOnline extends Message {
     /**
      * Anyone can query a specific user: are they currently logged in?
      * <p>
-     * Note that "false" can also mean that the user asking the question is not logged in, and therefore cannot ask this
-     * question.
+     * Note that "false" can also mean that the user asking the question is not
+     * logged in, and therefore cannot ask this question.
      */
     @Override
     public void process(final ClientUtil client) {

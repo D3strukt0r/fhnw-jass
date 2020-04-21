@@ -30,9 +30,15 @@ import jass.lib.message.UserOnlineData;
  * @version %I%, %G%
  * @since 0.0.1
  */
-public class UserOnline extends Message {
+public final class UserOnline extends Message {
+    /**
+     * The data of the message.
+     */
     private final UserOnlineData data;
 
+    /**
+     * @param rawData The data (still not casted)
+     */
     public UserOnline(final MessageData rawData) {
         super(rawData);
         data = (UserOnlineData) rawData;

@@ -32,36 +32,45 @@ import java.lang.reflect.InvocationTargetException;
  * @since 0.0.1
  */
 public abstract class Message {
-
+    /**
+     * The data of the message (still not casted).
+     */
     private final MessageData rawData;
 
-    public MessageData getRawData() {
-        return rawData;
-    }
-
-    ///////////////////////////////////////
-
+    /**
+     * @param rawData The data (still not casted)
+     */
     public Message(final MessageData rawData) {
         this.rawData = rawData;
     }
 
-    ///////////////////////////////////////
+    /**
+     * @return Returns the data.
+     */
+    public MessageData getRawData() {
+        return rawData;
+    }
 
     /**
-     * Perform whatever actions are required for this particular type of message.
+     * Perform whatever actions are required for this particular type of
+     * message.
+     *
+     * @param client The client object, to perform actions with the client.
      */
     public abstract void process(ClientUtil client);
 
     /**
      * Create a server message object of the correct class, using reflection
+     * <p>
+     * This would be more understandable - but a *lot* longer - if we used a
+     * series of "if" statements:
+     * <p>
+     * if (parts[0].equals("Login") msg = new Login(parts); else if
+     * (parts[0].equals("Logout") msg = new Logout(parts); else if ... else ...
      *
-     * This would be more understandable - but a *lot* longer - if we used
-     * a series of "if" statements:
+     * @param messageData The data.
      *
-     * if (parts[0].equals("Login") msg = new Login(parts);
-     * else if (parts[0].equals("Logout") msg = new Logout(parts);
-     * else if ...
-     * else ...
+     * @return Returns a message object using the data.
      *
      * @author Bradley Richards
      */
@@ -77,7 +86,7 @@ public abstract class Message {
     }
 
     /**
-     * A message is really just a bunch of strings separated by vertical bars.
+     * @return Returns the serialized JSON string.
      */
     @Override
     public String toString() {

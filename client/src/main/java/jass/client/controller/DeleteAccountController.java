@@ -43,8 +43,6 @@ import jass.client.util.ViewUtil;
 import jass.lib.message.DeleteLoginData;
 import jass.lib.message.LogoutData;
 import jass.lib.servicelocator.ServiceLocator;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -56,39 +54,90 @@ import java.util.ResourceBundle;
  * @version %I%, %G%
  * @since 0.0.1
  */
-public class DeleteAccountController extends Controller {
-    private static final Logger logger = LogManager.getLogger(DeleteAccountController.class);
+public final class DeleteAccountController extends Controller {
+    /**
+     * The view.
+     */
     private DeleteAccountView view;
 
     @FXML
     private VBox root;
 
+    /**
+     * The "File" element.
+     */
     @FXML
     private Menu mFile;
+
+    /**
+     * The "File -> Change Language" element.
+     */
     @FXML
     private Menu mFileChangeLanguage;
+
+    /**
+     * The "File -> Disconnect" element.
+     */
     @FXML
     private MenuItem mFileDisconnect;
+
+    /**
+     * The "File -> Exit" element.
+     */
     @FXML
     private MenuItem mFileExit;
+
+    /**
+     * The "Edit" element.
+     */
     @FXML
     private Menu mEdit;
+
+    /**
+     * The "Edit -> Delete" element.
+     */
     @FXML
     private MenuItem mEditDelete;
+
+    /**
+     * The "Help" element.
+     */
     @FXML
     private Menu mHelp;
+
+    /**
+     * The "Help -> About" element.
+     */
     @FXML
     private MenuItem mHelpAbout;
 
+    /**
+     * The navbar.
+     */
     @FXML
     private Text navbar;
 
+    /**
+     * The error message.
+     */
     @FXML
     private VBox errorMessage;
+
+    /**
+     * The message.
+     */
     @FXML
     private Text message;
+
+    /**
+     * The delete button.
+     */
     @FXML
     private JFXButton delete;
+
+    /**
+     * The cancel button.
+     */
     @FXML
     private JFXButton cancel;
 
@@ -142,7 +191,10 @@ public class DeleteAccountController extends Controller {
     }
 
     /**
-     * As the view contains an error message field, this updates the text and the window appropriately.
+     * As the view contains an error message field, this updates the text and
+     * the window appropriately.
+     *
+     * @param translatorKey The key of the translation.
      *
      * @since 0.0.1
      */
@@ -159,6 +211,9 @@ public class DeleteAccountController extends Controller {
         });
     }
 
+    /**
+     * Disconnect from the server and returns to the server connection window.
+     */
     @FXML
     private void clickOnDisconnect() {
         SocketUtil socket = (SocketUtil) ServiceLocator.get("backend");
@@ -169,13 +224,17 @@ public class DeleteAccountController extends Controller {
         WindowUtil.switchToServerConnectionWindow();
     }
 
+    /**
+     * Shuts down the application.
+     */
     @FXML
     private void clickOnExit() {
         Platform.exit();
     }
 
     /**
-     * Handles the click on the delete button. This will send it to the server, and logout if successful.
+     * Handles the click on the delete button. This will send it to the server,
+     * and logout if successful.
      *
      * @since 0.0.1
      */
@@ -210,16 +269,25 @@ public class DeleteAccountController extends Controller {
         }).start();
     }
 
+    /**
+     * After clicking on cancel, return to the lobby.
+     */
     @FXML
     public void clickOnCancel() {
-        WindowUtil.switchToDashboardWindow();
+        WindowUtil.switchToGameWindow();
         view.stop();
     }
 
+    /**
+     * @param view The view.
+     */
     public void setView(final DeleteAccountView view) {
         this.view = view;
     }
 
+    /**
+     * @return Returns the delete button
+     */
     public JFXButton getDelete() {
         return delete;
     }

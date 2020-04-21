@@ -16,10 +16,20 @@ import java.util.ResourceBundle;
  *
  * @author Brad Richards
  */
-public class SplashController extends Controller {
+public final class SplashController extends Controller {
+    /**
+     * The model.
+     */
     private SplashModel model;
+
+    /**
+     * The view.
+     */
     private SplashView view;
 
+    /**
+     * The loading bar.
+     */
     @FXML
     private JFXProgressBar loadingProgress;
 
@@ -33,7 +43,7 @@ public class SplashController extends Controller {
                 // If already logged in go to the game directly, if at least connected, go to login screen, otherwise
                 // to server connection
                 if (model.isLoggedIn()) {
-                    WindowUtil.switchToDashboardWindow();
+                    WindowUtil.switchToLobbyWindow();
                 } else if (model.isConnected()) {
                     WindowUtil.switchToLoginWindow();
                 } else {
@@ -46,6 +56,9 @@ public class SplashController extends Controller {
         model.initialize();
     }
 
+    /**
+     * @param view The view.
+     */
     public void setView(final SplashView view) {
         this.view = view;
     }

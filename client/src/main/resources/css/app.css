@@ -94,3 +94,6 @@ dark: #005005;
     -fx-background-radius: 50px;
     -fx-border-radius: 50px;
 }
+.search-text {
+    -fx-font-size: 16px;
+}

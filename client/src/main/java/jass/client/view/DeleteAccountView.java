@@ -37,7 +37,10 @@ import java.io.IOException;
  * @version %I%, %G%
  * @since 0.0.1
  */
-public class DeleteAccountView extends View {
+public final class DeleteAccountView extends View {
+    /**
+     * @param stage The stage of the window.
+     */
     public DeleteAccountView(final Stage stage) {
         super(stage);
         stage.titleProperty().bind(I18nUtil.createStringBinding("gui.deleteAccount.title"));

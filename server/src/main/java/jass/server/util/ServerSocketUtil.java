@@ -45,14 +45,38 @@ import java.util.ArrayList;
  * @version %I%, %G%
  * @since 0.0.1
  */
-public class ServerSocketUtil extends Thread {
+public final class ServerSocketUtil extends Thread {
+    /**
+     * The logger to print to console and save in a .log file.
+     */
     private static final Logger logger = LogManager.getLogger(ServerSocketUtil.class);
 
+    /**
+     * The server socket listener.
+     */
     private final ServerSocket listener;
+
+    /**
+     * The port of the listener.
+     */
     private final int port;
 
+    /**
+     * A list of all the connected clients.
+     */
     private static final ArrayList<ClientUtil> clients = new ArrayList<>();
 
+    /**
+     * @param port   The port of the server.
+     * @param secure Whether to use SSL or not.
+     *
+     * @throws IOException               An error with the socket.
+     * @throws KeyStoreException         An error with SSL.
+     * @throws CertificateException      An error with SSL.
+     * @throws NoSuchAlgorithmException  An error with SSL.
+     * @throws UnrecoverableKeyException An error with SSL.
+     * @throws KeyManagementException    An error with SSL.
+     */
     public ServerSocketUtil(final int port, final boolean secure) throws IOException, KeyStoreException, CertificateException, NoSuchAlgorithmException, UnrecoverableKeyException, KeyManagementException {
         super();
         this.port = port;
@@ -118,9 +142,9 @@ public class ServerSocketUtil extends Thread {
     /**
      * Check if there is someone connected using the given username.
      *
-     * @param username A string with the username
+     * @param username A string with the username of the user.
      *
-     * @return "true" if a client is connected, otherwise "false"
+     * @return Returns true if a client is connected, otherwise false.
      */
     public static synchronized boolean exists(final String username) {
         for (ClientUtil c : clients) {
@@ -134,7 +158,7 @@ public class ServerSocketUtil extends Thread {
     /**
      * Remove the desired client from the list of connected clients.
      *
-     * @param client A client object
+     * @param client The client object.
      */
     public static synchronized void remove(final ClientUtil client) {
         clients.remove(client);

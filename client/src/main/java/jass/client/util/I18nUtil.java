@@ -43,7 +43,7 @@ import java.util.concurrent.Callable;
  */
 public final class I18nUtil {
     /**
-     * the current selected Locale.
+     * The current selected Locale.
      */
     private static final ObjectProperty<Locale> locale;
 
@@ -53,7 +53,7 @@ public final class I18nUtil {
     }
 
     /**
-     * get the supported Locales.
+     * Get the supported Locales.
      *
      * @return List of Locale objects.
      *
@@ -69,7 +69,8 @@ public final class I18nUtil {
     }
 
     /**
-     * get the default locale. This is the systems default if contained in the supported locales, english otherwise.
+     * Get the default locale. This is the systems default if contained in the
+     * supported locales, english otherwise.
      *
      * @return A Locale constant, containing the current language.
      *
@@ -80,25 +81,35 @@ public final class I18nUtil {
         return getSupportedLocales().contains(sysDefault) ? sysDefault : Locale.ENGLISH;
     }
 
+    /**
+     * @return Returns the current locale.
+     */
     public static Locale getLocale() {
         return locale.get();
     }
 
+    /**
+     * @param locale The locale.
+     */
     public static void setLocale(final Locale locale) {
         localeProperty().set(locale);
         Locale.setDefault(locale);
     }
 
+    /**
+     * @return Returns the current locale property.
+     */
     public static ObjectProperty<Locale> localeProperty() {
         return locale;
     }
 
     /**
-     * gets the string with the given key from the resource bundle for the current locale and uses it as first argument
-     * to MessageFormat.format, passing in the optional args and returning the result.
+     * Gets the string with the given key from the resource bundle for the
+     * current locale and uses it as first argument to MessageFormat.format,
+     * passing in the optional args and returning the result.
      *
-     * @param key  message key
-     * @param args optional arguments for the message
+     * @param key  Message key
+     * @param args Optional arguments for the message
      *
      * @return localized formatted string
      *
@@ -110,9 +121,10 @@ public final class I18nUtil {
     }
 
     /**
-     * creates a String Binding to a localized String that is computed by calling the given func.
+     * Creates a String Binding to a localized String that is computed by
+     * calling the given func.
      *
-     * @param func function called on every change
+     * @param func Function called on every change
      *
      * @return StringBinding
      *
@@ -123,9 +135,11 @@ public final class I18nUtil {
     }
 
     /**
-     * creates a String binding to a localized String for the given message bundle key.
+     * Creates a String binding to a localized String for the given message
+     * bundle key.
      *
-     * @param key key
+     * @param key  Key
+     * @param args Custom variables for the string
      *
      * @return String binding
      *

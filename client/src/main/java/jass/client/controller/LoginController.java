@@ -23,7 +23,6 @@ import com.jfoenix.controls.JFXCheckBox;
 import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
 import javafx.application.Platform;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
@@ -57,39 +56,104 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * @version %I%, %G%
  * @since 0.0.1
  */
-public class LoginController extends Controller implements DisconnectEventListener {
+public final class LoginController extends Controller implements DisconnectEventListener {
+    /**
+     * The logger to print to console and save in a .log file.
+     */
     private static final Logger logger = LogManager.getLogger(LoginController.class);
+
+    /**
+     * The view.
+     */
     private LoginView view;
 
+    /**
+     * The "File" element.
+     */
     @FXML
     private Menu mFile;
+
+    /**
+     * The "File -> Change Language" element.
+     */
     @FXML
     private Menu mFileChangeLanguage;
+
+    /**
+     * The "File -> Disconnect" element.
+     */
     @FXML
     private MenuItem mFileDisconnect;
+
+    /**
+     * The "File -> Exit" element.
+     */
     @FXML
     private MenuItem mFileExit;
+
+    /**
+     * The "Edit" element.
+     */
     @FXML
     private Menu mEdit;
+
+    /**
+     * The "Edit -> Delete" element.
+     */
     @FXML
     private MenuItem mEditDelete;
+
+    /**
+     * The "Help" element.
+     */
     @FXML
     private Menu mHelp;
+
+    /**
+     * The "Help -> About" element.
+     */
     @FXML
     private MenuItem mHelpAbout;
 
+    /**
+     * The navbar.
+     */
     @FXML
     private Text navbar;
+
+    /**
+     * The error message.
+     */
     @FXML
     private VBox errorMessage;
+
+    /**
+     * The username text field.
+     */
     @FXML
     private JFXTextField username;
+
+    /**
+     * The password field.
+     */
     @FXML
     private JFXPasswordField password;
+
+    /**
+     * The "remember me" checkbox.
+     */
     @FXML
     private JFXCheckBox connectAutomatically;
+
+    /**
+     * The login button.
+     */
     @FXML
     private JFXButton login;
+
+    /**
+     * The register button.
+     */
     @FXML
     private JFXButton register;
 
@@ -204,7 +268,10 @@ public class LoginController extends Controller implements DisconnectEventListen
     }
 
     /**
-     * As the view contains an error message field, this updates the text and the window appropriately.
+     * As the view contains an error message field, this updates the text and
+     * the window appropriately.
+     *
+     * @param translatorKey The key of the translation.
      *
      * @since 0.0.1
      */
@@ -223,6 +290,9 @@ public class LoginController extends Controller implements DisconnectEventListen
         });
     }
 
+    /**
+     * Disconnect from the server and returns to the server connection window.
+     */
     @FXML
     private void clickOnDisconnect() {
         SocketUtil socket = (SocketUtil) ServiceLocator.get("backend");
@@ -233,14 +303,17 @@ public class LoginController extends Controller implements DisconnectEventListen
         WindowUtil.switchToServerConnectionWindow();
     }
 
+    /**
+     * Shuts down the application.
+     */
     @FXML
     private void clickOnExit() {
         Platform.exit();
     }
 
     /**
-     * Handles the click on the login button. Inputs should already be checked. This will send it to the server, and
-     * update local values if successful.
+     * Handles the click on the login button. Inputs should already be checked.
+     * This will send it to the server, and update local values if successful.
      *
      * @since 0.0.1
      */
@@ -269,7 +342,7 @@ public class LoginController extends Controller implements DisconnectEventListen
                 }
 
                 LoginRepository.getSingleton(null).setToConnectAutomatically(login); // Make sure it's the only entry
-                WindowUtil.switchToDashboardWindow();
+                WindowUtil.switchToLobbyWindow();
                 Platform.runLater(() -> this.login.getScene().getWindow().hide()); // Dashboard is still MVC
             } else {
                 enableAll();
@@ -278,12 +351,18 @@ public class LoginController extends Controller implements DisconnectEventListen
         }).start();
     }
 
+    /**
+     * @return Returns the login button
+     */
     public JFXButton getLogin() {
         return login;
     }
 
+    /**
+     * After clicking on register, switch to the register window.
+     */
     @FXML
-    private void clickOnRegister(final ActionEvent event) {
+    private void clickOnRegister() {
         WindowUtil.switchToRegisterWindow();
     }
 
@@ -293,6 +372,9 @@ public class LoginController extends Controller implements DisconnectEventListen
         WindowUtil.switchToServerConnectionWindow();
     }
 
+    /**
+     * @param view The view.
+     */
     public void setView(final LoginView view) {
         this.view = view;
     }

@@ -18,11 +18,7 @@
 
 package jass.client.util;
 
-import jass.client.view.LobbyView;
-import jass.client.view.LoginView;
-import jass.client.view.RegisterView;
-import jass.client.view.ServerConnectionView;
-import jass.client.view.SplashView;
+import jass.client.view.*;
 import javafx.application.Platform;
 import javafx.stage.Stage;
 
@@ -33,10 +29,15 @@ import javafx.stage.Stage;
  * @version %I%, %G%
  * @since 0.0.1
  */
-public class WindowUtil {
-    // Reuse the same window
+public final class WindowUtil {
+    /**
+     * A defined stage (window) to be reused.
+     */
     private static final Stage stage = new Stage();
 
+    /**
+     * Switch to splash screen window.
+     */
     public static void switchToSplashScreen() {
         Platform.runLater(() -> {
             Stage stage = new Stage();
@@ -45,6 +46,9 @@ public class WindowUtil {
         });
     }
 
+    /**
+     * Switch to server chooser window.
+     */
     public static void switchToServerConnectionWindow() {
         Platform.runLater(() -> {
             ServerConnectionView view = new ServerConnectionView(stage);
@@ -52,6 +56,9 @@ public class WindowUtil {
         });
     }
 
+    /**
+     * Switch to login window.
+     */
     public static void switchToLoginWindow() {
         Platform.runLater(() -> {
             LoginView view = new LoginView(stage);
@@ -59,6 +66,9 @@ public class WindowUtil {
         });
     }
 
+    /**
+     * Switch to register window.
+     */
     public static void switchToRegisterWindow() {
         Platform.runLater(() -> {
             RegisterView view = new RegisterView(stage);
@@ -66,7 +76,22 @@ public class WindowUtil {
         });
     }
 
-    public static void switchToDashboardWindow() {
+    /**
+     * Switch to dashboard (game) window.
+     */
+    public static void switchToGameWindow() {
+        Platform.runLater(() -> {
+            Stage stage = new Stage();
+            GameView view = new GameView(stage);
+            view.start();
+        });
+    }
+
+    /**
+     * Switch to lobby window.
+     * @author Sasa Trajkova
+     */
+    public static void switchToLobbyWindow() {
         Platform.runLater(() -> {
             Stage stage = new Stage();
             LobbyView view = new LobbyView(stage);

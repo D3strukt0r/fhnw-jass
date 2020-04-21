@@ -40,20 +40,31 @@ import java.sql.SQLException;
  * @version %I%, %G%
  * @since 0.0.1
  */
-public class DatabaseUtil implements Service, Closeable {
-    private ConnectionSource connectionSource;
+public final class DatabaseUtil implements Service, Closeable {
+    /**
+     * The database connection.
+     */
+    private final ConnectionSource connectionSource;
 
+    /**
+     * The DAO for the logins.
+     */
     private Dao<LoginEntity, String> loginDao;
+
+    /**
+     * The DAO for the servers.
+     */
     private Dao<ServerEntity, String> serverDao;
 
     /**
      * Create a database connection.
      *
-     * @param databaseLocation A string containing the location of the file to be accessed (and if necessary created)
+     * @param databaseLocation A string containing the location of the file to
+     *                         be accessed (and if necessary created).
      *
      * @since 0.0.1
      */
-    public DatabaseUtil(String databaseLocation) throws SQLException {
+    public DatabaseUtil(final String databaseLocation) throws SQLException {
         // this uses h2 but you can change it to match your database
         String databaseUrl = "jdbc:sqlite:" + databaseLocation;
 
@@ -94,17 +105,19 @@ public class DatabaseUtil implements Service, Closeable {
      */
     @Override
     public void close() {
-        if (connectionSource != null) try {
-            connectionSource.close();
-        } catch (IOException e) {
-            // we don't care
+        if (connectionSource != null) {
+            try {
+                connectionSource.close();
+            } catch (IOException e) {
+                // we don't care
+            }
         }
     }
 
     /**
      * @return DAO object for the saved logins
      *
-     * @since 0.0.2
+     * @since 0.0.1
      */
     public Dao<LoginEntity, String> getLoginDao() {
         return loginDao;
@@ -113,12 +126,15 @@ public class DatabaseUtil implements Service, Closeable {
     /**
      * @return DAO object for the saved servers
      *
-     * @since 0.0.2
+     * @since 0.0.1
      */
     public Dao<ServerEntity, String> getServerDao() {
         return serverDao;
     }
 
+    /**
+     * For the ServiceLocator.
+     */
     @Override
     public String getServiceName() {
         return "db";

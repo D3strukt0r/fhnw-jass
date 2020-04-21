@@ -30,9 +30,18 @@ import jass.lib.database.Repository;
  * @since 0.0.1
  */
 public class ServerRepository extends Repository<Dao<ServerEntity, String>, ServerEntity> {
-
+    /**
+     * The singleton.
+     */
     private static ServerRepository singleton = null;
 
+    /**
+     * Creates a new singleton or returns the existing one.
+     *
+     * @param dao The DAO to edit inside the database.
+     *
+     * @return Returns the Repository.
+     */
     public static ServerRepository getSingleton(final Dao<ServerEntity, String> dao) {
         if (singleton == null) {
             singleton = new ServerRepository(dao);
@@ -40,12 +49,16 @@ public class ServerRepository extends Repository<Dao<ServerEntity, String>, Serv
         return singleton;
     }
 
+    /**
+     * @param dao The DAO to edit inside the database.
+     */
     public ServerRepository(final Dao<ServerEntity, String> dao) {
         super(dao);
     }
 
     /**
-     * Sets the given server to connect automatically and disables all other connections.
+     * Sets the given server to connect automatically and disables all other
+     * connections.
      *
      * @param server A ServerEntity object
      *
@@ -76,6 +89,9 @@ public class ServerRepository extends Repository<Dao<ServerEntity, String>, Serv
         return true;
     }
 
+    /**
+     * @return Returns the server which is set as connect automatically.
+     */
     public ServerEntity findConnectAutomatically() {
         for (ServerEntity s : getDao()) {
             if (s.isConnectAutomatically()) {

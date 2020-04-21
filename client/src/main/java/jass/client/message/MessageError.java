@@ -33,17 +33,20 @@ import jass.lib.message.MessageErrorData;
  * @version %I%, %G%
  * @since 0.0.1
  */
-public class MessageError extends Message {
+public final class MessageError extends Message {
+    /**
+     * The data of the message.
+     */
     private final MessageErrorData data;
 
+    /**
+     * @param rawData The data (still not casted)
+     */
     public MessageError(final MessageData rawData) {
         super(rawData);
         data = (MessageErrorData) rawData;
     }
 
-    /**
-     * This message type does no processing at all (only the server)
-     */
     @Override
     public boolean process(final SocketUtil socket) {
         Platform.runLater(() -> {
