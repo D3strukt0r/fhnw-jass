@@ -172,6 +172,8 @@ public final class SocketUtil extends Thread implements Service, Closeable {
                     } else {
                         logger.info("Received message of type " + msgData.getMessageType());
                         lastMessages.add(msg);
+
+                        handleEventListenerOnMessage(msgData.getMessageType());
                     }
                 }
             }
