@@ -1,5 +1,6 @@
 package jass.client;
 
+import jass.client.view.SplashView;
 import javafx.application.Application;
 import javafx.stage.Stage;
 import org.apache.commons.cli.CommandLine;
@@ -64,6 +65,6 @@ public final class Main extends Application {
 
     @Override
     public void start(final Stage primaryStage) {
-        WindowUtil.switchToSplashScreen();
+        WindowUtil.openInNewWindow(SplashView.class);
     }
 }

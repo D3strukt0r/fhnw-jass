@@ -22,6 +22,9 @@ import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXCheckBox;
 import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
+import jass.client.view.LobbyView;
+import jass.client.view.RegisterView;
+import jass.client.view.ServerConnectionView;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Menu;
@@ -300,7 +303,7 @@ public final class LoginController extends Controller implements DisconnectEvent
             socket.close();
         }
         ServiceLocator.remove("backend");
-        WindowUtil.switchToServerConnectionWindow();
+        WindowUtil.switchTo(view, ServerConnectionView.class);
     }
 
     /**
@@ -342,8 +345,7 @@ public final class LoginController extends Controller implements DisconnectEvent
                 }
 
                 LoginRepository.getSingleton(null).setToConnectAutomatically(login); // Make sure it's the only entry
-                WindowUtil.switchToLobbyWindow();
-                Platform.runLater(() -> this.login.getScene().getWindow().hide()); // Dashboard is still MVC
+                WindowUtil.switchToNewWindow(view, LobbyView.class);
             } else {
                 enableAll();
                 setErrorMessage("gui.login.login.failed");
@@ -363,13 +365,13 @@ public final class LoginController extends Controller implements DisconnectEvent
      */
     @FXML
     private void clickOnRegister() {
-        WindowUtil.switchToRegisterWindow();
+        WindowUtil.switchTo(view, RegisterView.class);
     }
 
     @Override
     public void onDisconnectEvent() {
         ServiceLocator.remove("backend");
-        WindowUtil.switchToServerConnectionWindow();
+        WindowUtil.switchTo(view, ServerConnectionView.class);
     }
 
     /**

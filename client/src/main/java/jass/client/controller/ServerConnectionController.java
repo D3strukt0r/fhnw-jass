@@ -22,6 +22,7 @@ import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXCheckBox;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXTextField;
+import jass.client.view.LoginView;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.NumberBinding;
@@ -447,7 +448,7 @@ public final class ServerConnectionController extends Controller {
                         logger.error("Server connection not saved to database");
                     }
                 }
-                WindowUtil.switchToLoginWindow();
+                WindowUtil.switchTo(view, LoginView.class);
             }
         }).start();
     }

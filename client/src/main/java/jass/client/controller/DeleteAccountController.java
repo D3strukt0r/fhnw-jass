@@ -26,6 +26,9 @@ import jass.client.message.Logout;
 import jass.client.util.I18nUtil;
 import jass.client.util.SocketUtil;
 import jass.client.view.DeleteAccountView;
+import jass.client.view.GameView;
+import jass.client.view.LoginView;
+import jass.client.view.ServerConnectionView;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.NumberBinding;
@@ -221,7 +224,7 @@ public final class DeleteAccountController extends Controller {
             socket.close();
         }
         ServiceLocator.remove("backend");
-        WindowUtil.switchToServerConnectionWindow();
+        WindowUtil.switchTo(view, ServerConnectionView.class);
     }
 
     /**
@@ -256,7 +259,7 @@ public final class DeleteAccountController extends Controller {
                 // If deleted, try logging out now.
                 if (logoutMsg.process(backend)) {
                     ServiceLocator.remove("login");
-                    WindowUtil.switchToLoginWindow();
+                    WindowUtil.switchTo(view, LoginView.class);
                     view.stop();
                 } else {
                     enableAll();
@@ -274,7 +277,7 @@ public final class DeleteAccountController extends Controller {
      */
     @FXML
     public void clickOnCancel() {
-        WindowUtil.switchToGameWindow();
+        WindowUtil.switchTo(view, GameView.class);
         view.stop();
     }
 

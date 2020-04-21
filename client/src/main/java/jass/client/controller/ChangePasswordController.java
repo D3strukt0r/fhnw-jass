@@ -26,6 +26,8 @@ import jass.client.message.ChangePassword;
 import jass.client.util.I18nUtil;
 import jass.client.util.SocketUtil;
 import jass.client.view.ChangePasswordView;
+import jass.client.view.LobbyView;
+import jass.client.view.ServerConnectionView;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Menu;
@@ -289,7 +291,7 @@ public final class ChangePasswordController extends Controller {
             socket.close();
         }
         ServiceLocator.remove("backend");
-        WindowUtil.switchToServerConnectionWindow();
+        WindowUtil.switchTo(view, ServerConnectionView.class);
     }
 
     /**
@@ -323,8 +325,7 @@ public final class ChangePasswordController extends Controller {
             if (changePasswordMsg.process(backend)) {
                 ServiceLocator.remove("login");
                 ServiceLocator.add(newLogin);
-                WindowUtil.switchToLobbyWindow();
-                view.stop();
+                WindowUtil.switchTo(view, LobbyView.class);
             } else {
                 enableAll();
                 setErrorMessage("gui.changePassword.changeFailed");
@@ -337,7 +338,7 @@ public final class ChangePasswordController extends Controller {
      */
     @FXML
     public void clickOnCancel() {
-        WindowUtil.switchToLobbyWindow();
+        WindowUtil.switchTo(view, LobbyView.class);
         view.stop();
     }
 

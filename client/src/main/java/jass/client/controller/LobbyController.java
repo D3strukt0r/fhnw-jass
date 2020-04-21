@@ -7,6 +7,8 @@ import jass.client.util.SocketUtil;
 import jass.client.util.ViewUtil;
 import jass.client.util.WindowUtil;
 import jass.client.view.LobbyView;
+import jass.client.view.LoginView;
+import jass.client.view.ServerConnectionView;
 import jass.lib.servicelocator.ServiceLocator;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -140,8 +142,7 @@ public class LobbyController extends Controller {
             socket.close();
         }
         ServiceLocator.remove("backend");
-        WindowUtil.switchToServerConnectionWindow();
-        Platform.runLater(() -> this.view.getScene().getWindow().hide());
+        WindowUtil.switchTo(view, ServerConnectionView.class);
     }
 
     /**
@@ -150,8 +151,7 @@ public class LobbyController extends Controller {
     @FXML
     public void clickOnLogout() {
         //TODO handle logout properly
-        WindowUtil.switchToLoginWindow();
-        Platform.runLater(() -> this.view.getScene().getWindow().hide());
+        WindowUtil.switchTo(view, LoginView.class);
     }
 
     /**
