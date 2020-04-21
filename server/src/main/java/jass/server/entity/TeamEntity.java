@@ -59,4 +59,12 @@ public class TeamEntity implements Entity {
     public void setPlayerTwp(UserEntity playerTwo) {
         this.playerTwo = playerTwo;
     }
+
+    public boolean checkIfPlayerIsInTeam(UserEntity user) {
+        boolean returnValue = false;
+        if (playerOne.getId() == user.getId() || playerTwo.getId() == user.getId()) {
+            returnValue = true;
+        }
+        return returnValue;
+    }
 }

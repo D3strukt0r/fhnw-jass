@@ -10,7 +10,6 @@ import jass.server.repository.TeamRepository;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.awt.font.TextAttribute;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
@@ -86,10 +85,10 @@ public class SearchGameUtil implements Service {
             logger.info("Players searching for a game:  " + this.clients.size());
 
             // Broadcast to all Players
-            broadcastGameFound(playerOne, newGame, playerOne.getUser(), playerTwo.getUser(), playerThree.getUser(), playerFour.getUser());
-            broadcastGameFound(playerTwo, newGame, playerOne.getUser(), playerTwo.getUser(), playerThree.getUser(), playerFour.getUser());
-            broadcastGameFound(playerThree, newGame, playerOne.getUser(), playerTwo.getUser(), playerThree.getUser(), playerFour.getUser());
-            broadcastGameFound(playerFour, newGame, playerOne.getUser(), playerTwo.getUser(), playerThree.getUser(), playerFour.getUser());
+            broadcastGameFound(playerOne, newGame, playerOne.getUser(), playerTwo.getUser(), playerThree.getUser(), playerFour.getUser(), teamOne, teamTwo);
+            broadcastGameFound(playerTwo, newGame, playerOne.getUser(), playerTwo.getUser(), playerThree.getUser(), playerFour.getUser(), teamOne, teamTwo);
+            broadcastGameFound(playerThree, newGame, playerOne.getUser(), playerTwo.getUser(), playerThree.getUser(), playerFour.getUser(), teamOne, teamTwo);
+            broadcastGameFound(playerFour, newGame, playerOne.getUser(), playerTwo.getUser(), playerThree.getUser(), playerFour.getUser(), teamOne, teamTwo);
 
             // If there are still enough players searching for a game create new game
             if (clients.size() >= 4) {
@@ -99,9 +98,23 @@ public class SearchGameUtil implements Service {
         }
     }
 
-    private void broadcastGameFound(ClientUtil client, GameEntity game, UserEntity p1, UserEntity p2, UserEntity p3, UserEntity p4) {
-        GameFound gameFoundMsg = new GameFound(new GameFoundData(game.getId(), p1.getId(), p1.getUsername(), p2.getId(), p2.getUsername(), p3.getId(), p3.getUsername(), p4.getId(), p4.getUsername()));
+    private void broadcastGameFound(ClientUtil client, GameEntity game, UserEntity p1, UserEntity p2, UserEntity p3, UserEntity p4, TeamEntity teamOne, TeamEntity teamTwo) {
+        int playerOneTeamId = getTeamIdForPlayer(p1, teamOne, teamTwo);
+        int playerTwoTeamId = getTeamIdForPlayer(p2, teamOne, teamTwo);
+        int playerThreeTeamId = getTeamIdForPlayer(p3, teamOne, teamTwo);
+        int playerFourTeamId = getTeamIdForPlayer(p4, teamOne, teamTwo);
+
+        GameFound gameFoundMsg = new GameFound(new GameFoundData(game.getId(), p1.getId(), p1.getUsername(), playerOneTeamId, p2.getId(), p2.getUsername(), playerTwoTeamId, p3.getId(), p3.getUsername(), playerThreeTeamId, p4.getId(), p4.getUsername(), playerFourTeamId));
         client.send(gameFoundMsg);
+    }
+
+    private int getTeamIdForPlayer(UserEntity user, TeamEntity teamOne, TeamEntity teamTwo) {
+        boolean userIsInTeamOne = teamOne.checkIfPlayerIsInTeam(user);
+        if (userIsInTeamOne == true) {
+            return teamOne.getId();
+        } else {
+            return teamTwo.getId();
+        }
     }
 
 

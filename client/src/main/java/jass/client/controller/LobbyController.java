@@ -147,64 +147,6 @@ public class LobbyController extends Controller implements GameFoundEventListene
     }
 
     /**
-     * Disconnect from the server and returns to the server connection window.
-     */
-    @FXML
-    private void clickOnDisconnect() {
-        SocketUtil socket = (SocketUtil) ServiceLocator.get(SocketUtil.SERVICE_NAME);
-        if (socket != null) { // Not necessary but keeps IDE happy
-            socket.close();
-        }
-        ServiceLocator.remove("backend");
-        WindowUtil.switchTo(view, ServerConnectionView.class);
-    }
-
-    /**
-     * Keeps the server connection but returns to the login window.
-     */
-    @FXML
-    public void clickOnLogout() {
-        //TODO handle logout properly
-        WindowUtil.switchTo(view, LoginView.class);
-    }
-
-    /**
-     * Shuts down the application.
-     */
-    @FXML
-    private void clickOnExit() {
-        Platform.exit();
-    }
-
-    /**
-     * After clicking on Find match, change the button text to "Cancel" and show text "searching"
-     */
-    @FXML
-    public void clickOnFindMatch() {
-        searching.setVisible(true);
-        cancelMatch.setVisible(true);
-        findMatch.setVisible(false);
-        //TODO
-    }
-
-    /**
-     * After clicking on Cancel match, Find match button appears and text "searching" is hidden
-     */
-    @FXML
-    public void clickOnCancelMatch() {
-        searching.setVisible(false);
-        findMatch.setVisible(true);
-        cancelMatch.setVisible(false);
-    }
-
-    /**
-     * @param view The view.
-     */
-    public void setView(final LobbyView view) {
-        this.view = view;
-    }
-
-    /**
      * After clicking on Find match, change the button text to "Cancel" and show text "searching"
      */
 
@@ -285,13 +227,12 @@ public class LobbyController extends Controller implements GameFoundEventListene
      */
     @FXML
     private void clickOnDisconnect() {
-        SocketUtil socket = (SocketUtil) ServiceLocator.get("backend");
+        SocketUtil socket = (SocketUtil) ServiceLocator.get(SocketUtil.SERVICE_NAME);
         if (socket != null) { // Not necessary but keeps IDE happy
             socket.close();
         }
         ServiceLocator.remove("backend");
-        WindowUtil.switchToServerConnectionWindow();
-        Platform.runLater(() -> this.view.getScene().getWindow().hide());
+        WindowUtil.switchTo(view, LoginView.class);
     }
 
     /**
@@ -299,13 +240,12 @@ public class LobbyController extends Controller implements GameFoundEventListene
      */
     @FXML
     public void clickOnLogout() {
-        SocketUtil socket = (SocketUtil) ServiceLocator.get("backend");
+        SocketUtil socket = (SocketUtil) ServiceLocator.get(SocketUtil.SERVICE_NAME);
         if (socket != null) { // Not necessary but keeps IDE happy
             socket.close();
         }
         ServiceLocator.remove("backend");
-        WindowUtil.switchToLoginWindow();
-        Platform.runLater(() -> this.view.getScene().getWindow().hide());
+        WindowUtil.switchTo(view, LoginView.class);
     }
 
     /**
