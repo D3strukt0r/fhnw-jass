@@ -19,14 +19,14 @@ import java.util.ResourceBundle;
  * @version %I%, %G%
  * @since 0.0.1
  */
-public class GameController extends Controller {
+public final class GameController extends Controller {
     /**
      * The view.
      */
     private GameView view;
 
     @Override
-    public void initialize(URL location, ResourceBundle resources) {
+    public void initialize(final URL location, final ResourceBundle resources) {
         // TODO: Do something
     }
 

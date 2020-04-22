@@ -3,8 +3,6 @@ package jass.server.entity;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 import jass.lib.database.Entity;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 /**
  * A model with all known (and cached) Games.
@@ -14,7 +12,7 @@ import org.apache.logging.log4j.Logger;
  * @since 0.0.1
  */
 @DatabaseTable(tableName = "game")
-public class GameEntity implements Entity {
+public final class GameEntity implements Entity {
     /**
      * The ID.
      */
@@ -43,14 +41,15 @@ public class GameEntity implements Entity {
      * For ORMLite all persisted classes must define a no-arg constructor with
      * at least package visibility.
      */
-    GameEntity() { }
-
+    GameEntity() {
+    }
 
     /**
      * @param teamOne  Team one.
      * @param teamTwo  Team two.
      * @param isActive Whether the team is still active.
      */
+    public GameEntity(final TeamEntity teamOne, final TeamEntity teamTwo, final boolean isActive) {
         this.teamOne = teamOne;
         this.teamTwo = teamTwo;
         this.isActive = isActive;

@@ -1,7 +1,6 @@
 package jass.client.view;
 
 import jass.client.controller.LobbyController;
-import jass.client.controller.LoginController;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -19,7 +18,7 @@ import java.io.IOException;
  * @version %I%, %G%
  * @since 0.0.1
  */
-public class LobbyView extends View {
+public final class LobbyView extends View {
     /**
      * @param stage The stage of the window.
      */

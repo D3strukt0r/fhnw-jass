@@ -4,7 +4,6 @@ import jass.lib.message.SearchGameData;
 
 import jass.lib.message.MessageData;
 import jass.lib.message.ResultData;
-import jass.lib.message.SearchGameData;
 import jass.lib.servicelocator.ServiceLocator;
 import jass.server.util.ClientUtil;
 import jass.server.util.SearchGameUtil;
@@ -17,7 +16,7 @@ import jass.server.util.ServerSocketUtil;
  * @version %I%, %G%
  * @since 0.0.1
  */
-
+public final class SearchGame extends Message {
     /**
      * The data of the message.
      */
@@ -39,7 +38,7 @@ import jass.server.util.ServerSocketUtil;
         if (client.getToken() != null && client.getToken().equals(data.getToken())) {
             // Check if there is anyone connected with the given username.
             result = ServerSocketUtil.exists(data.getUsername());
-            if(result) {
+            if (result) {
                 SearchGameUtil sGU = (SearchGameUtil) ServiceLocator.get("SearchGameUtil");
                 sGU.addClientToSearchGame(client);
             }

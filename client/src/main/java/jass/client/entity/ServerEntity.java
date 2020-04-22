@@ -31,7 +31,7 @@ import jass.lib.servicelocator.Service;
  * @since 0.0.1
  */
 @DatabaseTable(tableName = "server")
-public class ServerEntity implements Service, Entity {
+public final class ServerEntity implements Service, Entity {
     /**
      * The service name.
      */

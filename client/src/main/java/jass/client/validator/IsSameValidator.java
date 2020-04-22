@@ -29,7 +29,7 @@ import javafx.scene.control.TextInputControl;
  * @version %I%, %G%
  * @since 0.0.1
  */
-public class IsSameValidator extends ValidatorBase {
+public final class IsSameValidator extends ValidatorBase {
     /**
      * The object which is to be validated to.
      */

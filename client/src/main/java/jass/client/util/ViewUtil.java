@@ -62,6 +62,14 @@ import java.util.Locale;
  */
 public final class ViewUtil {
     /**
+     * Utility classes, which are collections of static members, are not meant
+     * to be instantiated.
+     */
+    private ViewUtil() {
+        throw new IllegalStateException("Utility class");
+    }
+
+    /**
      * @param space The space to create.
      *
      * @return Returns a region with a space.

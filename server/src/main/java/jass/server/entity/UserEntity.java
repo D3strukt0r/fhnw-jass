@@ -39,7 +39,7 @@ import java.util.Date;
  * @since 0.0.1
  */
 @DatabaseTable(tableName = "users")
-public class UserEntity implements Entity {
+public final class UserEntity implements Entity {
     /**
      * The logger to print to console and save in a .log file.
      */

@@ -43,6 +43,11 @@ import jass.lib.servicelocator.Service;
  * @version %I%, %G%
  * @since 0.0.1
  */
+public final class SearchGameUtil implements Service {
+    /**
+     * The service name.
+     */
+    public static final String SERVICE_NAME = "SearchGameUtil";
 
     /**
      * The logger to print to console and save in a .log file.
@@ -57,6 +62,8 @@ import jass.lib.servicelocator.Service;
     /**
      * Empty constructor.
      */
+    public SearchGameUtil() {
+    }
 
     /**
      * Add new client to search for game - if the client already is in the
@@ -64,9 +71,10 @@ import jass.lib.servicelocator.Service;
      *
      * @param client The client to add.
      */
+    public void addClientToSearchGame(final ClientUtil client) {
         if (!clients.contains(client)) {
             clients.add(client);
-            logger.info("Added new client " + client.getUsername() +  " to waiting list. Total of " + clients.size() + " users searching for a game");
+            logger.info("Added new client " + client.getUsername() + " to waiting list. Total of " + clients.size() + " users searching for a game");
             this.createNewGame();
         }
 
@@ -78,6 +86,7 @@ import jass.lib.servicelocator.Service;
      *
      * @param client The client to remove.
      */
+    public void removeClientFromSearchingGame(final ClientUtil client) {
         synchronized (clients) {
             Boolean removedSuccessfully = false;
             Iterator<ClientUtil> iterator = clients.iterator();
@@ -85,7 +94,7 @@ import jass.lib.servicelocator.Service;
                 ClientUtil c = (ClientUtil) iterator.next();
                 if (c.getToken().equals(client.getToken())) {
                     iterator.remove();
-                    logger.info("Removed client " + client.getUsername() +  " from waiting list");
+                    logger.info("Removed client " + client.getUsername() + " from waiting list");
                     break;
                 }
             }
@@ -96,7 +105,7 @@ import jass.lib.servicelocator.Service;
      * Check if new game can be started.
      */
     private void createNewGame() {
-        if(clients.size() >= 4) {
+        if (clients.size() >= 4) {
             // Get players for game
             ClientUtil playerOne = this.clients.get(0);
             ClientUtil playerTwo = this.clients.get(1);
@@ -144,6 +153,7 @@ import jass.lib.servicelocator.Service;
      * @param teamOne Team one.
      * @param teamTwo Team two.
      */
+    private void broadcastGameFound(final ClientUtil client, final GameEntity game, final UserEntity p1, final UserEntity p2, final UserEntity p3, final UserEntity p4, final TeamEntity teamOne, final TeamEntity teamTwo) {
         int playerOneTeamId = getTeamIdForPlayer(p1, teamOne, teamTwo);
         int playerTwoTeamId = getTeamIdForPlayer(p2, teamOne, teamTwo);
         int playerThreeTeamId = getTeamIdForPlayer(p3, teamOne, teamTwo);
@@ -160,6 +170,7 @@ import jass.lib.servicelocator.Service;
      *
      * @return Returns the ID of the team the user belongs to.
      */
+    private int getTeamIdForPlayer(final UserEntity user, final TeamEntity teamOne, final TeamEntity teamTwo) {
         boolean userIsInTeamOne = teamOne.checkIfPlayerIsInTeam(user);
         if (userIsInTeamOne == true) {
             return teamOne.getId();
@@ -168,9 +179,8 @@ import jass.lib.servicelocator.Service;
         }
     }
 
-
     @Override
     public String getServiceName() {
-        return "SearchGameUtil";
+        return SERVICE_NAME;
     }
 }

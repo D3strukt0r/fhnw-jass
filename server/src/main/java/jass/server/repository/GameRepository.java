@@ -12,9 +12,18 @@ import jass.server.entity.GameEntity;
  * @since 0.0.1
  */
 public final class GameRepository extends Repository<Dao<GameEntity, String>, GameEntity> {
-
+    /**
+     * The singleton.
+     */
     private static GameRepository singleton = null;
 
+    /**
+     * Creates a new singleton or returns the existing one.
+     *
+     * @param dao The DAO to edit inside the database.
+     *
+     * @return Returns the Repository.
+     */
     public static GameRepository getSingleton(final Dao<GameEntity, String> dao) {
         if (singleton == null) {
             singleton = new GameRepository(dao);

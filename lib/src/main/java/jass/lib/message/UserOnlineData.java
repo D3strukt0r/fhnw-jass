@@ -27,7 +27,7 @@ import org.json.JSONObject;
  * @version %I%, %G%
  * @since 0.0.1
  */
-public class UserOnlineData extends MessageData {
+public final class UserOnlineData extends MessageData {
     /**
      * The token of the current session.
      */

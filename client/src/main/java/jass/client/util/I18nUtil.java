@@ -43,6 +43,14 @@ import java.util.concurrent.Callable;
  */
 public final class I18nUtil {
     /**
+     * Utility classes, which are collections of static members, are not meant
+     * to be instantiated.
+     */
+    private I18nUtil() {
+        throw new IllegalStateException("Utility class");
+    }
+
+    /**
      * The current selected Locale.
      */
     private static final ObjectProperty<Locale> locale;

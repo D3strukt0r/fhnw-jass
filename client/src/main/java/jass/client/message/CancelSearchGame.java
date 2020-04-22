@@ -5,20 +5,22 @@ import jass.lib.message.CancelSearchGameData;
 import jass.lib.message.MessageData;
 import jass.lib.message.ResultData;
 
-public class CancelSearchGame extends Message {
+public final class CancelSearchGame extends Message {
     /**
      * The data of the message.
      */
+    private final CancelSearchGameData data;
 
     /**
      * @param rawData The data (still not casted)
      */
+    public CancelSearchGame(final MessageData rawData) {
         super(rawData);
         data = (CancelSearchGameData) rawData;
     }
 
     @Override
-    public boolean process(SocketUtil socket) {
+    public boolean process(final SocketUtil socket) {
         socket.send(this);
 
         Message result = socket.waitForResultResponse(data.getId());

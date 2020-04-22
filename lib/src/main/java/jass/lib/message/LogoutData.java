@@ -27,7 +27,7 @@ import org.json.JSONObject;
  * @version %I%, %G%
  * @since 0.0.1
  */
-public class LogoutData extends MessageData {
+public final class LogoutData extends MessageData {
     /**
      * Creates the logout object.
      */

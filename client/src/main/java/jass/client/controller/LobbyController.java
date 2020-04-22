@@ -10,7 +10,6 @@ import jass.client.util.SocketUtil;
 import jass.lib.message.CancelSearchGameData;
 import jass.lib.message.SearchGameData;
 import jass.lib.servicelocator.ServiceLocator;
-import javafx.event.ActionEvent;
 import javafx.scene.control.Alert;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -19,7 +18,6 @@ import jass.client.util.ViewUtil;
 import jass.client.util.WindowUtil;
 import jass.client.view.LobbyView;
 import jass.client.view.LoginView;
-import jass.client.view.ServerConnectionView;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Menu;
@@ -37,7 +35,7 @@ import java.util.ResourceBundle;
  * @version %I%, %G%
  * @since 0.0.1
  */
-public class LobbyController extends Controller implements GameFoundEventListener {
+public final class LobbyController extends Controller implements GameFoundEventListener {
     /**
      * The logger to print to console and save in a .log file.
      */
@@ -124,7 +122,7 @@ public class LobbyController extends Controller implements GameFoundEventListene
 
 
     @Override
-    public void initialize(URL location, ResourceBundle resources) {
+    public void initialize(final URL location, final ResourceBundle resources) {
         SocketUtil socket = (SocketUtil) ServiceLocator.get("backend");
         if (socket != null) { // Not necessary but keeps IDE happy
             socket.setGameFoundEventListener(this);

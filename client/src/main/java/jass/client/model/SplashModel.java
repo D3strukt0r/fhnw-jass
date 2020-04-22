@@ -49,7 +49,7 @@ import java.util.ArrayList;
  * @version %I%, %G%
  * @since 0.0.1
  */
-public class SplashModel extends Model {
+public final class SplashModel extends Model {
     /**
      * The logger to print to console and save in a .log file.
      */

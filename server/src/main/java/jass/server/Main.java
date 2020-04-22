@@ -49,7 +49,7 @@ import java.sql.SQLException;
  * @version %I%, %G%
  * @since 0.0.1
  */
-public class Main {
+public final class Main {
     /**
      * The logger to print to console and save in a .log file.
      */
@@ -64,6 +64,14 @@ public class Main {
      * The default port of the server.
      */
     public static final int DEFAULT_PORT = 2000;
+
+    /**
+     * Utility classes, which are collections of static members, are not meant
+     * to be instantiated.
+     */
+    private Main() {
+        throw new IllegalStateException("Utility class");
+    }
 
     /**
      * @param args The arguments passed in the console.

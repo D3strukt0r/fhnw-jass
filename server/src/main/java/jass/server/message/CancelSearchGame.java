@@ -15,7 +15,7 @@ import jass.server.util.ServerSocketUtil;
  * @version %I%, %G%
  * @since 0.0.1
  */
-
+public final class CancelSearchGame extends Message {
     /**
      * The data of the message.
      */
@@ -37,7 +37,7 @@ import jass.server.util.ServerSocketUtil;
         if (client.getToken() != null && client.getToken().equals(data.getToken())) {
             // Check if there is anyone connected with the given username.
             result = ServerSocketUtil.exists(data.getUsername());
-            if(result) {
+            if (result) {
                 SearchGameUtil sGU = (SearchGameUtil) ServiceLocator.get("SearchGameUtil");
                 sGU.removeClientFromSearchingGame(client);
             }

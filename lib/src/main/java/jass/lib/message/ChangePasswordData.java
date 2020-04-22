@@ -27,7 +27,7 @@ import org.json.JSONObject;
  * @version %I%, %G%
  * @since 0.0.1
  */
-public class ChangePasswordData extends MessageData {
+public final class ChangePasswordData extends MessageData {
     /**
      * The token for the current session.
      */

@@ -3,8 +3,6 @@ package jass.server.entity;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 import jass.lib.database.Entity;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 /**
  * A model with all known (and cached) teams.
@@ -13,9 +11,8 @@ import org.apache.logging.log4j.Logger;
  * @version %I%, %G%
  * @since 0.0.1
  */
-
 @DatabaseTable(tableName = "team")
-public class TeamEntity implements Entity {
+public final class TeamEntity implements Entity {
     /**
      * The ID.
      */
@@ -38,7 +35,8 @@ public class TeamEntity implements Entity {
      * For ORMLite all persisted classes must define a no-arg constructor with
      * at least package visibility.
      */
-    TeamEntity() { }
+    TeamEntity() {
+    }
 
     /**
      * @param playerOne Player one.
@@ -52,6 +50,7 @@ public class TeamEntity implements Entity {
     /**
      * @return Returns the ID.
      */
+    public int getId() {
         return id;
     }
 
@@ -65,18 +64,21 @@ public class TeamEntity implements Entity {
     /**
      * @param playerOne Player one.
      */
+    public void setPlayerOne(final UserEntity playerOne) {
         this.playerOne = playerOne;
     }
 
     /**
      * @return Returns player two.
      */
+    public UserEntity getPlayerTwo() {
         return playerTwo;
     }
 
     /**
      * @param playerTwo Player two.
      */
+    public void setPlayerTwp(final UserEntity playerTwo) {
         this.playerTwo = playerTwo;
     }
 
@@ -85,6 +87,7 @@ public class TeamEntity implements Entity {
      *
      * @return Returns true if the user is inside the team, otherwise false.
      */
+    public boolean checkIfPlayerIsInTeam(final UserEntity user) {
         boolean returnValue = false;
         if (playerOne.getId() == user.getId() || playerTwo.getId() == user.getId()) {
             returnValue = true;

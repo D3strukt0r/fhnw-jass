@@ -275,6 +275,9 @@ public final class SocketUtil extends Thread implements Service, Closeable {
      *
      * @author Thomas Weber
      */
+    public void setGameFoundEventListener(final GameFoundEventListener gFL) {
+        this.gameFoundEventListener = gFL;
+    }
 
     /**
      * @param msgType Message to send to listener listening to "game-found"
@@ -282,6 +285,7 @@ public final class SocketUtil extends Thread implements Service, Closeable {
      *
      * @author Thomas Weber
      */
+    public void handleEventListenerOnMessage(final String msgType) {
         if (msgType.equals("GameFound")) {
             gameFoundEventListener.onGameFound();
         }

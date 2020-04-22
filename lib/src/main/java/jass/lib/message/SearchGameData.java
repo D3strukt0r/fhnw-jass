@@ -8,7 +8,7 @@ import org.json.JSONObject;
  * @author Thomas Weber
  */
 
-public class SearchGameData extends MessageData {
+public final class SearchGameData extends MessageData {
     /**
      * The token of the current session.
      */
@@ -23,6 +23,7 @@ public class SearchGameData extends MessageData {
      * @param token    The token of the current session.
      * @param username The username of the player searching.
      */
+    public SearchGameData(final String token, final String username) {
         super("SearchGame");
         this.token = token;
         this.username = username;
@@ -31,6 +32,7 @@ public class SearchGameData extends MessageData {
     /**
      * @param data The message containing all the data.
      */
+    public SearchGameData(final JSONObject data) {
         super(data);
         token = data.getString("token");
         username = data.getString("username");

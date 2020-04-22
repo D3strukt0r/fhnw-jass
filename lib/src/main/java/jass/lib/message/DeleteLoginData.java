@@ -27,7 +27,7 @@ import org.json.JSONObject;
  * @version %I%, %G%
  * @since 0.0.1
  */
-public class DeleteLoginData extends MessageData {
+public final class DeleteLoginData extends MessageData {
     /**
      * The token for the current session.
      */
