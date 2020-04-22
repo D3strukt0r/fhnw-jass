@@ -1,19 +1,16 @@
 plugins {
-    id('java')
     id('application')
-    //id 'org.openjfx.javafxplugin' version '0.0.8'
 }
 
 dependencies {
     implementation(project(':lib'))
 
     // Material UI Theme
-    implementation group: 'com.jfoenix', name: 'jfoenix', version: '8.0.8'
-    //implementation group: 'com.jfoenix', name: 'jfoenix', version: '9.0.8'
+    implementation(group: 'com.jfoenix', name: 'jfoenix', version: '8.0.9')
 
     // Use Material icons in the UI
-    implementation group: 'com.github.jiconfont', name: 'jiconfont-javafx', version: '1.0.0'
-    implementation group: 'com.github.jiconfont', name: 'jiconfont-google_material_design_icons', version: '2.2.0.2'
+    implementation(group: 'com.github.jiconfont', name: 'jiconfont-javafx', version: '1.0.0')
+    implementation(group: 'com.github.jiconfont', name: 'jiconfont-google_material_design_icons', version: '2.2.0.2')
 
     // Use SQLite and ORM for storage
     implementation(group: 'org.xerial', name: 'sqlite-jdbc', version: '3.28.0')
@@ -37,18 +34,13 @@ dependencies {
 
 // When running :client:run, where should it start?
 application {
-    mainClassName('jass.client.Main')
+    mainClassName = 'jass.client.Main'
 }
 
 // When running :client:run, these arguments are included
 run {
     args('--verbose')
 }
-
-//javafx {
-//    version = "11"
-//    modules = [ 'javafx.controls' ]
-//}
 
 jar {
     // So that Docker can easily find the file

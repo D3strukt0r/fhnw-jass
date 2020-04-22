@@ -27,7 +27,7 @@ import org.json.JSONObject;
  * @version %I%, %G%
  * @since 0.0.1
  */
-public class MessageErrorData extends MessageData {
+public final class MessageErrorData extends MessageData {
     /**
      * The error type that occurred.
      */

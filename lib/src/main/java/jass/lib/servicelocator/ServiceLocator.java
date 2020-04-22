@@ -28,11 +28,19 @@ import java.util.List;
  * @version %I%, %G%
  * @since 0.0.1
  */
-public class ServiceLocator {
+public final class ServiceLocator {
     /**
      * A list of all the services available.
      */
     private static final List<Service> services = new ArrayList<>();
+
+    /**
+     * Utility classes, which are collections of static members, are not meant
+     * to be instantiated.
+     */
+    private ServiceLocator() {
+        throw new IllegalStateException("Utility class");
+    }
 
     /**
      * @param serviceName The name of the service requested

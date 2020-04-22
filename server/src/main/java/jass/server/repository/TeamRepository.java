@@ -29,5 +29,4 @@ public final class TeamRepository extends Repository<Dao<TeamEntity, Integer>, T
     public TeamRepository(final Dao<TeamEntity, Integer> dao) {
         super(dao);
     }
-
 }

@@ -3,8 +3,6 @@ package jass.server.entity;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 import jass.lib.database.Entity;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 /**
  * A model with all known (and cached) teams.
@@ -13,18 +11,23 @@ import org.apache.logging.log4j.Logger;
  * @version %I%, %G%
  * @since 0.0.1
  */
-
 @DatabaseTable(tableName = "team")
-public class TeamEntity implements Entity {
-
-    private static final Logger logger = LogManager.getLogger(TeamEntity.class);
-
+public final class TeamEntity implements Entity {
+    /**
+     * The ID.
+     */
     @DatabaseField(generatedId = true)
     private int id;
 
+    /**
+     * Player one inside the team.
+     */
     @DatabaseField(foreign = true)
     private UserEntity playerOne;
 
+    /**
+     * Player two inside the team.
+     */
     @DatabaseField(foreign = true)
     private UserEntity playerTwo;
 
@@ -32,35 +35,59 @@ public class TeamEntity implements Entity {
      * For ORMLite all persisted classes must define a no-arg constructor with
      * at least package visibility.
      */
-    TeamEntity() { }
+    TeamEntity() {
+    }
 
-
+    /**
+     * @param playerOne Player one.
+     * @param playerTwo Player two.
+     */
     public TeamEntity(final UserEntity playerOne, final UserEntity playerTwo) {
         this.playerOne = playerOne;
         this.playerTwo = playerTwo;
     }
 
-    public int getId () {
+    /**
+     * @return Returns the ID.
+     */
+    public int getId() {
         return id;
     }
 
+    /**
+     * @return Returns player one.
+     */
     public UserEntity getPlayerOne() {
         return playerOne;
     }
 
-    public void setPlayerOne(UserEntity playerOne) {
+    /**
+     * @param playerOne Player one.
+     */
+    public void setPlayerOne(final UserEntity playerOne) {
         this.playerOne = playerOne;
     }
 
-    public UserEntity getPlayerTwo(){
+    /**
+     * @return Returns player two.
+     */
+    public UserEntity getPlayerTwo() {
         return playerTwo;
     }
 
-    public void setPlayerTwp(UserEntity playerTwo) {
+    /**
+     * @param playerTwo Player two.
+     */
+    public void setPlayerTwp(final UserEntity playerTwo) {
         this.playerTwo = playerTwo;
     }
 
-    public boolean checkIfPlayerIsInTeam(UserEntity user) {
+    /**
+     * @param user The user to check.
+     *
+     * @return Returns true if the user is inside the team, otherwise false.
+     */
+    public boolean checkIfPlayerIsInTeam(final UserEntity user) {
         boolean returnValue = false;
         if (playerOne.getId() == user.getId() || playerTwo.getId() == user.getId()) {
             returnValue = true;

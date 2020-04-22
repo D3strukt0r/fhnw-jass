@@ -4,23 +4,27 @@ import jass.lib.message.SearchGameData;
 
 import jass.lib.message.MessageData;
 import jass.lib.message.ResultData;
-import jass.lib.message.SearchGameData;
 import jass.lib.servicelocator.ServiceLocator;
 import jass.server.util.ClientUtil;
 import jass.server.util.SearchGameUtil;
 import jass.server.util.ServerSocketUtil;
 
 /**
- * Adds a client to the lobby waiting list
+ * Adds a client to the lobby waiting list.
  *
  * @author Thomas Weber
  * @version %I%, %G%
  * @since 0.0.1
  */
-
-public class SearchGame extends Message {
+public final class SearchGame extends Message {
+    /**
+     * The data of the message.
+     */
     private final SearchGameData data;
 
+    /**
+     * @param rawData The data (still not casted)
+     */
     public SearchGame(final MessageData rawData) {
         super(rawData);
         data = (SearchGameData) rawData;
@@ -34,7 +38,7 @@ public class SearchGame extends Message {
         if (client.getToken() != null && client.getToken().equals(data.getToken())) {
             // Check if there is anyone connected with the given username.
             result = ServerSocketUtil.exists(data.getUsername());
-            if(result) {
+            if (result) {
                 SearchGameUtil sGU = (SearchGameUtil) ServiceLocator.get("SearchGameUtil");
                 sGU.addClientToSearchGame(client);
             }

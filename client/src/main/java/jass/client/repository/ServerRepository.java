@@ -29,7 +29,7 @@ import jass.lib.database.Repository;
  * @version %I%, %G%
  * @since 0.0.1
  */
-public class ServerRepository extends Repository<Dao<ServerEntity, String>, ServerEntity> {
+public final class ServerRepository extends Repository<Dao<ServerEntity, String>, ServerEntity> {
     /**
      * The singleton.
      */

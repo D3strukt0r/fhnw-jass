@@ -1,5 +1,4 @@
 plugins {
-    id('java')
     id('application')
 }
 
@@ -28,7 +27,7 @@ dependencies {
 
 // When running :server:run, where should it start?
 application {
-    mainClassName('jass.server.Main')
+    mainClassName = 'jass.server.Main'
 }
 
 // When running :server:run, these arguments are included

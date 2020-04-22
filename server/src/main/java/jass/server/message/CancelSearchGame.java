@@ -9,16 +9,21 @@ import jass.server.util.SearchGameUtil;
 import jass.server.util.ServerSocketUtil;
 
 /**
- * Adds a client to the lobby waiting list
+ * Adds a client to the lobby waiting list.
  *
  * @author Thomas Weber
  * @version %I%, %G%
  * @since 0.0.1
  */
-
-public class CancelSearchGame extends Message {
+public final class CancelSearchGame extends Message {
+    /**
+     * The data of the message.
+     */
     private final CancelSearchGameData data;
 
+    /**
+     * @param rawData The data (still not casted)
+     */
     public CancelSearchGame(final MessageData rawData) {
         super(rawData);
         data = (CancelSearchGameData) rawData;
@@ -32,7 +37,7 @@ public class CancelSearchGame extends Message {
         if (client.getToken() != null && client.getToken().equals(data.getToken())) {
             // Check if there is anyone connected with the given username.
             result = ServerSocketUtil.exists(data.getUsername());
-            if(result) {
+            if (result) {
                 SearchGameUtil sGU = (SearchGameUtil) ServiceLocator.get("SearchGameUtil");
                 sGU.removeClientFromSearchingGame(client);
             }

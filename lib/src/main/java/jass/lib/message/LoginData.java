@@ -27,7 +27,7 @@ import org.json.JSONObject;
  * @version %I%, %G%
  * @since 0.0.1
  */
-public class LoginData extends MessageData {
+public final class LoginData extends MessageData {
     /**
      * The username.
      */
