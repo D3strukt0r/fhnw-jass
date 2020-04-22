@@ -24,12 +24,8 @@ import com.j256.ormlite.jdbc.JdbcConnectionSource;
 import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.TableUtils;
 import jass.lib.servicelocator.Service;
-import jass.server.entity.GameEntity;
-import jass.server.entity.TeamEntity;
-import jass.server.entity.UserEntity;
-import jass.server.repository.GameRepository;
-import jass.server.repository.TeamRepository;
-import jass.server.repository.UserRepository;
+import jass.server.entity.*;
+import jass.server.repository.*;
 
 import java.io.Closeable;
 import java.io.IOException;
@@ -59,9 +55,14 @@ public final class DatabaseUtil implements Service, Closeable {
     /**
      * The DAO for the users.
      */
-    private Dao<UserEntity, String> userDao;
-    private Dao<TeamEntity, String> teamDao;
-    private Dao<GameEntity, String> gameDao;
+    private Dao<UserEntity, Integer> userDao;
+    private Dao<TeamEntity, Integer> teamDao;
+    private Dao<GameEntity, Integer> gameDao;
+    private Dao<SuitEntity, Integer> suitDao;
+    private Dao<RankEntity, Integer> rankDao;
+    private Dao<DeckEntity, Integer> deckDao;
+    private Dao<RoundEntity, Integer> roundDao;
+    private Dao<CardEntity, Integer> cardDao;
 
     /**
      * Create a database connection.
@@ -90,7 +91,6 @@ public final class DatabaseUtil implements Service, Closeable {
      * @since 0.0.1
      */
     private void setupDatabase() throws SQLException {
-
         /*
          * Create our DAOs. One for each class and associated table.
          */
@@ -100,13 +100,62 @@ public final class DatabaseUtil implements Service, Closeable {
         TeamRepository.getSingleton(teamDao);
         gameDao = DaoManager.createDao(connectionSource, GameEntity.class);
         GameRepository.getSingleton(gameDao);
+        suitDao = DaoManager.createDao(connectionSource, SuitEntity.class);
+        SuitRepository.getSingleton(suitDao);
+        rankDao = DaoManager.createDao(connectionSource, RankEntity.class);
+        RankRepository.getSingleton(rankDao);
+        cardDao = DaoManager.createDao(connectionSource, CardEntity.class);
+        CardRepository.getSingleton(cardDao);
+        roundDao = DaoManager.createDao(connectionSource, RoundEntity.class);
+        RoundRepository.getSingleton(roundDao);
+        deckDao = DaoManager.createDao(connectionSource, DeckEntity.class);
+        DeckRepository.getSingleton(deckDao);
+
 
         /*
-         * Create the tables, if they don't exist yet.
+         * Drop and Recreate all the tables except for the user if server restarts.
          */
         TableUtils.createTableIfNotExists(connectionSource, UserEntity.class);
-        TableUtils.createTableIfNotExists(connectionSource, TeamEntity.class);
+        TableUtils.createTableIfNotExists(connectionSource, RankEntity.class);
+        TableUtils.createTableIfNotExists(connectionSource, SuitEntity.class);
+        TableUtils.createTableIfNotExists(connectionSource, CardEntity.class);
         TableUtils.createTableIfNotExists(connectionSource, GameEntity.class);
+        TableUtils.createTableIfNotExists(connectionSource, TeamEntity.class);
+        TableUtils.createTableIfNotExists(connectionSource, RoundEntity.class);
+        TableUtils.createTableIfNotExists(connectionSource, DeckEntity.class);
+
+        InsertSuitSeedData();
+        InsertRankSeedData();
+        InsertCardSeedData();
+    }
+
+    private void InsertRankSeedData() throws SQLException {
+        if(!rankDao.idExists(1)) rankDao.create(new RankEntity(1, "Six", 0, 0, 11));
+        if(!rankDao.idExists(2)) rankDao.create(new RankEntity(2, "Seven", 0, 0, 0));
+        if(!rankDao.idExists(3)) rankDao.create(new RankEntity(3, "Eight", 0, 8, 8));
+        if(!rankDao.idExists(4)) rankDao.create(new RankEntity(4, "Nine",0, 0, 0));
+        if(!rankDao.idExists(5)) rankDao.create(new RankEntity(5, "Ten",10, 10, 10));
+        if(!rankDao.idExists(6)) rankDao.create(new RankEntity(6, "Jack",2, 2, 2));
+        if(!rankDao.idExists(7)) rankDao.create(new RankEntity(7, "Queen",3, 3, 3));
+        if(!rankDao.idExists(8)) rankDao.create(new RankEntity(8, "King",4, 4, 4));
+        if(!rankDao.idExists(9)) rankDao.create(new RankEntity(9, "Ace",11, 11, 0));
+    }
+
+    private void InsertSuitSeedData() throws SQLException {
+        if(!suitDao.idExists(1)) suitDao.create(new SuitEntity(1, "Hearts"));
+        if(!suitDao.idExists(2)) suitDao.create(new SuitEntity(2,"Diamonds"));
+        if(!suitDao.idExists(3)) suitDao.create(new SuitEntity(3,"Spades"));
+        if(!suitDao.idExists(4)) suitDao.create(new SuitEntity(4,"Clubs"));
+    }
+
+    private void InsertCardSeedData() throws SQLException {
+        int addend = 0;
+        for (int i = 1; i <= 4; i++) {
+            for (int j = 1; j <= 9; j++) {
+                if(!cardDao.idExists(j + addend)) cardDao.create(new CardEntity(j + addend, rankDao.queryForId(j), suitDao.queryForId(i)));
+            }
+            addend += 9;
+        }
     }
 
     /**
@@ -121,23 +170,6 @@ public final class DatabaseUtil implements Service, Closeable {
                 connectionSource.close();
             } catch (IOException e) { /* Ignore */ }
         }
-    }
-
-    /**
-     * @return DAO object for the users
-     *
-     * @since 0.0.1
-     */
-    public Dao<UserEntity, String> getUserDao() {
-        return userDao;
-    }
-
-    public Dao<TeamEntity, String> getTeamDao() {
-        return teamDao;
-    }
-
-    public Dao<GameEntity, String> getGameDao() {
-        return gameDao;
     }
 
     /**
