@@ -339,7 +339,6 @@ public final class ChangePasswordController extends Controller {
     @FXML
     public void clickOnCancel() {
         WindowUtil.switchTo(view, LobbyView.class);
-        view.stop();
     }
 
     /**

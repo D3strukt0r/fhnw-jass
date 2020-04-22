@@ -19,6 +19,7 @@
 package jass.server;
 
 import jass.server.util.DatabaseUtil;
+import jass.server.util.SearchGameUtil;
 import jass.server.util.ServerSocketUtil;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.DefaultParser;
@@ -122,6 +123,10 @@ public class Main {
         // Check if the user wants to use ssl
         boolean secure = cmd.hasOption("ssl");
         logger.info("SSL is " + (secure ? "enabled" : "disabled"));
+
+        // Initialize SearchGameUtil and add to ServiceLocator
+        SearchGameUtil sGU = new SearchGameUtil();
+        ServiceLocator.add(sGU);
 
         // Start the listener
         try {

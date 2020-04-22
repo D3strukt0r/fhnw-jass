@@ -1,15 +1,25 @@
 package jass.client.controller;
 
 import com.jfoenix.controls.JFXButton;
+import jass.client.entity.LoginEntity;
+import jass.client.eventlistener.GameFoundEventListener;
+import jass.client.message.CancelSearchGame;
+import jass.client.message.SearchGame;
 import jass.client.mvc.Controller;
-import jass.client.util.I18nUtil;
 import jass.client.util.SocketUtil;
+import jass.lib.message.CancelSearchGameData;
+import jass.lib.message.SearchGameData;
+import jass.lib.servicelocator.ServiceLocator;
+import javafx.event.ActionEvent;
+import javafx.scene.control.Alert;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import jass.client.util.I18nUtil;
 import jass.client.util.ViewUtil;
 import jass.client.util.WindowUtil;
 import jass.client.view.LobbyView;
 import jass.client.view.LoginView;
 import jass.client.view.ServerConnectionView;
-import jass.lib.servicelocator.ServiceLocator;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Menu;
@@ -17,18 +27,19 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.text.Text;
 
-
 import java.net.URL;
 import java.util.ResourceBundle;
 
 /**
  * The controller for the lobby view.
  *
- * @author Sasa Trajkova
+ * @author Manuele Vaccari & Thomas Weber & Sasa Trajkova
  * @version %I%, %G%
  * @since 0.0.1
  */
-public class LobbyController extends Controller {
+public class LobbyController extends Controller implements GameFoundEventListener {
+    private static final Logger logger = LogManager.getLogger(LobbyController.class);
+    // GameService gameService
 
     /**
      * The view.
@@ -110,7 +121,10 @@ public class LobbyController extends Controller {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        // TODO: Do something
+        SocketUtil socket = (SocketUtil) ServiceLocator.get("backend");
+        if (socket != null) { // Not necessary but keeps IDE happy
+            socket.setGameFoundEventListener(this);
+        }
 
         /*
          * Bind all texts
@@ -133,6 +147,82 @@ public class LobbyController extends Controller {
     }
 
     /**
+     * After clicking on Find match, change the button text to "Cancel" and show text "searching"
+     */
+
+    /**
+     * The logic for searching for a game (client & server)
+     *
+     * @author Thomas Weber
+     */
+
+    @FXML
+    public void clickOnFindMatch() {
+        // Get token and initialize SearchGame Message
+        LoginEntity login = (LoginEntity) ServiceLocator.get("login");
+        String token = login.getToken();
+        String userName = login.getUsername();
+        SearchGame searchGameMsg = new SearchGame(new SearchGameData(token, userName));
+        SocketUtil backend = (SocketUtil) ServiceLocator.get("backend");
+
+        // Send SearchGame Message to Server
+        if (searchGameMsg.process(backend)) {
+            searching.setVisible(true);
+            cancelMatch.setVisible(true);
+            findMatch.setVisible(false);
+        } else {
+            logger.error("Error starting search for game");
+            Platform.runLater(() -> {
+                Alert alert = new Alert(Alert.AlertType.ERROR, "Error searching for a game. Please try again!");
+                alert.showAndWait();
+            });
+        }
+
+    }
+
+    /**
+     * After clicking on Cancel match, Find match button appears and text "searching" is hidden
+     */
+    @FXML
+    public void clickOnCancelMatch() {
+        // Get token and initialize SearchGame Message
+        LoginEntity login = (LoginEntity) ServiceLocator.get("login");
+        String token = login.getToken();
+        String userName = login.getUsername();
+        CancelSearchGame cancelSearchGameMsg = new CancelSearchGame(new CancelSearchGameData(token, userName));
+        SocketUtil backend = (SocketUtil) ServiceLocator.get("backend");
+
+        // Send SearchGame Message to Server
+        if (cancelSearchGameMsg.process(backend)) {
+            searching.setVisible(false);
+            findMatch.setVisible(true);
+            cancelMatch.setVisible(false);
+        } else {
+            logger.error("Error cancelling search for game");
+            Platform.runLater(() -> {
+                Alert alert = new Alert(Alert.AlertType.ERROR, "Error cancelling search for a game. Please try again!");
+                alert.showAndWait();
+            });
+        }
+    }
+
+    public void onGameFound() {
+        logger.info("Successfully found game!");
+
+        // TODO - get rid of this alert, just for demonstration purposes at the moment
+        Platform.runLater(() -> {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION, "Game Found!");
+            alert.showAndWait();
+        });
+
+        goToGameView();
+    }
+
+    public void goToGameView() {
+        // TODO - Move to game view
+    }
+
+    /**
      * Disconnect from the server and returns to the server connection window.
      */
     @FXML
@@ -142,7 +232,7 @@ public class LobbyController extends Controller {
             socket.close();
         }
         ServiceLocator.remove("backend");
-        WindowUtil.switchTo(view, ServerConnectionView.class);
+        WindowUtil.switchTo(view, LoginView.class);
     }
 
     /**
@@ -150,7 +240,11 @@ public class LobbyController extends Controller {
      */
     @FXML
     public void clickOnLogout() {
-        //TODO handle logout properly
+        SocketUtil socket = (SocketUtil) ServiceLocator.get(SocketUtil.SERVICE_NAME);
+        if (socket != null) { // Not necessary but keeps IDE happy
+            socket.close();
+        }
+        ServiceLocator.remove("backend");
         WindowUtil.switchTo(view, LoginView.class);
     }
 
@@ -163,30 +257,10 @@ public class LobbyController extends Controller {
     }
 
     /**
-     * After clicking on Find match, change the button text to "Cancel" and show text "searching"
-     */
-    @FXML
-    public void clickOnFindMatch() {
-        searching.setVisible(true);
-        cancelMatch.setVisible(true);
-        findMatch.setVisible(false);
-        //TODO
-    }
-
-    /**
-     * After clicking on Cancel match, Find match button appears and text "searching" is hidden
-     */
-    @FXML
-    public void clickOnCancelMatch() {
-        searching.setVisible(false);
-        findMatch.setVisible(true);
-        cancelMatch.setVisible(false);
-    }
-
-    /**
      * @param view The view.
      */
     public void setView(final LobbyView view) {
         this.view = view;
     }
+
 }

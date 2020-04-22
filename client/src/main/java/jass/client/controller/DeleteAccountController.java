@@ -278,7 +278,6 @@ public final class DeleteAccountController extends Controller {
     @FXML
     public void clickOnCancel() {
         WindowUtil.switchTo(view, GameView.class);
-        view.stop();
     }
 
     /**
