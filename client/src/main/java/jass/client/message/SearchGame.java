@@ -7,16 +7,19 @@ import jass.lib.message.ResultData;
 import jass.lib.message.SearchGameData;
 
 /**
- *  Search for a game
+ * Search for a game.
  *
  * @author Thomas Weber
  * @version %I%, %G%
  * @since 0.0.1
  */
+    /**
+     * The data of the message.
+     */
 
-public class SearchGame extends Message {
-    private SearchGameData data;
-
+    /**
+     * @param rawData The data (still not casted)
+     */
     public SearchGame(MessageData rawData) {
         super(rawData);
         data = (SearchGameData) rawData;
@@ -31,5 +34,4 @@ public class SearchGame extends Message {
 
         return resultData.getResult();
     }
-
 }

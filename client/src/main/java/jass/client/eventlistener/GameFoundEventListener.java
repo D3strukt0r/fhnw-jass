@@ -1,5 +1,8 @@
 package jass.client.eventlistener;
 
 public interface GameFoundEventListener {
-    public void onGameFound();
+    /**
+     * Executes when a game is found.
+     */
+    void onGameFound();
 }

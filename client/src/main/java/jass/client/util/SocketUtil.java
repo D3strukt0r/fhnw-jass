@@ -261,7 +261,6 @@ public final class SocketUtil extends Thread implements Service, Closeable {
     }
 
 
-
     /**
      * @param listener A DisconnectEventListener object
      *
@@ -272,21 +271,21 @@ public final class SocketUtil extends Thread implements Service, Closeable {
     }
 
     /**
-     * Author Thomas Weber
+     * @param gFL The listener to listen to game found.
+     *
+     * @author Thomas Weber
      */
 
-    public void setGameFoundEventListener(GameFoundEventListener gFL) { this.gameFoundEventListener = gFL; }
-
-    public void handleEventListenerOnMessage(String msgType) {
+    /**
+     * @param msgType Message to send to listener listening to "game-found"
+     *                event.
+     *
+     * @author Thomas Weber
+     */
         if (msgType.equals("GameFound")) {
             gameFoundEventListener.onGameFound();
         }
     }
-
-
-    /**
-     * End Author Thomas Weber
-     */
 
     /**
      * Verifies that the string is a valid ip address.

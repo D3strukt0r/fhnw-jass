@@ -1,3 +1,22 @@
+/*
+ * fhnw-jass is jass game programmed in java for a school project.
+ * Copyright (C) 2020 Manuele Vaccari, Victor Hargrave, Sasa Trajkova, Thomas
+ * Weber
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
 package jass.server.util;
 
 import jass.lib.message.GameFoundData;
@@ -18,22 +37,33 @@ import java.util.List;
 import jass.lib.servicelocator.Service;
 
 /**
- * Creates a game once 4 clients are searching for a game in the lobby
+ * Creates a game once 4 clients are searching for a game in the lobby.
  *
  * @author Thomas Weber
  * @version %I%, %G%
  * @since 0.0.1
  */
 
-public class SearchGameUtil implements Service {
+    /**
+     * The logger to print to console and save in a .log file.
+     */
     private static final Logger logger = LogManager.getLogger(SearchGameUtil.class);
 
+    /**
+     * List of all clients which are searching for a game.
+     */
     private static final List<ClientUtil> clients = Collections.synchronizedList(new ArrayList<ClientUtil>());
 
-    public SearchGameUtil() {}
+    /**
+     * Empty constructor.
+     */
 
-    // Add new client to search for game - if the client already is in the searching list remove the client
-    public void addClientToSearchGame(ClientUtil client) {
+    /**
+     * Add new client to search for game - if the client already is in the
+     * searching list remove the client.
+     *
+     * @param client The client to add.
+     */
         if (!clients.contains(client)) {
             clients.add(client);
             logger.info("Added new client " + client.getUsername() +  " to waiting list. Total of " + clients.size() + " users searching for a game");
@@ -42,8 +72,12 @@ public class SearchGameUtil implements Service {
 
     }
 
-    // Remove client from searching a game - either connection lost or game has been found
-    public void removeClientFromSearchingGame(ClientUtil client) {
+    /**
+     * Remove client from searching a game - either connection lost or game has
+     * been found.
+     *
+     * @param client The client to remove.
+     */
         synchronized (clients) {
             Boolean removedSuccessfully = false;
             Iterator<ClientUtil> iterator = clients.iterator();
@@ -58,7 +92,9 @@ public class SearchGameUtil implements Service {
         }
     }
 
-    // Check if new game can be started
+    /**
+     * Check if new game can be started.
+     */
     private void createNewGame() {
         if(clients.size() >= 4) {
             // Get players for game
@@ -98,7 +134,16 @@ public class SearchGameUtil implements Service {
         }
     }
 
-    private void broadcastGameFound(ClientUtil client, GameEntity game, UserEntity p1, UserEntity p2, UserEntity p3, UserEntity p4, TeamEntity teamOne, TeamEntity teamTwo) {
+    /**
+     * @param client  The client to send the message to.
+     * @param game    The game.
+     * @param p1      Player one.
+     * @param p2      Player two.
+     * @param p3      Player three.
+     * @param p4      Player four.
+     * @param teamOne Team one.
+     * @param teamTwo Team two.
+     */
         int playerOneTeamId = getTeamIdForPlayer(p1, teamOne, teamTwo);
         int playerTwoTeamId = getTeamIdForPlayer(p2, teamOne, teamTwo);
         int playerThreeTeamId = getTeamIdForPlayer(p3, teamOne, teamTwo);
@@ -108,7 +153,13 @@ public class SearchGameUtil implements Service {
         client.send(gameFoundMsg);
     }
 
-    private int getTeamIdForPlayer(UserEntity user, TeamEntity teamOne, TeamEntity teamTwo) {
+    /**
+     * @param user    The user.
+     * @param teamOne The first team.
+     * @param teamTwo The second team.
+     *
+     * @return Returns the ID of the team the user belongs to.
+     */
         boolean userIsInTeamOne = teamOne.checkIfPlayerIsInTeam(user);
         if (userIsInTeamOne == true) {
             return teamOne.getId();

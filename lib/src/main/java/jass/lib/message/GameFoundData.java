@@ -9,25 +9,86 @@ import org.json.JSONObject;
  */
 
 public class GameFoundData extends MessageData {
+    /**
+     * Game ID.
+     */
     private final int gameId;
 
+    /**
+     * Player one ID.
+     */
     private final int playerOneId;
+
+    /**
+     * Player one username.
+     */
     private final String playerOne;
+
+    /**
+     * Player one team ID.
+     */
     private final int playerOneTeamId;
 
+    /**
+     * Player two ID.
+     */
     private final int playerTwoId;
+
+    /**
+     * Player two username.
+     */
     private final String playerTwo;
+
+    /**
+     * Player two team ID.
+     */
     private final int playerTwoTeamId;
 
+    /**
+     * Player three ID.
+     */
     private final int playerThreeId;
+
+    /**
+     * Player three username.
+     */
     private final String playerThree;
+
+    /**
+     * Player three team ID.
+     */
     private final int playerThreeTeamId;
 
+    /**
+     * Player four ID.
+     */
     private final int playerFourId;
+
+    /**
+     * Player four username.
+     */
     private final String playerFour;
+
+    /**
+     * Player four team ID.
+     */
     private final int playerFourTeamId;
 
-    public GameFoundData(int gameId, int playerOneId, String playerOne, int playerOneTeamId, int playerTwoId, String playerTwo, int playerTwoTeamId, int playerThreeId, String playerThree, int playerThreeTeamId, int playerFourId, String playerFour, int playerFourTeamId) {
+    /**
+     * @param gameId            Game ID.
+     * @param playerOneId       Player one ID.
+     * @param playerOne         Player one username.
+     * @param playerOneTeamId   Player one team ID.
+     * @param playerTwoId       Player two ID.
+     * @param playerTwo         Player two username.
+     * @param playerTwoTeamId   Player two team ID.
+     * @param playerThreeId     Player three ID.
+     * @param playerThree       Player three username.
+     * @param playerThreeTeamId Player three team ID.
+     * @param playerFourId      Player four ID.
+     * @param playerFour        Player four username.
+     * @param playerFourTeamId  Player four team ID.
+     */
         super("GameFound");
 
         this.gameId = gameId;
@@ -48,7 +109,9 @@ public class GameFoundData extends MessageData {
         this.playerFourTeamId = playerFourTeamId;
     }
 
-    public GameFoundData(JSONObject data) {
+    /**
+     * @param data The message containing all the data.
+     */
         super(data);
         gameId = data.getInt("gameId");
 
@@ -69,29 +132,55 @@ public class GameFoundData extends MessageData {
         playerFourTeamId = data.getInt("playerFourTeamId");
     }
 
-    public int getGameId() { return gameId; }
+    /**
+     * @return Returns the game ID.
+     */
 
-    public int getPlayerOneId() { return playerOneId; }
+    /**
+     * @return Returns the player one's ID.
+     */
 
-    public String getPlayerOne() { return playerOne; }
+    /**
+     * @return Returns the player one's username.
+     */
 
-    public int getPlayerOneTeamId() { return playerOneTeamId; }
+    /**
+     * @return Returns the player one's team ID.
+     */
 
-    public int getPlayerTwoId() { return playerTwoId; }
+    /**
+     * @return Returns the player two's ID.
+     */
 
-    public String getPlayerTwo() { return playerTwo; }
+    /**
+     * @return Returns the player two's username.
+     */
 
-    public int getPlayerTwoTeamId() { return playerTwoTeamId; }
+    /**
+     * @return Returns the player two's team id.
+     */
 
-    public int getPlayerThreeId() { return playerThreeId; }
+    /**
+     * @return Returns the player three's ID.
+     */
 
-    public String getPlayerThree() { return playerThree; }
+    /**
+     * @return Returns the player three's username.
+     */
 
-    public int getPlayerThreeTeamId() { return playerThreeTeamId; }
+    /**
+     * @return Returns the player three's team ID.
+     */
 
-    public int getPlayerFourId() { return playerFourId; }
+    /**
+     * @return Returns the player four's ID.
+     */
 
-    public String getPlayerFour() { return playerFour; }
+    /**
+     * @return Returns the player four's username.
+     */
 
-    public int getPlayerFourTeamId() { return playerFourTeamId; }
+    /**
+     * @return Returns the player four's team ID.
+     */
 }

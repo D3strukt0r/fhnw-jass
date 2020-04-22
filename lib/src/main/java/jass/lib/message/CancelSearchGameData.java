@@ -8,27 +8,42 @@ import org.json.JSONObject;
  * @author Thomas Weber
  */
 
-public class CancelSearchGameData extends MessageData {
-
+    /**
+     * The token of the current session.
+     */
         private final String token;
+    /**
+     * The username of the player searching.
+     */
         private final String username;
 
-        public CancelSearchGameData(String token, String username) {
+    /**
+     * @param token    The token of the current session.
+     * @param username The username of the player searching.
+     */
             super("CancelSearchGame");
             this.token = token;
             this.username = username;
         }
 
-        public CancelSearchGameData(JSONObject data) {
+    /**
+     * @param data The message containing all the data.
+     */
             super(data);
             token = data.getString("token");
             username = data.getString("username");
         }
 
+    /**
+     * @return Returns the token.
+     */
         public String getToken() {
             return token;
         }
 
+    /**
+     * @return Returns the username.
+     */
         public String getUsername() {
             return username;
         }

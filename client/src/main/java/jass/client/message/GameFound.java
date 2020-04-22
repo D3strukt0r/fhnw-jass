@@ -6,10 +6,13 @@ import jass.lib.message.MessageData;
 import jass.lib.message.ResultData;
 
 public class GameFound extends Message {
+    /**
+     * The data of the message.
+     */
 
-    private GameFoundData data;
-
-    public GameFound(MessageData rawData) {
+    /**
+     * @param rawData The data (still not casted)
+     */
         super(rawData);
         data = (GameFoundData) rawData;
     }

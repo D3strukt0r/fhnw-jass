@@ -9,16 +9,21 @@ import jass.server.util.SearchGameUtil;
 import jass.server.util.ServerSocketUtil;
 
 /**
- * Adds a client to the lobby waiting list
+ * Adds a client to the lobby waiting list.
  *
  * @author Thomas Weber
  * @version %I%, %G%
  * @since 0.0.1
  */
 
-public class CancelSearchGame extends Message {
+    /**
+     * The data of the message.
+     */
     private final CancelSearchGameData data;
 
+    /**
+     * @param rawData The data (still not casted)
+     */
     public CancelSearchGame(final MessageData rawData) {
         super(rawData);
         data = (CancelSearchGameData) rawData;

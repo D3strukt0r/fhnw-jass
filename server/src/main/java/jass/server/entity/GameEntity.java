@@ -13,21 +13,29 @@ import org.apache.logging.log4j.Logger;
  * @version %I%, %G%
  * @since 0.0.1
  */
-
 @DatabaseTable(tableName = "game")
 public class GameEntity implements Entity {
-
-    private static final Logger logger = LogManager.getLogger(GameEntity.class);
-
+    /**
+     * The ID.
+     */
     @DatabaseField(generatedId = true)
     private int id;
 
+    /**
+     * Team one.
+     */
     @DatabaseField(foreign = true)
     private TeamEntity teamOne;
 
+    /**
+     * Team two.
+     */
     @DatabaseField(foreign = true)
     private TeamEntity teamTwo;
 
+    /**
+     * Whether the team is still active.
+     */
     @DatabaseField(defaultValue = "true", canBeNull = false)
     private boolean isActive = true;
 
@@ -38,22 +46,34 @@ public class GameEntity implements Entity {
     GameEntity() { }
 
 
-    public GameEntity(TeamEntity teamOne, TeamEntity teamTwo, Boolean isActive) {
+    /**
+     * @param teamOne  Team one.
+     * @param teamTwo  Team two.
+     * @param isActive Whether the team is still active.
+     */
         this.teamOne = teamOne;
         this.teamTwo = teamTwo;
         this.isActive = isActive;
     }
 
+    /**
+     * @return Returns the ID.
+     */
     public int getId() {
         return id;
     }
 
+    /**
+     * @return Returns team one.
+     */
     public TeamEntity getTeamOne() {
         return teamOne;
     }
 
+    /**
+     * @return Returns team two.
+     */
     public TeamEntity getTeamTwo() {
         return teamTwo;
     }
-
 }

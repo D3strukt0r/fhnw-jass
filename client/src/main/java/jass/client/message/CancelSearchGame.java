@@ -6,9 +6,13 @@ import jass.lib.message.MessageData;
 import jass.lib.message.ResultData;
 
 public class CancelSearchGame extends Message {
-    private CancelSearchGameData data;
+    /**
+     * The data of the message.
+     */
 
-    public CancelSearchGame(MessageData rawData) {
+    /**
+     * @param rawData The data (still not casted)
+     */
         super(rawData);
         data = (CancelSearchGameData) rawData;
     }
@@ -22,5 +26,4 @@ public class CancelSearchGame extends Message {
 
         return resultData.getResult();
     }
-
 }

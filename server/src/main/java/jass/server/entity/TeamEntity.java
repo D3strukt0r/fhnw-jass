@@ -16,15 +16,21 @@ import org.apache.logging.log4j.Logger;
 
 @DatabaseTable(tableName = "team")
 public class TeamEntity implements Entity {
-
-    private static final Logger logger = LogManager.getLogger(TeamEntity.class);
-
+    /**
+     * The ID.
+     */
     @DatabaseField(generatedId = true)
     private int id;
 
+    /**
+     * Player one inside the team.
+     */
     @DatabaseField(foreign = true)
     private UserEntity playerOne;
 
+    /**
+     * Player two inside the team.
+     */
     @DatabaseField(foreign = true)
     private UserEntity playerTwo;
 
@@ -34,33 +40,51 @@ public class TeamEntity implements Entity {
      */
     TeamEntity() { }
 
-
+    /**
+     * @param playerOne Player one.
+     * @param playerTwo Player two.
+     */
     public TeamEntity(final UserEntity playerOne, final UserEntity playerTwo) {
         this.playerOne = playerOne;
         this.playerTwo = playerTwo;
     }
 
-    public int getId () {
+    /**
+     * @return Returns the ID.
+     */
         return id;
     }
 
+    /**
+     * @return Returns player one.
+     */
     public UserEntity getPlayerOne() {
         return playerOne;
     }
 
-    public void setPlayerOne(UserEntity playerOne) {
+    /**
+     * @param playerOne Player one.
+     */
         this.playerOne = playerOne;
     }
 
-    public UserEntity getPlayerTwo(){
+    /**
+     * @return Returns player two.
+     */
         return playerTwo;
     }
 
-    public void setPlayerTwp(UserEntity playerTwo) {
+    /**
+     * @param playerTwo Player two.
+     */
         this.playerTwo = playerTwo;
     }
 
-    public boolean checkIfPlayerIsInTeam(UserEntity user) {
+    /**
+     * @param user The user to check.
+     *
+     * @return Returns true if the user is inside the team, otherwise false.
+     */
         boolean returnValue = false;
         if (playerOne.getId() == user.getId() || playerTwo.getId() == user.getId()) {
             returnValue = true;

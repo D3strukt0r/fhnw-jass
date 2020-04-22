@@ -1,6 +1,7 @@
 /*
  * fhnw-jass is jass game programmed in java for a school project.
- * Copyright (C) 2020 Manuele Vaccari
+ * Copyright (C) 2020 Manuele Vaccari, Victor Hargrave, Sasa Trajkova, Thomas
+ * Weber
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -60,7 +61,15 @@ public final class DatabaseUtil implements Service, Closeable {
      * The DAO for the users.
      */
     private Dao<UserEntity, String> userDao;
+
+    /**
+     * The DAO for the teams.
+     */
     private Dao<TeamEntity, String> teamDao;
+
+    /**
+     * The DAO for the games.
+     */
     private Dao<GameEntity, String> gameDao;
 
     /**
@@ -124,7 +133,7 @@ public final class DatabaseUtil implements Service, Closeable {
     }
 
     /**
-     * @return DAO object for the users
+     * @return DAO object for the users.
      *
      * @since 0.0.1
      */
@@ -132,10 +141,16 @@ public final class DatabaseUtil implements Service, Closeable {
         return userDao;
     }
 
+    /**
+     * @return DAO object for the teams.
+     */
     public Dao<TeamEntity, String> getTeamDao() {
         return teamDao;
     }
 
+    /**
+     * @return DAO object for the games.
+     */
     public Dao<GameEntity, String> getGameDao() {
         return gameDao;
     }

@@ -11,8 +11,6 @@ import jass.server.entity.GameEntity;
  * @version %I%, %G%
  * @since 0.0.1
  */
-
-
 public final class GameRepository extends Repository<Dao<GameEntity, String>, GameEntity> {
 
     private static GameRepository singleton = null;
@@ -30,5 +28,4 @@ public final class GameRepository extends Repository<Dao<GameEntity, String>, Ga
     public GameRepository(final Dao<GameEntity, String> dao) {
         super(dao);
     }
-
 }

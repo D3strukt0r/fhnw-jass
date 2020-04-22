@@ -11,7 +11,6 @@ import jass.server.entity.TeamEntity;
  * @version %I%, %G%
  * @since 0.0.1
  */
-
 public final class TeamRepository extends Repository<Dao<TeamEntity, String>, TeamEntity> {
 
     private static TeamRepository singleton = null;
@@ -29,5 +28,4 @@ public final class TeamRepository extends Repository<Dao<TeamEntity, String>, Te
     public TeamRepository(final Dao<TeamEntity, String> dao) {
         super(dao);
     }
-
 }

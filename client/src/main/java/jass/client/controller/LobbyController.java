@@ -38,7 +38,11 @@ import java.util.ResourceBundle;
  * @since 0.0.1
  */
 public class LobbyController extends Controller implements GameFoundEventListener {
+    /**
+     * The logger to print to console and save in a .log file.
+     */
     private static final Logger logger = LogManager.getLogger(LobbyController.class);
+
     // GameService gameService
 
     /**
@@ -147,15 +151,12 @@ public class LobbyController extends Controller implements GameFoundEventListene
     }
 
     /**
-     * After clicking on Find match, change the button text to "Cancel" and show text "searching"
-     */
-
-    /**
-     * The logic for searching for a game (client & server)
+     * After clicking on Find match, change the button text to "Cancel" and show
+     * text "searching" and the logic for searching for a game (client &
+     * server).
      *
      * @author Thomas Weber
      */
-
     @FXML
     public void clickOnFindMatch() {
         // Get token and initialize SearchGame Message
@@ -181,7 +182,8 @@ public class LobbyController extends Controller implements GameFoundEventListene
     }
 
     /**
-     * After clicking on Cancel match, Find match button appears and text "searching" is hidden
+     * After clicking on Cancel match, Find match button appears and text
+     * "searching" is hidden.
      */
     @FXML
     public void clickOnCancelMatch() {
@@ -206,6 +208,9 @@ public class LobbyController extends Controller implements GameFoundEventListene
         }
     }
 
+    /**
+     * Work to do after a game was found.
+     */
     public void onGameFound() {
         logger.info("Successfully found game!");
 
@@ -218,6 +223,9 @@ public class LobbyController extends Controller implements GameFoundEventListene
         goToGameView();
     }
 
+    /**
+     * Switch to the game window.
+     */
     public void goToGameView() {
         // TODO - Move to game view
     }
@@ -262,5 +270,4 @@ public class LobbyController extends Controller implements GameFoundEventListene
     public void setView(final LobbyView view) {
         this.view = view;
     }
-
 }

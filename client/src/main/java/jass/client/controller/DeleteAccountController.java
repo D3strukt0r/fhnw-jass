@@ -63,6 +63,9 @@ public final class DeleteAccountController extends Controller {
      */
     private DeleteAccountView view;
 
+    /**
+     * The root element of the view.
+     */
     @FXML
     private VBox root;
 
