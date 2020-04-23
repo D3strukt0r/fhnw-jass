@@ -1,5 +1,6 @@
 package jass.client.view;
 
+import jass.client.controller.GameController;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -37,6 +38,8 @@ public final class GameView extends View {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/game.fxml"));
             Parent root = loader.load();
+            GameController controller = loader.getController();
+            controller.setView(this);
             return new Scene(root);
         } catch (IOException e) {
             return null;

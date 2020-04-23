@@ -1,13 +1,18 @@
 package jass.client.controller;
-
 import jass.client.mvc.Controller;
+import jass.client.util.I18nUtil;
 import jass.client.util.SocketUtil;
+import jass.client.util.ViewUtil;
 import jass.client.util.WindowUtil;
 import jass.client.view.GameView;
+import jass.client.view.LoginView;
 import jass.client.view.ServerConnectionView;
 import jass.lib.servicelocator.ServiceLocator;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
+import javafx.scene.control.Menu;
+import javafx.scene.control.MenuItem;
+import javafx.scene.input.KeyCombination;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -20,14 +25,71 @@ import java.util.ResourceBundle;
  * @since 0.0.1
  */
 public final class GameController extends Controller {
+
     /**
      * The view.
      */
     private GameView view;
 
+    /**
+     * The "File" element.
+     */
+    @FXML
+    private Menu mFile;
+
+    /**
+     * The "File -> Change Language" element.
+     */
+    @FXML
+    private Menu mFileChangeLanguage;
+
+    /**
+     * The "File -> Disconnect" element.
+     */
+    @FXML
+    private MenuItem mFileDisconnect;
+
+    /**
+     * The "File -> Logout" element.
+     */
+    @FXML
+    private MenuItem mFileLogout;
+
+    /**
+     * The "File -> Exit" element.
+     */
+    @FXML
+    private MenuItem mFileExit;
+
+    /**
+     * The "Help" element.
+     */
+    @FXML
+    private Menu mHelp;
+
+    /**
+     * The "Help -> About" element.
+     */
+    @FXML
+    private MenuItem mHelpAbout;
+
     @Override
     public void initialize(final URL location, final ResourceBundle resources) {
         // TODO: Do something
+
+        /*
+         * Bind all texts
+         */
+        mFile.textProperty().bind(I18nUtil.createStringBinding(mFile.getText()));
+        mFileChangeLanguage.textProperty().bind(I18nUtil.createStringBinding(mFileChangeLanguage.getText()));
+        ViewUtil.useLanguageMenuContent(mFileChangeLanguage);
+        mFileDisconnect.textProperty().bind(I18nUtil.createStringBinding(mFileDisconnect.getText()));
+        mFileLogout.textProperty().bind(I18nUtil.createStringBinding(mFileLogout.getText()));
+        mFileExit.textProperty().bind(I18nUtil.createStringBinding(mFileExit.getText()));
+        mFileExit.setAccelerator(KeyCombination.keyCombination("Alt+F4"));
+
+        mHelp.textProperty().bind(I18nUtil.createStringBinding(mHelp.getText()));
+        mHelpAbout.textProperty().bind(I18nUtil.createStringBinding(mHelpAbout.getText()));
     }
 
     /**
@@ -40,7 +102,16 @@ public final class GameController extends Controller {
             socket.close();
         }
         ServiceLocator.remove("backend");
-        WindowUtil.switchTo(view, ServerConnectionView.class);
+        WindowUtil.switchToNewWindow(view, ServerConnectionView.class);
+    }
+
+    /**
+     * Keeps the server connection but returns to the login window.
+     */
+    @FXML
+    public void clickOnLogout() {
+        //TODO handle logout properly
+        WindowUtil.switchToNewWindow(view, LoginView.class);
     }
 
     /**

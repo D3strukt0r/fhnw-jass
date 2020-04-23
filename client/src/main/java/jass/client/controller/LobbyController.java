@@ -79,18 +79,6 @@ public final class LobbyController extends Controller implements GameFoundEventL
     private MenuItem mFileExit;
 
     /**
-     * The "Edit" element.
-     */
-    @FXML
-    private Menu mEdit;
-
-    /**
-     * The "Edit -> Delete" element.
-     */
-    @FXML
-    private MenuItem mEditDelete;
-
-    /**
      * The "Help" element.
      */
     @FXML
