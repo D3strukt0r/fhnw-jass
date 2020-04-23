@@ -7,6 +7,7 @@ import jass.client.message.CancelSearchGame;
 import jass.client.message.SearchGame;
 import jass.client.mvc.Controller;
 import jass.client.util.SocketUtil;
+import jass.client.view.GameView;
 import jass.lib.message.CancelSearchGameData;
 import jass.lib.message.SearchGameData;
 import jass.lib.servicelocator.ServiceLocator;
@@ -214,6 +215,7 @@ public final class LobbyController extends Controller implements GameFoundEventL
      */
     public void goToGameView() {
         // TODO - Move to game view
+        WindowUtil.switchTo(view, GameView.class);
     }
 
     /**
