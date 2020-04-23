@@ -236,11 +236,12 @@ public final class LobbyController extends Controller implements GameFoundEventL
      */
     @FXML
     public void clickOnLogout() {
-        SocketUtil socket = (SocketUtil) ServiceLocator.get(SocketUtil.SERVICE_NAME);
+        //TODO handle logout properly - below doesnt work because it disconnects from the server
+        /*SocketUtil socket = (SocketUtil) ServiceLocator.get(SocketUtil.SERVICE_NAME);
         if (socket != null) { // Not necessary but keeps IDE happy
             socket.close();
         }
-        ServiceLocator.remove("backend");
+        ServiceLocator.remove("backend");*/
         WindowUtil.switchTo(view, LoginView.class);
     }
 

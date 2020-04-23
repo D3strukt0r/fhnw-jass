@@ -36,7 +36,7 @@
             <children>
                <Pane prefHeight="200.0" prefWidth="200.0">
                   <children>
-                     <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="73.0" prefWidth="202.0" text="Mode:" textAlignment="JUSTIFY" />
+                     <Label fx:id="mode" alignment="CENTER" contentDisplay="CENTER" prefHeight="73.0" prefWidth="202.0" text="Mode:" textAlignment="JUSTIFY" />
                   </children>
                </Pane>
                <Pane prefHeight="200.0" prefWidth="200.0">
@@ -71,7 +71,7 @@
          <children>
             <BorderPane prefHeight="200.0" prefWidth="200.0" styleClass="player-pane" stylesheets="@../css/app.css">
                <top>
-                  <Label styleClass="player-pane" stylesheets="@../css/app.css" text="User 1" BorderPane.alignment="TOP_LEFT">
+                  <Label fx:id="user1" styleClass="player-pane" stylesheets="@../css/app.css" text="User 1" BorderPane.alignment="TOP_LEFT">
                      <BorderPane.margin>
                         <Insets bottom="15.0" left="17.5" top="10.0" />
                      </BorderPane.margin>
@@ -95,47 +95,47 @@
                         <Insets bottom="15.0" left="15.0" />
                      </BorderPane.margin>
                      <children>
-                        <Button disable="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="127.0" prefWidth="167.0">
+                        <Button fx:id="user1b1" disable="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="127.0" prefWidth="167.0">
                            <GridPane.margin>
                               <Insets bottom="5.0" right="5.0" />
                            </GridPane.margin>
                         </Button>
-                        <Button disable="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="127.0" prefWidth="99.0" GridPane.columnIndex="1">
+                        <Button fx:id="user1b2" disable="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="127.0" prefWidth="99.0" GridPane.columnIndex="1">
                            <GridPane.margin>
                               <Insets bottom="5.0" right="5.0" />
                            </GridPane.margin>
                         </Button>
-                        <Button disable="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="127.0" prefWidth="142.0" GridPane.columnIndex="2">
+                        <Button fx:id="user1b3" disable="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="127.0" prefWidth="142.0" GridPane.columnIndex="2">
                            <GridPane.margin>
                               <Insets bottom="5.0" right="5.0" />
                            </GridPane.margin>
                         </Button>
-                        <Button disable="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="127.0" prefWidth="141.0" GridPane.columnIndex="3">
+                        <Button fx:id="user1b4" disable="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="127.0" prefWidth="141.0" GridPane.columnIndex="3">
                            <GridPane.margin>
                               <Insets bottom="5.0" right="5.0" />
                            </GridPane.margin>
                         </Button>
-                        <Button disable="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="127.0" prefWidth="118.0" GridPane.columnIndex="4">
+                        <Button fx:id="user1b5" disable="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="127.0" prefWidth="118.0" GridPane.columnIndex="4">
                            <GridPane.margin>
                               <Insets bottom="5.0" right="5.0" />
                            </GridPane.margin>
                         </Button>
-                        <Button disable="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="127.0" prefWidth="128.0" GridPane.rowIndex="1">
+                        <Button fx:id="user1b6" disable="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="127.0" prefWidth="128.0" GridPane.rowIndex="1">
                            <GridPane.margin>
                               <Insets bottom="5.0" right="5.0" />
                            </GridPane.margin>
                         </Button>
-                        <Button disable="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="127.0" prefWidth="119.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                        <Button fx:id="user1b7" disable="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="127.0" prefWidth="119.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
                            <GridPane.margin>
                               <Insets bottom="5.0" right="5.0" />
                            </GridPane.margin>
                         </Button>
-                        <Button disable="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="127.0" prefWidth="103.0" GridPane.columnIndex="2" GridPane.rowIndex="1">
+                        <Button fx:id="user1b8" disable="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="127.0" prefWidth="103.0" GridPane.columnIndex="2" GridPane.rowIndex="1">
                            <GridPane.margin>
                               <Insets bottom="5.0" right="5.0" />
                            </GridPane.margin>
                         </Button>
-                        <Button disable="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="127.0" prefWidth="128.0" GridPane.columnIndex="3" GridPane.rowIndex="1">
+                        <Button fx:id="user1b9" disable="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="127.0" prefWidth="128.0" GridPane.columnIndex="3" GridPane.rowIndex="1">
                            <GridPane.margin>
                               <Insets bottom="5.0" right="5.0" />
                            </GridPane.margin>
@@ -156,7 +156,7 @@
                       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                     </rowConstraints>
                      <children>
-                        <Button disable="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="127.0" prefWidth="69.0" style="-fx-background-color: WHITE;" GridPane.rowIndex="1">
+                        <Button fx:id="user1played" disable="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="127.0" prefWidth="69.0" style="-fx-background-color: WHITE;" GridPane.rowIndex="1">
                            <GridPane.margin>
                               <Insets />
                            </GridPane.margin>
@@ -170,7 +170,7 @@
             </BorderPane>
             <BorderPane prefHeight="200.0" prefWidth="200.0" styleClass="player-pane" stylesheets="@../css/app.css" GridPane.rowIndex="1">
                <bottom>
-                  <Label styleClass="player-pane" stylesheets="@../css/app.css" text="User 3" BorderPane.alignment="BOTTOM_LEFT">
+                  <Label fx:id="user3" styleClass="player-pane" stylesheets="@../css/app.css" text="User 3" BorderPane.alignment="BOTTOM_LEFT">
                      <BorderPane.margin>
                         <Insets bottom="10.0" left="17.5" top="15.0" />
                      </BorderPane.margin>
@@ -194,47 +194,47 @@
                         <Insets left="15.0" top="15.0" />
                      </BorderPane.margin>
                      <children>
-                        <Button disable="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="126.0" prefWidth="123.0" GridPane.rowIndex="1">
+                        <Button fx:id="user3b5" disable="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="126.0" prefWidth="123.0" GridPane.rowIndex="1">
                            <GridPane.margin>
                               <Insets right="5.0" top="5.0" />
                            </GridPane.margin>
                         </Button>
-                        <Button disable="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="126.0" prefWidth="112.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                        <Button fx:id="user3b6" disable="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="126.0" prefWidth="112.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
                            <GridPane.margin>
                               <Insets right="5.0" top="5.0" />
                            </GridPane.margin>
                         </Button>
-                        <Button disable="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="126.0" prefWidth="116.0" GridPane.columnIndex="2" GridPane.rowIndex="1">
+                        <Button fx:id="user3b7" disable="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="126.0" prefWidth="116.0" GridPane.columnIndex="2" GridPane.rowIndex="1">
                            <GridPane.margin>
                               <Insets right="5.0" top="5.0" />
                            </GridPane.margin>
                         </Button>
-                        <Button disable="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="126.0" prefWidth="94.0" GridPane.columnIndex="3" GridPane.rowIndex="1">
+                        <Button fx:id="user3b8" disable="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="126.0" prefWidth="94.0" GridPane.columnIndex="3" GridPane.rowIndex="1">
                            <GridPane.margin>
                               <Insets right="5.0" top="5.0" />
                            </GridPane.margin>
                         </Button>
-                        <Button disable="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="126.0" prefWidth="112.0">
+                        <Button fx:id="user3b1" disable="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="126.0" prefWidth="112.0">
                            <GridPane.margin>
                               <Insets right="5.0" top="5.0" />
                            </GridPane.margin>
                         </Button>
-                        <Button disable="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="126.0" prefWidth="113.0" GridPane.columnIndex="1">
+                        <Button fx:id="user3b2" disable="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="126.0" prefWidth="113.0" GridPane.columnIndex="1">
                            <GridPane.margin>
                               <Insets right="5.0" top="5.0" />
                            </GridPane.margin>
                         </Button>
-                        <Button disable="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="126.0" prefWidth="121.0" GridPane.columnIndex="2">
+                        <Button fx:id="user3b3" disable="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="126.0" prefWidth="121.0" GridPane.columnIndex="2">
                            <GridPane.margin>
                               <Insets right="5.0" top="5.0" />
                            </GridPane.margin>
                         </Button>
-                        <Button disable="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="126.0" prefWidth="162.0" GridPane.columnIndex="3">
+                        <Button fx:id="user3b4" disable="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="126.0" prefWidth="162.0" GridPane.columnIndex="3">
                            <GridPane.margin>
                               <Insets right="5.0" top="5.0" />
                            </GridPane.margin>
                         </Button>
-                        <Button disable="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="126.0" prefWidth="126.0" GridPane.columnIndex="4" GridPane.rowIndex="1">
+                        <Button fx:id="user3b9" disable="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="126.0" prefWidth="126.0" GridPane.columnIndex="4" GridPane.rowIndex="1">
                            <GridPane.margin>
                               <Insets right="5.0" top="5.0" />
                            </GridPane.margin>
@@ -255,7 +255,7 @@
                       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                     </rowConstraints>
                      <children>
-                        <Button disable="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="127.0" prefWidth="128.0" style="-fx-background-color: WHITE;" />
+                        <Button fx:id="user3played" disable="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="127.0" prefWidth="128.0" style="-fx-background-color: WHITE;" />
                      </children>
                      <BorderPane.margin>
                         <Insets right="10.0" top="10.0" />
@@ -265,7 +265,7 @@
             </BorderPane>
             <BorderPane prefHeight="200.0" prefWidth="200.0" styleClass="player-pane" stylesheets="@../css/app.css" GridPane.columnIndex="1">
                <top>
-                  <Label styleClass="player-pane" text="User 2" BorderPane.alignment="TOP_RIGHT">
+                  <Label fx:id="user2" styleClass="player-pane" text="User 2" BorderPane.alignment="TOP_RIGHT">
                      <BorderPane.margin>
                         <Insets bottom="15.0" right="17.5" top="10.0" />
                      </BorderPane.margin>
@@ -289,17 +289,17 @@
                         <Insets bottom="15.0" right="15.0" />
                      </BorderPane.margin>
                      <children>
-                        <Button disable="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="83.0" prefWidth="71.0" GridPane.columnIndex="2">
+                        <Button fx:id="user2b2" disable="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="83.0" prefWidth="71.0" GridPane.columnIndex="2">
                            <GridPane.margin>
                               <Insets bottom="2.5" right="5.0" />
                            </GridPane.margin>
                         </Button>
-                        <Button disable="true" mnemonicParsing="false" prefHeight="121.0" prefWidth="83.0" GridPane.columnIndex="2" GridPane.rowIndex="1">
+                        <Button fx:id="user2b9" disable="true" mnemonicParsing="false" prefHeight="121.0" prefWidth="83.0" GridPane.columnIndex="2" GridPane.rowIndex="1">
                            <GridPane.margin>
                               <Insets right="5.0" top="2.5" />
                            </GridPane.margin>
                         </Button>
-                        <Button disable="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="121.0" prefWidth="97.0" GridPane.columnIndex="3">
+                        <Button fx:id="user2b3" disable="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="121.0" prefWidth="97.0" GridPane.columnIndex="3">
                            <padding>
                               <Insets left="5.0" right="5.0" />
                            </padding>
@@ -307,32 +307,32 @@
                               <Insets bottom="2.5" right="5.0" />
                            </GridPane.margin>
                         </Button>
-                        <Button disable="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="159.0" prefWidth="71.0" GridPane.columnIndex="3" GridPane.rowIndex="1">
+                        <Button fx:id="user2b8" disable="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="159.0" prefWidth="71.0" GridPane.columnIndex="3" GridPane.rowIndex="1">
                            <GridPane.margin>
                               <Insets right="5.0" top="2.5" />
                            </GridPane.margin>
                         </Button>
-                        <Button disable="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="121.0" prefWidth="114.0" GridPane.columnIndex="4">
+                        <Button fx:id="user2b4" disable="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="121.0" prefWidth="114.0" GridPane.columnIndex="4">
                            <GridPane.margin>
                               <Insets bottom="2.5" right="5.0" />
                            </GridPane.margin>
                         </Button>
-                        <Button disable="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="121.0" prefWidth="146.0" GridPane.columnIndex="1">
+                        <Button fx:id="user2b1" disable="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="121.0" prefWidth="146.0" GridPane.columnIndex="1">
                            <GridPane.margin>
                               <Insets bottom="2.5" right="5.0" />
                            </GridPane.margin>
                         </Button>
-                        <Button disable="true" mnemonicParsing="false" prefHeight="121.0" prefWidth="109.0" GridPane.columnIndex="4" GridPane.rowIndex="1">
+                        <Button fx:id="user2b7" disable="true" mnemonicParsing="false" prefHeight="121.0" prefWidth="109.0" GridPane.columnIndex="4" GridPane.rowIndex="1">
                            <GridPane.margin>
                               <Insets right="5.0" top="2.5" />
                            </GridPane.margin>
                         </Button>
-                        <Button disable="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="121.0" prefWidth="113.0" GridPane.columnIndex="5">
+                        <Button fx:id="user2b5" disable="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="121.0" prefWidth="113.0" GridPane.columnIndex="5">
                            <GridPane.margin>
                               <Insets bottom="2.5" right="5.0" />
                            </GridPane.margin>
                         </Button>
-                        <Button disable="true" mnemonicParsing="false" prefHeight="121.0" prefWidth="103.0" GridPane.columnIndex="5" GridPane.rowIndex="1">
+                        <Button fx:id="user2b6" disable="true" mnemonicParsing="false" prefHeight="121.0" prefWidth="103.0" GridPane.columnIndex="5" GridPane.rowIndex="1">
                            <GridPane.margin>
                               <Insets right="5.0" top="2.5" />
                            </GridPane.margin>
@@ -353,7 +353,7 @@
                       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                     </rowConstraints>
                      <children>
-                        <Button disable="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="129.0" prefWidth="84.0" style="-fx-background-color: WHITE;" GridPane.rowIndex="1" />
+                        <Button fx:id="user2played" disable="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="129.0" prefWidth="84.0" style="-fx-background-color: WHITE;" GridPane.rowIndex="1" />
                      </children>
                      <BorderPane.margin>
                         <Insets bottom="10.0" left="10.0" />
@@ -380,47 +380,47 @@
                         <Insets right="15.0" top="15.0" />
                      </BorderPane.margin>
                      <children>
-                        <Button disable="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="126.0" prefWidth="117.0" GridPane.columnIndex="2">
+                        <Button fx:id="user4b9" disable="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="126.0" prefWidth="117.0" GridPane.columnIndex="2">
                            <GridPane.margin>
                               <Insets bottom="2.5" right="5.0" top="2.5" />
                            </GridPane.margin>
                         </Button>
-                        <Button disable="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="123.0" prefWidth="118.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                        <Button fx:id="user4b1" disable="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="123.0" prefWidth="118.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
                            <GridPane.margin>
                               <Insets right="5.0" top="2.5" />
                            </GridPane.margin>
                         </Button>
-                        <Button disable="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="123.0" prefWidth="127.0" GridPane.columnIndex="2" GridPane.rowIndex="1">
+                        <Button fx:id="user4b2" disable="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="123.0" prefWidth="127.0" GridPane.columnIndex="2" GridPane.rowIndex="1">
                            <GridPane.margin>
                               <Insets right="5.0" top="2.5" />
                            </GridPane.margin>
                         </Button>
-                        <Button disable="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="123.0" prefWidth="101.0" GridPane.columnIndex="3">
+                        <Button fx:id="user4b8" disable="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="123.0" prefWidth="101.0" GridPane.columnIndex="3">
                            <GridPane.margin>
                               <Insets bottom="2.5" right="5.0" top="2.5" />
                            </GridPane.margin>
                         </Button>
-                        <Button disable="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="123.0" prefWidth="115.0" GridPane.columnIndex="3" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1">
+                        <Button fx:id="user4b3" disable="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="123.0" prefWidth="115.0" GridPane.columnIndex="3" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1">
                            <GridPane.margin>
                               <Insets right="5.0" top="2.5" />
                            </GridPane.margin>
                         </Button>
-                        <Button disable="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="123.0" prefWidth="113.0" GridPane.columnIndex="4">
+                        <Button fx:id="user4b7" disable="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="123.0" prefWidth="113.0" GridPane.columnIndex="4">
                            <GridPane.margin>
                               <Insets bottom="2.5" right="5.0" top="2.5" />
                            </GridPane.margin>
                         </Button>
-                        <Button disable="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="123.0" prefWidth="113.0" GridPane.columnIndex="5">
+                        <Button fx:id="user4b6" disable="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="123.0" prefWidth="113.0" GridPane.columnIndex="5">
                            <GridPane.margin>
                               <Insets bottom="2.5" right="5.0" top="2.5" />
                            </GridPane.margin>
                         </Button>
-                        <Button disable="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="123.0" prefWidth="102.0" GridPane.columnIndex="4" GridPane.rowIndex="1">
+                        <Button fx:id="user4b4" disable="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="123.0" prefWidth="102.0" GridPane.columnIndex="4" GridPane.rowIndex="1">
                            <GridPane.margin>
                               <Insets right="5.0" top="2.5" />
                            </GridPane.margin>
                         </Button>
-                        <Button disable="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="123.0" prefWidth="123.0" GridPane.columnIndex="5" GridPane.rowIndex="1">
+                        <Button fx:id="user4b5" disable="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="123.0" prefWidth="123.0" GridPane.columnIndex="5" GridPane.rowIndex="1">
                            <GridPane.margin>
                               <Insets right="5.0" top="2.5" />
                            </GridPane.margin>
@@ -429,7 +429,7 @@
                   </GridPane>
                </center>
                <bottom>
-                  <Label styleClass="player-pane" stylesheets="@../css/app.css" text="User 4" BorderPane.alignment="BOTTOM_RIGHT">
+                  <Label fx:id="user4" styleClass="player-pane" stylesheets="@../css/app.css" text="User 4" BorderPane.alignment="BOTTOM_RIGHT">
                      <BorderPane.margin>
                         <Insets bottom="10.0" right="17.5" top="15.0" />
                      </BorderPane.margin>
@@ -448,7 +448,7 @@
                       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                     </rowConstraints>
                      <children>
-                        <Button disable="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="127.0" prefWidth="128.0" style="-fx-background-color: WHITE;" />
+                        <Button fx:id="user4played" disable="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="127.0" prefWidth="128.0" style="-fx-background-color: WHITE;" />
                      </children>
                      <BorderPane.margin>
                         <Insets left="10.0" top="10.0" />
