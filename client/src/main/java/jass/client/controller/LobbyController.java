@@ -214,13 +214,6 @@ public final class LobbyController extends Controller implements GameFoundEventL
      */
     public void onGameFound() {
         logger.info("Successfully found game!");
-
-        // TODO - get rid of this alert, just for demonstration purposes at the moment
-        Platform.runLater(() -> {
-            Alert alert = new Alert(Alert.AlertType.INFORMATION, "Game Found!");
-            alert.showAndWait();
-        });
-
         goToGameView();
     }
 

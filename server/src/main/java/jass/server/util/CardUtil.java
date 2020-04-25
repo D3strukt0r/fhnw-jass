@@ -105,11 +105,6 @@ public final class CardUtil implements Service {
             cards.get(0), cards.get(1), cards.get(2), cards.get(3), cards.get(4), cards.get(5),
             cards.get(6), cards.get(7), cards.get(8), cards));
 
-        /*GameFound gameFoundMsg = new GameFound(new GameFoundData(1, 1, "",
-            2, 2, "",
-            3, 3, "",
-            4, 4, "", 4));
-        client.send(gameFoundMsg);*/
         client.send(broadcastDeckMsg);
     }
 }

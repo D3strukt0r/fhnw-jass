@@ -17,7 +17,7 @@ import java.util.List;
 
 public final class BroadcastDeckData extends MessageData {
     private final int deckId;
-    private final JSONArray cards;
+    /*private final JSONArray cards;*/
     private final int cardOneId;
     private final String cardOneSuit;
     private final String cardOneRank;
@@ -51,12 +51,12 @@ public final class BroadcastDeckData extends MessageData {
                              CardData card5, CardData card6, CardData card7, CardData card8, CardData card9, List<CardData> cards) {
         super("BroadcastDeck");
         this.deckId = deckId;
-        this.cards = new JSONArray(cards);
+        /*this.cards = new JSONArray(cards);
         for (int i = 0; i < this.cards.length(); i++) {
             JSONObject jsonobject = this.cards.getJSONObject(i);
             String suit = jsonobject.getString("suit");
             String rank = jsonobject.getString("rank");
-        }
+        }*/
         this.cardOneId = card1.getId();
         this.cardOneRank = card1.getRank();
         this.cardOneSuit = card1.getSuit();
@@ -98,7 +98,7 @@ public final class BroadcastDeckData extends MessageData {
     public BroadcastDeckData(final JSONObject data) {
         super(data);
         deckId = data.getInt("deckId");
-        cards = data.getJSONArray("cards");
+        /*cards = data.getJSONArray("cards");*/
 
         cardOneId = data.getInt("cardOneId");
         cardOneRank = data.getString("cardOneRank");
@@ -250,9 +250,9 @@ public final class BroadcastDeckData extends MessageData {
         return cardNineSuit;
     }
 
-    public JSONArray getCards() {
+    /*public JSONArray getCards() {
         return cards;
-    }
+    }*/
 }
 
 
