@@ -20,6 +20,7 @@ package jass.server.repository;
 
 import com.j256.ormlite.dao.Dao;
 import jass.lib.database.Repository;
+import jass.server.entity.CardEntity;
 import jass.server.entity.SuitEntity;
 
 import java.sql.SQLException;
@@ -55,6 +56,15 @@ public final class SuitRepository extends Repository<Dao<SuitEntity, Integer>, S
         try {
             List<SuitEntity> suits = getDao().queryForAll();
             return suits;
+        } catch (SQLException e) {
+            return null;
+        }
+    }
+
+    public SuitEntity getById(int id) {
+        try {
+            SuitEntity suitEntity = getDao().queryForId(id);
+            return suitEntity;
         } catch (SQLException e) {
             return null;
         }

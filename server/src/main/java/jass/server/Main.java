@@ -18,6 +18,7 @@
 
 package jass.server;
 
+import jass.server.util.CardUtil;
 import jass.server.util.DatabaseUtil;
 import jass.server.util.SearchGameUtil;
 import jass.server.util.ServerSocketUtil;
@@ -132,9 +133,12 @@ public final class Main {
         boolean secure = cmd.hasOption("ssl");
         logger.info("SSL is " + (secure ? "enabled" : "disabled"));
 
-        // Initialize SearchGameUtil and add to ServiceLocator
+        // Initialize Other Util Classes and add to ServiceLocator
         SearchGameUtil sGU = new SearchGameUtil();
         ServiceLocator.add(sGU);
+
+        CardUtil cardUtil = new CardUtil();
+        ServiceLocator.add(cardUtil);
 
         // Start the listener
         try {

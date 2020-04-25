@@ -3,6 +3,7 @@ package jass.server.entity;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 import jass.lib.database.Entity;
+import jass.lib.message.CardData;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -49,8 +50,21 @@ public class CardEntity implements Entity {
         return rank;
     }
 
+    public void setRank(RankEntity rank) {
+        this.rank = rank;
+    }
+
     public SuitEntity getSuit() {
         return suit;
     }
 
+    public void setSuit(SuitEntity suit) {
+        this.suit = suit;
+    }
+
+    public static CardData toCardData(CardEntity cardEntity) {
+        CardData cardData = new CardData(cardEntity.id, cardEntity.suit.getId(),
+            cardEntity.suit.getKey(), cardEntity.rank.getId(), cardEntity.rank.getKey());
+        return cardData;
+    }
 }

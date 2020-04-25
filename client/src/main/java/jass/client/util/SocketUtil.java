@@ -18,6 +18,8 @@
 
 package jass.client.util;
 
+import jass.client.controller.LobbyController;
+import jass.client.eventlistener.BroadcastDeckEventListener;
 import jass.client.eventlistener.GameFoundEventListener;
 import jass.client.message.Message;
 import org.apache.logging.log4j.LogManager;
@@ -84,9 +86,11 @@ public final class SocketUtil extends Thread implements Service, Closeable {
     private final ArrayList<DisconnectEventListener> disconnectListener = new ArrayList<>();
 
     /**
-     * Object listening to a found game event.
+     * event listeners
      */
     private GameFoundEventListener gameFoundEventListener;
+
+    private BroadcastDeckEventListener broadcastDeckEventListener;
 
     /**
      * A list of all messages coming from the server.
@@ -178,7 +182,7 @@ public final class SocketUtil extends Thread implements Service, Closeable {
                         logger.info("Received message of type " + msgData.getMessageType());
                         lastMessages.add(msg);
 
-                        handleEventListenerOnMessage(msgData.getMessageType());
+                        handleEventListenerOnMessage(msgData.getMessageType(), msgData);
                     }
                 }
             }
@@ -280,14 +284,25 @@ public final class SocketUtil extends Thread implements Service, Closeable {
     }
 
     /**
+     * @author Victor Hargrave
+     */
+    public void setBroadcastDeckEventListener(BroadcastDeckEventListener eventListener) {
+        this.broadcastDeckEventListener = eventListener;
+    }
+
+    /**
      * @param msgType Message to send to listener listening to "game-found"
      *                event.
      *
+     * @param msgData
      * @author Thomas Weber
      */
-    public void handleEventListenerOnMessage(final String msgType) {
+    public void handleEventListenerOnMessage(final String msgType, MessageData msgData) {
         if (msgType.equals("GameFound")) {
             gameFoundEventListener.onGameFound();
+        }
+        if (msgType.equals("BroadcastDeck")) {
+            broadcastDeckEventListener.onDeckBroadcasted(msgData);
         }
     }
 

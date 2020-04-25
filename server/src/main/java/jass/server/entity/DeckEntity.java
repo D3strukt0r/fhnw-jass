@@ -7,6 +7,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import javax.smartcardio.Card;
+import java.util.ArrayList;
 
 /**
  * A model with all known (and cached) teams.
@@ -91,5 +92,19 @@ public class DeckEntity implements Entity {
 
     public int getId() {
         return id;
+    }
+
+    public ArrayList<CardEntity> getCards() {
+        ArrayList<CardEntity> cards = new ArrayList<CardEntity>();
+        cards.add(card1);
+        cards.add(card2);
+        cards.add(card3);
+        cards.add(card4);
+        cards.add(card5);
+        cards.add(card6);
+        cards.add(card7);
+        cards.add(card8);
+        cards.add(card9);
+        return cards;
     }
 }

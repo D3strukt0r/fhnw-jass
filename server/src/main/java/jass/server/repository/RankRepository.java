@@ -21,6 +21,7 @@ package jass.server.repository;
 import com.j256.ormlite.dao.Dao;
 import jass.lib.database.Repository;
 import jass.server.entity.RankEntity;
+import jass.server.entity.SuitEntity;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -55,6 +56,15 @@ public final class RankRepository extends Repository<Dao<RankEntity, Integer>, R
         try {
             List<RankEntity> ranks = getDao().queryForAll();
             return ranks;
+        } catch (SQLException e) {
+            return null;
+        }
+    }
+
+    public RankEntity getById(int id) {
+        try {
+            RankEntity rankEntity = getDao().queryForId(id);
+            return rankEntity;
         } catch (SQLException e) {
             return null;
         }

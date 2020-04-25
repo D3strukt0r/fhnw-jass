@@ -43,6 +43,13 @@ public class RoundEntity implements Entity {
     RoundEntity() {
     }
 
+    public RoundEntity(UserEntity gameModeChooser, GameEntity game) {
+        this.gameModeChooser = gameModeChooser;
+        this.game = game;
+        this.pointsTeamOne = 0;
+        this.pointsTeamTwo = 0;
+    }
+
     public int getId() {
         return id;
     }

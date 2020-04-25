@@ -20,12 +20,13 @@
 package jass.server.util;
 
 import jass.lib.message.GameFoundData;
-import jass.server.entity.GameEntity;
-import jass.server.entity.TeamEntity;
-import jass.server.entity.UserEntity;
+import jass.lib.servicelocator.ServiceLocator;
+import jass.server.entity.*;
 import jass.server.message.GameFound;
 import jass.server.repository.GameRepository;
+import jass.server.repository.RoundRepository;
 import jass.server.repository.TeamRepository;
+import jass.server.repository.UserRepository;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -135,12 +136,29 @@ public final class SearchGameUtil implements Service {
             broadcastGameFound(playerThree, newGame, playerOne.getUser(), playerTwo.getUser(), playerThree.getUser(), playerFour.getUser(), teamOne, teamTwo);
             broadcastGameFound(playerFour, newGame, playerOne.getUser(), playerTwo.getUser(), playerThree.getUser(), playerFour.getUser(), teamOne, teamTwo);
 
+            CardUtil cardUtil = (CardUtil) ServiceLocator.get("CardUtil");
+            RoundEntity newRound = new RoundEntity(playerOne.getUser(), newGame);
+            RoundRepository.getSingleton(null).add(newRound);
+
+            List<DeckEntity> decks = cardUtil.addDecksForPlayers(newRound, playerOne.getUser(), playerTwo.getUser(), playerThree.getUser(), playerFour.getUser());
+            cardUtil.broadcastDeck(playerOne, decks.get(0));
+            cardUtil.broadcastDeck(playerTwo, decks.get(1));
+            cardUtil.broadcastDeck(playerThree, decks.get(2));
+            cardUtil.broadcastDeck(playerFour, decks.get(3));
+
             // If there are still enough players searching for a game create new game
             if (clients.size() >= 4) {
                 this.createNewGame();
             }
 
         }
+        CardUtil cardUtil = (CardUtil) ServiceLocator.get("CardUtil");
+        RoundEntity newRound = new RoundEntity(this.clients.get(0).getUser(), GameRepository.getSingleton(null).getById(1));
+        List<DeckEntity> decks = cardUtil.addDecksForPlayers(newRound, UserRepository.getSingleton(null).getByUsername("test1"),
+            UserRepository.getSingleton(null).getByUsername("test2"),
+            UserRepository.getSingleton(null).getByUsername("test3"),
+            UserRepository.getSingleton(null).getByUsername("test4"));
+        cardUtil.broadcastDeck(this.clients.get(0), decks.get(0));
     }
 
     /**

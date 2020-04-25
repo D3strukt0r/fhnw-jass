@@ -21,7 +21,6 @@ package jass.server.repository;
 import com.j256.ormlite.dao.Dao;
 import jass.lib.database.Repository;
 import jass.server.entity.CardEntity;
-import jass.server.entity.UserEntity;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -65,6 +64,12 @@ public final class CardRepository extends Repository<Dao<CardEntity, Integer>, C
     public List<CardEntity> getAll() {
         try {
             List<CardEntity> cards = getDao().queryForAll();
+            SuitRepository suitRepo = SuitRepository.getSingleton(null);
+            RankRepository rankRepo = RankRepository.getSingleton(null);
+            cards.forEach(card -> {
+                card.setSuit(suitRepo.getById(card.getSuit().getId()));
+                card.setRank(rankRepo.getById(card.getSuit().getId()));
+            });
             return cards;
         } catch (SQLException e) {
             return null;

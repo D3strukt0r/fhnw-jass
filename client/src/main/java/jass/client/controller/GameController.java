@@ -1,10 +1,12 @@
 package jass.client.controller;
 
+import jass.client.eventlistener.BroadcastDeckEventListener;
 import jass.client.mvc.Controller;
 import jass.client.util.SocketUtil;
 import jass.client.util.WindowUtil;
 import jass.client.view.GameView;
 import jass.client.view.ServerConnectionView;
+import jass.lib.message.MessageData;
 import jass.lib.servicelocator.ServiceLocator;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -19,7 +21,7 @@ import java.util.ResourceBundle;
  * @version %I%, %G%
  * @since 0.0.1
  */
-public final class GameController extends Controller {
+public final class GameController extends Controller implements BroadcastDeckEventListener {
     /**
      * The view.
      */
@@ -27,7 +29,10 @@ public final class GameController extends Controller {
 
     @Override
     public void initialize(final URL location, final ResourceBundle resources) {
-        // TODO: Do something
+        SocketUtil socket = (SocketUtil) ServiceLocator.get("backend");
+        if (socket != null) { // Not necessary but keeps IDE happy
+            socket.setBroadcastDeckEventListener(this);
+        }
     }
 
     /**
@@ -56,5 +61,10 @@ public final class GameController extends Controller {
      */
     public void setView(final GameView view) {
         this.view = view;
+    }
+
+    @Override
+    public void onDeckBroadcasted(MessageData msgData) {
+
     }
 }

@@ -20,12 +20,9 @@ package jass.server.repository;
 
 import com.j256.ormlite.dao.Dao;
 import jass.lib.database.Repository;
-import jass.server.entity.CardEntity;
 import jass.server.entity.DeckEntity;
-import jass.server.entity.UserEntity;
 
 import java.sql.SQLException;
-import java.util.List;
 
 public final class DeckRepository extends Repository<Dao<DeckEntity, Integer>, DeckEntity> {
     /**
@@ -37,7 +34,6 @@ public final class DeckRepository extends Repository<Dao<DeckEntity, Integer>, D
      * Creates a new singleton or returns the existing one.
      *
      * @param dao The DAO to edit inside the database.
-     *
      * @return Returns the Repository.
      */
     public static DeckRepository getSingleton(final Dao<DeckEntity, Integer> dao) {
