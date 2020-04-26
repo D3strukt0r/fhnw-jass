@@ -37,9 +37,7 @@ import java.util.stream.Collectors;
 import jass.lib.servicelocator.Service;
 
 /**
- * Creates a game once 4 clients are searching for a game in the lobby.
- *
- * @author Thomas Weber
+ * @author Victor Hargrave
  * @version %I%, %G%
  * @since 0.0.1
  */
@@ -52,7 +50,7 @@ public final class CardUtil implements Service {
     /**
      * The logger to print to console and save in a .log file.
      */
-    private static final Logger logger = LogManager.getLogger(SearchGameUtil.class);
+    private static final Logger logger = LogManager.getLogger(CardUtil.class);
 
     /**
      * Empty constructor.
@@ -60,19 +58,6 @@ public final class CardUtil implements Service {
     public CardUtil() {
     }
 
-    /**
-     * Add new client to search for game - if the client already is in the
-     * searching list remove the client.
-     *
-     * @param client The client to add.
-     */
-    public void addClientToSearchGame(final ClientUtil client) {
-        /*if (!clients.contains(client)) {
-            clients.add(client);
-            logger.info("Added new client " + client.getUsername() + " to waiting list. Total of " + clients.size() + " users searching for a game");
-            this.createNewGame();
-        }*/
-    }
 
     @Override
     public String getServiceName() {
@@ -82,6 +67,7 @@ public final class CardUtil implements Service {
     public List<DeckEntity> addDecksForPlayers(RoundEntity newRound, UserEntity playerOne, UserEntity playerTwo, UserEntity playerThree, UserEntity playerFour) {
         List<CardEntity> cards = CardRepository.getSingleton(null).getAll();
         Collections.shuffle(cards);
+        logger.info("shuffled cards");
 
         List<DeckEntity> decks = new ArrayList<DeckEntity>();
         decks.add(addNewDeck(newRound, playerOne, cards, 0));
@@ -96,6 +82,7 @@ public final class CardUtil implements Service {
             cards.get(i + 1), cards.get(i + 2), cards.get(i + 3), cards.get(i + 4), cards.get(i + 5),
             cards.get(i + 6), cards.get(i + 7), cards.get(i + 8));
         DeckRepository.getSingleton(null).add(deck);
+        logger.info("added deck for player");
         return deck;
     }
 

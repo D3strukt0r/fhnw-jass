@@ -38,7 +38,7 @@ import java.sql.SQLException;
  * Also contains a lot of code from following example code:
  * https://github.com/j256/ormlite-jdbc/blob/master/src/test/java/com/j256/ormlite/examples/manytomany/ManyToManyMain.java
  *
- * @author Manuele Vaccari
+ * @author Manuele Vaccari & Victor Hargrave
  * @version %I%, %G%
  * @since 0.0.1
  */

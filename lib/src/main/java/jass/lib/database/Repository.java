@@ -5,6 +5,10 @@ import com.j256.ormlite.dao.Dao;
 import java.sql.SQLException;
 import java.util.List;
 
+/**
+ * @author Victor Hargrave & Manuele Vaccari
+ */
+
 public abstract class Repository<D extends Dao<E, Integer>, E extends Entity> {
     /**
      * The DAO.

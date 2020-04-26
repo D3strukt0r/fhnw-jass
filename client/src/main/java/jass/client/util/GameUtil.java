@@ -14,6 +14,11 @@ import jass.lib.servicelocator.Service;
 
 import java.util.ArrayList;
 
+/**
+ * @author Victor Hargrave
+ * @version %I%, %G%
+ * @since 0.0.1
+ */
 public class GameUtil implements Service, BroadcastDeckEventListener {
     private static final Logger logger = LogManager.getLogger(GameController.class);
     private GameFoundData game;
