@@ -49,13 +49,4 @@ public final class DeckRepository extends Repository<Dao<DeckEntity, Integer>, D
     public DeckRepository(final Dao<DeckEntity, Integer> dao) {
         super(dao);
     }
-
-    public DeckEntity getById(int id) {
-        try {
-            DeckEntity deck = getDao().queryForId(id);
-            return deck;
-        } catch (SQLException e) {
-            return null;
-        }
-    }
 }

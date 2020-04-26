@@ -54,12 +54,12 @@ public final class DatabaseUtil implements Service, Closeable {
     /**
      * The DAO for the logins.
      */
-    private Dao<LoginEntity, String> loginDao;
+    private Dao<LoginEntity, Integer> loginDao;
 
     /**
      * The DAO for the servers.
      */
-    private Dao<ServerEntity, String> serverDao;
+    private Dao<ServerEntity, Integer> serverDao;
 
     /**
      * Create a database connection.
@@ -124,7 +124,7 @@ public final class DatabaseUtil implements Service, Closeable {
      *
      * @since 0.0.1
      */
-    public Dao<LoginEntity, String> getLoginDao() {
+    public Dao<LoginEntity, Integer> getLoginDao() {
         return loginDao;
     }
 
@@ -133,7 +133,7 @@ public final class DatabaseUtil implements Service, Closeable {
      *
      * @since 0.0.1
      */
-    public Dao<ServerEntity, String> getServerDao() {
+    public Dao<ServerEntity, Integer> getServerDao() {
         return serverDao;
     }
 

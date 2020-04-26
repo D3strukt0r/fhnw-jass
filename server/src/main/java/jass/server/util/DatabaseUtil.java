@@ -131,22 +131,22 @@ public final class DatabaseUtil implements Service, Closeable {
     }
 
     private void InsertRankSeedData() throws SQLException {
-        if(!rankDao.idExists(1)) rankDao.create(new RankEntity(1, "Six", 0, 0, 11));
-        if(!rankDao.idExists(2)) rankDao.create(new RankEntity(2, "Seven", 0, 0, 0));
-        if(!rankDao.idExists(3)) rankDao.create(new RankEntity(3, "Eight", 0, 8, 8));
-        if(!rankDao.idExists(4)) rankDao.create(new RankEntity(4, "Nine",0, 0, 0));
-        if(!rankDao.idExists(5)) rankDao.create(new RankEntity(5, "Ten",10, 10, 10));
-        if(!rankDao.idExists(6)) rankDao.create(new RankEntity(6, "Jack",2, 2, 2));
-        if(!rankDao.idExists(7)) rankDao.create(new RankEntity(7, "Queen",3, 3, 3));
-        if(!rankDao.idExists(8)) rankDao.create(new RankEntity(8, "King",4, 4, 4));
-        if(!rankDao.idExists(9)) rankDao.create(new RankEntity(9, "Ace",11, 11, 0));
+        if(!rankDao.idExists(1)) rankDao.create(new RankEntity(1, "6", 0, 0, 11));
+        if(!rankDao.idExists(2)) rankDao.create(new RankEntity(2, "7", 0, 0, 0));
+        if(!rankDao.idExists(3)) rankDao.create(new RankEntity(3, "8", 0, 8, 8));
+        if(!rankDao.idExists(4)) rankDao.create(new RankEntity(4, "9",0, 0, 0));
+        if(!rankDao.idExists(5)) rankDao.create(new RankEntity(5, "10",10, 10, 10));
+        if(!rankDao.idExists(6)) rankDao.create(new RankEntity(6, "jack",2, 2, 2));
+        if(!rankDao.idExists(7)) rankDao.create(new RankEntity(7, "queen",3, 3, 3));
+        if(!rankDao.idExists(8)) rankDao.create(new RankEntity(8, "king",4, 4, 4));
+        if(!rankDao.idExists(9)) rankDao.create(new RankEntity(9, "ace",11, 11, 0));
     }
 
     private void InsertSuitSeedData() throws SQLException {
-        if(!suitDao.idExists(1)) suitDao.create(new SuitEntity(1, "Hearts"));
-        if(!suitDao.idExists(2)) suitDao.create(new SuitEntity(2,"Diamonds"));
-        if(!suitDao.idExists(3)) suitDao.create(new SuitEntity(3,"Spades"));
-        if(!suitDao.idExists(4)) suitDao.create(new SuitEntity(4,"Clubs"));
+        if(!suitDao.idExists(1)) suitDao.create(new SuitEntity(1, "hearts"));
+        if(!suitDao.idExists(2)) suitDao.create(new SuitEntity(2,"diamonds"));
+        if(!suitDao.idExists(3)) suitDao.create(new SuitEntity(3,"spades"));
+        if(!suitDao.idExists(4)) suitDao.create(new SuitEntity(4,"clubs"));
     }
 
     private void InsertCardSeedData() throws SQLException {

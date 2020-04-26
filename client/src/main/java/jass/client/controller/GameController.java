@@ -7,6 +7,7 @@ import jass.client.util.WindowUtil;
 import jass.client.view.GameView;
 import jass.client.view.ServerConnectionView;
 import jass.lib.message.BroadcastDeckData;
+import jass.lib.message.CardData;
 import jass.lib.message.MessageData;
 import jass.lib.servicelocator.ServiceLocator;
 import javafx.application.Platform;
@@ -25,8 +26,7 @@ import java.util.ResourceBundle;
  * @version %I%, %G%
  * @since 0.0.1
  */
-public final class GameController extends Controller implements BroadcastDeckEventListener {
-    private static final Logger logger = LogManager.getLogger(GameController.class);
+public final class GameController extends Controller {
     /**
      * The view.
      */
@@ -34,10 +34,7 @@ public final class GameController extends Controller implements BroadcastDeckEve
 
     @Override
     public void initialize(final URL location, final ResourceBundle resources) {
-        SocketUtil socket = (SocketUtil) ServiceLocator.get("backend");
-        if (socket != null) { // Not necessary but keeps IDE happy
-            socket.setBroadcastDeckEventListener(this);
-        }
+
     }
 
     /**
@@ -68,16 +65,4 @@ public final class GameController extends Controller implements BroadcastDeckEve
         this.view = view;
     }
 
-    @Override
-    public void onDeckBroadcasted(MessageData msgData) {
-        BroadcastDeckData data = (BroadcastDeckData) msgData;
-        logger.info("Successfully received cards!");
-
-        // TODO - get rid of this alert, just for demonstration purposes at the moment
-        Platform.runLater(() -> {
-            Alert alert = new Alert(Alert.AlertType.INFORMATION, "Cards Received!");
-            alert.showAndWait();
-        });
-
-    }
 }

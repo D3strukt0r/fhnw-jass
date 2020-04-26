@@ -29,7 +29,7 @@ import jass.lib.database.Repository;
  * @version %I%, %G%
  * @since 0.0.1
  */
-public final class LoginRepository extends Repository<Dao<LoginEntity, String>, LoginEntity> {
+public final class LoginRepository extends Repository<Dao<LoginEntity, Integer>, LoginEntity> {
     /**
      * The singleton.
      */
@@ -42,7 +42,7 @@ public final class LoginRepository extends Repository<Dao<LoginEntity, String>, 
      *
      * @return Returns the Repository.
      */
-    public static LoginRepository getSingleton(final Dao<LoginEntity, String> dao) {
+    public static LoginRepository getSingleton(final Dao<LoginEntity, Integer> dao) {
         if (singleton == null) {
             singleton = new LoginRepository(dao);
         }
@@ -52,7 +52,7 @@ public final class LoginRepository extends Repository<Dao<LoginEntity, String>, 
     /**
      * @param dao The DAO to edit inside the database.
      */
-    public LoginRepository(final Dao<LoginEntity, String> dao) {
+    public LoginRepository(final Dao<LoginEntity, Integer> dao) {
         super(dao);
     }
 

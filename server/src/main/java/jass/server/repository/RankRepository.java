@@ -51,22 +51,4 @@ public final class RankRepository extends Repository<Dao<RankEntity, Integer>, R
     public RankRepository(final Dao<RankEntity, Integer> dao) {
         super(dao);
     }
-
-    public List<RankEntity> getAll() {
-        try {
-            List<RankEntity> ranks = getDao().queryForAll();
-            return ranks;
-        } catch (SQLException e) {
-            return null;
-        }
-    }
-
-    public RankEntity getById(int id) {
-        try {
-            RankEntity rankEntity = getDao().queryForId(id);
-            return rankEntity;
-        } catch (SQLException e) {
-            return null;
-        }
-    }
 }

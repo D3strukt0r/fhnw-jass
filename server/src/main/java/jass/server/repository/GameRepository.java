@@ -33,14 +33,4 @@ public final class GameRepository extends Repository<Dao<GameEntity, Integer>, G
     public GameRepository(final Dao<GameEntity, Integer> dao) {
         super(dao);
     }
-
-    public GameEntity getById(int id) {
-        try {
-            GameEntity game = getDao().queryForId(id);
-            return game;
-        } catch (SQLException e) {
-            return null;
-        }
-    }
-
 }

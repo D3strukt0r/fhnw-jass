@@ -51,28 +51,4 @@ public final class CardRepository extends Repository<Dao<CardEntity, Integer>, C
     public CardRepository(final Dao<CardEntity, Integer> dao) {
         super(dao);
     }
-
-    public CardEntity getById(int id) {
-        try {
-            CardEntity card = getDao().queryForId(id);
-            return card;
-        } catch (SQLException e) {
-            return null;
-        }
-    }
-
-    public List<CardEntity> getAll() {
-        try {
-            List<CardEntity> cards = getDao().queryForAll();
-            SuitRepository suitRepo = SuitRepository.getSingleton(null);
-            RankRepository rankRepo = RankRepository.getSingleton(null);
-            cards.forEach(card -> {
-                card.setSuit(suitRepo.getById(card.getSuit().getId()));
-                card.setRank(rankRepo.getById(card.getSuit().getId()));
-            });
-            return cards;
-        } catch (SQLException e) {
-            return null;
-        }
-    }
 }

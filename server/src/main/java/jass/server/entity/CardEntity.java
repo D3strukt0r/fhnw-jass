@@ -23,10 +23,10 @@ public class CardEntity implements Entity {
     @DatabaseField(id = true)
     private int id;
 
-    @DatabaseField(foreign = true)
+    @DatabaseField(foreign = true, foreignAutoRefresh = true)
     private RankEntity rank;
 
-    @DatabaseField(foreign = true)
+    @DatabaseField(foreign = true, foreignAutoRefresh = true)
     private SuitEntity suit;
 
     /**

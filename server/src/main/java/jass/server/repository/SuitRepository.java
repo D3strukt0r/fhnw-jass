@@ -51,22 +51,4 @@ public final class SuitRepository extends Repository<Dao<SuitEntity, Integer>, S
     public SuitRepository(final Dao<SuitEntity, Integer> dao) {
         super(dao);
     }
-
-    public List<SuitEntity> getAll() {
-        try {
-            List<SuitEntity> suits = getDao().queryForAll();
-            return suits;
-        } catch (SQLException e) {
-            return null;
-        }
-    }
-
-    public SuitEntity getById(int id) {
-        try {
-            SuitEntity suitEntity = getDao().queryForId(id);
-            return suitEntity;
-        } catch (SQLException e) {
-            return null;
-        }
-    }
 }

@@ -22,6 +22,7 @@ import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXCheckBox;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXTextField;
+import jass.client.util.*;
 import jass.client.view.LoginView;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
@@ -41,11 +42,6 @@ import org.apache.logging.log4j.Logger;
 import jass.client.entity.ServerEntity;
 import jass.client.repository.ServerRepository;
 import jass.client.mvc.Controller;
-import jass.client.util.SocketUtil;
-import jass.client.util.DatabaseUtil;
-import jass.client.util.I18nUtil;
-import jass.client.util.WindowUtil;
-import jass.client.util.ViewUtil;
 import jass.client.view.ServerConnectionView;
 import jass.lib.servicelocator.ServiceLocator;
 
@@ -428,6 +424,9 @@ public final class ServerConnectionController extends Controller {
                 // Try to connect to the server
                 socket = new SocketUtil(server.getIp(), server.getPort(), server.isSecure());
                 ServiceLocator.add(socket);
+                GameUtil gameUtil = new GameUtil();
+                ServiceLocator.add(gameUtil);
+
                 ServerRepository.getSingleton(null).setToConnectAutomatically(server); // Make sure it's the only entry
             } catch (ConnectException e) {
                 enableAllIfNew();

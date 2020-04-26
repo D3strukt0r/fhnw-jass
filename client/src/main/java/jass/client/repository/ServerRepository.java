@@ -29,7 +29,7 @@ import jass.lib.database.Repository;
  * @version %I%, %G%
  * @since 0.0.1
  */
-public final class ServerRepository extends Repository<Dao<ServerEntity, String>, ServerEntity> {
+public final class ServerRepository extends Repository<Dao<ServerEntity, Integer>, ServerEntity> {
     /**
      * The singleton.
      */
@@ -42,7 +42,7 @@ public final class ServerRepository extends Repository<Dao<ServerEntity, String>
      *
      * @return Returns the Repository.
      */
-    public static ServerRepository getSingleton(final Dao<ServerEntity, String> dao) {
+    public static ServerRepository getSingleton(final Dao<ServerEntity, Integer> dao) {
         if (singleton == null) {
             singleton = new ServerRepository(dao);
         }
@@ -52,7 +52,7 @@ public final class ServerRepository extends Repository<Dao<ServerEntity, String>
     /**
      * @param dao The DAO to edit inside the database.
      */
-    public ServerRepository(final Dao<ServerEntity, String> dao) {
+    public ServerRepository(final Dao<ServerEntity, Integer> dao) {
         super(dao);
     }
 

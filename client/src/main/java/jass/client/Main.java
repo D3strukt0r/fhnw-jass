@@ -1,6 +1,8 @@
 package jass.client;
 
+import jass.client.util.GameUtil;
 import jass.client.view.SplashView;
+import jass.lib.servicelocator.ServiceLocator;
 import javafx.application.Application;
 import javafx.stage.Stage;
 import org.apache.commons.cli.CommandLine;
@@ -59,7 +61,6 @@ public final class Main extends Application {
             ctx.getConfiguration().getRootLogger().setLevel(Level.DEBUG);
             ctx.updateLoggers();
         }
-
         launch(args);
     }
 

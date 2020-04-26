@@ -22,6 +22,8 @@ import jass.client.controller.LobbyController;
 import jass.client.eventlistener.BroadcastDeckEventListener;
 import jass.client.eventlistener.GameFoundEventListener;
 import jass.client.message.Message;
+import jass.lib.message.BroadcastDeckData;
+import jass.lib.message.GameFoundData;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import jass.client.entity.LoginEntity;
@@ -299,10 +301,10 @@ public final class SocketUtil extends Thread implements Service, Closeable {
      */
     public void handleEventListenerOnMessage(final String msgType, MessageData msgData) {
         if (msgType.equals("GameFound")) {
-            gameFoundEventListener.onGameFound();
+            gameFoundEventListener.onGameFound((GameFoundData) msgData);
         }
         if (msgType.equals("BroadcastDeck")) {
-            broadcastDeckEventListener.onDeckBroadcasted(msgData);
+            broadcastDeckEventListener.onDeckBroadcasted((BroadcastDeckData) msgData);
         }
     }
 
