@@ -277,7 +277,7 @@ public final class GameController extends Controller {
     }
 
     private void setImage(String pathToImage, Button button) {
-        BackgroundImage backgroundImage = new BackgroundImage( new Image( getClass().getResource(pathToImage).toExternalForm()), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, new BackgroundSize (73,113,true, true,true, false));
+        BackgroundImage backgroundImage = new BackgroundImage( new Image( getClass().getResource(pathToImage).toExternalForm()), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, new BackgroundSize (74,113,true, true,true, false));
         Background background = new Background(backgroundImage);
         button.setBackground(background);
 
