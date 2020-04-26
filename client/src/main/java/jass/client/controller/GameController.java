@@ -228,8 +228,8 @@ public final class GameController extends Controller {
             }
         });
 
-        //for testing
-        setImage(clubs, user1b1);
+        //for testing TODO delete when not needed anymore
+        setImage(clubs, user2b1);
 
         /*
          * Bind all texts
@@ -247,6 +247,9 @@ public final class GameController extends Controller {
         // TODO: Do something
     }
 
+    /**
+     * Render images for the player
+     */
     private void updateCardImages() {
         if(this.gameUtil.getPlayerDeck().stream().count() == 9) {
             CardData card1 = this.gameUtil.getPlayerDeck().get(0);
@@ -254,6 +257,27 @@ public final class GameController extends Controller {
 
             CardData card2 = this.gameUtil.getPlayerDeck().get(1);
             setImage("/images/cards/" + card2.getRank() +"_of_" + card2.getSuit() +".png", user1b2);
+
+            CardData card3 = this.gameUtil.getPlayerDeck().get(2);
+            setImage("/images/cards/" + card3.getRank() +"_of_" + card3.getSuit() +".png", user1b3);
+
+            CardData card4 = this.gameUtil.getPlayerDeck().get(3);
+            setImage("/images/cards/" + card4.getRank() +"_of_" + card4.getSuit() +".png", user1b4);
+
+            CardData card5 = this.gameUtil.getPlayerDeck().get(4);
+            setImage("/images/cards/" + card5.getRank() +"_of_" + card5.getSuit() +".png", user1b5);
+
+            CardData card6 = this.gameUtil.getPlayerDeck().get(5);
+            setImage("/images/cards/" + card6.getRank() +"_of_" + card6.getSuit() +".png", user1b6);
+
+            CardData card7 = this.gameUtil.getPlayerDeck().get(6);
+            setImage("/images/cards/" + card7.getRank() +"_of_" + card7.getSuit() +".png", user1b7);
+
+            CardData card8 = this.gameUtil.getPlayerDeck().get(7);
+            setImage("/images/cards/" + card8.getRank() +"_of_" + card8.getSuit() +".png", user1b8);
+
+            CardData card9 = this.gameUtil.getPlayerDeck().get(8);
+            setImage("/images/cards/" + card9.getRank() +"_of_" + card9.getSuit() +".png", user1b9);
         }
     }
 
