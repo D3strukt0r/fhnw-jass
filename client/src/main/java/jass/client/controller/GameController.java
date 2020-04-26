@@ -1,20 +1,13 @@
 package jass.client.controller;
 
-import jass.client.eventlistener.BroadcastDeckEventListener;
 import jass.client.mvc.Controller;
 import jass.client.util.SocketUtil;
 import jass.client.util.WindowUtil;
 import jass.client.view.GameView;
 import jass.client.view.ServerConnectionView;
-import jass.lib.message.BroadcastDeckData;
-import jass.lib.message.CardData;
-import jass.lib.message.MessageData;
 import jass.lib.servicelocator.ServiceLocator;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import java.net.URL;
 import java.util.ResourceBundle;

@@ -10,7 +10,6 @@ import jass.client.util.*;
 import jass.client.view.GameView;
 import jass.lib.message.CancelSearchGameData;
 import jass.lib.message.GameFoundData;
-import jass.lib.message.MessageData;
 import jass.lib.message.SearchGameData;
 import jass.lib.servicelocator.ServiceLocator;
 import javafx.scene.control.Alert;
