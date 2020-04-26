@@ -11,20 +11,12 @@ import jass.server.entity.TeamEntity;
  * @version %I%, %G%
  * @since 0.0.1
  */
-public final class TeamRepository extends Repository<Dao<TeamEntity, String>, TeamEntity> {
-    /**
-     * The singleton.
-     */
+
+public final class TeamRepository extends Repository<Dao<TeamEntity, Integer>, TeamEntity> {
+
     private static TeamRepository singleton = null;
 
-    /**
-     * Creates a new singleton or returns the existing one.
-     *
-     * @param dao The DAO to edit inside the database.
-     *
-     * @return Returns the Repository.
-     */
-    public static TeamRepository getSingleton(final Dao<TeamEntity, String> dao) {
+    public static TeamRepository getSingleton(final Dao<TeamEntity, Integer> dao) {
         if (singleton == null) {
             singleton = new TeamRepository(dao);
         }
@@ -34,7 +26,7 @@ public final class TeamRepository extends Repository<Dao<TeamEntity, String>, Te
     /**
      * @param dao The DAO to edit inside the database.
      */
-    public TeamRepository(final Dao<TeamEntity, String> dao) {
+    public TeamRepository(final Dao<TeamEntity, Integer> dao) {
         super(dao);
     }
 }

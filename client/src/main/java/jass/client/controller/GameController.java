@@ -27,7 +27,7 @@ public final class GameController extends Controller {
 
     @Override
     public void initialize(final URL location, final ResourceBundle resources) {
-        // TODO: Do something
+
     }
 
     /**
@@ -57,4 +57,5 @@ public final class GameController extends Controller {
     public void setView(final GameView view) {
         this.view = view;
     }
+
 }

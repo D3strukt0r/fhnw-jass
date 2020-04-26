@@ -25,7 +25,7 @@ import jass.server.entity.UserEntity;
 import java.sql.SQLException;
 import java.util.List;
 
-public final class UserRepository extends Repository<Dao<UserEntity, String>, UserEntity> {
+public final class UserRepository extends Repository<Dao<UserEntity, Integer>, UserEntity> {
     /**
      * The singleton.
      */
@@ -38,7 +38,7 @@ public final class UserRepository extends Repository<Dao<UserEntity, String>, Us
      *
      * @return Returns the Repository.
      */
-    public static UserRepository getSingleton(final Dao<UserEntity, String> dao) {
+    public static UserRepository getSingleton(final Dao<UserEntity, Integer> dao) {
         if (singleton == null) {
             singleton = new UserRepository(dao);
         }
@@ -48,7 +48,7 @@ public final class UserRepository extends Repository<Dao<UserEntity, String>, Us
     /**
      * @param dao The DAO to edit inside the database.
      */
-    public UserRepository(final Dao<UserEntity, String> dao) {
+    public UserRepository(final Dao<UserEntity, Integer> dao) {
         super(dao);
     }
 

@@ -3,8 +3,13 @@ package jass.lib.database;
 import com.j256.ormlite.dao.Dao;
 
 import java.sql.SQLException;
+import java.util.List;
 
-public abstract class Repository<D extends Dao<E, ?>, E extends Entity> {
+/**
+ * @author Victor Hargrave & Manuele Vaccari
+ */
+
+public abstract class Repository<D extends Dao<E, Integer>, E extends Entity> {
     /**
      * The DAO.
      */
@@ -22,6 +27,24 @@ public abstract class Repository<D extends Dao<E, ?>, E extends Entity> {
      */
     public D getDao() {
         return dao;
+    }
+
+    public E getById(Integer id) {
+        try {
+            E entity = getDao().queryForId(id);
+            return entity;
+        } catch (SQLException e) {
+            return null;
+        }
+    }
+
+    public List<E> getAll() {
+        try {
+            List<E> cards = getDao().queryForAll();
+            return cards;
+        } catch (SQLException e) {
+            return null;
+        }
     }
 
     /**
