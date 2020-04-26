@@ -2,6 +2,7 @@ package jass.client.controller;
 
 import com.jfoenix.controls.JFXButton;
 import jass.client.entity.LoginEntity;
+import jass.client.eventlistener.BroadcastDeckEventListener;
 import jass.client.eventlistener.GameFoundEventListener;
 import jass.client.message.CancelSearchGame;
 import jass.client.message.SearchGame;
@@ -186,6 +187,7 @@ public final class LobbyController extends Controller implements GameFoundEventL
             searching.setVisible(false);
             findMatch.setVisible(true);
             cancelMatch.setVisible(false);
+            goToGameView();
         } else {
             logger.error("Error cancelling search for game");
             Platform.runLater(() -> {
@@ -200,13 +202,6 @@ public final class LobbyController extends Controller implements GameFoundEventL
      */
     public void onGameFound() {
         logger.info("Successfully found game!");
-
-        // TODO - get rid of this alert, just for demonstration purposes at the moment
-        Platform.runLater(() -> {
-            Alert alert = new Alert(Alert.AlertType.INFORMATION, "Game Found!");
-            alert.showAndWait();
-        });
-
         goToGameView();
     }
 
@@ -214,7 +209,6 @@ public final class LobbyController extends Controller implements GameFoundEventL
      * Switch to the game window.
      */
     public void goToGameView() {
-        // TODO - Move to game view
         WindowUtil.switchTo(view, GameView.class);
     }
 

@@ -20,16 +20,16 @@ package jass.server.repository;
 
 import com.j256.ormlite.dao.Dao;
 import jass.lib.database.Repository;
-import jass.server.entity.UserEntity;
+import jass.server.entity.CardEntity;
 
 import java.sql.SQLException;
 import java.util.List;
 
-public final class UserRepository extends Repository<Dao<UserEntity, Integer>, UserEntity> {
+public final class CardRepository extends Repository<Dao<CardEntity, Integer>, CardEntity> {
     /**
      * The singleton.
      */
-    private static UserRepository singleton = null;
+    private static CardRepository singleton = null;
 
     /**
      * Creates a new singleton or returns the existing one.
@@ -38,9 +38,9 @@ public final class UserRepository extends Repository<Dao<UserEntity, Integer>, U
      *
      * @return Returns the Repository.
      */
-    public static UserRepository getSingleton(final Dao<UserEntity, Integer> dao) {
+    public static CardRepository getSingleton(final Dao<CardEntity, Integer> dao) {
         if (singleton == null) {
-            singleton = new UserRepository(dao);
+            singleton = new CardRepository(dao);
         }
         return singleton;
     }
@@ -48,42 +48,31 @@ public final class UserRepository extends Repository<Dao<UserEntity, Integer>, U
     /**
      * @param dao The DAO to edit inside the database.
      */
-    public UserRepository(final Dao<UserEntity, Integer> dao) {
+    public CardRepository(final Dao<CardEntity, Integer> dao) {
         super(dao);
     }
 
-    /**
-     * @param username The username of the user.
-     *
-     * @return Returns the UserEntity of the user, or null if not found or
-     * something went wrong.
-     */
-    public UserEntity getByUsername(final String username) {
+    public CardEntity getById(int id) {
         try {
-            // Find all users with the given username (only one)
-            List<UserEntity> results = getDao().queryBuilder().where().eq("username", username).query();
-            if (results.size() != 0) {
-                return results.get(0);
-            } else {
-                return null;
-            }
+            CardEntity card = getDao().queryForId(id);
+            return card;
         } catch (SQLException e) {
             return null;
         }
     }
 
-    /**
-     * @param username The username of the user.
-     *
-     * @return Returns true if the user exists, otherwise false.
-     */
-    public boolean usernameExists(final String username) {
+    public List<CardEntity> getAll() {
         try {
-            // Check if there is somebody in the db already using the given username.
-            List<UserEntity> results = getDao().queryBuilder().where().eq("username", username).query();
-            return results.size() != 0;
+            List<CardEntity> cards = getDao().queryForAll();
+            SuitRepository suitRepo = SuitRepository.getSingleton(null);
+            RankRepository rankRepo = RankRepository.getSingleton(null);
+            cards.forEach(card -> {
+                card.setSuit(suitRepo.getById(card.getSuit().getId()));
+                card.setRank(rankRepo.getById(card.getSuit().getId()));
+            });
+            return cards;
         } catch (SQLException e) {
-            return false;
+            return null;
         }
     }
 }

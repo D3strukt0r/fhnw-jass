@@ -20,27 +20,27 @@ package jass.server.repository;
 
 import com.j256.ormlite.dao.Dao;
 import jass.lib.database.Repository;
-import jass.server.entity.UserEntity;
+import jass.server.entity.CardEntity;
+import jass.server.entity.SuitEntity;
 
 import java.sql.SQLException;
 import java.util.List;
 
-public final class UserRepository extends Repository<Dao<UserEntity, Integer>, UserEntity> {
+public final class SuitRepository extends Repository<Dao<SuitEntity, Integer>, SuitEntity> {
     /**
      * The singleton.
      */
-    private static UserRepository singleton = null;
+    private static SuitRepository singleton = null;
 
     /**
      * Creates a new singleton or returns the existing one.
      *
      * @param dao The DAO to edit inside the database.
-     *
      * @return Returns the Repository.
      */
-    public static UserRepository getSingleton(final Dao<UserEntity, Integer> dao) {
+    public static SuitRepository getSingleton(final Dao<SuitEntity, Integer> dao) {
         if (singleton == null) {
-            singleton = new UserRepository(dao);
+            singleton = new SuitRepository(dao);
         }
         return singleton;
     }
@@ -48,42 +48,25 @@ public final class UserRepository extends Repository<Dao<UserEntity, Integer>, U
     /**
      * @param dao The DAO to edit inside the database.
      */
-    public UserRepository(final Dao<UserEntity, Integer> dao) {
+    public SuitRepository(final Dao<SuitEntity, Integer> dao) {
         super(dao);
     }
 
-    /**
-     * @param username The username of the user.
-     *
-     * @return Returns the UserEntity of the user, or null if not found or
-     * something went wrong.
-     */
-    public UserEntity getByUsername(final String username) {
+    public List<SuitEntity> getAll() {
         try {
-            // Find all users with the given username (only one)
-            List<UserEntity> results = getDao().queryBuilder().where().eq("username", username).query();
-            if (results.size() != 0) {
-                return results.get(0);
-            } else {
-                return null;
-            }
+            List<SuitEntity> suits = getDao().queryForAll();
+            return suits;
         } catch (SQLException e) {
             return null;
         }
     }
 
-    /**
-     * @param username The username of the user.
-     *
-     * @return Returns true if the user exists, otherwise false.
-     */
-    public boolean usernameExists(final String username) {
+    public SuitEntity getById(int id) {
         try {
-            // Check if there is somebody in the db already using the given username.
-            List<UserEntity> results = getDao().queryBuilder().where().eq("username", username).query();
-            return results.size() != 0;
+            SuitEntity suitEntity = getDao().queryForId(id);
+            return suitEntity;
         } catch (SQLException e) {
-            return false;
+            return null;
         }
     }
 }
