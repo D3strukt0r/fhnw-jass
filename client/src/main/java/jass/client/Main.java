@@ -59,7 +59,6 @@ public final class Main extends Application {
             ctx.getConfiguration().getRootLogger().setLevel(Level.DEBUG);
             ctx.updateLoggers();
         }
-
         launch(args);
     }
 

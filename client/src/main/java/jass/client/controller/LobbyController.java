@@ -2,22 +2,19 @@ package jass.client.controller;
 
 import com.jfoenix.controls.JFXButton;
 import jass.client.entity.LoginEntity;
-import jass.client.eventlistener.BroadcastDeckEventListener;
 import jass.client.eventlistener.GameFoundEventListener;
 import jass.client.message.CancelSearchGame;
 import jass.client.message.SearchGame;
 import jass.client.mvc.Controller;
-import jass.client.util.SocketUtil;
+import jass.client.util.*;
 import jass.client.view.GameView;
 import jass.lib.message.CancelSearchGameData;
+import jass.lib.message.GameFoundData;
 import jass.lib.message.SearchGameData;
 import jass.lib.servicelocator.ServiceLocator;
 import javafx.scene.control.Alert;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import jass.client.util.I18nUtil;
-import jass.client.util.ViewUtil;
-import jass.client.util.WindowUtil;
 import jass.client.view.LobbyView;
 import jass.client.view.LoginView;
 import javafx.application.Platform;
@@ -200,10 +197,15 @@ public final class LobbyController extends Controller implements GameFoundEventL
 
     /**
      * Work to do after a game was found.
+     * @param msgData
      */
-    public void onGameFound() {
-        logger.info("Successfully found game!");
+    public void onGameFound(GameFoundData msgData) {
+        GameUtil gameUtil = (GameUtil) ServiceLocator.get("GameUtil");
+        if (gameUtil != null) { // Not necessary but keeps IDE happy
+            gameUtil.setGame(msgData);
+        }
         goToGameView();
+        logger.info("Successfully found game!");
     }
 
     /**

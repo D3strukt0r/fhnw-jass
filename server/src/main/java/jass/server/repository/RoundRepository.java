@@ -49,13 +49,4 @@ public final class RoundRepository extends Repository<Dao<RoundEntity, Integer>,
     public RoundRepository(final Dao<RoundEntity, Integer> dao) {
         super(dao);
     }
-
-    public RoundEntity getById(int id) {
-        try {
-            RoundEntity deck = getDao().queryForId(id);
-            return deck;
-        } catch (SQLException e) {
-            return null;
-        }
-    }
 }

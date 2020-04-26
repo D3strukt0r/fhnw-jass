@@ -8,7 +8,7 @@ import org.json.JSONObject;
  * @author Victor Hargrave
  */
 
-public final class CardData extends MessageData{
+public final class CardData{
     private final int cardId;
 
     private final int suitId;
@@ -20,7 +20,6 @@ public final class CardData extends MessageData{
     private final String rank;
 
     public CardData(final int cardId, final int suitId, final String suit, final int rankId, final String rank) {
-        super("cards");
         this.cardId = cardId;
         this.suitId = suitId;
         this.suit = suit;
@@ -34,5 +33,17 @@ public final class CardData extends MessageData{
 
     public String getRank() {
         return rank;
+    }
+
+    public int getCardId() {
+        return cardId;
+    }
+
+    public int getSuitId() {
+        return suitId;
+    }
+
+    public int getRankId() {
+        return rankId;
     }
 }

@@ -101,9 +101,7 @@ public final class CardUtil implements Service {
 
     public void broadcastDeck(ClientUtil client, DeckEntity deckEntity) {
         List<CardData> cards = deckEntity.getCards().stream().map(CardEntity::toCardData).collect(Collectors.toList());
-        BroadcastDeck broadcastDeckMsg = new BroadcastDeck(new BroadcastDeckData(deckEntity.getId(),
-            cards.get(0), cards.get(1), cards.get(2), cards.get(3), cards.get(4), cards.get(5),
-            cards.get(6), cards.get(7), cards.get(8), cards));
+        BroadcastDeck broadcastDeckMsg = new BroadcastDeck(new BroadcastDeckData(deckEntity.getId(), cards));
 
         client.send(broadcastDeckMsg);
     }
