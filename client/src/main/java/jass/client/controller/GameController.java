@@ -20,8 +20,10 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
+import javafx.scene.image.Image;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.control.Alert;
+import javafx.scene.layout.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -210,6 +212,7 @@ public final class GameController extends Controller implements BroadcastDeckEve
     @FXML
     private Button user4played;
 
+    public String clubs = new String("/images/cards/2_of_clubs.png");
 
     @Override
     public void initialize(final URL location, final ResourceBundle resources) {
@@ -218,6 +221,9 @@ public final class GameController extends Controller implements BroadcastDeckEve
             socket.setBroadcastDeckEventListener(this);
         }
         // TODO: Do something
+
+        //for testing
+        setImage(clubs, user1b1);
 
         /*
          * Bind all texts
@@ -233,6 +239,13 @@ public final class GameController extends Controller implements BroadcastDeckEve
         mHelp.textProperty().bind(I18nUtil.createStringBinding(mHelp.getText()));
         mHelpAbout.textProperty().bind(I18nUtil.createStringBinding(mHelpAbout.getText()));
         // TODO: Do something
+    }
+
+    private void setImage(String pathToImage, Button button) {
+        BackgroundImage backgroundImage = new BackgroundImage( new Image( getClass().getResource(pathToImage).toExternalForm()), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);
+        Background background = new Background(backgroundImage);
+        button.setBackground(background);
+
     }
 
     /**
@@ -278,6 +291,11 @@ public final class GameController extends Controller implements BroadcastDeckEve
         logger.info("Successfully received cards!");
 
         // TODO - get rid of this alert, just for demonstration purposes at the moment
+
+        //TODO if card id 1 then .... show this card image itd itd
+        setImage("images/cards/" + data.getCardOneRank() +"_of_" + data.getCardOneSuit() +".png", user1b1);
+        setImage("images/cards/" + data.getCardTwoRank() +"_of_" + data.getCardTwoSuit() +".png", user1b2);
+
         Platform.runLater(() -> {
             Alert alert = new Alert(Alert.AlertType.INFORMATION, "Cards Received!");
             alert.showAndWait();

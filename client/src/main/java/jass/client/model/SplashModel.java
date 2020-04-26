@@ -100,7 +100,7 @@ public final class SplashModel extends Model {
                 }
             });
             // Check whether we can already login
-            tasks.add(() -> {
+            /*tasks.add(() -> {
                 LoginEntity login = LoginRepository.getSingleton(null).findConnectAutomatically();
                 if (login != null) {
                     logger.info("Automatic login found");
@@ -117,7 +117,7 @@ public final class SplashModel extends Model {
                         }
                     }
                 }
-            });
+            });*/
 
 
             // First, take some time, update progress

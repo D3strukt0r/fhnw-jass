@@ -148,7 +148,8 @@ public final class LobbyController extends Controller implements GameFoundEventL
     @FXML
     public void clickOnFindMatch() {
         // Get token and initialize SearchGame Message
-        LoginEntity login = (LoginEntity) ServiceLocator.get("login");
+        goToGameView(); //TODO get rid of this
+        /*LoginEntity login = (LoginEntity) ServiceLocator.get("login");
         String token = login.getToken();
         String userName = login.getUsername();
         SearchGame searchGameMsg = new SearchGame(new SearchGameData(token, userName));
@@ -165,7 +166,7 @@ public final class LobbyController extends Controller implements GameFoundEventL
                 Alert alert = new Alert(Alert.AlertType.ERROR, "Error searching for a game. Please try again!");
                 alert.showAndWait();
             });
-        }
+        }*/
 
     }
 
