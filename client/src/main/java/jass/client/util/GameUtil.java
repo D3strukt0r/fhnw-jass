@@ -21,8 +21,12 @@ public class GameUtil implements Service, BroadcastDeckEventListener {
     private GameFoundData game;
     private int deckId;
     private ObservableList<CardData> playerDeck;
-    //TODO DUMMY DATA FOR gamemode, points, etc.
 
+
+    //TODO DUMMY DATA - delete when not used anymore
+    private String gameMode = "Trumpf";
+    private int pointsRound = 14;
+    private int pointsTotal = 15;
 
     public GameUtil() {
         SocketUtil socket = (SocketUtil) ServiceLocator.get("backend");

@@ -1,16 +1,11 @@
 package jass.client.controller;
-import com.jfoenix.controls.JFXButton;
 
-
-import jass.client.eventlistener.BroadcastDeckEventListener;
 import jass.client.mvc.Controller;
 import jass.client.util.*;
 import jass.client.view.GameView;
 import jass.client.view.LoginView;
 import jass.client.view.ServerConnectionView;
-import jass.lib.message.BroadcastDeckData;
 import jass.lib.message.CardData;
-import jass.lib.message.MessageData;
 import jass.lib.servicelocator.ServiceLocator;
 import javafx.application.Platform;
 import javafx.collections.ListChangeListener;
@@ -21,14 +16,12 @@ import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCombination;
-import javafx.scene.control.Alert;
 import javafx.scene.layout.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.net.URL;
 import java.util.ResourceBundle;
-import java.util.stream.Collectors;
 
 /**
  * The controller for the dashboard (game) view.
@@ -212,7 +205,9 @@ public final class GameController extends Controller {
     @FXML
     private Button user4played;
 
+    //TODO temp variable - delete when not needed
     public String clubs = new String("/images/cards/2_of_clubs.png");
+
     private GameUtil gameUtil;
 
     @Override
@@ -244,9 +239,9 @@ public final class GameController extends Controller {
 
         mHelp.textProperty().bind(I18nUtil.createStringBinding(mHelp.getText()));
         mHelpAbout.textProperty().bind(I18nUtil.createStringBinding(mHelpAbout.getText()));
+
         // TODO: Do something
     }
-
     /**
      * Render images for the player
      */
@@ -282,7 +277,7 @@ public final class GameController extends Controller {
     }
 
     private void setImage(String pathToImage, Button button) {
-        BackgroundImage backgroundImage = new BackgroundImage( new Image( getClass().getResource(pathToImage).toExternalForm()), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);
+        BackgroundImage backgroundImage = new BackgroundImage( new Image( getClass().getResource(pathToImage).toExternalForm()), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, new BackgroundSize (73,113,true, true,true, false));
         Background background = new Background(backgroundImage);
         button.setBackground(background);
 
@@ -335,14 +330,6 @@ public final class GameController extends Controller {
 
     /**
      * @author Sasa Trajkova
-     * Method to display card images based on the players hand
-     */
-    public void updateCardImage() {
-        //TODO return card image (calculate what the players cards are)
-    }
-
-    /**
-     * @author Sasa Trajkova
      * Change background color in the player pane if it's the player's turn to play
      */
     @FXML
@@ -356,7 +343,32 @@ public final class GameController extends Controller {
      */
     @FXML
     public void updateUserNames(){
-        //TODO update usernames;
+
+        //TODO
+
+        /*if(gameUtil.getGame().getPlayerOne() != null){
+            user1.setText(gameUtil.getGame().getPlayerOne());
+        } else {
+            user1.setText("--");
+        }
+
+        if(gameUtil.getGame().getPlayerTwo() != null){
+            user2.setText(gameUtil.getGame().getPlayerTwo());
+        } else {
+            user2.setText("--");
+        }
+
+        if(gameUtil.getGame().getPlayerThree() != null){
+            user3.setText(gameUtil.getGame().getPlayerThree());
+        } else {
+            user3.setText("--");
+        }
+
+        if(gameUtil.getGame().getPlayerFour() != null){
+            user4.setText(gameUtil.getGame().getPlayerFour());
+        } else {
+            user4.setText("--");
+        }*/
     }
 }
 
