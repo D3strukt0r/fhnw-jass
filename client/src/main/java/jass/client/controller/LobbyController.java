@@ -145,8 +145,7 @@ public final class LobbyController extends Controller implements GameFoundEventL
     @FXML
     public void clickOnFindMatch() {
         // Get token and initialize SearchGame Message
-        goToGameView(); //TODO get rid of this
-        /*LoginEntity login = (LoginEntity) ServiceLocator.get("login");
+        LoginEntity login = (LoginEntity) ServiceLocator.get("login");
         String token = login.getToken();
         String userName = login.getUsername();
         SearchGame searchGameMsg = new SearchGame(new SearchGameData(token, userName));
@@ -157,13 +156,15 @@ public final class LobbyController extends Controller implements GameFoundEventL
             searching.setVisible(true);
             cancelMatch.setVisible(true);
             findMatch.setVisible(false);
+// TODO don't commit anything here
+            goToGameView();
         } else {
             logger.error("Error starting search for game");
             Platform.runLater(() -> {
                 Alert alert = new Alert(Alert.AlertType.ERROR, "Error searching for a game. Please try again!");
                 alert.showAndWait();
             });
-        }*/
+        }
 
     }
 

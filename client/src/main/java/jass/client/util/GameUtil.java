@@ -7,6 +7,8 @@ import jass.lib.message.CardData;
 import jass.lib.message.GameFoundData;
 import jass.lib.servicelocator.ServiceLocator;
 import javafx.application.Platform;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.scene.control.Alert;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -18,7 +20,7 @@ public class GameUtil implements Service, BroadcastDeckEventListener {
     private static final Logger logger = LogManager.getLogger(GameController.class);
     private GameFoundData game;
     private int deckId;
-    private ArrayList<CardData> playerDeck;
+    private ObservableList<CardData> playerDeck;
 
     public GameUtil() {
         SocketUtil socket = (SocketUtil) ServiceLocator.get("backend");
@@ -58,12 +60,12 @@ public class GameUtil implements Service, BroadcastDeckEventListener {
         this.deckId = deckId;
     }
 
-    public ArrayList<CardData> getPlayerDeck() {
+    public ObservableList<CardData> getPlayerDeck() {
         return playerDeck;
     }
 
     public void setPlayerDeck(ArrayList<CardData> playerDeck) {
-        this.playerDeck = playerDeck;
+        this.playerDeck = FXCollections.observableArrayList(playerDeck);
     }
 
     @Override

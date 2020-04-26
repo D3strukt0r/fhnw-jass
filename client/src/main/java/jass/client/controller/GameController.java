@@ -4,17 +4,16 @@ import com.jfoenix.controls.JFXButton;
 
 import jass.client.eventlistener.BroadcastDeckEventListener;
 import jass.client.mvc.Controller;
-import jass.client.util.I18nUtil;
-import jass.client.util.SocketUtil;
-import jass.client.util.ViewUtil;
-import jass.client.util.WindowUtil;
+import jass.client.util.*;
 import jass.client.view.GameView;
 import jass.client.view.LoginView;
 import jass.client.view.ServerConnectionView;
 import jass.lib.message.BroadcastDeckData;
+import jass.lib.message.CardData;
 import jass.lib.message.MessageData;
 import jass.lib.servicelocator.ServiceLocator;
 import javafx.application.Platform;
+import javafx.collections.ListChangeListener;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -29,6 +28,7 @@ import org.apache.logging.log4j.Logger;
 
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.stream.Collectors;
 
 /**
  * The controller for the dashboard (game) view.
@@ -37,7 +37,7 @@ import java.util.ResourceBundle;
  * @version %I%, %G%
  * @since 0.0.1
  */
-public final class GameController extends Controller implements BroadcastDeckEventListener {
+public final class GameController extends Controller {
     private static final Logger logger = LogManager.getLogger(GameController.class);
     /**
      * The view.
@@ -213,14 +213,20 @@ public final class GameController extends Controller implements BroadcastDeckEve
     private Button user4played;
 
     public String clubs = new String("/images/cards/2_of_clubs.png");
+    private GameUtil gameUtil;
 
     @Override
     public void initialize(final URL location, final ResourceBundle resources) {
-        SocketUtil socket = (SocketUtil) ServiceLocator.get("backend");
-        if (socket != null) { // Not necessary but keeps IDE happy
-            socket.setBroadcastDeckEventListener(this);
-        }
-        // TODO: Do something
+        this.gameUtil = (GameUtil) ServiceLocator.get("GameUtil");
+
+        updateCardImages();
+
+        this.gameUtil.getPlayerDeck().addListener(new ListChangeListener() {
+            @Override
+            public void onChanged(Change c) {
+                updateCardImages();
+            }
+        });
 
         //for testing
         setImage(clubs, user1b1);
@@ -239,6 +245,16 @@ public final class GameController extends Controller implements BroadcastDeckEve
         mHelp.textProperty().bind(I18nUtil.createStringBinding(mHelp.getText()));
         mHelpAbout.textProperty().bind(I18nUtil.createStringBinding(mHelpAbout.getText()));
         // TODO: Do something
+    }
+
+    private void updateCardImages() {
+        if(this.gameUtil.getPlayerDeck().stream().count() == 9) {
+            CardData card1 = this.gameUtil.getPlayerDeck().get(0);
+            setImage("/images/cards/" + card1.getRank() +"_of_" + card1.getSuit() +".png", user1b1);
+
+            CardData card2 = this.gameUtil.getPlayerDeck().get(1);
+            setImage("/images/cards/" + card2.getRank() +"_of_" + card2.getSuit() +".png", user1b2);
+        }
     }
 
     private void setImage(String pathToImage, Button button) {
@@ -283,24 +299,6 @@ public final class GameController extends Controller implements BroadcastDeckEve
      */
     public void setView(final GameView view) {
         this.view = view;
-    }
-
-    @Override
-    public void onDeckBroadcasted(MessageData msgData) {
-        BroadcastDeckData data = (BroadcastDeckData) msgData;
-        logger.info("Successfully received cards!");
-
-        // TODO - get rid of this alert, just for demonstration purposes at the moment
-
-        //TODO if card id 1 then .... show this card image itd itd
-        setImage("images/cards/" + data.getCardOneRank() +"_of_" + data.getCardOneSuit() +".png", user1b1);
-        setImage("images/cards/" + data.getCardTwoRank() +"_of_" + data.getCardTwoSuit() +".png", user1b2);
-
-        Platform.runLater(() -> {
-            Alert alert = new Alert(Alert.AlertType.INFORMATION, "Cards Received!");
-            alert.showAndWait();
-        });
-
     }
 
     /**
