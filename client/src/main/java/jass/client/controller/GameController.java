@@ -1,6 +1,7 @@
 package jass.client.controller;
 
 import jass.client.entity.LoginEntity;
+import jass.client.eventlistener.BroadcastGameModeEventListener;
 import jass.client.mvc.Controller;
 import jass.client.util.GameUtil;
 import jass.client.util.I18nUtil;
@@ -10,6 +11,7 @@ import jass.client.util.WindowUtil;
 import jass.client.view.GameView;
 import jass.client.view.LoginView;
 import jass.client.view.ServerConnectionView;
+import jass.lib.message.BroadcastGameModeData;
 import jass.lib.message.CardData;
 import jass.lib.servicelocator.ServiceLocator;
 import javafx.application.Platform;
@@ -37,7 +39,7 @@ import java.util.ResourceBundle;
  * @version %I%, %G%
  * @since 0.0.1
  */
-public final class GameController extends Controller {
+public final class GameController extends Controller implements BroadcastGameModeEventListener {
     /**
      * The view.
      */
@@ -382,6 +384,9 @@ public final class GameController extends Controller {
 
         this.gameUtil.getPlayerDeck().addListener((ListChangeListener) c -> updateCardImages());
 
+        SocketUtil socket = (SocketUtil) ServiceLocator.get(SocketUtil.class);
+        socket.addBroadcastGameModeEventListener(this);
+
         /*
          * Bind all texts
          */
@@ -674,5 +679,11 @@ public final class GameController extends Controller {
         } else {
             user4.setText("--");
         }
+    }
+
+    @Override
+    public void onBroadcastGameMode(final BroadcastGameModeData data) {
+        mode.setText("Mode: " + data.getGameMode().toString());
+        // TODO Maybe enable buttons in here to start game?
     }
 }
