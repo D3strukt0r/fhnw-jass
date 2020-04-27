@@ -48,7 +48,7 @@ public abstract class View {
     protected View(final Stage stage) {
         this.stage = stage;
 
-        scene = create_GUI(); // Create all controls within "root"
+        scene = createGUI(); // Create all controls within "root"
         stage.getIcons().add(new Image(getClass().getResource("/images/icon.png").toString())); // Add icon to window
         stage.setScene(scene);
     }
@@ -56,7 +56,7 @@ public abstract class View {
     /**
      * @return Returns a scene with the contents.
      */
-    protected abstract Scene create_GUI();
+    protected abstract Scene createGUI();
 
     /**
      * Display the view.

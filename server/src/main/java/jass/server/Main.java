@@ -57,16 +57,6 @@ public final class Main {
     private static final Logger logger = LogManager.getLogger(Main.class);
 
     /**
-     * The location of the database storage.
-     */
-    public static String dbLocation = "data/jass_server.sqlite3";
-
-    /**
-     * The default port of the server.
-     */
-    public static final int DEFAULT_PORT = 2000;
-
-    /**
      * Utility classes, which are collections of static members, are not meant
      * to be instantiated.
      */
@@ -98,7 +88,7 @@ public final class Main {
         }
 
         // Check for the ports argument
-        int port = DEFAULT_PORT;
+        int port = ServerSocketUtil.DEFAULT_PORT;
         if (cmd.hasOption("port")) {
             try {
                 port = Integer.parseInt(cmd.getOptionValue("port"));
@@ -109,11 +99,14 @@ public final class Main {
         }
         logger.info("Using port " + port);
 
-        // Check if the user wants to use a different location for the database
-        if (cmd.hasOption("db-location")) {
-            dbLocation = cmd.getOptionValue("db-location");
-        }
         try {
+            String dbLocation = DatabaseUtil.DEFAULT_LOCATION;
+
+            // Check if the user wants to use a different location for the database
+            if (cmd.hasOption("db-location")) {
+                dbLocation = cmd.getOptionValue("db-location");
+            }
+
             DatabaseUtil db = new DatabaseUtil(dbLocation);
             ServiceLocator.add(db);
             logger.info("Connection to database created");

@@ -52,7 +52,7 @@ public final class LoginView extends View {
     }
 
     @Override
-    protected Scene create_GUI() {
+    protected Scene createGUI() {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/login.fxml"));
             Parent root = loader.load();

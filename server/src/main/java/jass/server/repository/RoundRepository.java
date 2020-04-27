@@ -22,8 +22,13 @@ import com.j256.ormlite.dao.Dao;
 import jass.lib.database.Repository;
 import jass.server.entity.RoundEntity;
 
-import java.sql.SQLException;
-
+/**
+ * A model with all known rounds.
+ *
+ * @author Victor Hargrave
+ * @version %I%, %G%
+ * @since 0.0.1
+ */
 public final class RoundRepository extends Repository<Dao<RoundEntity, Integer>, RoundEntity> {
     /**
      * The singleton.
@@ -34,6 +39,7 @@ public final class RoundRepository extends Repository<Dao<RoundEntity, Integer>,
      * Creates a new singleton or returns the existing one.
      *
      * @param dao The DAO to edit inside the database.
+     *
      * @return Returns the Repository.
      */
     public static RoundRepository getSingleton(final Dao<RoundEntity, Integer> dao) {

@@ -1,5 +1,6 @@
 package jass.client;
 
+import jass.client.util.DatabaseUtil;
 import jass.client.view.SplashView;
 import javafx.application.Application;
 import javafx.stage.Stage;
@@ -25,7 +26,7 @@ public final class Main extends Application {
     /**
      * The location of the database storage.
      */
-    public static String dbLocation = "data/jass.sqlite3";
+    public static String dbLocation = DatabaseUtil.DEFAULT_LOCATION;
 
     /**
      * @param args The arguments passed in the console.

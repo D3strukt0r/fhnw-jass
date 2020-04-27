@@ -25,6 +25,13 @@ import jass.server.entity.UserEntity;
 import java.sql.SQLException;
 import java.util.List;
 
+/**
+ * A model with all users.
+ *
+ * @author Manuele Vaccari
+ * @version %I%, %G%
+ * @since 0.0.1
+ */
 public final class UserRepository extends Repository<Dao<UserEntity, Integer>, UserEntity> {
     /**
      * The singleton.

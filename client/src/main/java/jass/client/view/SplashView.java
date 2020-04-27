@@ -45,7 +45,7 @@ public final class SplashView extends View {
     }
 
     @Override
-    protected Scene create_GUI() {
+    protected Scene createGUI() {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/splash_screen.fxml"));
             Parent root = loader.load();

@@ -6,7 +6,11 @@ import jass.client.eventlistener.GameFoundEventListener;
 import jass.client.message.CancelSearchGame;
 import jass.client.message.SearchGame;
 import jass.client.mvc.Controller;
-import jass.client.util.*;
+import jass.client.util.GameUtil;
+import jass.client.util.I18nUtil;
+import jass.client.util.SocketUtil;
+import jass.client.util.ViewUtil;
+import jass.client.util.WindowUtil;
 import jass.client.view.GameView;
 import jass.lib.message.CancelSearchGameData;
 import jass.lib.message.GameFoundData;
@@ -195,9 +199,10 @@ public final class LobbyController extends Controller implements GameFoundEventL
 
     /**
      * Work to do after a game was found.
-     * @param msgData
+     *
+     * @param msgData The game found data.
      */
-    public void onGameFound(GameFoundData msgData) {
+    public void onGameFound(final GameFoundData msgData) {
         GameUtil gameUtil = (GameUtil) ServiceLocator.get(GameUtil.class);
         if (gameUtil != null) { // Not necessary but keeps IDE happy
             gameUtil.setGame(msgData);

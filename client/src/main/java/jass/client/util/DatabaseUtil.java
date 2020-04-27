@@ -42,6 +42,11 @@ import java.sql.SQLException;
  */
 public final class DatabaseUtil implements Service, Closeable {
     /**
+     * Default location to store the data.
+     */
+    public static final String DEFAULT_LOCATION = "sqlite:data/jass.sqlite3";
+
+    /**
      * The database connection.
      */
     private final ConnectionSource connectionSource;
@@ -66,7 +71,7 @@ public final class DatabaseUtil implements Service, Closeable {
      */
     public DatabaseUtil(final String databaseLocation) throws SQLException {
         // this uses h2 but you can change it to match your database
-        String databaseUrl = "jdbc:sqlite:" + databaseLocation;
+        String databaseUrl = "jdbc:" + databaseLocation;
 
         // create our data-source for the database
         connectionSource = new JdbcConnectionSource(databaseUrl);

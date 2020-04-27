@@ -21,11 +21,13 @@ package jass.server.util;
 
 import jass.lib.message.BroadcastDeckData;
 import jass.lib.message.CardData;
-import jass.lib.message.GameFoundData;
-import jass.server.entity.*;
+import jass.server.entity.CardEntity;
+import jass.server.entity.DeckEntity;
+import jass.server.entity.RoundEntity;
+import jass.server.entity.UserEntity;
 import jass.server.message.BroadcastDeck;
-import jass.server.message.GameFound;
-import jass.server.repository.*;
+import jass.server.repository.CardRepository;
+import jass.server.repository.DeckRepository;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -53,12 +55,21 @@ public final class CardUtil implements Service {
     public CardUtil() {
     }
 
-    public List<DeckEntity> addDecksForPlayers(RoundEntity newRound, UserEntity playerOne, UserEntity playerTwo, UserEntity playerThree, UserEntity playerFour) {
+    /**
+     * @param newRound    The new round.
+     * @param playerOne   User one.
+     * @param playerTwo   User two.
+     * @param playerThree User three.
+     * @param playerFour  User four.
+     *
+     * @return Returns the four decks created for each player.
+     */
+    public List<DeckEntity> addDecksForPlayers(final RoundEntity newRound, final UserEntity playerOne, final UserEntity playerTwo, final UserEntity playerThree, final UserEntity playerFour) {
         List<CardEntity> cards = CardRepository.getSingleton(null).getAll();
         Collections.shuffle(cards);
         logger.info("shuffled cards");
 
-        List<DeckEntity> decks = new ArrayList<DeckEntity>();
+        List<DeckEntity> decks = new ArrayList<>();
         decks.add(addNewDeck(newRound, playerOne, cards, 0));
         decks.add(addNewDeck(newRound, playerTwo, cards, 9));
         decks.add(addNewDeck(newRound, playerThree, cards, 18));
@@ -66,7 +77,15 @@ public final class CardUtil implements Service {
         return decks;
     }
 
-    private DeckEntity addNewDeck(RoundEntity newRound, UserEntity player, List<CardEntity> cards, int i) {
+    /**
+     * @param newRound The new round.
+     * @param player   The player.
+     * @param cards    The cards.
+     * @param i        The ID inside the iterator.
+     *
+     * @return Returns a deck for a specific player.
+     */
+    private DeckEntity addNewDeck(final RoundEntity newRound, final UserEntity player, final List<CardEntity> cards, final int i) {
         DeckEntity deck = new DeckEntity(player, newRound, cards.get(i),
             cards.get(i + 1), cards.get(i + 2), cards.get(i + 3), cards.get(i + 4), cards.get(i + 5),
             cards.get(i + 6), cards.get(i + 7), cards.get(i + 8));
@@ -75,7 +94,11 @@ public final class CardUtil implements Service {
         return deck;
     }
 
-    public void broadcastDeck(ClientUtil client, DeckEntity deckEntity) {
+    /**
+     * @param client     The client to send the deck to.
+     * @param deckEntity The deck to send to the client.
+     */
+    public void broadcastDeck(final ClientUtil client, final DeckEntity deckEntity) {
         List<CardData> cards = deckEntity.getCards().stream().map(CardEntity::toCardData).collect(Collectors.toList());
         BroadcastDeck broadcastDeckMsg = new BroadcastDeck(new BroadcastDeckData(deckEntity.getId(), cards));
 

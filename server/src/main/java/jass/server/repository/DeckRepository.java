@@ -22,8 +22,13 @@ import com.j256.ormlite.dao.Dao;
 import jass.lib.database.Repository;
 import jass.server.entity.DeckEntity;
 
-import java.sql.SQLException;
-
+/**
+ * A model with all decks.
+ *
+ * @author Victor Hargrave
+ * @version %I%, %G%
+ * @since 0.0.1
+ */
 public final class DeckRepository extends Repository<Dao<DeckEntity, Integer>, DeckEntity> {
     /**
      * The singleton.

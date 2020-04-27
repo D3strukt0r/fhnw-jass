@@ -21,7 +21,11 @@ package jass.server.util;
 
 import jass.lib.message.GameFoundData;
 import jass.lib.servicelocator.ServiceLocator;
-import jass.server.entity.*;
+import jass.server.entity.DeckEntity;
+import jass.server.entity.GameEntity;
+import jass.server.entity.RoundEntity;
+import jass.server.entity.TeamEntity;
+import jass.server.entity.UserEntity;
 import jass.server.message.GameFound;
 import jass.server.repository.GameRepository;
 import jass.server.repository.RoundRepository;
@@ -52,7 +56,7 @@ public final class SearchGameUtil implements Service {
     /**
      * List of all clients which are searching for a game.
      */
-    private static final List<ClientUtil> clients = Collections.synchronizedList(new ArrayList<ClientUtil>());
+    private static final List<ClientUtil> clients = Collections.synchronizedList(new ArrayList<>());
 
     /**
      * Empty constructor.
@@ -86,7 +90,7 @@ public final class SearchGameUtil implements Service {
             Boolean removedSuccessfully = false;
             Iterator<ClientUtil> iterator = clients.iterator();
             while (iterator.hasNext()) {
-                ClientUtil c = (ClientUtil) iterator.next();
+                ClientUtil c = iterator.next();
                 if (c.getToken().equals(client.getToken())) {
                     iterator.remove();
                     logger.info("Removed client " + client.getUsername() + " from waiting list");
@@ -102,10 +106,10 @@ public final class SearchGameUtil implements Service {
     private void createNewGame() {
         if (clients.size() >= 4) {
             // Get players for game
-            ClientUtil playerOne = this.clients.get(0);
-            ClientUtil playerTwo = this.clients.get(1);
-            ClientUtil playerThree = this.clients.get(2);
-            ClientUtil playerFour = this.clients.get(3);
+            ClientUtil playerOne = clients.get(0);
+            ClientUtil playerTwo = clients.get(1);
+            ClientUtil playerThree = clients.get(2);
+            ClientUtil playerFour = clients.get(3);
 
             // Assign and create Teams
             TeamEntity teamOne = new TeamEntity(playerOne.getUser(), playerThree.getUser());
@@ -121,8 +125,8 @@ public final class SearchGameUtil implements Service {
             // TODO - Where do we add new Game? GameUtil?
 
             // Remove players from waiting list
-            this.clients.subList(0, 4).clear();
-            logger.info("Players searching for a game:  " + this.clients.size());
+            clients.subList(0, 4).clear();
+            logger.info("Players searching for a game:  " + clients.size());
 
             // Broadcast to all Players
             broadcastGameFound(playerOne, newGame, playerOne.getUser(), playerTwo.getUser(), playerThree.getUser(), playerFour.getUser(), teamOne, teamTwo);

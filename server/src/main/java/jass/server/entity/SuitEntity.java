@@ -3,8 +3,6 @@ package jass.server.entity;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 import jass.lib.database.Entity;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 /**
  * A model with all known (and cached) Games.
@@ -13,15 +11,17 @@ import org.apache.logging.log4j.Logger;
  * @version %I%, %G%
  * @since 0.0.1
  */
-
 @DatabaseTable(tableName = "suit")
-public class SuitEntity implements Entity {
-
-    private static final Logger logger = LogManager.getLogger(SuitEntity.class);
-
+public final class SuitEntity implements Entity {
+    /**
+     * The ID.
+     */
     @DatabaseField(id = true)
     private int id;
 
+    /**
+     * The suit.
+     */
     @DatabaseField()
     private String key;
 
@@ -29,17 +29,28 @@ public class SuitEntity implements Entity {
      * For ORMLite all persisted classes must define a no-arg constructor with
      * at least package visibility.
      */
-    SuitEntity() { }
+    SuitEntity() {
+    }
 
-    public SuitEntity(int id, String key) {
+    /**
+     * @param id  The ID.
+     * @param key The suit,
+     */
+    public SuitEntity(final int id, final String key) {
         this.id = id;
         this.key = key;
     }
 
+    /**
+     * @return Returns the ID.
+     */
     public int getId() {
         return id;
     }
 
+    /**
+     * @return Returns the suit.
+     */
     public String getKey() {
         return key;
     }

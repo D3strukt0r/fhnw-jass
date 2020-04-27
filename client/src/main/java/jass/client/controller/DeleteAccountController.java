@@ -263,7 +263,6 @@ public final class DeleteAccountController extends Controller {
                 if (logoutMsg.process(backend)) {
                     ServiceLocator.remove(LoginEntity.class);
                     WindowUtil.switchTo(view, LoginView.class);
-                    view.stop();
                 } else {
                     enableAll();
                     setErrorMessage("gui.deleteAccount.logoutFailed");

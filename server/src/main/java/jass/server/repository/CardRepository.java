@@ -22,9 +22,13 @@ import com.j256.ormlite.dao.Dao;
 import jass.lib.database.Repository;
 import jass.server.entity.CardEntity;
 
-import java.sql.SQLException;
-import java.util.List;
-
+/**
+ * A model with all known cards.
+ *
+ * @author Victor Hargrave
+ * @version %I%, %G%
+ * @since 0.0.1
+ */
 public final class CardRepository extends Repository<Dao<CardEntity, Integer>, CardEntity> {
     /**
      * The singleton.

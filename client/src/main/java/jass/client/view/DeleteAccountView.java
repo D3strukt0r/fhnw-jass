@@ -52,7 +52,7 @@ public final class DeleteAccountView extends View {
     }
 
     @Override
-    protected Scene create_GUI() {
+    protected Scene createGUI() {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/delete_account.fxml"));
             Parent root = loader.load();

@@ -2,7 +2,11 @@ package jass.client.controller;
 
 import jass.client.entity.LoginEntity;
 import jass.client.mvc.Controller;
-import jass.client.util.*;
+import jass.client.util.GameUtil;
+import jass.client.util.I18nUtil;
+import jass.client.util.SocketUtil;
+import jass.client.util.ViewUtil;
+import jass.client.util.WindowUtil;
 import jass.client.view.GameView;
 import jass.client.view.LoginView;
 import jass.client.view.ServerConnectionView;
@@ -17,9 +21,11 @@ import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCombination;
-import javafx.scene.layout.*;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundImage;
+import javafx.scene.layout.BackgroundPosition;
+import javafx.scene.layout.BackgroundRepeat;
+import javafx.scene.layout.BackgroundSize;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -32,7 +38,6 @@ import java.util.ResourceBundle;
  * @since 0.0.1
  */
 public final class GameController extends Controller {
-    private static final Logger logger = LogManager.getLogger(GameController.class);
     /**
      * The view.
      */
@@ -99,113 +104,272 @@ public final class GameController extends Controller {
     private Label scoreT;
 
     /**
-     * The Username labels.
+     * The Username label for user one.
      */
     @FXML
     private Label user1;
+
+    /**
+     * The Username label for user two.
+     */
     @FXML
     private Label user2;
+
+    /**
+     * The Username label for user three.
+     */
     @FXML
     private Label user3;
+
+    /**
+     * The Username label for user four.
+     */
     @FXML
     private Label user4;
 
     /**
-     * The User1 card buttons.
+     * The user one card button one.
      */
     @FXML
     private Button user1b1;
+
+    /**
+     * The user one card button two.
+     */
     @FXML
     private Button user1b2;
+
+    /**
+     * The user one card button three.
+     */
     @FXML
     private Button user1b3;
+
+    /**
+     * The user one card button four.
+     */
     @FXML
     private Button user1b4;
+
+    /**
+     * The user one card button five.
+     */
     @FXML
     private Button user1b5;
+
+    /**
+     * The user one card button six.
+     */
     @FXML
     private Button user1b6;
+
+    /**
+     * The user one card button seven.
+     */
     @FXML
     private Button user1b7;
+
+    /**
+     * The user one card button eight.
+     */
     @FXML
     private Button user1b8;
+
+    /**
+     * The user one card button nine.
+     */
     @FXML
     private Button user1b9;
+
+    /**
+     * The card that user one played in this round.
+     */
     @FXML
     private Button user1played;
 
     /**
-     * The User2 card buttons.
+     * The user two card button one.
      */
     @FXML
     private Button user2b1;
+
+    /**
+     * The user two card button two.
+     */
     @FXML
     private Button user2b2;
+
+    /**
+     * The user two card button three.
+     */
     @FXML
     private Button user2b3;
+
+    /**
+     * The user two card button four.
+     */
     @FXML
     private Button user2b4;
+
+    /**
+     * The user two card button five.
+     */
     @FXML
     private Button user2b5;
+
+    /**
+     * The user two card button six.
+     */
     @FXML
     private Button user2b6;
+
+    /**
+     * The user two card button seven.
+     */
     @FXML
     private Button user2b7;
+
+    /**
+     * The user two card button eight.
+     */
     @FXML
     private Button user2b8;
+
+    /**
+     * The user two card button nine.
+     */
     @FXML
     private Button user2b9;
+
+    /**
+     * The card that user two played in this round.
+     */
     @FXML
     private Button user2played;
 
     /**
-     * The User3 card buttons.
+     * The user three card button one.
      */
     @FXML
     private Button user3b1;
+
+    /**
+     * The user three card button two.
+     */
     @FXML
     private Button user3b2;
+
+    /**
+     * The user three card button three.
+     */
     @FXML
     private Button user3b3;
+
+    /**
+     * The user three card button four.
+     */
     @FXML
     private Button user3b4;
+
+    /**
+     * The user three card button five.
+     */
     @FXML
     private Button user3b5;
+
+    /**
+     * The user three card button six.
+     */
     @FXML
     private Button user3b6;
+
+    /**
+     * The user three card button seven.
+     */
     @FXML
     private Button user3b7;
+
+    /**
+     * The user three card button eight.
+     */
     @FXML
     private Button user3b8;
+
+    /**
+     * The user three card button nine.
+     */
     @FXML
     private Button user3b9;
+
+    /**
+     * The card that user three played in this round.
+     */
     @FXML
     private Button user3played;
 
     /**
-     * The User4 card buttons.
+     * The user four card button one.
      */
     @FXML
     private Button user4b1;
+
+    /**
+     * The user four card button two.
+     */
     @FXML
     private Button user4b2;
+
+    /**
+     * The user four card button three.
+     */
     @FXML
     private Button user4b3;
+
+    /**
+     * The user four card button four.
+     */
     @FXML
     private Button user4b4;
+
+    /**
+     * The user four card button five.
+     */
     @FXML
     private Button user4b5;
+
+    /**
+     * The user four card button six.
+     */
     @FXML
     private Button user4b6;
+
+    /**
+     * The user four card button seven.
+     */
     @FXML
     private Button user4b7;
+
+    /**
+     * The user four card button eight.
+     */
     @FXML
     private Button user4b8;
+
+    /**
+     * The user four card button nine.
+     */
     @FXML
     private Button user4b9;
+
+    /**
+     * The card that user four played in this round.
+     */
     @FXML
     private Button user4played;
 
+    /**
+     * The running game.
+     */
     private GameUtil gameUtil;
 
     @Override
@@ -216,12 +380,7 @@ public final class GameController extends Controller {
         updateUserNames();
         updateCardImages();
 
-        this.gameUtil.getPlayerDeck().addListener(new ListChangeListener() {
-            @Override
-            public void onChanged(Change c) {
-                updateCardImages();
-            }
-        });
+        this.gameUtil.getPlayerDeck().addListener((ListChangeListener) c -> updateCardImages());
 
         /*
          * Bind all texts
@@ -239,10 +398,10 @@ public final class GameController extends Controller {
     }
 
     /**
-     * Display card images in the right player pane
+     * Display card images in the right player pane.
      */
     private void updateCardImages() {
-        if (this.gameUtil.getPlayerDeck().stream().count() == 9) {
+        if (gameUtil.getPlayerDeck().size() == 9) {
 
             LoginEntity login = (LoginEntity) ServiceLocator.get(LoginEntity.class);
 
@@ -365,11 +524,14 @@ public final class GameController extends Controller {
         }
     }
 
-    private void setImage(String pathToImage, Button button) {
+    /**
+     * @param pathToImage The image path.
+     * @param button      The button to assign a card image.
+     */
+    private void setImage(final String pathToImage, final Button button) {
         BackgroundImage backgroundImage = new BackgroundImage(new Image(getClass().getResource(pathToImage).toExternalForm()), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, new BackgroundSize(74, 113, true, true, true, false));
         Background background = new Background(backgroundImage);
         button.setBackground(background);
-
     }
 
     /**
@@ -411,8 +573,10 @@ public final class GameController extends Controller {
 
 
     /**
+     * Method to only enable buttons for those cards that are legal for a
+     * specific round.
+     *
      * @author Sasa Trajkova
-     * Method to only enable buttons for those cards that are legal for a specific round
      */
     public void enableButtons() {
         //TODO enable buttons for the cards that could be played in the round based on game mode
@@ -469,8 +633,10 @@ public final class GameController extends Controller {
     }
 
     /**
+     * Change background color in the player pane if it's the player's turn to
+     * play.
+     *
      * @author Sasa Trajkova
-     * Change background color in the player pane if it's the player's turn to play
      */
     @FXML
     public void changePlayerPaneBackground() {
@@ -478,8 +644,9 @@ public final class GameController extends Controller {
     }
 
     /**
+     * Fetch usernames and match them with the right label.
+     *
      * @author Sasa Trajkova
-     * Fatch usernames and match them with the right label
      */
     @FXML
     public void updateUserNames() {
@@ -509,4 +676,3 @@ public final class GameController extends Controller {
         }
     }
 }
-

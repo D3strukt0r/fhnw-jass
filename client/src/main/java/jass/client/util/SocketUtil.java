@@ -18,7 +18,6 @@
 
 package jass.client.util;
 
-import jass.client.controller.LobbyController;
 import jass.client.eventlistener.BroadcastDeckEventListener;
 import jass.client.eventlistener.GameFoundEventListener;
 import jass.client.message.Message;
@@ -83,10 +82,13 @@ public final class SocketUtil extends Thread implements Service, Closeable {
     private final ArrayList<DisconnectEventListener> disconnectListener = new ArrayList<>();
 
     /**
-     * event listeners
+     * Object listening to game found event.
      */
     private GameFoundEventListener gameFoundEventListener;
 
+    /**
+     * Object listening to broadcast deck event.
+     */
     private BroadcastDeckEventListener broadcastDeckEventListener;
 
     /**
@@ -281,20 +283,22 @@ public final class SocketUtil extends Thread implements Service, Closeable {
     }
 
     /**
+     * @param eventListener The listener to listen to broadcast deck.
+     *
      * @author Victor Hargrave
      */
-    public void setBroadcastDeckEventListener(BroadcastDeckEventListener eventListener) {
+    public void setBroadcastDeckEventListener(final BroadcastDeckEventListener eventListener) {
         this.broadcastDeckEventListener = eventListener;
     }
 
     /**
      * @param msgType Message to send to listener listening to "game-found"
      *                event.
+     * @param msgData The message to send to the listeners.
      *
-     * @param msgData
      * @author Thomas Weber
      */
-    public void handleEventListenerOnMessage(final String msgType, MessageData msgData) {
+    public void handleEventListenerOnMessage(final String msgType, final MessageData msgData) {
         if (msgType.equals("GameFound")) {
             gameFoundEventListener.onGameFound((GameFoundData) msgData);
         }

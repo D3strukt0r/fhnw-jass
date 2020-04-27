@@ -20,6 +20,14 @@ import java.security.spec.InvalidKeySpecException;
  */
 public final class HashUtil {
     /**
+     * Utility classes, which are collections of static members, are not meant
+     * to be instantiated.
+     */
+    private HashUtil() {
+        throw new IllegalStateException("Utility class");
+    }
+
+    /**
      * @param password The password to hash.
      *
      * @return Returns a hashed password.
@@ -97,7 +105,7 @@ public final class HashUtil {
      *
      * @return Returns a hex string.
      */
-    private static byte[] fromHex(String hex) {
+    private static byte[] fromHex(final String hex) {
         byte[] bytes = new byte[hex.length() / 2];
         for (int i = 0; i < bytes.length; i++) {
             bytes[i] = (byte) Integer.parseInt(hex.substring(2 * i, 2 * i + 2), 16);

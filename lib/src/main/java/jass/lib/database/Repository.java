@@ -6,9 +6,11 @@ import java.sql.SQLException;
 import java.util.List;
 
 /**
+ * @param <D> The DAO for the entity
+ * @param <E> The entity
+ *
  * @author Victor Hargrave & Manuele Vaccari
  */
-
 public abstract class Repository<D extends Dao<E, Integer>, E extends Entity> {
     /**
      * The DAO.
@@ -27,24 +29,6 @@ public abstract class Repository<D extends Dao<E, Integer>, E extends Entity> {
      */
     public D getDao() {
         return dao;
-    }
-
-    public E getById(Integer id) {
-        try {
-            E entity = getDao().queryForId(id);
-            return entity;
-        } catch (SQLException e) {
-            return null;
-        }
-    }
-
-    public List<E> getAll() {
-        try {
-            List<E> cards = getDao().queryForAll();
-            return cards;
-        } catch (SQLException e) {
-            return null;
-        }
     }
 
     /**
@@ -89,6 +73,30 @@ public abstract class Repository<D extends Dao<E, Integer>, E extends Entity> {
             return true;
         } catch (SQLException e) {
             return false;
+        }
+    }
+
+    /**
+     * @param id The id of the tuple to find.
+     *
+     * @return Returns the entity or null if not found.
+     */
+    public E getById(final int id) {
+        try {
+            return dao.queryForId(id);
+        } catch (SQLException e) {
+            return null;
+        }
+    }
+
+    /**
+     * @return Returns all tuples or null if an error happened.
+     */
+    public List<E> getAll() {
+        try {
+            return dao.queryForAll();
+        } catch (SQLException e) {
+            return null;
         }
     }
 }

@@ -21,11 +21,14 @@ package jass.server.repository;
 import com.j256.ormlite.dao.Dao;
 import jass.lib.database.Repository;
 import jass.server.entity.RankEntity;
-import jass.server.entity.SuitEntity;
 
-import java.sql.SQLException;
-import java.util.List;
-
+/**
+ * A model with all known ranks.
+ *
+ * @author Victor Hargrave
+ * @version %I%, %G%
+ * @since 0.0.1
+ */
 public final class RankRepository extends Repository<Dao<RankEntity, Integer>, RankEntity> {
     /**
      * The singleton.
@@ -36,6 +39,7 @@ public final class RankRepository extends Repository<Dao<RankEntity, Integer>, R
      * Creates a new singleton or returns the existing one.
      *
      * @param dao The DAO to edit inside the database.
+     *
      * @return Returns the Repository.
      */
     public static RankRepository getSingleton(final Dao<RankEntity, Integer> dao) {

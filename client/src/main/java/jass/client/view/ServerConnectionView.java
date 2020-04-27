@@ -52,7 +52,7 @@ public final class ServerConnectionView extends View {
     }
 
     @Override
-    protected Scene create_GUI() {
+    protected Scene createGUI() {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/server_connection.fxml"));
             Parent root = loader.load();

@@ -52,7 +52,7 @@ public final class ChangePasswordView extends View {
     }
 
     @Override
-    protected Scene create_GUI() {
+    protected Scene createGUI() {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/change_password.fxml"));
             Parent root = loader.load();

@@ -52,6 +52,11 @@ public final class ServerSocketUtil extends Thread {
     private static final Logger logger = LogManager.getLogger(ServerSocketUtil.class);
 
     /**
+     * The default port of the server.
+     */
+    public static final int DEFAULT_PORT = 2000;
+
+    /**
      * The server socket listener.
      */
     private final ServerSocket listener;

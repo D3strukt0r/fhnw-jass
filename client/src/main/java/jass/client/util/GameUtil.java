@@ -21,10 +21,25 @@ import java.util.ArrayList;
  * @version %I%, %G%
  * @since 0.0.1
  */
-public class GameUtil implements Service, BroadcastDeckEventListener {
+public final class GameUtil implements Service, BroadcastDeckEventListener {
+    /**
+     * The logger to print to console and save in a .log file.
+     */
     private static final Logger logger = LogManager.getLogger(GameController.class);
+
+    /**
+     * The game.
+     */
     private GameFoundData game;
+
+    /**
+     * The deck ID.
+     */
     private int deckId;
+
+    /**
+     * The deck of the player.
+     */
     private ObservableList<CardData> playerDeck;
 
 
@@ -33,6 +48,9 @@ public class GameUtil implements Service, BroadcastDeckEventListener {
     private int pointsRound = 14;
     private int pointsTotal = 15;
 
+    /**
+     * An object for a running game.
+     */
     public GameUtil() {
         SocketUtil socket = (SocketUtil) ServiceLocator.get(SocketUtil.class);
         if (socket != null) { // Not necessary but keeps IDE happy
@@ -41,8 +59,7 @@ public class GameUtil implements Service, BroadcastDeckEventListener {
     }
 
     @Override
-    public void onDeckBroadcasted(BroadcastDeckData msgData) {
-        BroadcastDeckData data = msgData;
+    public void onDeckBroadcasted(final BroadcastDeckData data) {
         logger.info("Successfully received cards!");
         this.setDeckId(data.getDeckId());
         this.setPlayerDeck(data.getCardsClient());
@@ -55,27 +72,45 @@ public class GameUtil implements Service, BroadcastDeckEventListener {
         });
     }
 
-    public void setGame(GameFoundData msgData) {
+    /**
+     * @param msgData The game.
+     */
+    public void setGame(final GameFoundData msgData) {
         this.game = msgData;
     }
 
+    /**
+     * @return Returns the game.
+     */
     public GameFoundData getGame() {
         return game;
     }
 
+    /**
+     * @return Returns the deck ID.
+     */
     public int getDeckId() {
         return deckId;
     }
 
-    public void setDeckId(int deckId) {
+    /**
+     * @param deckId The deck ID.
+     */
+    public void setDeckId(final int deckId) {
         this.deckId = deckId;
     }
 
+    /**
+     * @return Returns the deck of the player.
+     */
     public ObservableList<CardData> getPlayerDeck() {
         return playerDeck;
     }
 
-    public void setPlayerDeck(ArrayList<CardData> playerDeck) {
+    /**
+     * @param playerDeck The deck of the player.
+     */
+    public void setPlayerDeck(final ArrayList<CardData> playerDeck) {
         this.playerDeck = FXCollections.observableArrayList(playerDeck);
     }
 }

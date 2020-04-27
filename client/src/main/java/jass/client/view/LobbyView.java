@@ -33,7 +33,7 @@ public final class LobbyView extends View {
     }
 
     @Override
-    protected Scene create_GUI() {
+    protected Scene createGUI() {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/lobby.fxml"));
             Parent root = loader.load();

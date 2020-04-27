@@ -53,32 +53,24 @@ public final class IsSameValidator extends ValidatorBase {
     }
 
     /**
-     * Validate the fields.
+     * Validate the fields by comparing two fields.
      */
     protected void eval() {
         if (this.srcControl.get() instanceof TextInputControl) {
-            this.evalTextInputField();
-        }
-    }
+            TextInputControl textField = (TextInputControl) this.srcControl.get();
+            String text = textField.getText();
+            String validateToText = validateTo.getText();
 
-    /**
-     * Compare the two fields.
-     */
-    private void evalTextInputField() {
-        TextInputControl textField = (TextInputControl) this.srcControl.get();
-        String text = textField.getText();
-        String validateToText = validateTo.getText();
-
-        try {
-            this.hasErrors.set(false);
-            if (!text.isEmpty() && !validateToText.isEmpty()) {
-                if (!text.equals(validateToText)) {
-                    this.hasErrors.set(true);
+            try {
+                this.hasErrors.set(false);
+                if (!text.isEmpty() && !validateToText.isEmpty()) {
+                    if (!text.equals(validateToText)) {
+                        this.hasErrors.set(true);
+                    }
                 }
+            } catch (Exception var4) {
+                this.hasErrors.set(true);
             }
-        } catch (Exception var4) {
-            this.hasErrors.set(true);
         }
-
     }
 }

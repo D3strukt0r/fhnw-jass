@@ -64,6 +64,7 @@ public final class ServiceLocator {
         for (Service service : services) {
             if (service.getClass().getName().equalsIgnoreCase(newService.getClass().getName())) {
                 exists = true;
+                break;
             }
         }
         if (!exists) {
