@@ -108,7 +108,7 @@ dark: #005005;
 
 .card-buttons {
     -fx-border-color: #acacac;
-    -fx-border-width: 0 2 2 1;
+    -fx-border-width: 1 2 2 1;
 }
 
 .navbar-game-panel {

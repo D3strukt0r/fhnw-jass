@@ -1,5 +1,6 @@
 package jass.client.controller;
 
+import jass.client.entity.LoginEntity;
 import jass.client.mvc.Controller;
 import jass.client.util.*;
 import jass.client.view.GameView;
@@ -205,15 +206,13 @@ public final class GameController extends Controller {
     @FXML
     private Button user4played;
 
-    //TODO temp variable - delete when not needed
-    public String clubs = new String("/images/cards/2_of_clubs.png");
-
     private GameUtil gameUtil;
 
     @Override
     public void initialize(final URL location, final ResourceBundle resources) {
         this.gameUtil = (GameUtil) ServiceLocator.get("GameUtil");
 
+        updateUserNames();
         updateCardImages();
 
         this.gameUtil.getPlayerDeck().addListener(new ListChangeListener() {
@@ -222,9 +221,6 @@ public final class GameController extends Controller {
                 updateCardImages();
             }
         });
-
-        //for testing TODO delete when not needed anymore
-        setImage(clubs, user2b1);
 
         /*
          * Bind all texts
@@ -242,42 +238,135 @@ public final class GameController extends Controller {
 
         // TODO: Do something
     }
+
     /**
      * Render images for the player
      */
     private void updateCardImages() {
-        if(this.gameUtil.getPlayerDeck().stream().count() == 9) {
-            CardData card1 = this.gameUtil.getPlayerDeck().get(0);
-            setImage("/images/cards/" + card1.getRank() +"_of_" + card1.getSuit() +".png", user1b1);
+        if (this.gameUtil.getPlayerDeck().stream().count() == 9) {
 
-            CardData card2 = this.gameUtil.getPlayerDeck().get(1);
-            setImage("/images/cards/" + card2.getRank() +"_of_" + card2.getSuit() +".png", user1b2);
+            LoginEntity login = (LoginEntity) ServiceLocator.get(LoginEntity.SERVICE_NAME);
 
-            CardData card3 = this.gameUtil.getPlayerDeck().get(2);
-            setImage("/images/cards/" + card3.getRank() +"_of_" + card3.getSuit() +".png", user1b3);
+            if (gameUtil.getGame().getPlayerOne().equals(login.getUsername())) {
+                CardData card1 = this.gameUtil.getPlayerDeck().get(0);
+                setImage("/images/cards/" + card1.getRank() + "_of_" + card1.getSuit() + ".png", user1b1);
 
-            CardData card4 = this.gameUtil.getPlayerDeck().get(3);
-            setImage("/images/cards/" + card4.getRank() +"_of_" + card4.getSuit() +".png", user1b4);
+                CardData card2 = this.gameUtil.getPlayerDeck().get(1);
+                setImage("/images/cards/" + card2.getRank() + "_of_" + card2.getSuit() + ".png", user1b2);
 
-            CardData card5 = this.gameUtil.getPlayerDeck().get(4);
-            setImage("/images/cards/" + card5.getRank() +"_of_" + card5.getSuit() +".png", user1b5);
+                CardData card3 = this.gameUtil.getPlayerDeck().get(2);
+                setImage("/images/cards/" + card3.getRank() + "_of_" + card3.getSuit() + ".png", user1b3);
 
-            CardData card6 = this.gameUtil.getPlayerDeck().get(5);
-            setImage("/images/cards/" + card6.getRank() +"_of_" + card6.getSuit() +".png", user1b6);
+                CardData card4 = this.gameUtil.getPlayerDeck().get(3);
+                setImage("/images/cards/" + card4.getRank() + "_of_" + card4.getSuit() + ".png", user1b4);
 
-            CardData card7 = this.gameUtil.getPlayerDeck().get(6);
-            setImage("/images/cards/" + card7.getRank() +"_of_" + card7.getSuit() +".png", user1b7);
+                CardData card5 = this.gameUtil.getPlayerDeck().get(4);
+                setImage("/images/cards/" + card5.getRank() + "_of_" + card5.getSuit() + ".png", user1b5);
 
-            CardData card8 = this.gameUtil.getPlayerDeck().get(7);
-            setImage("/images/cards/" + card8.getRank() +"_of_" + card8.getSuit() +".png", user1b8);
+                CardData card6 = this.gameUtil.getPlayerDeck().get(5);
+                setImage("/images/cards/" + card6.getRank() + "_of_" + card6.getSuit() + ".png", user1b6);
 
-            CardData card9 = this.gameUtil.getPlayerDeck().get(8);
-            setImage("/images/cards/" + card9.getRank() +"_of_" + card9.getSuit() +".png", user1b9);
+                CardData card7 = this.gameUtil.getPlayerDeck().get(6);
+                setImage("/images/cards/" + card7.getRank() + "_of_" + card7.getSuit() + ".png", user1b7);
+
+                CardData card8 = this.gameUtil.getPlayerDeck().get(7);
+                setImage("/images/cards/" + card8.getRank() + "_of_" + card8.getSuit() + ".png", user1b8);
+
+                CardData card9 = this.gameUtil.getPlayerDeck().get(8);
+                setImage("/images/cards/" + card9.getRank() + "_of_" + card9.getSuit() + ".png", user1b9);
+            }
+
+            if (gameUtil.getGame().getPlayerTwo().equals(login.getUsername())) {
+                CardData card1 = this.gameUtil.getPlayerDeck().get(0);
+                setImage("/images/cards/" + card1.getRank() + "_of_" + card1.getSuit() + ".png", user2b1);
+
+                CardData card2 = this.gameUtil.getPlayerDeck().get(1);
+                setImage("/images/cards/" + card2.getRank() + "_of_" + card2.getSuit() + ".png", user2b2);
+
+                CardData card3 = this.gameUtil.getPlayerDeck().get(2);
+                setImage("/images/cards/" + card3.getRank() + "_of_" + card3.getSuit() + ".png", user2b3);
+
+                CardData card4 = this.gameUtil.getPlayerDeck().get(3);
+                setImage("/images/cards/" + card4.getRank() + "_of_" + card4.getSuit() + ".png", user2b4);
+
+                CardData card5 = this.gameUtil.getPlayerDeck().get(4);
+                setImage("/images/cards/" + card5.getRank() + "_of_" + card5.getSuit() + ".png", user2b5);
+
+                CardData card6 = this.gameUtil.getPlayerDeck().get(5);
+                setImage("/images/cards/" + card6.getRank() + "_of_" + card6.getSuit() + ".png", user2b6);
+
+                CardData card7 = this.gameUtil.getPlayerDeck().get(6);
+                setImage("/images/cards/" + card7.getRank() + "_of_" + card7.getSuit() + ".png", user2b7);
+
+                CardData card8 = this.gameUtil.getPlayerDeck().get(7);
+                setImage("/images/cards/" + card8.getRank() + "_of_" + card8.getSuit() + ".png", user2b8);
+
+                CardData card9 = this.gameUtil.getPlayerDeck().get(8);
+                setImage("/images/cards/" + card9.getRank() + "_of_" + card9.getSuit() + ".png", user2b9);
+            }
+
+            if (gameUtil.getGame().getPlayerThree().equals(login.getUsername())) {
+                CardData card1 = this.gameUtil.getPlayerDeck().get(0);
+                setImage("/images/cards/" + card1.getRank() + "_of_" + card1.getSuit() + ".png", user3b1);
+
+                CardData card2 = this.gameUtil.getPlayerDeck().get(1);
+                setImage("/images/cards/" + card2.getRank() + "_of_" + card2.getSuit() + ".png", user3b2);
+
+                CardData card3 = this.gameUtil.getPlayerDeck().get(2);
+                setImage("/images/cards/" + card3.getRank() + "_of_" + card3.getSuit() + ".png", user3b3);
+
+                CardData card4 = this.gameUtil.getPlayerDeck().get(3);
+                setImage("/images/cards/" + card4.getRank() + "_of_" + card4.getSuit() + ".png", user3b4);
+
+                CardData card5 = this.gameUtil.getPlayerDeck().get(4);
+                setImage("/images/cards/" + card5.getRank() + "_of_" + card5.getSuit() + ".png", user3b5);
+
+                CardData card6 = this.gameUtil.getPlayerDeck().get(5);
+                setImage("/images/cards/" + card6.getRank() + "_of_" + card6.getSuit() + ".png", user3b6);
+
+                CardData card7 = this.gameUtil.getPlayerDeck().get(6);
+                setImage("/images/cards/" + card7.getRank() + "_of_" + card7.getSuit() + ".png", user3b7);
+
+                CardData card8 = this.gameUtil.getPlayerDeck().get(7);
+                setImage("/images/cards/" + card8.getRank() + "_of_" + card8.getSuit() + ".png", user3b8);
+
+                CardData card9 = this.gameUtil.getPlayerDeck().get(8);
+                setImage("/images/cards/" + card9.getRank() + "_of_" + card9.getSuit() + ".png", user3b9);
+            }
+
+            if (gameUtil.getGame().getPlayerFour().equals(login.getUsername())) {
+                CardData card1 = this.gameUtil.getPlayerDeck().get(0);
+                setImage("/images/cards/" + card1.getRank() + "_of_" + card1.getSuit() + ".png", user4b1);
+
+                CardData card2 = this.gameUtil.getPlayerDeck().get(1);
+                setImage("/images/cards/" + card2.getRank() + "_of_" + card2.getSuit() + ".png", user4b2);
+
+                CardData card3 = this.gameUtil.getPlayerDeck().get(2);
+                setImage("/images/cards/" + card3.getRank() + "_of_" + card3.getSuit() + ".png", user4b3);
+
+                CardData card4 = this.gameUtil.getPlayerDeck().get(3);
+                setImage("/images/cards/" + card4.getRank() + "_of_" + card4.getSuit() + ".png", user4b4);
+
+                CardData card5 = this.gameUtil.getPlayerDeck().get(4);
+                setImage("/images/cards/" + card5.getRank() + "_of_" + card5.getSuit() + ".png", user4b5);
+
+                CardData card6 = this.gameUtil.getPlayerDeck().get(5);
+                setImage("/images/cards/" + card6.getRank() + "_of_" + card6.getSuit() + ".png", user4b6);
+
+                CardData card7 = this.gameUtil.getPlayerDeck().get(6);
+                setImage("/images/cards/" + card7.getRank() + "_of_" + card7.getSuit() + ".png", user4b7);
+
+                CardData card8 = this.gameUtil.getPlayerDeck().get(7);
+                setImage("/images/cards/" + card8.getRank() + "_of_" + card8.getSuit() + ".png", user4b8);
+
+                CardData card9 = this.gameUtil.getPlayerDeck().get(8);
+                setImage("/images/cards/" + card9.getRank() + "_of_" + card9.getSuit() + ".png", user4b9);
+            }
         }
     }
 
     private void setImage(String pathToImage, Button button) {
-        BackgroundImage backgroundImage = new BackgroundImage( new Image( getClass().getResource(pathToImage).toExternalForm()), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, new BackgroundSize (74,113,true, true,true, false));
+        BackgroundImage backgroundImage = new BackgroundImage(new Image(getClass().getResource(pathToImage).toExternalForm()), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, new BackgroundSize(74, 113, true, true, true, false));
         Background background = new Background(backgroundImage);
         button.setBackground(background);
 
@@ -320,6 +409,7 @@ public final class GameController extends Controller {
         this.view = view;
     }
 
+
     /**
      * @author Sasa Trajkova
      * Method to only enable buttons for those cards that are legal for a specific round
@@ -333,7 +423,7 @@ public final class GameController extends Controller {
      * Change background color in the player pane if it's the player's turn to play
      */
     @FXML
-    public void changePlayerPaneBackground(){
+    public void changePlayerPaneBackground() {
         //TODO change player pane background
     }
 
@@ -342,33 +432,31 @@ public final class GameController extends Controller {
      * Fatch usernames and match them with the right label
      */
     @FXML
-    public void updateUserNames(){
+    public void updateUserNames() {
 
-        //TODO
-
-        /*if(gameUtil.getGame().getPlayerOne() != null){
+        if (gameUtil.getGame().getPlayerOne() != null) {
             user1.setText(gameUtil.getGame().getPlayerOne());
         } else {
             user1.setText("--");
         }
 
-        if(gameUtil.getGame().getPlayerTwo() != null){
+        if (gameUtil.getGame().getPlayerTwo() != null) {
             user2.setText(gameUtil.getGame().getPlayerTwo());
         } else {
             user2.setText("--");
         }
 
-        if(gameUtil.getGame().getPlayerThree() != null){
+        if (gameUtil.getGame().getPlayerThree() != null) {
             user3.setText(gameUtil.getGame().getPlayerThree());
         } else {
             user3.setText("--");
         }
 
-        if(gameUtil.getGame().getPlayerFour() != null){
+        if (gameUtil.getGame().getPlayerFour() != null) {
             user4.setText(gameUtil.getGame().getPlayerFour());
         } else {
             user4.setText("--");
-        }*/
+        }
     }
 }
 

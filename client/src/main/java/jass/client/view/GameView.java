@@ -26,8 +26,8 @@ public final class GameView extends View {
         super(stage);
         stage.titleProperty().bind(I18nUtil.createStringBinding("gui.game.title"));
         stage.setResizable(false);
-        stage.setMinHeight(710);
-        stage.setMinWidth(1160);
+        stage.setMinHeight(715);
+        stage.setMinWidth(1220);
         stage.centerOnScreen();
 
         // Register ourselves to handle window-closing event
