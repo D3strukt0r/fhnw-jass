@@ -212,6 +212,7 @@ public final class GameController extends Controller {
     public void initialize(final URL location, final ResourceBundle resources) {
         this.gameUtil = (GameUtil) ServiceLocator.get("GameUtil");
 
+        enableButtons();
         updateUserNames();
         updateCardImages();
 
@@ -235,18 +236,17 @@ public final class GameController extends Controller {
 
         mHelp.textProperty().bind(I18nUtil.createStringBinding(mHelp.getText()));
         mHelpAbout.textProperty().bind(I18nUtil.createStringBinding(mHelpAbout.getText()));
-
-        // TODO: Do something
     }
 
     /**
-     * Render images for the player
+     * Display card images in the right player pane
      */
     private void updateCardImages() {
         if (this.gameUtil.getPlayerDeck().stream().count() == 9) {
 
             LoginEntity login = (LoginEntity) ServiceLocator.get(LoginEntity.SERVICE_NAME);
 
+            assert login != null;
             if (gameUtil.getGame().getPlayerOne().equals(login.getUsername())) {
                 CardData card1 = this.gameUtil.getPlayerDeck().get(0);
                 setImage("/images/cards/" + card1.getRank() + "_of_" + card1.getSuit() + ".png", user1b1);
@@ -415,7 +415,57 @@ public final class GameController extends Controller {
      * Method to only enable buttons for those cards that are legal for a specific round
      */
     public void enableButtons() {
-        //TODO enable buttons for the cards that could be played in the round
+        //TODO enable buttons for the cards that could be played in the round based on game mode
+
+        LoginEntity login = (LoginEntity) ServiceLocator.get(LoginEntity.SERVICE_NAME);
+
+        if (gameUtil.getGame().getPlayerOne().equals(login.getUsername())) {
+            user1b1.setDisable(false);
+            user1b2.setDisable(false);
+            user1b3.setDisable(false);
+            user1b4.setDisable(false);
+            user1b5.setDisable(false);
+            user1b6.setDisable(false);
+            user1b7.setDisable(false);
+            user1b8.setDisable(false);
+            user1b9.setDisable(false);
+        }
+
+        if (gameUtil.getGame().getPlayerTwo().equals(login.getUsername())) {
+            user2b1.setDisable(false);
+            user2b2.setDisable(false);
+            user2b3.setDisable(false);
+            user2b4.setDisable(false);
+            user2b5.setDisable(false);
+            user2b6.setDisable(false);
+            user2b7.setDisable(false);
+            user2b8.setDisable(false);
+            user2b9.setDisable(false);
+        }
+
+        if (gameUtil.getGame().getPlayerThree().equals(login.getUsername())) {
+            user3b1.setDisable(false);
+            user3b2.setDisable(false);
+            user3b3.setDisable(false);
+            user3b4.setDisable(false);
+            user3b5.setDisable(false);
+            user3b6.setDisable(false);
+            user3b7.setDisable(false);
+            user3b8.setDisable(false);
+            user3b9.setDisable(false);
+        }
+
+        if (gameUtil.getGame().getPlayerFour().equals(login.getUsername())) {
+            user4b1.setDisable(false);
+            user4b2.setDisable(false);
+            user4b3.setDisable(false);
+            user4b4.setDisable(false);
+            user4b5.setDisable(false);
+            user4b6.setDisable(false);
+            user4b7.setDisable(false);
+            user4b8.setDisable(false);
+            user4b9.setDisable(false);
+        }
     }
 
     /**
