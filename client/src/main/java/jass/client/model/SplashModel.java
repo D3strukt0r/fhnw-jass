@@ -120,7 +120,7 @@ public final class SplashModel extends Model {
                         }
                     }
                 }
-            });*/
+            });
 
 
             // First, take some time, update progress
