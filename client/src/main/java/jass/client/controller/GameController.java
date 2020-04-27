@@ -692,7 +692,9 @@ public final class GameController extends Controller implements DisconnectEventL
 
     @Override
     public void onBroadcastGameMode(final BroadcastGameModeData data) {
-        mode.setText("Mode: " + data.getGameMode().toString());
-        // TODO Maybe enable buttons in here to start game?
+        Platform.runLater(() -> {
+            mode.setText("Mode: " + data.getGameMode().toString());
+            // TODO Maybe enable buttons in here to start game?
+        });
     }
 }
