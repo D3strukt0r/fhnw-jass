@@ -45,11 +45,6 @@ import jass.lib.servicelocator.Service;
  */
 public final class SearchGameUtil implements Service {
     /**
-     * The service name.
-     */
-    public static final String SERVICE_NAME = "SearchGameUtil";
-
-    /**
      * The logger to print to console and save in a .log file.
      */
     private static final Logger logger = LogManager.getLogger(SearchGameUtil.class);
@@ -135,7 +130,7 @@ public final class SearchGameUtil implements Service {
             broadcastGameFound(playerThree, newGame, playerOne.getUser(), playerTwo.getUser(), playerThree.getUser(), playerFour.getUser(), teamOne, teamTwo);
             broadcastGameFound(playerFour, newGame, playerOne.getUser(), playerTwo.getUser(), playerThree.getUser(), playerFour.getUser(), teamOne, teamTwo);
 
-            CardUtil cardUtil = (CardUtil) ServiceLocator.get("CardUtil");
+            CardUtil cardUtil = (CardUtil) ServiceLocator.get(CardUtil.class);
             RoundEntity newRound = new RoundEntity(playerOne.getUser(), newGame);
             RoundRepository.getSingleton(null).add(newRound);
 
@@ -186,10 +181,5 @@ public final class SearchGameUtil implements Service {
         } else {
             return teamTwo.getId();
         }
-    }
-
-    @Override
-    public String getServiceName() {
-        return SERVICE_NAME;
     }
 }

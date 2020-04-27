@@ -47,9 +47,9 @@ public final class ServiceLocator {
      *
      * @return Return the service object or null if not found.
      */
-    public static Service get(final String serviceName) {
+    public static Service get(final Class<? extends Service> serviceName) {
         for (Service service : services) {
-            if (service.getServiceName().equalsIgnoreCase(serviceName)) {
+            if (service.getClass().getName().equalsIgnoreCase(serviceName.getName())) {
                 return service;
             }
         }
@@ -62,7 +62,7 @@ public final class ServiceLocator {
     public static void add(final Service newService) {
         boolean exists = false;
         for (Service service : services) {
-            if (service.getServiceName().equalsIgnoreCase(newService.getServiceName())) {
+            if (service.getClass().getName().equalsIgnoreCase(newService.getClass().getName())) {
                 exists = true;
             }
         }
@@ -74,10 +74,10 @@ public final class ServiceLocator {
     /**
      * @param serviceName The service to be removed from the list.
      */
-    public static void remove(final String serviceName) {
+    public static void remove(final Class<? extends Service> serviceName) {
         Service objectFound = null;
         for (Service service : services) {
-            if (service.getServiceName().equalsIgnoreCase(serviceName)) {
+            if (service.getClass().getName().equalsIgnoreCase(serviceName.getName())) {
                 objectFound = service;
             }
         }

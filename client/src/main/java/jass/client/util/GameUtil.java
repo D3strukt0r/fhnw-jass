@@ -34,7 +34,7 @@ public class GameUtil implements Service, BroadcastDeckEventListener {
     private int pointsTotal = 15;
 
     public GameUtil() {
-        SocketUtil socket = (SocketUtil) ServiceLocator.get("backend");
+        SocketUtil socket = (SocketUtil) ServiceLocator.get(SocketUtil.class);
         if (socket != null) { // Not necessary but keeps IDE happy
             socket.setBroadcastDeckEventListener(this);
         }
@@ -77,10 +77,5 @@ public class GameUtil implements Service, BroadcastDeckEventListener {
 
     public void setPlayerDeck(ArrayList<CardData> playerDeck) {
         this.playerDeck = FXCollections.observableArrayList(playerDeck);
-    }
-
-    @Override
-    public String getServiceName() {
-        return "GameUtil";
     }
 }

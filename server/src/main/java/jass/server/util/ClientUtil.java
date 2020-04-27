@@ -157,7 +157,7 @@ public final class ClientUtil extends Thread {
      * Shuts down all connections.
      */
     public void disconnect() {
-        SearchGameUtil sGU = (SearchGameUtil) ServiceLocator.get("SearchGameUtil");
+        SearchGameUtil sGU = (SearchGameUtil) ServiceLocator.get(SearchGameUtil.class);
         sGU.removeClientFromSearchingGame(this);
 
         // TODO: Close down the game if client was inside.

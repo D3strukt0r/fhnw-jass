@@ -210,7 +210,7 @@ public final class GameController extends Controller {
 
     @Override
     public void initialize(final URL location, final ResourceBundle resources) {
-        this.gameUtil = (GameUtil) ServiceLocator.get("GameUtil");
+        this.gameUtil = (GameUtil) ServiceLocator.get(GameUtil.class);
 
         enableButtons();
         updateUserNames();
@@ -244,7 +244,7 @@ public final class GameController extends Controller {
     private void updateCardImages() {
         if (this.gameUtil.getPlayerDeck().stream().count() == 9) {
 
-            LoginEntity login = (LoginEntity) ServiceLocator.get(LoginEntity.SERVICE_NAME);
+            LoginEntity login = (LoginEntity) ServiceLocator.get(LoginEntity.class);
 
             assert login != null;
             if (gameUtil.getGame().getPlayerOne().equals(login.getUsername())) {
@@ -377,11 +377,11 @@ public final class GameController extends Controller {
      */
     @FXML
     private void clickOnDisconnect() {
-        SocketUtil socket = (SocketUtil) ServiceLocator.get(SocketUtil.SERVICE_NAME);
+        SocketUtil socket = (SocketUtil) ServiceLocator.get(SocketUtil.class);
         if (socket != null) { // Not necessary but keeps IDE happy
             socket.close();
         }
-        ServiceLocator.remove("backend");
+        ServiceLocator.remove(SocketUtil.class);
         WindowUtil.switchToNewWindow(view, ServerConnectionView.class);
     }
 
@@ -417,7 +417,7 @@ public final class GameController extends Controller {
     public void enableButtons() {
         //TODO enable buttons for the cards that could be played in the round based on game mode
 
-        LoginEntity login = (LoginEntity) ServiceLocator.get(LoginEntity.SERVICE_NAME);
+        LoginEntity login = (LoginEntity) ServiceLocator.get(LoginEntity.class);
 
         if (gameUtil.getGame().getPlayerOne().equals(login.getUsername())) {
             user1b1.setDisable(false);

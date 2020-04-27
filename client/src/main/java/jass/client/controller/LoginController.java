@@ -165,7 +165,7 @@ public final class LoginController extends Controller implements DisconnectEvent
         /*
          * Register oneself for disconnect events
          */
-        SocketUtil socket = (SocketUtil) ServiceLocator.get(SocketUtil.SERVICE_NAME);
+        SocketUtil socket = (SocketUtil) ServiceLocator.get(SocketUtil.class);
         if (socket != null) { // Not necessary but keeps IDE happy
             socket.addDisconnectListener(this);
         }
@@ -298,11 +298,11 @@ public final class LoginController extends Controller implements DisconnectEvent
      */
     @FXML
     private void clickOnDisconnect() {
-        SocketUtil socket = (SocketUtil) ServiceLocator.get(SocketUtil.SERVICE_NAME);
+        SocketUtil socket = (SocketUtil) ServiceLocator.get(SocketUtil.class);
         if (socket != null) { // Not necessary but keeps IDE happy
             socket.close();
         }
-        ServiceLocator.remove("backend");
+        ServiceLocator.remove(SocketUtil.class);
         WindowUtil.switchTo(view, ServerConnectionView.class);
     }
 
@@ -332,7 +332,7 @@ public final class LoginController extends Controller implements DisconnectEvent
                 password.getText(),
                 connectAutomatically.isSelected()
             );
-            SocketUtil backend = (SocketUtil) ServiceLocator.get(SocketUtil.SERVICE_NAME);
+            SocketUtil backend = (SocketUtil) ServiceLocator.get(SocketUtil.class);
             Login loginMsg = new Login(new LoginData(login.getUsername(), login.getPassword()));
 
             // Send the login request to the server. Update locally if successful.
@@ -370,7 +370,7 @@ public final class LoginController extends Controller implements DisconnectEvent
 
     @Override
     public void onDisconnectEvent() {
-        ServiceLocator.remove("backend");
+        ServiceLocator.remove(SocketUtil.class);
         WindowUtil.switchTo(view, ServerConnectionView.class);
     }
 

@@ -33,11 +33,6 @@ import jass.lib.servicelocator.Service;
 @DatabaseTable(tableName = "server")
 public final class ServerEntity implements Service, Entity {
     /**
-     * The service name.
-     */
-    public static final String SERVICE_NAME = "server";
-
-    /**
      * The ID.
      */
     @DatabaseField(generatedId = true)
@@ -168,10 +163,5 @@ public final class ServerEntity implements Service, Entity {
      */
     public void setConnectAutomatically(final boolean connectAutomatically) {
         this.connectAutomatically = connectAutomatically;
-    }
-
-    @Override
-    public String getServiceName() {
-        return SERVICE_NAME;
     }
 }

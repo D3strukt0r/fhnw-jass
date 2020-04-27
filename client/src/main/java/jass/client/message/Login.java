@@ -62,7 +62,7 @@ public final class Login extends Message {
             token = resultData.getResultData().getString("token");
 
             LoginEntity login = new LoginEntity(data.getUsername(), data.getPassword(), token);
-            ServiceLocator.remove("login");
+            ServiceLocator.remove(LoginEntity.class);
             ServiceLocator.add(login);
         }
         return resultData.getResult();

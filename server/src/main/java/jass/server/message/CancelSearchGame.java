@@ -38,7 +38,7 @@ public final class CancelSearchGame extends Message {
             // Check if there is anyone connected with the given username.
             result = ServerSocketUtil.exists(data.getUsername());
             if (result) {
-                SearchGameUtil sGU = (SearchGameUtil) ServiceLocator.get("SearchGameUtil");
+                SearchGameUtil sGU = (SearchGameUtil) ServiceLocator.get(SearchGameUtil.class);
                 sGU.removeClientFromSearchingGame(client);
             }
         }

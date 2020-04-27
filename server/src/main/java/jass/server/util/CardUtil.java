@@ -43,11 +43,6 @@ import jass.lib.servicelocator.Service;
  */
 public final class CardUtil implements Service {
     /**
-     * The service name.
-     */
-    public static final String SERVICE_NAME = "CardUtil";
-
-    /**
      * The logger to print to console and save in a .log file.
      */
     private static final Logger logger = LogManager.getLogger(CardUtil.class);
@@ -56,12 +51,6 @@ public final class CardUtil implements Service {
      * Empty constructor.
      */
     public CardUtil() {
-    }
-
-
-    @Override
-    public String getServiceName() {
-        return SERVICE_NAME;
     }
 
     public List<DeckEntity> addDecksForPlayers(RoundEntity newRound, UserEntity playerOne, UserEntity playerTwo, UserEntity playerThree, UserEntity playerFour) {

@@ -62,11 +62,6 @@ import java.util.ArrayList;
  */
 public final class SocketUtil extends Thread implements Service, Closeable {
     /**
-     * The service name.
-     */
-    public static final String SERVICE_NAME = "backend";
-
-    /**
      * The logger to print to console and save in a .log file.
      */
     private static final Logger logger = LogManager.getLogger(SocketUtil.class);
@@ -249,7 +244,7 @@ public final class SocketUtil extends Thread implements Service, Closeable {
      * @since 0.0.1
      */
     public boolean isLoggedIn() {
-        return ServiceLocator.get(LoginEntity.SERVICE_NAME) != null;
+        return ServiceLocator.get(LoginEntity.class) != null;
     }
 
     /**
@@ -259,7 +254,7 @@ public final class SocketUtil extends Thread implements Service, Closeable {
      * @since 0.0.1
      */
     public String getToken() {
-        LoginEntity login = (LoginEntity) ServiceLocator.get(LoginEntity.SERVICE_NAME);
+        LoginEntity login = (LoginEntity) ServiceLocator.get(LoginEntity.class);
         if (login != null) {
             return login.getToken();
         }
@@ -349,10 +344,5 @@ public final class SocketUtil extends Thread implements Service, Closeable {
                 socket.close();
             } catch (IOException e) { /* Ignore */ }
         }
-    }
-
-    @Override
-    public String getServiceName() {
-        return SERVICE_NAME;
     }
 }

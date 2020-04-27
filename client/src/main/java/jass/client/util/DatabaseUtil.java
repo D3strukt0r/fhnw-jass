@@ -42,11 +42,6 @@ import java.sql.SQLException;
  */
 public final class DatabaseUtil implements Service, Closeable {
     /**
-     * The service name.
-     */
-    public static final String SERVICE_NAME = "db";
-
-    /**
      * The database connection.
      */
     private final ConnectionSource connectionSource;
@@ -135,13 +130,5 @@ public final class DatabaseUtil implements Service, Closeable {
      */
     public Dao<ServerEntity, Integer> getServerDao() {
         return serverDao;
-    }
-
-    /**
-     * For the ServiceLocator.
-     */
-    @Override
-    public String getServiceName() {
-        return SERVICE_NAME;
     }
 }

@@ -107,7 +107,7 @@ public final class SplashModel extends Model {
                 LoginEntity login = LoginRepository.getSingleton(null).findConnectAutomatically();
                 if (login != null) {
                     logger.info("Automatic login found");
-                    SocketUtil backend = (SocketUtil) ServiceLocator.get(SocketUtil.SERVICE_NAME);
+                    SocketUtil backend = (SocketUtil) ServiceLocator.get(SocketUtil.class);
                     if (backend != null) {
                         logger.info("Backend for login is available...");
                         Login loginMsg = new Login(new LoginData(login.getUsername(), login.getPassword()));
