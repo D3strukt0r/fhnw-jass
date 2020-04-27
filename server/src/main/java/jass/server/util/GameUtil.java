@@ -71,7 +71,7 @@ public final class GameUtil implements ChosenGameModeEventListener {
         UserEntity playerFour = clientPlayerFour.getUser();
 
         // Add event listeners
-        clientPlayerOne.addChooseGameModeEventListener(this);
+        clientPlayerOne.addChosenGameModeEventListener(this);
 
         // Assign and create Teams
         TeamEntity teamOne = new TeamEntity(playerOne, playerThree);

@@ -77,7 +77,7 @@ public final class ClientUtil extends Thread {
     /**
      * A list of all objects listening to a choose game mode event.
      */
-    private final ArrayList<ChosenGameModeEventListener> chooseGameModeListener = new ArrayList<>();
+    private final ArrayList<ChosenGameModeEventListener> chosenGameModeListener = new ArrayList<>();
 
     /**
      * Create a new client object, communicating over the given socket.
@@ -123,6 +123,8 @@ public final class ClientUtil extends Thread {
                         logger.error("Received invalid message of type " + msgData.getMessageType());
                     } else {
                         logger.info("Received message of type " + msgData.getMessageType());
+
+                        handleEventListenerOnMessage(msgData.getMessageType(), msgData);
                     }
                 }
             } catch (SocketException | SSLException e) {
@@ -150,8 +152,8 @@ public final class ClientUtil extends Thread {
      * @author Thomas Weber, Manuele Vaccari
      */
     public void handleEventListenerOnMessage(final String msgType, final MessageData msgData) {
-        if ("ChooseGameMode".equals(msgType)) {
-            for (ChosenGameModeEventListener listener : chooseGameModeListener) {
+        if ("ChosenGameMode".equals(msgType)) {
+            for (ChosenGameModeEventListener listener : chosenGameModeListener) {
                 listener.onChosenGameMode((ChosenGameModeData) msgData);
             }
         }
@@ -163,8 +165,8 @@ public final class ClientUtil extends Thread {
      * @author Manuele Vaccari
      * @since 0.0.1
      */
-    public void addChooseGameModeEventListener(final ChosenGameModeEventListener listener) {
-        this.chooseGameModeListener.add(listener);
+    public void addChosenGameModeEventListener(final ChosenGameModeEventListener listener) {
+        this.chosenGameModeListener.add(listener);
     }
 
     /**
