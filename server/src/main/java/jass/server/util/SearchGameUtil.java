@@ -26,7 +26,6 @@ import jass.server.message.GameFound;
 import jass.server.repository.GameRepository;
 import jass.server.repository.RoundRepository;
 import jass.server.repository.TeamRepository;
-import jass.server.repository.UserRepository;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
