@@ -112,7 +112,6 @@ public final class DatabaseUtil implements Service, Closeable {
         deckDao = DaoManager.createDao(connectionSource, DeckEntity.class);
         DeckRepository.getSingleton(deckDao);
 
-
         /*
          * Drop and Recreate all the tables except for the user if server restarts.
          */

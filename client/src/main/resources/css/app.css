@@ -97,3 +97,27 @@ dark: #005005;
 .search-text {
     -fx-font-size: 16px;
 }
+
+.player-pane {
+    -fx-background-color: gainsboro;
+    -fx-border-radius: 5px;
+    -fx-background-radius: 5px;
+    -fx-text-fill: grey;
+    -fx-font-size: 14px;
+}
+
+.card-buttons {
+    -fx-border-color: #acacac;
+    -fx-border-width: 1 2 2 1;
+}
+
+.navbar-game-panel {
+    -fx-background-color: gainsboro;
+}
+.navbar-game-panel-text {
+    -fx-border-color: #bdbdbd;
+    -fx-border-radius: 15px;
+    -fx-background-radius: 15px;
+    -fx-background-color: #e7e7e7;
+
+}
