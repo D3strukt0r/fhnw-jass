@@ -156,8 +156,6 @@ public final class LobbyController extends Controller implements GameFoundEventL
             searching.setVisible(true);
             cancelMatch.setVisible(true);
             findMatch.setVisible(false);
-// TODO don't commit anything here
-            //goToGameView();
         } else {
             logger.error("Error starting search for game");
             Platform.runLater(() -> {
@@ -186,7 +184,6 @@ public final class LobbyController extends Controller implements GameFoundEventL
             searching.setVisible(false);
             findMatch.setVisible(true);
             cancelMatch.setVisible(false);
-            goToGameView();
         } else {
             logger.error("Error cancelling search for game");
             Platform.runLater(() -> {
