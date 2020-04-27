@@ -35,7 +35,7 @@ import jass.lib.servicelocator.Service;
 /**
  * Creates a game once 4 clients are searching for a game in the lobby.
  *
- * @author Thomas Weber
+ * @author Thomas Weber, Manuele Vaccari
  * @version %I%, %G%
  * @since 0.0.1
  */

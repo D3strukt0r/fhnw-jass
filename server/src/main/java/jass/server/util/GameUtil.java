@@ -23,6 +23,11 @@ import org.apache.logging.log4j.Logger;
 
 import java.util.List;
 
+/**
+ * @author Thomas Weber, Manuele Vaccari
+ * @version %I%, %G%
+ * @since 0.0.1
+ */
 public final class GameUtil implements ChosenGameModeEventListener {
     /**
      * The logger to print to console and save in a .log file.
