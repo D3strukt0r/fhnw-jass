@@ -18,9 +18,17 @@
 
 package jass.client.util;
 
-import jass.client.eventlistener.*;
+import jass.client.eventlistener.BroadcastDeckEventListener;
+import jass.client.eventlistener.BroadcastGameModeEventListener;
+import jass.client.eventlistener.ChooseGameModeEventListener;
+import jass.client.eventlistener.DisconnectEventListener;
+import jass.client.eventlistener.GameFoundEventListener;
 import jass.client.message.Message;
-import jass.lib.message.*;
+import jass.lib.message.BroadcastDeckData;
+import jass.lib.message.BroadcastGameModeData;
+import jass.lib.message.ChooseGameModeData;
+import jass.lib.message.GameFoundData;
+import jass.lib.message.MessageData;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import jass.client.entity.LoginEntity;
@@ -196,10 +204,8 @@ public final class SocketUtil extends Thread implements Service, Closeable {
         }
 
         close();
-        if (disconnectListener != null) {
-            for (DisconnectEventListener listener : disconnectListener) {
-                listener.onDisconnectEvent();
-            }
+        for (DisconnectEventListener listener : disconnectListener) {
+            listener.onDisconnectEvent();
         }
     }
 

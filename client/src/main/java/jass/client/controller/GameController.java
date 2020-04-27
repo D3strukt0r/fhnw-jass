@@ -2,6 +2,7 @@ package jass.client.controller;
 
 import jass.client.entity.LoginEntity;
 import jass.client.eventlistener.BroadcastGameModeEventListener;
+import jass.client.eventlistener.DisconnectEventListener;
 import jass.client.mvc.Controller;
 import jass.client.util.GameUtil;
 import jass.client.util.I18nUtil;
@@ -39,7 +40,7 @@ import java.util.ResourceBundle;
  * @version %I%, %G%
  * @since 0.0.1
  */
-public final class GameController extends Controller implements BroadcastGameModeEventListener {
+public final class GameController extends Controller implements DisconnectEventListener, BroadcastGameModeEventListener {
     /**
      * The view.
      */
@@ -385,6 +386,7 @@ public final class GameController extends Controller implements BroadcastGameMod
         this.gameUtil.getPlayerDeck().addListener((ListChangeListener) c -> updateCardImages());
 
         SocketUtil socket = (SocketUtil) ServiceLocator.get(SocketUtil.class);
+        socket.addDisconnectListener(this);
         socket.addBroadcastGameModeEventListener(this);
 
         /*
@@ -679,6 +681,13 @@ public final class GameController extends Controller implements BroadcastGameMod
         } else {
             user4.setText("--");
         }
+    }
+
+    @Override
+    public void onDisconnectEvent() {
+        ServiceLocator.remove(LoginEntity.class);
+        ServiceLocator.remove(SocketUtil.class);
+        WindowUtil.switchToNewWindow(view, ServerConnectionView.class);
     }
 
     @Override
