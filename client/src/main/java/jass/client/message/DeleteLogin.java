@@ -63,7 +63,7 @@ public final class DeleteLogin extends Message {
         ResultData resultData = (ResultData) result.getRawData();
 
         if (resultData.getResult()) {
-            LoginEntity login = (LoginEntity) ServiceLocator.get(LoginEntity.class);
+            LoginEntity login = ServiceLocator.get(LoginEntity.class);
 
             if (!LoginRepository.getSingleton(null).remove(login)) {
                 logger.error("Couldn't save login data to local database.");

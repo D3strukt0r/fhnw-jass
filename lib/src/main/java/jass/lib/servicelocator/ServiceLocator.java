@@ -43,14 +43,17 @@ public final class ServiceLocator {
     }
 
     /**
-     * @param serviceName The name of the service requested
+     * @param serviceName The name of the service requested.
+     * @param <S>         The class of of the service.
      *
      * @return Return the service object or null if not found.
      */
-    public static Service get(final Class<? extends Service> serviceName) {
+    public static <S extends Service> S get(final Class<S> serviceName) {
         for (Service service : services) {
             if (service.getClass().getName().equalsIgnoreCase(serviceName.getName())) {
-                return service;
+                @SuppressWarnings("unchecked")
+                S serviceCasted = (S) service;
+                return serviceCasted;
             }
         }
         return null;
@@ -58,8 +61,9 @@ public final class ServiceLocator {
 
     /**
      * @param newService The service to be added to the list.
+     * @param <S>        The class of of the service.
      */
-    public static void add(final Service newService) {
+    public static <S extends Service> void add(final S newService) {
         boolean exists = false;
         for (Service service : services) {
             if (service.getClass().getName().equalsIgnoreCase(newService.getClass().getName())) {

@@ -101,7 +101,7 @@ public final class GameUtil implements ChosenGameModeEventListener {
         broadcast(gameFound);
 
         // Create a round
-        CardUtil cardUtil = (CardUtil) ServiceLocator.get(CardUtil.class);
+        CardUtil cardUtil = ServiceLocator.get(CardUtil.class);
         RoundEntity newRound = new RoundEntity(playerOne, game);
         RoundRepository.getSingleton(null).add(newRound);
 

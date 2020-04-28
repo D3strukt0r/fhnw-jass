@@ -165,7 +165,7 @@ public final class RegisterController extends Controller implements DisconnectEv
         /*
          * Register oneself for disconnect events
          */
-        SocketUtil socket = (SocketUtil) ServiceLocator.get(SocketUtil.class);
+        SocketUtil socket = ServiceLocator.get(SocketUtil.class);
         if (socket != null) { // Not necessary but keeps IDE happy
             socket.addDisconnectListener(this);
         }
@@ -310,7 +310,7 @@ public final class RegisterController extends Controller implements DisconnectEv
      */
     @FXML
     private void clickOnDisconnect() {
-        SocketUtil socket = (SocketUtil) ServiceLocator.get(SocketUtil.class);
+        SocketUtil socket = ServiceLocator.get(SocketUtil.class);
         if (socket != null) { // Not necessary but keeps IDE happy
             socket.close();
         }
@@ -342,7 +342,7 @@ public final class RegisterController extends Controller implements DisconnectEv
         new Thread(() -> {
             LoginEntity login = new LoginEntity(username.getText(), password.getText());
 
-            SocketUtil backend = (SocketUtil) ServiceLocator.get(SocketUtil.class);
+            SocketUtil backend = ServiceLocator.get(SocketUtil.class);
             Register registerMsg = new Register(new RegisterData(login.getUsername(), login.getPassword()));
 
             // Try sending the register command.

@@ -378,7 +378,7 @@ public final class GameController extends Controller implements DisconnectEventL
 
     @Override
     public void initialize(final URL location, final ResourceBundle resources) {
-        this.gameUtil = (GameUtil) ServiceLocator.get(GameUtil.class);
+        this.gameUtil = ServiceLocator.get(GameUtil.class);
 
         enableButtons();
         updateUserNames();
@@ -386,7 +386,7 @@ public final class GameController extends Controller implements DisconnectEventL
 
         this.gameUtil.getPlayerDeck().addListener((ListChangeListener) c -> updateCardImages());
 
-        SocketUtil socket = (SocketUtil) ServiceLocator.get(SocketUtil.class);
+        SocketUtil socket = ServiceLocator.get(SocketUtil.class);
         socket.addDisconnectListener(this);
         socket.addBroadcastGameModeEventListener(this);
 
@@ -411,7 +411,7 @@ public final class GameController extends Controller implements DisconnectEventL
     private void updateCardImages() {
         if (gameUtil.getPlayerDeck().size() == 9) {
 
-            LoginEntity login = (LoginEntity) ServiceLocator.get(LoginEntity.class);
+            LoginEntity login = ServiceLocator.get(LoginEntity.class);
 
             assert login != null;
             if (gameUtil.getGame().getPlayerOne().equals(login.getUsername())) {
@@ -547,7 +547,7 @@ public final class GameController extends Controller implements DisconnectEventL
      */
     @FXML
     private void clickOnDisconnect() {
-        SocketUtil socket = (SocketUtil) ServiceLocator.get(SocketUtil.class);
+        SocketUtil socket = ServiceLocator.get(SocketUtil.class);
         if (socket != null) { // Not necessary but keeps IDE happy
             socket.close();
         }
@@ -589,7 +589,7 @@ public final class GameController extends Controller implements DisconnectEventL
     public void enableButtons() {
         //TODO enable buttons for the cards that could be played in the round based on game mode
 
-        LoginEntity login = (LoginEntity) ServiceLocator.get(LoginEntity.class);
+        LoginEntity login = ServiceLocator.get(LoginEntity.class);
 
         if (gameUtil.getGame().getPlayerOne().equals(login.getUsername())) {
             user1b1.setDisable(false);

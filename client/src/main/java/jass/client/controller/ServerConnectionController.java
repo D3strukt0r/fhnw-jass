@@ -189,7 +189,7 @@ public final class ServerConnectionController extends Controller {
 
     @Override
     public void initialize(final URL location, final ResourceBundle resources) {
-        DatabaseUtil db = (DatabaseUtil) ServiceLocator.get(DatabaseUtil.class);
+        DatabaseUtil db = ServiceLocator.get(DatabaseUtil.class);
 
         /*
          * Bind all texts

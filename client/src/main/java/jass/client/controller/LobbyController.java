@@ -114,7 +114,7 @@ public final class LobbyController extends Controller implements GameFoundEventL
 
     @Override
     public void initialize(final URL location, final ResourceBundle resources) {
-        SocketUtil socket = (SocketUtil) ServiceLocator.get(SocketUtil.class);
+        SocketUtil socket = ServiceLocator.get(SocketUtil.class);
         if (socket != null) { // Not necessary but keeps IDE happy
             socket.setGameFoundEventListener(this);
         }
@@ -149,11 +149,11 @@ public final class LobbyController extends Controller implements GameFoundEventL
     @FXML
     public void clickOnFindMatch() {
         // Get token and initialize SearchGame Message
-        LoginEntity login = (LoginEntity) ServiceLocator.get(LoginEntity.class);
+        LoginEntity login = ServiceLocator.get(LoginEntity.class);
         String token = login.getToken();
         String userName = login.getUsername();
         SearchGame searchGameMsg = new SearchGame(new SearchGameData(token, userName));
-        SocketUtil backend = (SocketUtil) ServiceLocator.get(SocketUtil.class);
+        SocketUtil backend = ServiceLocator.get(SocketUtil.class);
 
         // Send SearchGame Message to Server
         if (searchGameMsg.process(backend)) {
@@ -177,11 +177,11 @@ public final class LobbyController extends Controller implements GameFoundEventL
     @FXML
     public void clickOnCancelMatch() {
         // Get token and initialize SearchGame Message
-        LoginEntity login = (LoginEntity) ServiceLocator.get(LoginEntity.class);
+        LoginEntity login = ServiceLocator.get(LoginEntity.class);
         String token = login.getToken();
         String userName = login.getUsername();
         CancelSearchGame cancelSearchGameMsg = new CancelSearchGame(new CancelSearchGameData(token, userName));
-        SocketUtil backend = (SocketUtil) ServiceLocator.get(SocketUtil.class);
+        SocketUtil backend = ServiceLocator.get(SocketUtil.class);
 
         // Send SearchGame Message to Server
         if (cancelSearchGameMsg.process(backend)) {
@@ -203,7 +203,7 @@ public final class LobbyController extends Controller implements GameFoundEventL
      * @param msgData The game found data.
      */
     public void onGameFound(final GameFoundData msgData) {
-        GameUtil gameUtil = (GameUtil) ServiceLocator.get(GameUtil.class);
+        GameUtil gameUtil = ServiceLocator.get(GameUtil.class);
         if (gameUtil != null) { // Not necessary but keeps IDE happy
             gameUtil.setGame(msgData);
         }
@@ -223,7 +223,7 @@ public final class LobbyController extends Controller implements GameFoundEventL
      */
     @FXML
     private void clickOnDisconnect() {
-        SocketUtil socket = (SocketUtil) ServiceLocator.get(SocketUtil.class);
+        SocketUtil socket = ServiceLocator.get(SocketUtil.class);
         if (socket != null) { // Not necessary but keeps IDE happy
             socket.close();
         }
@@ -237,7 +237,7 @@ public final class LobbyController extends Controller implements GameFoundEventL
     @FXML
     public void clickOnLogout() {
         //TODO handle logout properly - below doesnt work because it disconnects from the server
-        /*SocketUtil socket = (SocketUtil) ServiceLocator.get(SocketUtil.class);
+        /*SocketUtil socket = ServiceLocator.get(SocketUtil.class);
         if (socket != null) { // Not necessary but keeps IDE happy
             socket.close();
         }

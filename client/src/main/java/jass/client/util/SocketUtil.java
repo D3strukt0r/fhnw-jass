@@ -268,7 +268,7 @@ public final class SocketUtil extends Thread implements Service, Closeable {
      * @since 0.0.1
      */
     public String getToken() {
-        LoginEntity login = (LoginEntity) ServiceLocator.get(LoginEntity.class);
+        LoginEntity login = ServiceLocator.get(LoginEntity.class);
         if (login != null) {
             return login.getToken();
         }

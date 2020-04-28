@@ -57,7 +57,7 @@ public final class GameUtil implements Service, BroadcastDeckEventListener, Choo
      * An object for a running game.
      */
     public GameUtil() {
-        SocketUtil socket = (SocketUtil) ServiceLocator.get(SocketUtil.class);
+        SocketUtil socket = ServiceLocator.get(SocketUtil.class);
         if (socket != null) { // Not necessary but keeps IDE happy
             socket.setBroadcastDeckEventListener(this);
             socket.addChooseGameModeEventListener(this);
@@ -93,7 +93,7 @@ public final class GameUtil implements Service, BroadcastDeckEventListener, Choo
             }
 
             GameMode gameMode = GameMode.fromString(result);
-            LoginEntity login = (LoginEntity) ServiceLocator.get(LoginEntity.class);
+            LoginEntity login = ServiceLocator.get(LoginEntity.class);
 
             // If trumpf, choose which card to be trumpf
             ChosenGameMode chosenGameMode;
@@ -123,7 +123,7 @@ public final class GameUtil implements Service, BroadcastDeckEventListener, Choo
             }
 
             // Return the chosen game mode back to the server.
-            SocketUtil socket = (SocketUtil) ServiceLocator.get(SocketUtil.class);
+            SocketUtil socket = ServiceLocator.get(SocketUtil.class);
             socket.send(chosenGameMode);
         });
     }
