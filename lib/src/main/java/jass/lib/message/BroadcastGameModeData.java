@@ -1,5 +1,8 @@
 package jass.lib.message;
 
+import jass.lib.Card;
+import jass.lib.GameMode;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
@@ -11,14 +14,29 @@ public final class BroadcastGameModeData extends MessageData {
     /**
      * The token for the current session.
      */
-    private final ChooseGameModeData.GameMode gameMode;
+    private final GameMode gameMode;
+
+    /**
+     * The suit to be the trumpf, if game mode trumpf is chosen.
+     */
+    private final Card.Suit trumpfSuit;
 
     /**
      * @param gameMode The game mode.
      */
-    public BroadcastGameModeData(final ChooseGameModeData.GameMode gameMode) {
+    public BroadcastGameModeData(final GameMode gameMode) {
         super("BroadcastGameMode");
         this.gameMode = gameMode;
+        trumpfSuit = null;
+    }
+
+    /**
+     * @param gameMode The game mode.
+     */
+    public BroadcastGameModeData(final GameMode gameMode, final Card.Suit trumpfSuit) {
+        super("BroadcastGameMode");
+        this.gameMode = gameMode;
+        this.trumpfSuit = trumpfSuit;
     }
 
     /**
@@ -26,13 +44,27 @@ public final class BroadcastGameModeData extends MessageData {
      */
     public BroadcastGameModeData(final JSONObject data) {
         super(data);
-        gameMode = data.getEnum(ChooseGameModeData.GameMode.class, "gameMode");
+        gameMode = data.getEnum(GameMode.class, "gameMode");
+        Card.Suit trumpfSuitTemp;
+        try {
+            trumpfSuitTemp = data.getEnum(Card.Suit.class, "trumpfSuit");
+        } catch (JSONException exception) {
+            trumpfSuitTemp = null;
+        }
+        trumpfSuit = trumpfSuitTemp;
     }
 
     /**
      * @return Returns the game mode.
      */
-    public ChooseGameModeData.GameMode getGameMode() {
+    public GameMode getGameMode() {
         return gameMode;
+    }
+
+    /**
+     * @return Returns the trumpf suit.
+     */
+    public Card.Suit getTrumpfSuit() {
+        return trumpfSuit;
     }
 }

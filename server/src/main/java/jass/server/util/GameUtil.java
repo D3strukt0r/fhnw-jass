@@ -1,5 +1,6 @@
 package jass.server.util;
 
+import jass.lib.GameMode;
 import jass.lib.message.BroadcastGameModeData;
 import jass.lib.message.ChooseGameModeData;
 import jass.lib.message.ChosenGameModeData;
@@ -120,8 +121,13 @@ public final class GameUtil implements ChosenGameModeEventListener {
     public void onChosenGameMode(final ChosenGameModeData data) {
         // Check with token if player one actually is the one who sent the data.
         if (data.getToken().equals(clientPlayerOne.getToken())) {
-            ChooseGameModeData.GameMode gameMode = data.getGameMode();
-            BroadcastGameMode broadcastGameMode = new BroadcastGameMode(new BroadcastGameModeData(gameMode));
+            GameMode gameMode = data.getGameMode();
+            BroadcastGameMode broadcastGameMode;
+            if (gameMode == GameMode.TRUMPF) {
+                broadcastGameMode = new BroadcastGameMode(new BroadcastGameModeData(gameMode, data.getTrumpfSuit()));
+            } else {
+                broadcastGameMode = new BroadcastGameMode(new BroadcastGameModeData(gameMode));
+            }
             broadcast(broadcastGameMode);
         }
     }

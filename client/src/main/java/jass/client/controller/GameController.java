@@ -12,6 +12,7 @@ import jass.client.util.WindowUtil;
 import jass.client.view.GameView;
 import jass.client.view.LoginView;
 import jass.client.view.ServerConnectionView;
+import jass.lib.GameMode;
 import jass.lib.message.BroadcastGameModeData;
 import jass.lib.message.CardData;
 import jass.lib.servicelocator.ServiceLocator;
@@ -693,7 +694,12 @@ public final class GameController extends Controller implements DisconnectEventL
     @Override
     public void onBroadcastGameMode(final BroadcastGameModeData data) {
         Platform.runLater(() -> {
-            mode.setText("Mode: " + data.getGameMode().toString());
+            // TODO Make this more beautiful
+            if (data.getGameMode() == GameMode.TRUMPF) {
+                mode.setText("Mode: " + data.getGameMode().toString() + " | Card: " + data.getTrumpfSuit());
+            } else {
+                mode.setText("Mode: " + data.getGameMode().toString());
+            }
             // TODO Maybe enable buttons in here to start game?
         });
     }

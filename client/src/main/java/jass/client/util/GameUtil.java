@@ -5,6 +5,8 @@ import jass.client.entity.LoginEntity;
 import jass.client.eventlistener.BroadcastDeckEventListener;
 import jass.client.eventlistener.ChooseGameModeEventListener;
 import jass.client.message.ChosenGameMode;
+import jass.lib.Card;
+import jass.lib.GameMode;
 import jass.lib.message.BroadcastDeckData;
 import jass.lib.message.CardData;
 import jass.lib.message.ChooseGameModeData;
@@ -22,8 +24,8 @@ import org.apache.logging.log4j.Logger;
 import jass.lib.servicelocator.Service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 
 /**
  * @author Victor Hargrave
@@ -74,10 +76,7 @@ public final class GameUtil implements Service, BroadcastDeckEventListener, Choo
         Platform.runLater(() -> {
             // Save all the possible game modes...
             List<String> choices = new ArrayList<>();
-            for (ChooseGameModeData.GameMode gameMode : ChooseGameModeData.GameMode.values()) {
-                String str = gameMode.toString();
-                choices.add(str.substring(0, 1).toUpperCase() + str.substring(1));
-            }
+            Arrays.stream(GameMode.values()).forEach(gameMode -> choices.add(gameMode.toString()));
 
             // Preparing the dialog...
             ChoiceDialog<String> dialog = new ChoiceDialog<>("", choices);
@@ -88,15 +87,40 @@ public final class GameUtil implements Service, BroadcastDeckEventListener, Choo
             stage.getIcons().add(new Image(getClass().getResource("/images/icon.png").toString()));
 
             // Show the dialog until the player chooses something
-            String endResult = null;
-            while (endResult == null) {
-                Optional<String> result = dialog.showAndWait();
-                endResult = result.orElse(null);
+            String result = "";
+            while (result == null || result.length() == 0) {
+                result = dialog.showAndWait().orElse(null);
             }
 
+            GameMode gameMode = GameMode.fromString(result);
             LoginEntity login = (LoginEntity) ServiceLocator.get(LoginEntity.class);
-            ChooseGameModeData.GameMode endEndResult = ChooseGameModeData.GameMode.valueOf(endResult);
-            ChosenGameMode chosenGameMode = new ChosenGameMode(new ChosenGameModeData(data.getId(), login.getToken(), endEndResult));
+
+            // If trumpf, choose which card to be trumpf
+            ChosenGameMode chosenGameMode;
+            if (gameMode == GameMode.TRUMPF) {
+                // Save all the possible card types...
+                List<String> choices2 = new ArrayList<>();
+                Arrays.stream(Card.Suit.values()).forEach(suit -> choices2.add(suit.toString()));
+
+                // Preparing the dialog...
+                ChoiceDialog<String> dialog2 = new ChoiceDialog<>("", choices2);
+                dialog2.setTitle("Choose suit");
+                dialog2.setHeaderText(null);
+                dialog2.setContentText("Choose suit for trumpf:");
+                Stage stage2 = (Stage) dialog2.getDialogPane().getScene().getWindow();
+                stage2.getIcons().add(new Image(getClass().getResource("/images/icon.png").toString()));
+
+                // Show the dialog until the player chooses something
+                String result2 = "";
+                while (result2 == null || result2.length() == 0) {
+                    result2 = dialog2.showAndWait().orElse(null);
+                }
+
+                Card.Suit suit = Card.Suit.fromString(result2);
+                chosenGameMode = new ChosenGameMode(new ChosenGameModeData(data.getId(), login.getToken(), gameMode, suit));
+            } else {
+                chosenGameMode = new ChosenGameMode(new ChosenGameModeData(data.getId(), login.getToken(), gameMode));
+            }
 
             // Return the chosen game mode back to the server.
             SocketUtil socket = (SocketUtil) ServiceLocator.get(SocketUtil.class);

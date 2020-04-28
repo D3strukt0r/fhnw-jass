@@ -26,22 +26,6 @@ import org.json.JSONObject;
  * @since 0.0.1
  */
 public final class ChooseGameModeData extends MessageData {
-    public enum GameMode {
-        /**
-         * Trumpf game mode.
-         */
-        TRUMPF,
-
-        /**
-         * Obe abe game mode.
-         */
-        OBE_ABE,
-
-        /**
-         * Onde ufe game mode.
-         */
-        ONDE_UFE
-    }
 
     /**
      * This is used by the server to notify the client to give an appropriate
