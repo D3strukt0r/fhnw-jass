@@ -385,23 +385,23 @@ public final class GameController extends Controller implements DisconnectEventL
         gameUtil = ServiceLocator.get(GameUtil.class);
 
         logger.info("initialising");
+        gameUtil.getPlayerDeck().addListener((ListChangeListener<CardData>) c -> {
+            logger.info("listener was activated. Now updating cards");
+            logger.info("here's a card" + gameUtil.getPlayerDeck().get(0).getSuit());
+            updateCardImages();
+        });
+        logger.info("listener created for cards");
         enableButtons();
         logger.info("buttons enabled");
         updateUserNames();
         logger.info("updated user names");
 
-        if(gameUtil.getPlayerDeck() != null && gameUtil.getPlayerDeck().get(0) != null) {
-            logger.info("here's a card" + gameUtil.getPlayerDeck().get(0).getSuit());
-        }
-        updateCardImages();
-        logger.info("updated card images");
-
-
-        gameUtil.getPlayerDeck().addListener((ListChangeListener) c -> {
-            logger.info("listener was activated. Now updating cards");
-            logger.info("here's a card" + gameUtil.getPlayerDeck().get(0).getSuit());
+        if(gameUtil.getPlayerDeck() != null) {
             updateCardImages();
-        });
+            logger.info("updated card images");
+        }
+
+
 
         gameUtil.getGameModeProperty().addListener((obs, oldGameMode, newGameMode) -> {
             Platform.runLater(() -> {
