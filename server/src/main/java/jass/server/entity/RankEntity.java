@@ -12,7 +12,7 @@ import jass.lib.database.Entity;
  * @since 0.0.1
  */
 @DatabaseTable(tableName = "rank")
-public final class RankEntity implements Entity {
+public final class RankEntity extends Entity {
     /**
      * The ID.
      */
@@ -22,47 +22,32 @@ public final class RankEntity implements Entity {
     /**
      * The rank.
      */
-    @DatabaseField()
+    @DatabaseField
     private String key;
 
     /**
      * How many points this rank gives if it's a trumpf.
      */
-    @DatabaseField()
+    @DatabaseField
     private int pointsTrumpf;
 
     /**
      * How many points this rank gives if the game mode is Obe Abe.
      */
-    @DatabaseField()
+    @DatabaseField
     private int pointsObeAbe;
 
     /**
      * How many points this rank gives if the game mode is Onde Ufe.
      */
-    @DatabaseField()
+    @DatabaseField
     private int pointsOndeufe;
 
     /**
      * For ORMLite all persisted classes must define a no-arg constructor with
      * at least package visibility.
      */
-    RankEntity() {
-    }
-
-    /**
-     * @param id            The ID.
-     * @param key           The rank.
-     * @param pointsTrumpf  Points (Trumpf)
-     * @param pointsObeAbe  Points (Obe Abe)
-     * @param pointsOndeufe Points (Onde Ufe)
-     */
-    public RankEntity(final int id, final String key, final int pointsTrumpf, final int pointsObeAbe, final int pointsOndeufe) {
-        this.id = id;
-        this.key = key;
-        this.pointsObeAbe = pointsObeAbe;
-        this.pointsOndeufe = pointsOndeufe;
-        this.pointsTrumpf = pointsTrumpf;
+    public RankEntity() {
     }
 
     /**
@@ -73,10 +58,80 @@ public final class RankEntity implements Entity {
     }
 
     /**
+     * @param id The ID.
+     *
+     * @return Returns the object for further processing.
+     */
+    public RankEntity setId(int id) {
+        this.id = id;
+        return this;
+    }
+
+    /**
      * @return Returns the rank.
      */
     public String getKey() {
         return key;
     }
 
+    /**
+     * @param key The kex.
+     *
+     * @return Returns the object for further processing.
+     */
+    public RankEntity setKey(final String key) {
+        this.key = key;
+        return this;
+    }
+
+    /**
+     * @return Returns the points for trumpf.
+     */
+    public int getPointsTrumpf() {
+        return pointsTrumpf;
+    }
+
+    /**
+     * @param pointsTrumpf Points trumpf.
+     *
+     * @return Returns the object for further processing.
+     */
+    public RankEntity setPointsTrumpf(final int pointsTrumpf) {
+        this.pointsTrumpf = pointsTrumpf;
+        return this;
+    }
+
+    /**
+     * @return Returns the points for obe abe.
+     */
+    public int getPointsObeAbe() {
+        return pointsObeAbe;
+    }
+
+    /**
+     * @param pointsObeAbe Points obe abe.
+     *
+     * @return Returns the object for further processing.
+     */
+    public RankEntity setPointsObeAbe(final int pointsObeAbe) {
+        this.pointsObeAbe = pointsObeAbe;
+        return this;
+    }
+
+    /**
+     * @return Returns the points for onde ufe
+     */
+    public int getPointsOndeufe() {
+        return pointsOndeufe;
+    }
+
+    /**
+     * @param pointsOndeufe Points onde ufe.
+     *
+     * @return Returns the object for further processing.
+     */
+    public RankEntity setPointsOndeufe(final int pointsOndeufe) {
+        this.pointsOndeufe = pointsOndeufe;
+        return this;
+    }
 }

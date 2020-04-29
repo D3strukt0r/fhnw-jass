@@ -317,9 +317,14 @@ public final class ChangePasswordController extends Controller {
         // Connection would freeze window (and the animations) so do it in a different thread.
         new Thread(() -> {
             LoginEntity login = ServiceLocator.get(LoginEntity.class);
-            LoginEntity newLogin = new LoginEntity(login.getUsername(), newPassword.getText(), login.getToken());
+            assert login != null;
+            LoginEntity newLogin = (new LoginEntity())
+                .setUsername(login.getUsername())
+                .setPassword(newPassword.getText())
+                .setToken(login.getToken());
 
             SocketUtil backend = ServiceLocator.get(SocketUtil.class);
+            assert backend != null;
             ChangePassword changePasswordMsg = new ChangePassword(new ChangePasswordData(login.getToken(), newLogin.getPassword()));
 
             // Send the change password request to the server. Update locally if successful.

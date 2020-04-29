@@ -88,13 +88,13 @@ public final class GameUtil implements ChosenGameModeEventListener {
         clientPlayerFour.addChosenGameModeEventListener(this);
 
         // Assign and create Teams
-        TeamEntity teamOne = new TeamEntity(playerOne, playerThree);
+        TeamEntity teamOne = (new TeamEntity()).setPlayerOne(playerOne).setPlayerTwo(playerThree);
         TeamRepository.getSingleton(null).add(teamOne);
-        TeamEntity teamTwo = new TeamEntity(playerTwo, playerFour);
+        TeamEntity teamTwo = (new TeamEntity()).setPlayerOne(playerTwo).setPlayerTwo(playerFour);
         TeamRepository.getSingleton(null).add(teamTwo);
 
         // Initialize new Game
-        game = new GameEntity(teamOne, teamTwo, true);
+        game = (new GameEntity()).setTeamOne(teamOne).setTeamTwo(teamTwo);
         GameRepository.getSingleton(null).add(game);
         logger.info("Successfully created game with ID: " + game.getId());
 
@@ -111,7 +111,7 @@ public final class GameUtil implements ChosenGameModeEventListener {
         // Create a round
         CardUtil cardUtil = ServiceLocator.get(CardUtil.class);
         assert cardUtil != null;
-        currentRound = new RoundEntity(playerOne, game);
+        currentRound = (new RoundEntity()).setGameModeChooser(playerOne).setGame(game);
         RoundRepository.getSingleton(null).add(currentRound);
 
         // Send a deck to each user

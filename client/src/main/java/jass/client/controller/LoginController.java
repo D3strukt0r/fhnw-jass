@@ -22,6 +22,7 @@ import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXCheckBox;
 import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
+import jass.client.entity.ServerEntity;
 import jass.client.view.LobbyView;
 import jass.client.view.RegisterView;
 import jass.client.view.ServerConnectionView;
@@ -327,12 +328,16 @@ public final class LoginController extends Controller implements DisconnectEvent
 
         // Connection would freeze window (and the animations) so do it in a different thread.
         new Thread(() -> {
-            LoginEntity login = new LoginEntity(
-                username.getText(),
-                password.getText(),
-                connectAutomatically.isSelected()
-            );
             SocketUtil backend = ServiceLocator.get(SocketUtil.class);
+            assert backend != null;
+            ServerEntity server = ServiceLocator.get(ServerEntity.class);
+            assert server != null;
+
+            LoginEntity login = (new LoginEntity())
+                .setServer(server)
+                .setUsername(username.getText())
+                .setPassword(password.getText())
+                .setConnectAutomatically(connectAutomatically.isSelected());
             Login loginMsg = new Login(new LoginData(login.getUsername(), login.getPassword()));
 
             // Send the login request to the server. Update locally if successful.

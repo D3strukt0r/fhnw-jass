@@ -13,7 +13,7 @@ import jass.lib.message.CardData;
  * @since 0.0.1
  */
 @DatabaseTable(tableName = "card")
-public final class CardEntity implements Entity {
+public final class CardEntity extends Entity {
     /**
      * The ID.
      */
@@ -36,18 +36,7 @@ public final class CardEntity implements Entity {
      * For ORMLite all persisted classes must define a no-arg constructor with
      * at least package visibility.
      */
-    CardEntity() {
-    }
-
-    /**
-     * @param id   The ID.
-     * @param rank The rank of this card.
-     * @param suit The suit of this card.
-     */
-    public CardEntity(final int id, final RankEntity rank, final SuitEntity suit) {
-        this.id = id;
-        this.rank = rank;
-        this.suit = suit;
+    public CardEntity() {
     }
 
     /**
@@ -55,6 +44,16 @@ public final class CardEntity implements Entity {
      */
     public int getId() {
         return id;
+    }
+
+    /**
+     * @param id The ID.
+     *
+     * @return Returns the object for further processing.
+     */
+    public CardEntity setId(final int id) {
+        this.id = id;
+        return this;
     }
 
     /**
@@ -66,9 +65,12 @@ public final class CardEntity implements Entity {
 
     /**
      * @param rank The rank.
+     *
+     * @return Returns the object for further processing.
      */
-    public void setRank(final RankEntity rank) {
+    public CardEntity setRank(final RankEntity rank) {
         this.rank = rank;
+        return this;
     }
 
     /**
@@ -80,9 +82,12 @@ public final class CardEntity implements Entity {
 
     /**
      * @param suit The suit.
+     *
+     * @return Returns the object for further processing.
      */
-    public void setSuit(final SuitEntity suit) {
+    public CardEntity setSuit(final SuitEntity suit) {
         this.suit = suit;
+        return this;
     }
 
     /**

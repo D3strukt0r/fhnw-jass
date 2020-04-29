@@ -259,7 +259,7 @@ public final class ServerConnectionController extends Controller {
             }
         });
         // Add the "Create new..." element
-        chooseServer.getItems().add(new ServerEntity(null, 0));
+        chooseServer.getItems().add((new ServerEntity()).setIp(null).setPort(0));
         chooseServer.getSelectionModel().selectFirst();
         // Find all saved element
         if (db != null) {
@@ -415,12 +415,11 @@ public final class ServerConnectionController extends Controller {
 
         // Connection would freeze window (and the animations) so do it in a different thread.
         new Thread(() -> {
-            ServerEntity server = new ServerEntity(
-                ipOrDomain.getText(),
-                Integer.parseInt(port.getText()),
-                secure.isSelected(),
-                connectAutomatically.isSelected()
-            );
+            ServerEntity server = (new ServerEntity())
+                .setIp(ipOrDomain.getText())
+                .setPort(Integer.parseInt(port.getText()))
+                .setSecure(secure.isSelected())
+                .setConnectAutomatically(connectAutomatically.isSelected());
             ServiceLocator.add(server);
 
             SocketUtil socket = null;

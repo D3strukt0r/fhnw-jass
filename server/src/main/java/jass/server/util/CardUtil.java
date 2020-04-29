@@ -86,9 +86,18 @@ public final class CardUtil implements Service {
      * @return Returns a deck for a specific player.
      */
     private DeckEntity addNewDeck(final RoundEntity newRound, final UserEntity player, final List<CardEntity> cards, final int i) {
-        DeckEntity deck = new DeckEntity(player, newRound, cards.get(i),
-            cards.get(i + 1), cards.get(i + 2), cards.get(i + 3), cards.get(i + 4), cards.get(i + 5),
-            cards.get(i + 6), cards.get(i + 7), cards.get(i + 8));
+        DeckEntity deck = (new DeckEntity())
+            .setPlayer(player)
+            .setRound(newRound)
+            .setCardOne(cards.get(i))
+            .setCardTwo(cards.get(i + 1))
+            .setCardThree(cards.get(i + 2))
+            .setCardFour(cards.get(i + 3))
+            .setCardFive(cards.get(i + 4))
+            .setCardSix(cards.get(i + 5))
+            .setCardSeven(cards.get(i + 6))
+            .setCardEight(cards.get(i + 7))
+            .setCardNine(cards.get(i + 8));
         DeckRepository.getSingleton(null).add(deck);
         logger.info("added deck for player");
         return deck;

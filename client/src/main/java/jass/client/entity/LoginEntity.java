@@ -31,7 +31,7 @@ import jass.lib.servicelocator.Service;
  * @since 0.0.1
  */
 @DatabaseTable(tableName = "login")
-public final class LoginEntity implements Service, Entity {
+public final class LoginEntity extends Entity implements Service {
     /**
      * The ID.
      */
@@ -63,54 +63,16 @@ public final class LoginEntity implements Service, Entity {
     private boolean connectAutomatically = false;
 
     /**
+     * The server that this login is used for.
+     */
+    @DatabaseField(foreign = true)
+    private ServerEntity server;
+
+    /**
      * For ORMLite all persisted classes must define a no-arg constructor with
      * at least package visibility.
      */
-    LoginEntity() {
-    }
-
-    /**
-     * @param username The username.
-     * @param password The password.
-     */
-    public LoginEntity(final String username, final String password) {
-        this.username = username;
-        this.password = password;
-    }
-
-    /**
-     * @param username             The username.
-     * @param password             The password.
-     * @param connectAutomatically Whether to connect automatically.
-     */
-    public LoginEntity(final String username, final String password, final boolean connectAutomatically) {
-        this.username = username;
-        this.password = password;
-        this.connectAutomatically = connectAutomatically;
-    }
-
-    /**
-     * @param username The username.
-     * @param password The password.
-     * @param token    The token.
-     */
-    public LoginEntity(final String username, final String password, final String token) {
-        this.username = username;
-        this.password = password;
-        this.token = token;
-    }
-
-    /**
-     * @param username             The username.
-     * @param password             The password.
-     * @param token                The token.
-     * @param connectAutomatically Whether to connect automatically.
-     */
-    public LoginEntity(final String username, final String password, final String token, final boolean connectAutomatically) {
-        this.username = username;
-        this.password = password;
-        this.token = token;
-        this.connectAutomatically = connectAutomatically;
+    public LoginEntity() {
     }
 
     /**
@@ -129,9 +91,12 @@ public final class LoginEntity implements Service, Entity {
 
     /**
      * @param username The username.
+     *
+     * @return Returns the object for further processing.
      */
-    public void setUsername(final String username) {
+    public LoginEntity setUsername(final String username) {
         this.username = username;
+        return this;
     }
 
     /**
@@ -143,9 +108,12 @@ public final class LoginEntity implements Service, Entity {
 
     /**
      * @param password The password.
+     *
+     * @return Returns the object for further processing.
      */
-    public void setPassword(final String password) {
+    public LoginEntity setPassword(final String password) {
         this.password = password;
+        return this;
     }
 
     /**
@@ -157,9 +125,12 @@ public final class LoginEntity implements Service, Entity {
 
     /**
      * @param token The token.
+     *
+     * @return Returns the object for further processing.
      */
-    public void setToken(final String token) {
+    public LoginEntity setToken(final String token) {
         this.token = token;
+        return this;
     }
 
     /**
@@ -171,8 +142,28 @@ public final class LoginEntity implements Service, Entity {
 
     /**
      * @param connectAutomatically Whether to connect automatically.
+     *
+     * @return Returns the object for further processing.
      */
-    public void setConnectAutomatically(final boolean connectAutomatically) {
+    public LoginEntity setConnectAutomatically(final boolean connectAutomatically) {
         this.connectAutomatically = connectAutomatically;
+        return this;
+    }
+
+    /**
+     * @return Returns the server this login belongs to.
+     */
+    public ServerEntity getServer() {
+        return server;
+    }
+
+    /**
+     * @param server The server this login belongs to.
+     *
+     * @return Returns the object for further processing.
+     */
+    public LoginEntity setServer(final ServerEntity server) {
+        this.server = server;
+        return this;
     }
 }

@@ -3,5 +3,5 @@ package jass.lib.database;
 /**
  * @author Manuele Vaccari
  */
-public interface Entity {
+public abstract class Entity {
 }

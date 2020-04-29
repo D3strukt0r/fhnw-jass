@@ -31,7 +31,7 @@ import jass.lib.servicelocator.Service;
  * @since 0.0.1
  */
 @DatabaseTable(tableName = "server")
-public final class ServerEntity implements Service, Entity {
+public final class ServerEntity extends Entity implements Service {
     /**
      * The ID.
      */
@@ -66,40 +66,7 @@ public final class ServerEntity implements Service, Entity {
      * For ORMLite all persisted classes must define a no-arg constructor with
      * at least package visibility.
      */
-    ServerEntity() {
-    }
-
-    /**
-     * @param ip   The IP address.
-     * @param port The port.
-     */
-    public ServerEntity(final String ip, final int port) {
-        this.ip = ip;
-        this.port = port;
-    }
-
-    /**
-     * @param ip     The IP address.
-     * @param port   The port.
-     * @param secure Whether to use SSL.
-     */
-    public ServerEntity(final String ip, final int port, final boolean secure) {
-        this.ip = ip;
-        this.port = port;
-        this.secure = secure;
-    }
-
-    /**
-     * @param ip                   The IP address.
-     * @param port                 The port.
-     * @param secure               Whether to use SSL.
-     * @param connectAutomatically Whether to connect automatically.
-     */
-    public ServerEntity(final String ip, final int port, final boolean secure, final boolean connectAutomatically) {
-        this.ip = ip;
-        this.port = port;
-        this.secure = secure;
-        this.connectAutomatically = connectAutomatically;
+    public ServerEntity() {
     }
 
     /**
@@ -118,9 +85,12 @@ public final class ServerEntity implements Service, Entity {
 
     /**
      * @param ip The IP address.
+     *
+     * @return Returns the object for further processing.
      */
-    public void setIp(final String ip) {
+    public ServerEntity setIp(final String ip) {
         this.ip = ip;
+        return this;
     }
 
     /**
@@ -132,9 +102,12 @@ public final class ServerEntity implements Service, Entity {
 
     /**
      * @param port The port.
+     *
+     * @return Returns the object for further processing.
      */
-    public void setPort(final int port) {
+    public ServerEntity setPort(final int port) {
         this.port = port;
+        return this;
     }
 
     /**
@@ -146,9 +119,12 @@ public final class ServerEntity implements Service, Entity {
 
     /**
      * @param secure Whether to use SSL or not.
+     *
+     * @return Returns the object for further processing.
      */
-    public void setSecure(final boolean secure) {
+    public ServerEntity setSecure(final boolean secure) {
         this.secure = secure;
+        return this;
     }
 
     /**
@@ -160,8 +136,11 @@ public final class ServerEntity implements Service, Entity {
 
     /**
      * @param connectAutomatically Whether to connect automatically.
+     *
+     * @return Returns the object for further processing.
      */
-    public void setConnectAutomatically(final boolean connectAutomatically) {
+    public ServerEntity setConnectAutomatically(final boolean connectAutomatically) {
         this.connectAutomatically = connectAutomatically;
+        return this;
     }
 }

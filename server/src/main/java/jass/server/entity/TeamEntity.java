@@ -12,7 +12,7 @@ import jass.lib.database.Entity;
  * @since 0.0.1
  */
 @DatabaseTable(tableName = "team")
-public final class TeamEntity implements Entity {
+public final class TeamEntity extends Entity {
     /**
      * The ID.
      */
@@ -35,16 +35,7 @@ public final class TeamEntity implements Entity {
      * For ORMLite all persisted classes must define a no-arg constructor with
      * at least package visibility.
      */
-    TeamEntity() {
-    }
-
-    /**
-     * @param playerOne Player one.
-     * @param playerTwo Player two.
-     */
-    public TeamEntity(final UserEntity playerOne, final UserEntity playerTwo) {
-        this.playerOne = playerOne;
-        this.playerTwo = playerTwo;
+    public TeamEntity() {
     }
 
     /**
@@ -63,9 +54,12 @@ public final class TeamEntity implements Entity {
 
     /**
      * @param playerOne Player one.
+     *
+     * @return Returns the object for further processing.
      */
-    public void setPlayerOne(final UserEntity playerOne) {
+    public TeamEntity setPlayerOne(final UserEntity playerOne) {
         this.playerOne = playerOne;
+        return this;
     }
 
     /**
@@ -77,9 +71,12 @@ public final class TeamEntity implements Entity {
 
     /**
      * @param playerTwo Player two.
+     *
+     * @return Returns the object for further processing.
      */
-    public void setPlayerTwp(final UserEntity playerTwo) {
+    public TeamEntity setPlayerTwo(final UserEntity playerTwo) {
         this.playerTwo = playerTwo;
+        return this;
     }
 
     /**

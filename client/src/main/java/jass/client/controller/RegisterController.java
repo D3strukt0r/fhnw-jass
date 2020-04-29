@@ -348,12 +348,12 @@ public final class RegisterController extends Controller implements DisconnectEv
 
         // Connection would freeze window (and the animations) so do it in a different thread.
         new Thread(() -> {
-            LoginEntity login = new LoginEntity(
-                username.getText(),
-                password.getText(),
-                connectAutomatically.isSelected()
-            );
+            LoginEntity login = (new LoginEntity())
+                .setUsername(username.getText())
+                .setPassword(password.getText())
+                .setConnectAutomatically(connectAutomatically.isSelected());
             SocketUtil backend = ServiceLocator.get(SocketUtil.class);
+            assert backend != null;
             Register registerMsg = new Register(new RegisterData(login.getUsername(), login.getPassword()));
 
             // Try sending the register command.

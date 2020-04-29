@@ -39,7 +39,7 @@ import java.util.Date;
  * @since 0.0.1
  */
 @DatabaseTable(tableName = "users")
-public final class UserEntity implements Entity {
+public final class UserEntity extends Entity {
     /**
      * The logger to print to console and save in a .log file.
      */
@@ -87,23 +87,7 @@ public final class UserEntity implements Entity {
      * For ORMLite all persisted classes must define a no-arg constructor with
      * at least package visibility.
      */
-    UserEntity() {
-    }
-
-    /**
-     * @param username The username.
-     */
-    public UserEntity(final String username) {
-        this.username = username;
-    }
-
-    /**
-     * @param username The username.
-     * @param password The password.
-     */
-    public UserEntity(final String username, final String password) {
-        this.username = username;
-        setPassword(password);
+    public UserEntity() {
     }
 
     /**
@@ -122,9 +106,12 @@ public final class UserEntity implements Entity {
 
     /**
      * @param username The username.
+     *
+     * @return Returns the object for further processing.
      */
-    public void setUsername(final String username) {
+    public UserEntity setUsername(final String username) {
         this.username = username;
+        return this;
     }
 
     /**
@@ -136,14 +123,17 @@ public final class UserEntity implements Entity {
 
     /**
      * @param password The password.
+     *
+     * @return Returns the object for further processing.
      */
-    public void setPassword(final String password) {
+    public UserEntity setPassword(final String password) {
         try {
             this.password = HashUtil.generateStrongPasswordHash(password);
         } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
             logger.fatal("Secure password hashing not possible - stopping server");
             System.exit(0);
         }
+        return this;
     }
 
     /**
@@ -177,23 +167,32 @@ public final class UserEntity implements Entity {
 
     /**
      * Set the user to being online.
+     *
+     * @return Returns the object for further processing.
      */
-    public void setOnline() {
+    public UserEntity setOnline() {
         this.online = true;
+        return this;
     }
 
     /**
      * Set the user to being offline.
+     *
+     * @return Returns the object for further processing.
      */
-    public void setOffline() {
+    public UserEntity setOffline() {
         this.online = false;
+        return this;
     }
 
     /**
      * Switch between online states.
+     *
+     * @return Returns the object for further processing.
      */
-    public void toggleOnline() {
+    public UserEntity toggleOnline() {
         this.online = !this.online;
+        return this;
     }
 
     /**
@@ -213,9 +212,12 @@ public final class UserEntity implements Entity {
 
     /**
      * @param lastLogin The last login time.
+     *
+     * @return Returns the object for further processing.
      */
-    public void setLastLogin(final Date lastLogin) {
+    public UserEntity setLastLogin(final Date lastLogin) {
         this.lastLogin = lastLogin;
+        return this;
     }
 
     // TODO: This shouldn't be here.
@@ -224,8 +226,9 @@ public final class UserEntity implements Entity {
     }
 
     // TODO: This shouldn't be here.
-    public void setFriend(final boolean friend) {
+    public UserEntity setFriend(final boolean friend) {
         this.friend = friend;
+        return this;
     }
 
     // TODO: This shouldn't be here.
@@ -234,8 +237,9 @@ public final class UserEntity implements Entity {
     }
 
     // TODO: This shouldn't be here.
-    public void setBlocked(final boolean blocked) {
+    public UserEntity setBlocked(final boolean blocked) {
         this.blocked = blocked;
+        return this;
     }
 
     // TODO: Is this required?

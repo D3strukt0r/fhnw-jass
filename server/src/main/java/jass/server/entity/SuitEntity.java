@@ -12,7 +12,7 @@ import jass.lib.database.Entity;
  * @since 0.0.1
  */
 @DatabaseTable(tableName = "suit")
-public final class SuitEntity implements Entity {
+public final class SuitEntity extends Entity {
     /**
      * The ID.
      */
@@ -22,23 +22,14 @@ public final class SuitEntity implements Entity {
     /**
      * The suit.
      */
-    @DatabaseField()
+    @DatabaseField
     private String key;
 
     /**
      * For ORMLite all persisted classes must define a no-arg constructor with
      * at least package visibility.
      */
-    SuitEntity() {
-    }
-
-    /**
-     * @param id  The ID.
-     * @param key The suit,
-     */
-    public SuitEntity(final int id, final String key) {
-        this.id = id;
-        this.key = key;
+    public SuitEntity() {
     }
 
     /**
@@ -49,10 +40,29 @@ public final class SuitEntity implements Entity {
     }
 
     /**
+     * @param id The ID.
+     *
+     * @return Returns the object for further processing.
+     */
+    public SuitEntity setId(final int id) {
+        this.id = id;
+        return this;
+    }
+
+    /**
      * @return Returns the suit.
      */
     public String getKey() {
         return key;
     }
 
+    /**
+     * @param key The Key.
+     *
+     * @return Returns the object for further processing.
+     */
+    public SuitEntity setKey(final String key) {
+        this.key = key;
+        return this;
+    }
 }

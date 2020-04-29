@@ -14,7 +14,7 @@ import jass.lib.database.Entity;
  * @since 0.0.1
  */
 @DatabaseTable(tableName = "round")
-public final class RoundEntity implements Entity {
+public final class RoundEntity extends Entity {
     /**
      * The ID.
      */
@@ -48,31 +48,20 @@ public final class RoundEntity implements Entity {
     /**
      * A cached total of the points for team one.
      */
-    @DatabaseField()
-    private int pointsTeamOne;
+    @DatabaseField(defaultValue = "0", canBeNull = false)
+    private int pointsTeamOne = 0;
 
     /**
      * A cached total of the points for team two.
      */
-    @DatabaseField()
-    private int pointsTeamTwo;
+    @DatabaseField(defaultValue = "0", canBeNull = false)
+    private int pointsTeamTwo = 0;
 
     /**
      * For ORMLite all persisted classes must define a no-arg constructor with
      * at least package visibility.
      */
-    RoundEntity() {
-    }
-
-    /**
-     * @param gameModeChooser The user which chooses the game mode.
-     * @param game            The game.
-     */
-    public RoundEntity(final UserEntity gameModeChooser, final GameEntity game) {
-        this.gameModeChooser = gameModeChooser;
-        this.game = game;
-        this.pointsTeamOne = 0;
-        this.pointsTeamTwo = 0;
+    public RoundEntity() {
     }
 
     /**
@@ -90,16 +79,97 @@ public final class RoundEntity implements Entity {
     }
 
     /**
-     * @param gameMode The game mode.
+     * @param gameModeChooser The game mode chooser.
+     *
+     * @return Returns the object for further processing.
      */
-    public void setGameMode(final GameMode gameMode) {
+    public RoundEntity setGameModeChooser(final UserEntity gameModeChooser) {
+        this.gameModeChooser = gameModeChooser;
+        return this;
+    }
+
+    /**
+     * @return Returns the game mode.
+     */
+    public GameMode getGameMode() {
+        return gameMode;
+    }
+
+    /**
+     * @param gameMode The game mode.
+     *
+     * @return Returns the object for further processing.
+     */
+    public RoundEntity setGameMode(final GameMode gameMode) {
         this.gameMode = gameMode;
+        return this;
+    }
+
+    /**
+     * @return Returns the suit of the trumpf.
+     */
+    public Card.Suit getTrumpfSuit() {
+        return trumpfSuit;
     }
 
     /**
      * @param trumpfSuit The trumpf suit.
+     *
+     * @return Returns the object for further processing.
      */
-    public void setTrumpfSuit(final Card.Suit trumpfSuit) {
+    public RoundEntity setTrumpfSuit(final Card.Suit trumpfSuit) {
         this.trumpfSuit = trumpfSuit;
+        return this;
+    }
+
+    /**
+     * @return Returns the game.
+     */
+    public GameEntity getGame() {
+        return game;
+    }
+
+    /**
+     * @param game The game.
+     *
+     * @return Returns the object for further processing.
+     */
+    public RoundEntity setGame(final GameEntity game) {
+        this.game = game;
+        return this;
+    }
+
+    /**
+     * @return Returns the total points for team one.
+     */
+    public int getPointsTeamOne() {
+        return pointsTeamOne;
+    }
+
+    /**
+     * @param pointsTeamOne The total points for team one.
+     *
+     * @return Returns the object for further processing.
+     */
+    public RoundEntity setPointsTeamOne(int pointsTeamOne) {
+        this.pointsTeamOne = pointsTeamOne;
+        return this;
+    }
+
+    /**
+     * @return Returns the total points for team two.
+     */
+    public int getPointsTeamTwo() {
+        return pointsTeamTwo;
+    }
+
+    /**
+     * @param pointsTeamTwo The total points for team two.
+     *
+     * @return Returns the object for further processing.
+     */
+    public RoundEntity setPointsTeamTwo(int pointsTeamTwo) {
+        this.pointsTeamTwo = pointsTeamTwo;
+        return this;
     }
 }

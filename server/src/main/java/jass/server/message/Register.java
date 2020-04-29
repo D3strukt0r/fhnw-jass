@@ -74,7 +74,9 @@ public final class Register extends Message {
             if (data.getPassword() != null && data.getPassword().length() >= PASSWORD_MIN_LENGTH) {
                 // Check whether the username is not already taken
                 if (!UserRepository.getSingleton(null).usernameExists(data.getUsername())) {
-                    UserEntity newUser = new UserEntity(data.getUsername(), data.getPassword());
+                    UserEntity newUser = (new UserEntity())
+                        .setUsername(data.getUsername())
+                        .setPassword(data.getPassword());
 
                     // Add the new user to the database, and only return true if it was saved successfully
                     if (UserRepository.getSingleton(null).add(newUser)) {
