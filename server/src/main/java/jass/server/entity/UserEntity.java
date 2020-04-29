@@ -75,14 +75,6 @@ public final class UserEntity extends Entity {
     @DatabaseField
     private Date lastLogin;
 
-    // TODO: This field should be a Many-To-Many between User and User.
-    @DatabaseField(defaultValue = "false", canBeNull = false)
-    private boolean friend = false;
-
-    // TODO: This field should be a Many-To-Many between User and User.
-    @DatabaseField(defaultValue = "false", canBeNull = false)
-    private boolean blocked = false;
-
     /**
      * For ORMLite all persisted classes must define a no-arg constructor with
      * at least package visibility.
@@ -218,33 +210,5 @@ public final class UserEntity extends Entity {
     public UserEntity setLastLogin(final Date lastLogin) {
         this.lastLogin = lastLogin;
         return this;
-    }
-
-    // TODO: This shouldn't be here.
-    public boolean isFriend() {
-        return friend;
-    }
-
-    // TODO: This shouldn't be here.
-    public UserEntity setFriend(final boolean friend) {
-        this.friend = friend;
-        return this;
-    }
-
-    // TODO: This shouldn't be here.
-    public boolean isBlocked() {
-        return blocked;
-    }
-
-    // TODO: This shouldn't be here.
-    public UserEntity setBlocked(final boolean blocked) {
-        this.blocked = blocked;
-        return this;
-    }
-
-    // TODO: Is this required?
-    @Override
-    public String toString() {
-        return username;
     }
 }
