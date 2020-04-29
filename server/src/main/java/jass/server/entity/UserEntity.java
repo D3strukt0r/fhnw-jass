@@ -28,7 +28,6 @@ import jass.server.util.HashUtil;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 import java.text.SimpleDateFormat;
-import java.time.Instant;
 import java.util.Date;
 
 /**
@@ -142,10 +141,6 @@ public final class UserEntity extends Entity {
         } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
             logger.fatal("Secure password hashing not possible - stopping server");
             System.exit(0);
-        }
-
-        if (matched) {
-            setLastLogin(Date.from(Instant.now()));
         }
         return matched;
     }

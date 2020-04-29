@@ -29,6 +29,8 @@ import jass.lib.message.MessageData;
 import jass.lib.message.ResultData;
 
 import java.security.SecureRandom;
+import java.time.Instant;
+import java.util.Date;
 
 /**
  * Login to an existing account. If successful, return an authentication token
@@ -78,6 +80,11 @@ public final class Login extends Message {
         // Check if the client used the correct password.
         if (user != null && user.checkPassword(data.getPassword())) {
             logger.info("Client used the correct password");
+
+            // Update last login time
+            user.setOnline()
+                .setLastLogin(Date.from(Instant.now()));
+            UserRepository.getSingleton(null).update(user);
 
             // Save the user to this connection.
             client.setUser(user);

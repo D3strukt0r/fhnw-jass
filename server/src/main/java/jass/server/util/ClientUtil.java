@@ -26,6 +26,7 @@ import jass.lib.servicelocator.ServiceLocator;
 import jass.server.entity.UserEntity;
 import jass.server.eventlistener.ChosenGameModeEventListener;
 import jass.server.message.Message;
+import jass.server.repository.UserRepository;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import jass.server.message.MessageError;
@@ -198,6 +199,9 @@ public final class ClientUtil extends Thread {
         // TODO: Close down the game if client was inside.
 
         clientReachable = false;
+
+        user.setOffline();
+        UserRepository.getSingleton(null).update(user);
         token = null;
         user = null;
 
