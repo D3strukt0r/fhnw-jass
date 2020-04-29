@@ -215,14 +215,7 @@ public final class LobbyController extends Controller implements GameFoundEventL
         assert gameUtil != null;
         gameUtil.setGame(msgData);
 
-        goToGameView();
-    }
-
-    /**
-     * Switch to the game window.
-     */
-    public void goToGameView() {
-        WindowUtil.switchTo(view, GameView.class);
+        WindowUtil.switchToNewWindow(view, GameView.class);
     }
 
     /**
