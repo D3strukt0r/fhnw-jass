@@ -1,7 +1,6 @@
 package jass.client.controller;
 
 import jass.client.entity.LoginEntity;
-import jass.client.eventlistener.BroadcastGameModeEventListener;
 import jass.client.eventlistener.DisconnectEventListener;
 import jass.client.message.Logout;
 import jass.client.mvc.Controller;
@@ -14,7 +13,6 @@ import jass.client.view.GameView;
 import jass.client.view.LoginView;
 import jass.client.view.ServerConnectionView;
 import jass.lib.GameMode;
-import jass.lib.message.BroadcastGameModeData;
 import jass.lib.message.CardData;
 import jass.lib.message.LogoutData;
 import jass.lib.servicelocator.ServiceLocator;
@@ -43,7 +41,7 @@ import java.util.ResourceBundle;
  * @version %I%, %G%
  * @since 0.0.1
  */
-public final class GameController extends Controller implements DisconnectEventListener, BroadcastGameModeEventListener {
+public final class GameController extends Controller implements DisconnectEventListener {
     /**
      * The view.
      */
@@ -388,10 +386,22 @@ public final class GameController extends Controller implements DisconnectEventL
 
         gameUtil.getPlayerDeck().addListener((ListChangeListener) c -> updateCardImages());
 
+        gameUtil.getGameModeProperty().addListener((obs, oldGameMode, newGameMode) -> {
+            Platform.runLater(() -> {
+                // TODO Make this more beautiful
+                if (newGameMode == GameMode.TRUMPF) {
+                    String rawTrumpf = gameUtil.getTrumpfProperty().getValue().toString();
+                    String trumpf = rawTrumpf.substring(0, 1).toUpperCase() + rawTrumpf.substring(1);
+                    mode.setText("Mode: " + newGameMode.toString() + " | Card: " + trumpf);
+                } else {
+                    mode.setText("Mode: " + newGameMode.toString());
+                }
+            });
+        });
+
         SocketUtil socket = ServiceLocator.get(SocketUtil.class);
         assert socket != null;
         socket.addDisconnectListener(this);
-        socket.addBroadcastGameModeEventListener(this);
 
         /*
          * Bind all texts
@@ -636,18 +646,5 @@ public final class GameController extends Controller implements DisconnectEventL
         ServiceLocator.remove(LoginEntity.class);
         ServiceLocator.remove(SocketUtil.class);
         WindowUtil.switchToNewWindow(view, ServerConnectionView.class);
-    }
-
-    @Override
-    public void onBroadcastGameMode(final BroadcastGameModeData data) {
-        Platform.runLater(() -> {
-            // TODO Make this more beautiful
-            if (data.getGameMode() == GameMode.TRUMPF) {
-                mode.setText("Mode: " + data.getGameMode().toString() + " | Card: " + data.getTrumpfSuit());
-            } else {
-                mode.setText("Mode: " + data.getGameMode().toString());
-            }
-            // TODO Maybe enable buttons in here to start game?
-        });
     }
 }

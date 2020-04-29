@@ -211,9 +211,9 @@ public final class LobbyController extends Controller implements GameFoundEventL
     public void onGameFound(final GameFoundData msgData) {
         logger.info("Successfully found game!");
 
-        GameUtil gameUtil = new GameUtil();
+        GameUtil gameUtil = ServiceLocator.get(GameUtil.class);
+        assert gameUtil != null;
         gameUtil.setGame(msgData);
-        ServiceLocator.add(gameUtil);
 
         goToGameView();
     }

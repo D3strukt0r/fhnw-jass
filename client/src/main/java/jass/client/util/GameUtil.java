@@ -3,17 +3,20 @@ package jass.client.util;
 import jass.client.controller.GameController;
 import jass.client.entity.LoginEntity;
 import jass.client.eventlistener.BroadcastDeckEventListener;
+import jass.client.eventlistener.BroadcastGameModeEventListener;
 import jass.client.eventlistener.ChooseGameModeEventListener;
 import jass.client.message.ChosenGameMode;
 import jass.lib.Card;
 import jass.lib.GameMode;
 import jass.lib.message.BroadcastDeckData;
+import jass.lib.message.BroadcastGameModeData;
 import jass.lib.message.CardData;
 import jass.lib.message.ChooseGameModeData;
 import jass.lib.message.ChosenGameModeData;
 import jass.lib.message.GameFoundData;
 import jass.lib.servicelocator.ServiceLocator;
 import javafx.application.Platform;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.ChoiceDialog;
@@ -32,7 +35,7 @@ import java.util.List;
  * @version %I%, %G%
  * @since 0.0.1
  */
-public final class GameUtil implements Service, BroadcastDeckEventListener, ChooseGameModeEventListener {
+public final class GameUtil implements Service, BroadcastDeckEventListener, ChooseGameModeEventListener, BroadcastGameModeEventListener {
     /**
      * The logger to print to console and save in a .log file.
      */
@@ -54,6 +57,16 @@ public final class GameUtil implements Service, BroadcastDeckEventListener, Choo
     private ObservableList<CardData> playerDeck;
 
     /**
+     * The game mode data.
+     */
+    private SimpleObjectProperty<GameMode> gameMode = new SimpleObjectProperty<>();
+
+    /**
+     * The trumpf.
+     */
+    private SimpleObjectProperty<Card.Suit> trumpf = new SimpleObjectProperty<>();
+
+    /**
      * An object for a running game.
      */
     public GameUtil() {
@@ -62,6 +75,7 @@ public final class GameUtil implements Service, BroadcastDeckEventListener, Choo
 
         socket.setBroadcastDeckEventListener(this);
         socket.addChooseGameModeEventListener(this);
+        socket.addBroadcastGameModeEventListener(this);
     }
 
     @Override
@@ -130,6 +144,14 @@ public final class GameUtil implements Service, BroadcastDeckEventListener, Choo
         });
     }
 
+    @Override
+    public void onBroadcastGameMode(final BroadcastGameModeData data) {
+        if (data.getGameMode() == GameMode.TRUMPF) {
+            trumpf.setValue(data.getTrumpfSuit());
+        }
+        gameMode.setValue(data.getGameMode());
+    }
+
     /**
      * @param msgData The game.
      */
@@ -170,5 +192,19 @@ public final class GameUtil implements Service, BroadcastDeckEventListener, Choo
      */
     public void setPlayerDeck(final ArrayList<CardData> playerDeck) {
         this.playerDeck = FXCollections.observableArrayList(playerDeck);
+    }
+
+    /**
+     * @return Returns the game mode property.
+     */
+    public SimpleObjectProperty<GameMode> getGameModeProperty() {
+        return gameMode;
+    }
+
+    /**
+     * @return Returns the trumpf property.
+     */
+    public SimpleObjectProperty<Card.Suit> getTrumpfProperty() {
+        return trumpf;
     }
 }

@@ -430,6 +430,9 @@ public final class ServerConnectionController extends Controller {
                 socket = new SocketUtil(server.getIp(), server.getPort(), server.isSecure());
                 ServiceLocator.add(socket);
 
+                GameUtil gameUtil = new GameUtil();
+                ServiceLocator.add(gameUtil);
+
                 ServerRepository.getSingleton(null).setToConnectAutomatically(server); // Make sure it's the only entry
             } catch (ConnectException e) {
                 enableAllIfNew();
