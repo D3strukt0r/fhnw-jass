@@ -200,8 +200,11 @@ public final class ClientUtil extends Thread {
 
         clientReachable = false;
 
-        user.setOffline();
-        UserRepository.getSingleton(null).update(user);
+        // If user is still logged in ...
+        if (user != null) {
+            user.setOffline();
+            UserRepository.getSingleton(null).update(user);
+        }
         token = null;
         user = null;
 
