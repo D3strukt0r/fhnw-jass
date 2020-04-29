@@ -58,17 +58,17 @@ public final class GameUtil implements Service, BroadcastDeckEventListener, Choo
      */
     public GameUtil() {
         SocketUtil socket = ServiceLocator.get(SocketUtil.class);
-        if (socket != null) { // Not necessary but keeps IDE happy
-            socket.setBroadcastDeckEventListener(this);
-            socket.addChooseGameModeEventListener(this);
-        }
+        assert socket != null;
+
+        socket.setBroadcastDeckEventListener(this);
+        socket.addChooseGameModeEventListener(this);
     }
 
     @Override
     public void onDeckBroadcasted(final BroadcastDeckData data) {
         logger.info("Successfully received cards!");
-        this.setDeckId(data.getDeckId());
-        this.setPlayerDeck(data.getCardsClient());
+        deckId = data.getDeckId();
+        playerDeck = FXCollections.observableArrayList(data.getCardsClient());
     }
 
     @Override
@@ -94,6 +94,7 @@ public final class GameUtil implements Service, BroadcastDeckEventListener, Choo
 
             GameMode gameMode = GameMode.fromString(result);
             LoginEntity login = ServiceLocator.get(LoginEntity.class);
+            assert login != null;
 
             // If trumpf, choose which card to be trumpf
             ChosenGameMode chosenGameMode;
@@ -124,6 +125,7 @@ public final class GameUtil implements Service, BroadcastDeckEventListener, Choo
 
             // Return the chosen game mode back to the server.
             SocketUtil socket = ServiceLocator.get(SocketUtil.class);
+            assert socket != null;
             socket.send(chosenGameMode);
         });
     }

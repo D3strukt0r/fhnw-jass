@@ -3,6 +3,7 @@ package jass.client.controller;
 import jass.client.entity.LoginEntity;
 import jass.client.eventlistener.BroadcastGameModeEventListener;
 import jass.client.eventlistener.DisconnectEventListener;
+import jass.client.message.Logout;
 import jass.client.mvc.Controller;
 import jass.client.util.GameUtil;
 import jass.client.util.I18nUtil;
@@ -15,6 +16,7 @@ import jass.client.view.ServerConnectionView;
 import jass.lib.GameMode;
 import jass.lib.message.BroadcastGameModeData;
 import jass.lib.message.CardData;
+import jass.lib.message.LogoutData;
 import jass.lib.servicelocator.ServiceLocator;
 import javafx.application.Platform;
 import javafx.collections.ListChangeListener;
@@ -378,15 +380,16 @@ public final class GameController extends Controller implements DisconnectEventL
 
     @Override
     public void initialize(final URL location, final ResourceBundle resources) {
-        this.gameUtil = ServiceLocator.get(GameUtil.class);
+        gameUtil = ServiceLocator.get(GameUtil.class);
 
         enableButtons();
         updateUserNames();
         updateCardImages();
 
-        this.gameUtil.getPlayerDeck().addListener((ListChangeListener) c -> updateCardImages());
+        gameUtil.getPlayerDeck().addListener((ListChangeListener) c -> updateCardImages());
 
         SocketUtil socket = ServiceLocator.get(SocketUtil.class);
+        assert socket != null;
         socket.addDisconnectListener(this);
         socket.addBroadcastGameModeEventListener(this);
 
@@ -497,9 +500,9 @@ public final class GameController extends Controller implements DisconnectEventL
     @FXML
     private void clickOnDisconnect() {
         SocketUtil socket = ServiceLocator.get(SocketUtil.class);
-        if (socket != null) { // Not necessary but keeps IDE happy
-            socket.close();
-        }
+        assert socket != null;
+
+        socket.close();
         ServiceLocator.remove(SocketUtil.class);
         WindowUtil.switchToNewWindow(view, ServerConnectionView.class);
     }
@@ -509,7 +512,12 @@ public final class GameController extends Controller implements DisconnectEventL
      */
     @FXML
     public void clickOnLogout() {
-        //TODO handle logout properly
+        SocketUtil socket = ServiceLocator.get(SocketUtil.class);
+        assert socket != null;
+
+        Logout logoutMsg = new Logout(new LogoutData());
+        socket.send(logoutMsg);
+        ServiceLocator.remove(LoginEntity.class);
         WindowUtil.switchToNewWindow(view, LoginView.class);
     }
 
@@ -527,7 +535,6 @@ public final class GameController extends Controller implements DisconnectEventL
     public void setView(final GameView view) {
         this.view = view;
     }
-
 
     /**
      * Method to only enable buttons for those cards that are legal for a
@@ -589,7 +596,6 @@ public final class GameController extends Controller implements DisconnectEventL
      *
      * @author Sasa Trajkova
      */
-    @FXML
     public void changePlayerPaneBackground() {
         //TODO change player pane background
     }
@@ -599,7 +605,6 @@ public final class GameController extends Controller implements DisconnectEventL
      *
      * @author Sasa Trajkova
      */
-    @FXML
     public void updateUserNames() {
         if (gameUtil.getGame().getPlayerOne() != null) {
             user1.setText(gameUtil.getGame().getPlayerOne());

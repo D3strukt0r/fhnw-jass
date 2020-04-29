@@ -23,7 +23,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.Closeable;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
@@ -96,6 +95,8 @@ public final class SearchGameUtil extends Thread implements Service, Closeable {
                 for (ClientUtil player : playersToPlay) {
                     searchingClients.remove(player);
                 }
+
+                logger.info("Total of " + searchingClients.size() + " users searching for a game");
             } else {
                 try {
                     Thread.sleep(100);
@@ -115,7 +116,7 @@ public final class SearchGameUtil extends Thread implements Service, Closeable {
      *
      * @param client The client to add.
      */
-    public void addClientToSearchGame(final ClientUtil client) {
+    public synchronized void addClientToSearchGame(final ClientUtil client) {
         if (!searchingClients.contains(client)) {
             searchingClients.add(client);
             logger.info("Added new client " + client.getUsername() + " to waiting list. Total of " + searchingClients.size() + " users searching for a game");

@@ -95,8 +95,6 @@ public final class SplashModel extends Model {
                     try {
                         SocketUtil backend = new SocketUtil(server.getIp(), server.getPort(), server.isSecure());
                         ServiceLocator.add(backend);
-                        GameUtil gameUtil = new GameUtil();
-                        ServiceLocator.add(gameUtil);
                         connected = true;
                         logger.info("Connected to server");
                     } catch (IOException | KeyStoreException | CertificateException | NoSuchAlgorithmException | UnrecoverableKeyException | KeyManagementException e) { /* Ignore and continue */ }
