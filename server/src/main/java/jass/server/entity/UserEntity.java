@@ -54,7 +54,7 @@ public final class UserEntity implements Entity {
     /**
      * The Username.
      */
-    @DatabaseField(canBeNull = false)
+    @DatabaseField(canBeNull = false, unique = true)
     private String username;
 
     /**
