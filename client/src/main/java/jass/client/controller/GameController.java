@@ -45,6 +45,11 @@ import java.util.ResourceBundle;
  */
 public final class GameController extends Controller implements DisconnectEventListener {
     /**
+     * The logger to print to console and save in a .log file.
+     */
+    private static final Logger logger = LogManager.getLogger(GameController.class);
+
+    /**
      * The view.
      */
     private GameView view;
@@ -378,8 +383,6 @@ public final class GameController extends Controller implements DisconnectEventL
      */
     private GameUtil gameUtil;
 
-    private static final Logger logger = LogManager.getLogger(GameController.class);
-
     @Override
     public void initialize(final URL location, final ResourceBundle resources) {
         gameUtil = ServiceLocator.get(GameUtil.class);
@@ -388,7 +391,9 @@ public final class GameController extends Controller implements DisconnectEventL
         gameUtil.getPlayerDeck().addListener((ListChangeListener<CardData>) c -> {
             logger.info("listener was activated. Now updating cards");
             logger.info("here's a card" + gameUtil.getPlayerDeck().get(0).getSuit());
-            updateCardImages();
+            if (gameUtil.getPlayerDeck().size() == 9) {
+                updateCardImages();
+            }
         });
         logger.info("listener created for cards");
         enableButtons();
@@ -396,12 +401,10 @@ public final class GameController extends Controller implements DisconnectEventL
         updateUserNames();
         logger.info("updated user names");
 
-        if(gameUtil.getPlayerDeck() != null) {
+        if (gameUtil.getPlayerDeck() != null) {
             updateCardImages();
             logger.info("updated card images");
         }
-
-
 
         gameUtil.getGameModeProperty().addListener((obs, oldGameMode, newGameMode) -> {
             Platform.runLater(() -> {

@@ -1,6 +1,5 @@
 package jass.client.util;
 
-import jass.client.controller.GameController;
 import jass.client.entity.LoginEntity;
 import jass.client.eventlistener.BroadcastDeckEventListener;
 import jass.client.eventlistener.BroadcastGameModeEventListener;
@@ -76,13 +75,14 @@ public final class GameUtil implements Service, BroadcastDeckEventListener, Choo
         socket.setBroadcastDeckEventListener(this);
         socket.addChooseGameModeEventListener(this);
         socket.addBroadcastGameModeEventListener(this);
-        playerDeck = FXCollections.observableArrayList(new ArrayList<CardData>());
+        playerDeck = FXCollections.observableArrayList(new ArrayList<>());
     }
 
     @Override
     public void onBroadcastDeck(final BroadcastDeckData data) {
         logger.info("Successfully received cards!");
         deckId = data.getDeckId();
+        playerDeck.clear();
         playerDeck.addAll(data.getCardsClient());
     }
 
