@@ -145,6 +145,20 @@ public final class ServerSocketUtil extends Thread {
     }
 
     /**
+     * @param username A string with the username of the user.
+     *
+     * @return Returns the client if it exists, otherwise null.
+     */
+    public static synchronized ClientUtil get(final String username) {
+        for (ClientUtil c : clients) {
+            if (c.getUser() != null && c.getUser().getUsername().equals(username)) {
+                return c;
+            }
+        }
+        return null;
+    }
+
+    /**
      * Check if there is someone connected using the given username.
      *
      * @param username A string with the username of the user.

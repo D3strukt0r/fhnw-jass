@@ -83,6 +83,9 @@ public final class GameUtil implements ChosenGameModeEventListener {
 
         // Add event listeners
         clientPlayerOne.addChosenGameModeEventListener(this);
+        clientPlayerTwo.addChosenGameModeEventListener(this);
+        clientPlayerThree.addChosenGameModeEventListener(this);
+        clientPlayerFour.addChosenGameModeEventListener(this);
 
         // Assign and create Teams
         TeamEntity teamOne = new TeamEntity(playerOne, playerThree);
@@ -124,8 +127,23 @@ public final class GameUtil implements ChosenGameModeEventListener {
 
     @Override
     public void onChosenGameMode(final ChosenGameModeData data) {
+        // Get the right client to compare to.
+        String gameModeChooserUsername = currentRound.getGameModeChooser().getUsername();
+        ClientUtil client;
+        if (gameModeChooserUsername.equals(clientPlayerOne.getUsername())) {
+            client = clientPlayerOne;
+        } else if (gameModeChooserUsername.equals(clientPlayerTwo.getUsername())) {
+            client = clientPlayerTwo;
+        } else if (gameModeChooserUsername.equals(clientPlayerThree.getUsername())) {
+            client = clientPlayerThree;
+        } else if (gameModeChooserUsername.equals(clientPlayerFour.getUsername())) {
+            client = clientPlayerFour;
+        } else {
+            throw new IllegalStateException("Unexpected value: " + gameModeChooserUsername);
+        }
+
         // Check with token if player one actually is the one who sent the data.
-        if (data.getToken().equals(clientPlayerOne.getToken())) {
+        if (data.getToken().equals(client.getToken())) {
             GameMode gameMode = data.getGameMode();
             BroadcastGameMode broadcastGameMode;
             if (gameMode == GameMode.TRUMPF) {
