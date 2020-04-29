@@ -29,16 +29,10 @@ import jass.server.util.ClientUtil;
  */
 public final class BroadcastGameMode extends Message {
     /**
-     * The data of the message.
-     */
-    private final BroadcastGameModeData data;
-
-    /**
      * @param rawData The data (still not casted)
      */
     public BroadcastGameMode(final MessageData rawData) {
         super(rawData);
-        data = (BroadcastGameModeData) rawData;
     }
 
     @Override

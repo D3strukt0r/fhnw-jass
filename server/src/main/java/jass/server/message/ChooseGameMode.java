@@ -18,7 +18,6 @@
 
 package jass.server.message;
 
-import jass.lib.message.ChooseGameModeData;
 import jass.lib.message.MessageData;
 import jass.server.util.ClientUtil;
 
@@ -29,16 +28,10 @@ import jass.server.util.ClientUtil;
  */
 public final class ChooseGameMode extends Message {
     /**
-     * The data of the message.
-     */
-    private final ChooseGameModeData data;
-
-    /**
      * @param rawData The data (still not casted)
      */
     public ChooseGameMode(final MessageData rawData) {
         super(rawData);
-        data = (ChooseGameModeData) rawData;
     }
 
     @Override
