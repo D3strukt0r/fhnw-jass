@@ -340,12 +340,17 @@ public final class LoginController extends Controller implements DisconnectEvent
                 login.setToken(loginMsg.getToken());
 
                 // Save the login in the db
+                // TODO This keeps adding the same entity, check before adding
                 if (!LoginRepository.getSingleton(null).add(login)) {
                     logger.error("Couldn't save login data to local database.");
                 }
 
-                LoginRepository.getSingleton(null).setToConnectAutomatically(login); // Make sure it's the only entry
-                WindowUtil.switchToNewWindow(view, LobbyView.class);
+                if (login.isConnectAutomatically()) {
+                    // Make sure it's the only entry
+                    LoginRepository.getSingleton(null).setToConnectAutomatically(login);
+                }
+
+                WindowUtil.switchTo(view, LobbyView.class);
             } else {
                 enableAll();
                 setErrorMessage("gui.login.login.failed");

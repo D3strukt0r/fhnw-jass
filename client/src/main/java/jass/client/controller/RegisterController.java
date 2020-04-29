@@ -22,6 +22,7 @@ import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXCheckBox;
 import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
+import jass.client.repository.LoginRepository;
 import jass.client.view.LobbyView;
 import jass.client.view.LoginView;
 import jass.client.view.ServerConnectionView;
@@ -46,6 +47,8 @@ import jass.client.view.RegisterView;
 import jass.lib.message.RegisterData;
 import jass.lib.message.LoginData;
 import jass.lib.servicelocator.ServiceLocator;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -59,6 +62,11 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * @since 0.0.1
  */
 public final class RegisterController extends Controller implements DisconnectEventListener {
+    /**
+     * The logger to print to console and save in a .log file.
+     */
+    private static final Logger logger = LogManager.getLogger(RegisterController.class);
+
     /**
      * The view.
      */
@@ -340,8 +348,11 @@ public final class RegisterController extends Controller implements DisconnectEv
 
         // Connection would freeze window (and the animations) so do it in a different thread.
         new Thread(() -> {
-            LoginEntity login = new LoginEntity(username.getText(), password.getText());
-
+            LoginEntity login = new LoginEntity(
+                username.getText(),
+                password.getText(),
+                connectAutomatically.isSelected()
+            );
             SocketUtil backend = ServiceLocator.get(SocketUtil.class);
             Register registerMsg = new Register(new RegisterData(login.getUsername(), login.getPassword()));
 
@@ -352,7 +363,18 @@ public final class RegisterController extends Controller implements DisconnectEv
                 // If registered, try logging in now.
                 if (loginMsg.process(backend)) {
                     login.setToken(loginMsg.getToken());
-                    ServiceLocator.add(login);
+
+                    // Save the login in the db
+                    // TODO This keeps adding the same entity, check before adding
+                    if (!LoginRepository.getSingleton(null).add(login)) {
+                        logger.error("Couldn't save login data to local database.");
+                    }
+
+                    if (login.isConnectAutomatically()) {
+                        // Make sure it's the only entry
+                        LoginRepository.getSingleton(null).setToConnectAutomatically(login);
+                    }
+
                     WindowUtil.switchTo(view, LobbyView.class);
                 } else {
                     enableAll();
