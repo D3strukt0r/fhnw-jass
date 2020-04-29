@@ -67,4 +67,11 @@ public final class RoundEntity implements Entity {
     public int getId() {
         return id;
     }
+
+    /**
+     * @return Returns the game mode chooser.
+     */
+    public UserEntity getGameModeChooser() {
+        return gameModeChooser;
+    }
 }

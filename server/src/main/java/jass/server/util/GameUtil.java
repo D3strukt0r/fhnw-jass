@@ -61,6 +61,11 @@ public final class GameUtil implements ChosenGameModeEventListener {
     private final GameEntity game;
 
     /**
+     * The current round in the game.
+     */
+    private RoundEntity currentRound;
+
+    /**
      * @param clientPlayerOne   Player one.
      * @param clientPlayerTwo   Player two.
      * @param clientPlayerThree Player three.
@@ -103,19 +108,18 @@ public final class GameUtil implements ChosenGameModeEventListener {
         // Create a round
         CardUtil cardUtil = ServiceLocator.get(CardUtil.class);
         assert cardUtil != null;
-        RoundEntity newRound = new RoundEntity(playerOne, game);
-        RoundRepository.getSingleton(null).add(newRound);
+        currentRound = new RoundEntity(playerOne, game);
+        RoundRepository.getSingleton(null).add(currentRound);
 
         // Send a deck to each user
-        List<DeckEntity> decks = cardUtil.addDecksForPlayers(newRound, playerOne, playerTwo, playerThree, playerFour);
+        List<DeckEntity> decks = cardUtil.addDecksForPlayers(currentRound, playerOne, playerTwo, playerThree, playerFour);
         cardUtil.broadcastDeck(clientPlayerOne, decks.get(0));
         cardUtil.broadcastDeck(clientPlayerTwo, decks.get(1));
         cardUtil.broadcastDeck(clientPlayerThree, decks.get(2));
         cardUtil.broadcastDeck(clientPlayerFour, decks.get(3));
 
         // Send a message to player one to choose a game mode
-        ChooseGameMode chooseGameMode = new ChooseGameMode(new ChooseGameModeData());
-        clientPlayerOne.send(chooseGameMode);
+        sendChooseGameMode();
     }
 
     @Override
@@ -156,6 +160,25 @@ public final class GameUtil implements ChosenGameModeEventListener {
             return teamOne.getId();
         } else {
             return teamTwo.getId();
+        }
+    }
+
+    /**
+     * Sends a ChooseGameMode message to the user defined in the RoundEntity.
+     */
+    private void sendChooseGameMode() {
+        ChooseGameMode chooseGameMode = new ChooseGameMode(new ChooseGameModeData());
+        String gameModeChooserUsername = currentRound.getGameModeChooser().getUsername();
+        if (gameModeChooserUsername.equals(clientPlayerOne.getUsername())) {
+            clientPlayerOne.send(chooseGameMode);
+        } else if (gameModeChooserUsername.equals(clientPlayerTwo.getUsername())) {
+            clientPlayerTwo.send(chooseGameMode);
+        } else if (gameModeChooserUsername.equals(clientPlayerThree.getUsername())) {
+            clientPlayerThree.send(chooseGameMode);
+        } else if (gameModeChooserUsername.equals(clientPlayerFour.getUsername())) {
+            clientPlayerFour.send(chooseGameMode);
+        } else {
+            throw new IllegalStateException("Unexpected value: " + currentRound.getGameModeChooser().getUsername());
         }
     }
 }
