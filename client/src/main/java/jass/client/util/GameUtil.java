@@ -76,13 +76,14 @@ public final class GameUtil implements Service, BroadcastDeckEventListener, Choo
         socket.setBroadcastDeckEventListener(this);
         socket.addChooseGameModeEventListener(this);
         socket.addBroadcastGameModeEventListener(this);
+        playerDeck = FXCollections.observableArrayList(new ArrayList<CardData>());
     }
 
     @Override
     public void onBroadcastDeck(final BroadcastDeckData data) {
         logger.info("Successfully received cards!");
         deckId = data.getDeckId();
-        playerDeck = FXCollections.observableArrayList(data.getCardsClient());
+        playerDeck.addAll(data.getCardsClient());
     }
 
     @Override
