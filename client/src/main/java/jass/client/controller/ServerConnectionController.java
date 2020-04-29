@@ -23,7 +23,6 @@ import com.jfoenix.controls.JFXCheckBox;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXTextField;
 import jass.client.util.DatabaseUtil;
-import jass.client.util.GameUtil;
 import jass.client.util.I18nUtil;
 import jass.client.util.SocketUtil;
 import jass.client.util.ViewUtil;
@@ -429,9 +428,6 @@ public final class ServerConnectionController extends Controller {
                 // Try to connect to the server
                 socket = new SocketUtil(server.getIp(), server.getPort(), server.isSecure());
                 ServiceLocator.add(socket);
-
-                GameUtil gameUtil = new GameUtil();
-                ServiceLocator.add(gameUtil);
             } catch (ConnectException e) {
                 enableAllIfNew();
                 setErrorMessage("gui.serverConnection.connect.connection");

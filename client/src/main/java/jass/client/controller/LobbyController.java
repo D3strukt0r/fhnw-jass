@@ -121,6 +121,9 @@ public final class LobbyController extends Controller implements GameFoundEventL
             socket.setGameFoundEventListener(this);
         }
 
+        GameUtil gameUtil = new GameUtil();
+        ServiceLocator.add(gameUtil);
+
         /*
          * Bind all texts
          */

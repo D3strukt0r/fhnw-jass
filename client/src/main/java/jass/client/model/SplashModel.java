@@ -18,7 +18,6 @@
 
 package jass.client.model;
 
-import jass.client.util.GameUtil;
 import javafx.concurrent.Task;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -97,10 +96,6 @@ public final class SplashModel extends Model {
                         ServiceLocator.add(backend);
                         connected = true;
                         logger.info("Connected to server");
-
-                        // Instantiates event listeners
-                        GameUtil gameUtil = new GameUtil();
-                        ServiceLocator.add(gameUtil);
                     } catch (IOException | KeyStoreException | CertificateException | NoSuchAlgorithmException | UnrecoverableKeyException | KeyManagementException e) { /* Ignore and continue */ }
                 }
             });
