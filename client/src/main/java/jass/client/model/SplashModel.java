@@ -18,7 +18,6 @@
 
 package jass.client.model;
 
-import jass.client.util.GameUtil;
 import javafx.concurrent.Task;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -95,8 +94,6 @@ public final class SplashModel extends Model {
                     try {
                         SocketUtil backend = new SocketUtil(server.getIp(), server.getPort(), server.isSecure());
                         ServiceLocator.add(backend);
-                        GameUtil gameUtil = new GameUtil();
-                        ServiceLocator.add(gameUtil);
                         connected = true;
                         logger.info("Connected to server");
                     } catch (IOException | KeyStoreException | CertificateException | NoSuchAlgorithmException | UnrecoverableKeyException | KeyManagementException e) { /* Ignore and continue */ }
@@ -107,7 +104,7 @@ public final class SplashModel extends Model {
                 LoginEntity login = LoginRepository.getSingleton(null).findConnectAutomatically();
                 if (login != null) {
                     logger.info("Automatic login found");
-                    SocketUtil backend = (SocketUtil) ServiceLocator.get(SocketUtil.class);
+                    SocketUtil backend = ServiceLocator.get(SocketUtil.class);
                     if (backend != null) {
                         logger.info("Backend for login is available...");
                         Login loginMsg = new Login(new LoginData(login.getUsername(), login.getPassword()));

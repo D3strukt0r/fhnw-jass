@@ -39,7 +39,7 @@ public final class SearchGame extends Message {
             // Check if there is anyone connected with the given username.
             result = ServerSocketUtil.exists(data.getUsername());
             if (result) {
-                SearchGameUtil sGU = (SearchGameUtil) ServiceLocator.get(SearchGameUtil.class);
+                SearchGameUtil sGU = ServiceLocator.get(SearchGameUtil.class);
                 sGU.addClientToSearchGame(client);
             }
         }

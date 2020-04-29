@@ -23,7 +23,6 @@ import com.jfoenix.controls.JFXCheckBox;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXTextField;
 import jass.client.util.DatabaseUtil;
-import jass.client.util.GameUtil;
 import jass.client.util.I18nUtil;
 import jass.client.util.SocketUtil;
 import jass.client.util.ViewUtil;
@@ -189,7 +188,7 @@ public final class ServerConnectionController extends Controller {
 
     @Override
     public void initialize(final URL location, final ResourceBundle resources) {
-        DatabaseUtil db = (DatabaseUtil) ServiceLocator.get(DatabaseUtil.class);
+        DatabaseUtil db = ServiceLocator.get(DatabaseUtil.class);
 
         /*
          * Bind all texts
@@ -429,10 +428,6 @@ public final class ServerConnectionController extends Controller {
                 // Try to connect to the server
                 socket = new SocketUtil(server.getIp(), server.getPort(), server.isSecure());
                 ServiceLocator.add(socket);
-                GameUtil gameUtil = new GameUtil();
-                ServiceLocator.add(gameUtil);
-
-                ServerRepository.getSingleton(null).setToConnectAutomatically(server); // Make sure it's the only entry
             } catch (ConnectException e) {
                 enableAllIfNew();
                 setErrorMessage("gui.serverConnection.connect.connection");
@@ -450,6 +445,10 @@ public final class ServerConnectionController extends Controller {
                 if (selectedItem != null && selectedItem.getIp() == null) {
                     if (!ServerRepository.getSingleton(null).add(server)) {
                         logger.error("Server connection not saved to database");
+                    }
+                    if (server.isConnectAutomatically()) {
+                        // Make sure it's the only entry
+                        ServerRepository.getSingleton(null).setToConnectAutomatically(server);
                     }
                 }
                 WindowUtil.switchTo(view, LoginView.class);

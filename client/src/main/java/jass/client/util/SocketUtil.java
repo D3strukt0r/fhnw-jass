@@ -19,15 +19,19 @@
 package jass.client.util;
 
 import jass.client.eventlistener.BroadcastDeckEventListener;
+import jass.client.eventlistener.BroadcastGameModeEventListener;
+import jass.client.eventlistener.ChooseGameModeEventListener;
+import jass.client.eventlistener.DisconnectEventListener;
 import jass.client.eventlistener.GameFoundEventListener;
 import jass.client.message.Message;
 import jass.lib.message.BroadcastDeckData;
+import jass.lib.message.BroadcastGameModeData;
+import jass.lib.message.ChooseGameModeData;
 import jass.lib.message.GameFoundData;
+import jass.lib.message.MessageData;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import jass.client.entity.LoginEntity;
-import jass.client.eventlistener.DisconnectEventListener;
-import jass.lib.message.MessageData;
 import jass.lib.servicelocator.Service;
 import jass.lib.servicelocator.ServiceLocator;
 
@@ -90,6 +94,16 @@ public final class SocketUtil extends Thread implements Service, Closeable {
      * Object listening to broadcast deck event.
      */
     private BroadcastDeckEventListener broadcastDeckEventListener;
+
+    /**
+     * A list of all objects listening to a choose game mode event.
+     */
+    private final ArrayList<ChooseGameModeEventListener> chooseGameModeListener = new ArrayList<>();
+
+    /**
+     * A list of objects listening to broadcast game mode event.
+     */
+    private final ArrayList<BroadcastGameModeEventListener> broadcastGameModeListener = new ArrayList<>();
 
     /**
      * A list of all messages coming from the server.
@@ -190,10 +204,8 @@ public final class SocketUtil extends Thread implements Service, Closeable {
         }
 
         close();
-        if (disconnectListener != null) {
-            for (DisconnectEventListener listener : disconnectListener) {
-                listener.onDisconnectEvent();
-            }
+        for (DisconnectEventListener listener : disconnectListener) {
+            listener.onDisconnectEvent();
         }
     }
 
@@ -256,39 +268,59 @@ public final class SocketUtil extends Thread implements Service, Closeable {
      * @since 0.0.1
      */
     public String getToken() {
-        LoginEntity login = (LoginEntity) ServiceLocator.get(LoginEntity.class);
+        LoginEntity login = ServiceLocator.get(LoginEntity.class);
         if (login != null) {
             return login.getToken();
         }
         return null;
     }
 
-
     /**
      * @param listener A DisconnectEventListener object
      *
+     * @author Manuele Vaccari
      * @since 0.0.1
      */
     public void addDisconnectListener(final DisconnectEventListener listener) {
-        this.disconnectListener.add(listener);
+        disconnectListener.add(listener);
     }
 
     /**
-     * @param gFL The listener to listen to game found.
+     * @param listener The listener to listen to game found.
      *
      * @author Thomas Weber
      */
-    public void setGameFoundEventListener(final GameFoundEventListener gFL) {
-        this.gameFoundEventListener = gFL;
+    public void setGameFoundEventListener(final GameFoundEventListener listener) {
+        gameFoundEventListener = listener;
     }
 
     /**
-     * @param eventListener The listener to listen to broadcast deck.
+     * @param listener The listener to listen to broadcast deck.
      *
      * @author Victor Hargrave
      */
-    public void setBroadcastDeckEventListener(final BroadcastDeckEventListener eventListener) {
-        this.broadcastDeckEventListener = eventListener;
+    public void setBroadcastDeckEventListener(final BroadcastDeckEventListener listener) {
+        broadcastDeckEventListener = listener;
+    }
+
+    /**
+     * @param listener A ChooseGameModeEventListener object
+     *
+     * @author Manuele Vaccari
+     * @since 0.0.1
+     */
+    public void addChooseGameModeEventListener(final ChooseGameModeEventListener listener) {
+        chooseGameModeListener.add(listener);
+    }
+
+    /**
+     * @param listener A ChooseGameModeEventListener object
+     *
+     * @author Manuele Vaccari
+     * @since 0.0.1
+     */
+    public void addBroadcastGameModeEventListener(final BroadcastGameModeEventListener listener) {
+        broadcastGameModeListener.add(listener);
     }
 
     /**
@@ -296,14 +328,32 @@ public final class SocketUtil extends Thread implements Service, Closeable {
      *                event.
      * @param msgData The message to send to the listeners.
      *
-     * @author Thomas Weber
+     * @author Thomas Weber, Manuele Vaccari, Victor Hargrave
      */
     public void handleEventListenerOnMessage(final String msgType, final MessageData msgData) {
-        if (msgType.equals("GameFound")) {
-            gameFoundEventListener.onGameFound((GameFoundData) msgData);
-        }
-        if (msgType.equals("BroadcastDeck")) {
-            broadcastDeckEventListener.onDeckBroadcasted((BroadcastDeckData) msgData);
+        switch (msgType) {
+            case "GameFound":
+                logger.info("Invoking onGameFound event on " + gameFoundEventListener.getClass().getName());
+                gameFoundEventListener.onGameFound((GameFoundData) msgData);
+                break;
+            case "BroadcastDeck":
+                logger.info("Invoking onBroadcastDeck event on " + broadcastDeckEventListener.getClass().getName());
+                broadcastDeckEventListener.onBroadcastDeck((BroadcastDeckData) msgData);
+                break;
+            case "ChooseGameMode":
+                for (ChooseGameModeEventListener listener : chooseGameModeListener) {
+                    logger.info("Invoking onChooseGameMode event on " + listener.getClass().getName());
+                    listener.onChooseGameMode((ChooseGameModeData) msgData);
+                }
+                break;
+            case "BroadcastGameMode":
+                for (BroadcastGameModeEventListener listener : broadcastGameModeListener) {
+                    logger.info("Invoking onBroadcastGameMode event on " + listener.getClass().getName());
+                    listener.onBroadcastGameMode((BroadcastGameModeData) msgData);
+                }
+                break;
+            default:
+                break;
         }
     }
 

@@ -165,7 +165,7 @@ public final class LoginController extends Controller implements DisconnectEvent
         /*
          * Register oneself for disconnect events
          */
-        SocketUtil socket = (SocketUtil) ServiceLocator.get(SocketUtil.class);
+        SocketUtil socket = ServiceLocator.get(SocketUtil.class);
         if (socket != null) { // Not necessary but keeps IDE happy
             socket.addDisconnectListener(this);
         }
@@ -298,7 +298,7 @@ public final class LoginController extends Controller implements DisconnectEvent
      */
     @FXML
     private void clickOnDisconnect() {
-        SocketUtil socket = (SocketUtil) ServiceLocator.get(SocketUtil.class);
+        SocketUtil socket = ServiceLocator.get(SocketUtil.class);
         if (socket != null) { // Not necessary but keeps IDE happy
             socket.close();
         }
@@ -332,7 +332,7 @@ public final class LoginController extends Controller implements DisconnectEvent
                 password.getText(),
                 connectAutomatically.isSelected()
             );
-            SocketUtil backend = (SocketUtil) ServiceLocator.get(SocketUtil.class);
+            SocketUtil backend = ServiceLocator.get(SocketUtil.class);
             Login loginMsg = new Login(new LoginData(login.getUsername(), login.getPassword()));
 
             // Send the login request to the server. Update locally if successful.
@@ -340,12 +340,17 @@ public final class LoginController extends Controller implements DisconnectEvent
                 login.setToken(loginMsg.getToken());
 
                 // Save the login in the db
+                // TODO This keeps adding the same entity, check before adding
                 if (!LoginRepository.getSingleton(null).add(login)) {
                     logger.error("Couldn't save login data to local database.");
                 }
 
-                LoginRepository.getSingleton(null).setToConnectAutomatically(login); // Make sure it's the only entry
-                WindowUtil.switchToNewWindow(view, LobbyView.class);
+                if (login.isConnectAutomatically()) {
+                    // Make sure it's the only entry
+                    LoginRepository.getSingleton(null).setToConnectAutomatically(login);
+                }
+
+                WindowUtil.switchTo(view, LobbyView.class);
             } else {
                 enableAll();
                 setErrorMessage("gui.login.login.failed");
@@ -370,6 +375,10 @@ public final class LoginController extends Controller implements DisconnectEvent
 
     @Override
     public void onDisconnectEvent() {
+        SocketUtil socket = ServiceLocator.get(SocketUtil.class);
+        if (socket != null) { // Not necessary but keeps IDE happy
+            socket.close();
+        }
         ServiceLocator.remove(SocketUtil.class);
         WindowUtil.switchTo(view, ServerConnectionView.class);
     }

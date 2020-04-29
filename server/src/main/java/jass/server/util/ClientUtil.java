@@ -19,13 +19,15 @@
 
 package jass.server.util;
 
+import jass.lib.message.ChosenGameModeData;
+import jass.lib.message.MessageData;
+import jass.lib.message.MessageErrorData;
 import jass.lib.servicelocator.ServiceLocator;
 import jass.server.entity.UserEntity;
+import jass.server.eventlistener.ChosenGameModeEventListener;
 import jass.server.message.Message;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import jass.lib.message.MessageData;
-import jass.lib.message.MessageErrorData;
 import jass.server.message.MessageError;
 
 import javax.net.ssl.SSLException;
@@ -35,6 +37,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.Socket;
 import java.net.SocketException;
+import java.util.ArrayList;
 
 /**
  * Copyright 2015, FHNW, Prof. Dr. Brad Richards. All rights reserved. This code
@@ -72,6 +75,11 @@ public final class ClientUtil extends Thread {
     private String token = null;
 
     /**
+     * A list of all objects listening to a choose game mode event.
+     */
+    private final ArrayList<ChosenGameModeEventListener> chosenGameModeListener = new ArrayList<>();
+
+    /**
      * Create a new client object, communicating over the given socket.
      * Immediately start a thread to receive messages from the client.
      *
@@ -95,10 +103,10 @@ public final class ClientUtil extends Thread {
             try {
                 BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
                 String msgText = in.readLine(); // Will wait here for complete line
-                logger.info("Receiving message: " + msgText);
+                logger.info(getUsername() + " - Receiving message: " + msgText);
 
                 if (msgText == null) {
-                    logger.info("Client " + getUsername() + " disconnected");
+                    logger.info(getUsername() + " - Client disconnected");
                     disconnect();
                     continue;
                 }
@@ -115,10 +123,12 @@ public final class ClientUtil extends Thread {
                         logger.error("Received invalid message of type " + msgData.getMessageType());
                     } else {
                         logger.info("Received message of type " + msgData.getMessageType());
+
+                        handleEventListenerOnMessage(msgData.getMessageType(), msgData);
                     }
                 }
             } catch (SocketException | SSLException e) {
-                logger.info("Client " + getUsername() + " disconnected");
+                logger.info(getUsername() + " - Client disconnected");
                 disconnect();
                 continue;
             } catch (IOException e) {
@@ -136,6 +146,31 @@ public final class ClientUtil extends Thread {
     }
 
     /**
+     * @param msgType Message type to check against available events.
+     * @param msgData The message to send to the listeners.
+     *
+     * @author Thomas Weber, Manuele Vaccari
+     */
+    public void handleEventListenerOnMessage(final String msgType, final MessageData msgData) {
+        if ("ChosenGameMode".equals(msgType)) {
+            for (ChosenGameModeEventListener listener : chosenGameModeListener) {
+                logger.info("Invoking onChosenGameMode event on " + listener.getClass().getName());
+                listener.onChosenGameMode((ChosenGameModeData) msgData);
+            }
+        }
+    }
+
+    /**
+     * @param listener A DisconnectEventListener object
+     *
+     * @author Manuele Vaccari
+     * @since 0.0.1
+     */
+    public void addChosenGameModeEventListener(final ChosenGameModeEventListener listener) {
+        this.chosenGameModeListener.add(listener);
+    }
+
+    /**
      * Send a message to this client. In case of an exception, log the client
      * out.
      *
@@ -144,11 +179,11 @@ public final class ClientUtil extends Thread {
     public void send(final Message msg) {
         try {
             OutputStreamWriter out = new OutputStreamWriter(socket.getOutputStream());
-            logger.info("Sending message: " + msg.toString());
+            logger.info(getUsername() + " - Sending message: " + msg.toString());
             out.write(msg.toString() + "\n"); // This will send the serialized MessageData object
             out.flush();
         } catch (IOException e) {
-            logger.info("Client " + getUsername() + " unreachable; logged out");
+            logger.info(getUsername() + " - Client unreachable; logged out");
             disconnect();
         }
     }
@@ -157,8 +192,8 @@ public final class ClientUtil extends Thread {
      * Shuts down all connections.
      */
     public void disconnect() {
-        SearchGameUtil sGU = (SearchGameUtil) ServiceLocator.get(SearchGameUtil.class);
-        sGU.removeClientFromSearchingGame(this);
+        SearchGameUtil searchGameUtil = ServiceLocator.get(SearchGameUtil.class);
+        searchGameUtil.removeClientFromSearchingGame(this);
 
         // TODO: Close down the game if client was inside.
 

@@ -63,7 +63,7 @@ public final class ChangePassword extends Message {
 
         if (resultData.getResult()) {
             // Data is final, so create a new object.
-            LoginEntity login = (LoginEntity) ServiceLocator.get(LoginEntity.class);
+            LoginEntity login = ServiceLocator.get(LoginEntity.class);
             LoginEntity newLogin = new LoginEntity(login.getUsername(), data.getNewPassword(), login.getToken());
 
             // Replace the ServiceLocator with the new login.

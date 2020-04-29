@@ -127,8 +127,9 @@ public final class Main {
         logger.info("SSL is " + (secure ? "enabled" : "disabled"));
 
         // Initialize Other Util Classes and add to ServiceLocator
-        SearchGameUtil sGU = new SearchGameUtil();
-        ServiceLocator.add(sGU);
+        SearchGameUtil searchGameUtil = new SearchGameUtil();
+        searchGameUtil.start();
+        ServiceLocator.add(searchGameUtil);
 
         CardUtil cardUtil = new CardUtil();
         ServiceLocator.add(cardUtil);
