@@ -30,7 +30,7 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * @author Victor Hargrave
+ * @author Victor Hargrave, Manuele Vaccari
  * @version %I%, %G%
  * @since 0.0.1
  */

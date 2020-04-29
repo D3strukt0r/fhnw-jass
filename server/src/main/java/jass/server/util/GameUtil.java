@@ -144,13 +144,15 @@ public final class GameUtil implements ChosenGameModeEventListener {
 
         // Check with token if player one actually is the one who sent the data.
         if (data.getToken().equals(client.getToken())) {
-            GameMode gameMode = data.getGameMode();
+            currentRound.setGameMode(data.getGameMode());
             BroadcastGameMode broadcastGameMode;
-            if (gameMode == GameMode.TRUMPF) {
-                broadcastGameMode = new BroadcastGameMode(new BroadcastGameModeData(gameMode, data.getTrumpfSuit()));
+            if (data.getGameMode() == GameMode.TRUMPF) {
+                currentRound.setTrumpfSuit(data.getTrumpfSuit());
+                broadcastGameMode = new BroadcastGameMode(new BroadcastGameModeData(data.getGameMode(), data.getTrumpfSuit()));
             } else {
-                broadcastGameMode = new BroadcastGameMode(new BroadcastGameModeData(gameMode));
+                broadcastGameMode = new BroadcastGameMode(new BroadcastGameModeData(data.getGameMode()));
             }
+            RoundRepository.getSingleton(null).update(currentRound);
             broadcast(broadcastGameMode);
         }
     }

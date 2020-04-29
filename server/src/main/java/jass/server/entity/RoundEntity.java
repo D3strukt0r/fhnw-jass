@@ -2,12 +2,14 @@ package jass.server.entity;
 
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
+import jass.lib.Card;
+import jass.lib.GameMode;
 import jass.lib.database.Entity;
 
 /**
  * A model with all known (and cached) teams.
  *
- * @author Victor Hargrave
+ * @author Victor Hargrave, Manuele Vaccari
  * @version %I%, %G%
  * @since 0.0.1
  */
@@ -24,6 +26,18 @@ public final class RoundEntity implements Entity {
      */
     @DatabaseField(foreign = true)
     private UserEntity gameModeChooser;
+
+    /**
+     * The chosen game mode.
+     */
+    @DatabaseField(defaultValue = "null")
+    private GameMode gameMode = null;
+
+    /**
+     * In case of game mode trumpf, the trumpf card.
+     */
+    @DatabaseField(defaultValue = "null")
+    private Card.Suit trumpfSuit = null;
 
     /**
      * The game that this round belongs to.
@@ -73,5 +87,19 @@ public final class RoundEntity implements Entity {
      */
     public UserEntity getGameModeChooser() {
         return gameModeChooser;
+    }
+
+    /**
+     * @param gameMode The game mode.
+     */
+    public void setGameMode(final GameMode gameMode) {
+        this.gameMode = gameMode;
+    }
+
+    /**
+     * @param trumpfSuit The trumpf suit.
+     */
+    public void setTrumpfSuit(final Card.Suit trumpfSuit) {
+        this.trumpfSuit = trumpfSuit;
     }
 }

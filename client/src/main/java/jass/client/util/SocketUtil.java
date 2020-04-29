@@ -328,7 +328,7 @@ public final class SocketUtil extends Thread implements Service, Closeable {
      *                event.
      * @param msgData The message to send to the listeners.
      *
-     * @author Thomas Weber, Manuele Vaccari
+     * @author Thomas Weber, Manuele Vaccari, Victor Hargrave
      */
     public void handleEventListenerOnMessage(final String msgType, final MessageData msgData) {
         switch (msgType) {
