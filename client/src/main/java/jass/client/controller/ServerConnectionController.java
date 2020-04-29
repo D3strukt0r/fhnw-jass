@@ -432,8 +432,6 @@ public final class ServerConnectionController extends Controller {
 
                 GameUtil gameUtil = new GameUtil();
                 ServiceLocator.add(gameUtil);
-
-                ServerRepository.getSingleton(null).setToConnectAutomatically(server); // Make sure it's the only entry
             } catch (ConnectException e) {
                 enableAllIfNew();
                 setErrorMessage("gui.serverConnection.connect.connection");
@@ -451,6 +449,10 @@ public final class ServerConnectionController extends Controller {
                 if (selectedItem != null && selectedItem.getIp() == null) {
                     if (!ServerRepository.getSingleton(null).add(server)) {
                         logger.error("Server connection not saved to database");
+                    }
+                    if (server.isConnectAutomatically()) {
+                        // Make sure it's the only entry
+                        ServerRepository.getSingleton(null).setToConnectAutomatically(server);
                     }
                 }
                 WindowUtil.switchTo(view, LoginView.class);
