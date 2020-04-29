@@ -30,6 +30,8 @@ import javafx.scene.layout.BackgroundImage;
 import javafx.scene.layout.BackgroundPosition;
 import javafx.scene.layout.BackgroundRepeat;
 import javafx.scene.layout.BackgroundSize;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -376,15 +378,30 @@ public final class GameController extends Controller implements DisconnectEventL
      */
     private GameUtil gameUtil;
 
+    private static final Logger logger = LogManager.getLogger(GameController.class);
+
     @Override
     public void initialize(final URL location, final ResourceBundle resources) {
         gameUtil = ServiceLocator.get(GameUtil.class);
 
+        logger.info("initialising");
         enableButtons();
+        logger.info("buttons enabled");
         updateUserNames();
-        updateCardImages();
+        logger.info("updated user names");
 
-        gameUtil.getPlayerDeck().addListener((ListChangeListener) c -> updateCardImages());
+        if(gameUtil.getPlayerDeck() != null && gameUtil.getPlayerDeck().get(0) != null) {
+            logger.info("here's a card" + gameUtil.getPlayerDeck().get(0).getSuit());
+        }
+        updateCardImages();
+        logger.info("updated card images");
+
+
+        gameUtil.getPlayerDeck().addListener((ListChangeListener) c -> {
+            logger.info("listener was activated. Now updating cards");
+            logger.info("here's a card" + gameUtil.getPlayerDeck().get(0).getSuit());
+            updateCardImages();
+        });
 
         gameUtil.getGameModeProperty().addListener((obs, oldGameMode, newGameMode) -> {
             Platform.runLater(() -> {

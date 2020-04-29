@@ -39,7 +39,7 @@ public final class GameUtil implements Service, BroadcastDeckEventListener, Choo
     /**
      * The logger to print to console and save in a .log file.
      */
-    private static final Logger logger = LogManager.getLogger(GameController.class);
+    private static final Logger logger = LogManager.getLogger(GameUtil.class);
 
     /**
      * The game.
@@ -141,11 +141,13 @@ public final class GameUtil implements Service, BroadcastDeckEventListener, Choo
             SocketUtil socket = ServiceLocator.get(SocketUtil.class);
             assert socket != null;
             socket.send(chosenGameMode);
+            logger.info("Sent game mode!");
         });
     }
 
     @Override
     public void onBroadcastGameMode(final BroadcastGameModeData data) {
+        logger.info("Received Game mode!");
         if (data.getGameMode() == GameMode.TRUMPF) {
             trumpf.setValue(data.getTrumpfSuit());
         }
