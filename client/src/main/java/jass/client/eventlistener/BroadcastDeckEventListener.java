@@ -8,5 +8,5 @@ public interface BroadcastDeckEventListener {
      *
      * @param msgData The deck of the user.
      */
-    void onDeckBroadcasted(BroadcastDeckData msgData);
+    void onBroadcastDeck(BroadcastDeckData msgData);
 }

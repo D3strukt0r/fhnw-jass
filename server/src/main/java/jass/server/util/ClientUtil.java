@@ -154,6 +154,7 @@ public final class ClientUtil extends Thread {
     public void handleEventListenerOnMessage(final String msgType, final MessageData msgData) {
         if ("ChosenGameMode".equals(msgType)) {
             for (ChosenGameModeEventListener listener : chosenGameModeListener) {
+                logger.info("Invoking onChosenGameMode event on " + listener.getClass().getName());
                 listener.onChosenGameMode((ChosenGameModeData) msgData);
             }
         }

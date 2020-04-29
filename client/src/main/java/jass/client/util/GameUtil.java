@@ -79,7 +79,7 @@ public final class GameUtil implements Service, BroadcastDeckEventListener, Choo
     }
 
     @Override
-    public void onDeckBroadcasted(final BroadcastDeckData data) {
+    public void onBroadcastDeck(final BroadcastDeckData data) {
         logger.info("Successfully received cards!");
         deckId = data.getDeckId();
         playerDeck = FXCollections.observableArrayList(data.getCardsClient());

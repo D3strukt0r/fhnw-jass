@@ -333,18 +333,22 @@ public final class SocketUtil extends Thread implements Service, Closeable {
     public void handleEventListenerOnMessage(final String msgType, final MessageData msgData) {
         switch (msgType) {
             case "GameFound":
+                logger.info("Invoking onGameFound event on " + gameFoundEventListener.getClass().getName());
                 gameFoundEventListener.onGameFound((GameFoundData) msgData);
                 break;
             case "BroadcastDeck":
-                broadcastDeckEventListener.onDeckBroadcasted((BroadcastDeckData) msgData);
+                logger.info("Invoking onBroadcastDeck event on " + broadcastDeckEventListener.getClass().getName());
+                broadcastDeckEventListener.onBroadcastDeck((BroadcastDeckData) msgData);
                 break;
             case "ChooseGameMode":
                 for (ChooseGameModeEventListener listener : chooseGameModeListener) {
+                    logger.info("Invoking onChooseGameMode event on " + listener.getClass().getName());
                     listener.onChooseGameMode((ChooseGameModeData) msgData);
                 }
                 break;
             case "BroadcastGameMode":
                 for (BroadcastGameModeEventListener listener : broadcastGameModeListener) {
+                    logger.info("Invoking onBroadcastGameMode event on " + listener.getClass().getName());
                     listener.onBroadcastGameMode((BroadcastGameModeData) msgData);
                 }
                 break;
