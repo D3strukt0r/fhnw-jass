@@ -375,6 +375,10 @@ public final class LoginController extends Controller implements DisconnectEvent
 
     @Override
     public void onDisconnectEvent() {
+        SocketUtil socket = ServiceLocator.get(SocketUtil.class);
+        if (socket != null) { // Not necessary but keeps IDE happy
+            socket.close();
+        }
         ServiceLocator.remove(SocketUtil.class);
         WindowUtil.switchTo(view, ServerConnectionView.class);
     }

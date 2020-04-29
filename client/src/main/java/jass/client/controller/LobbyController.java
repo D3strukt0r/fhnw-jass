@@ -223,10 +223,11 @@ public final class LobbyController extends Controller implements GameFoundEventL
      */
     @FXML
     private void clickOnDisconnect() {
+        ServiceLocator.remove(LoginEntity.class);
         SocketUtil socket = ServiceLocator.get(SocketUtil.class);
-        assert socket != null;
-
-        socket.close();
+        if (socket != null) { // Not necessary but keeps IDE happy
+            socket.close();
+        }
         ServiceLocator.remove(SocketUtil.class);
         WindowUtil.switchTo(view, LoginView.class);
     }

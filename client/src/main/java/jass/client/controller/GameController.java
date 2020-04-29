@@ -529,10 +529,11 @@ public final class GameController extends Controller implements DisconnectEventL
      */
     @FXML
     private void clickOnDisconnect() {
+        ServiceLocator.remove(LoginEntity.class);
         SocketUtil socket = ServiceLocator.get(SocketUtil.class);
-        assert socket != null;
-
-        socket.close();
+        if (socket != null) { // Not necessary but keeps IDE happy
+            socket.close();
+        }
         ServiceLocator.remove(SocketUtil.class);
         WindowUtil.switchToNewWindow(view, ServerConnectionView.class);
     }
@@ -664,6 +665,10 @@ public final class GameController extends Controller implements DisconnectEventL
     @Override
     public void onDisconnectEvent() {
         ServiceLocator.remove(LoginEntity.class);
+        SocketUtil socket = ServiceLocator.get(SocketUtil.class);
+        if (socket != null) { // Not necessary but keeps IDE happy
+            socket.close();
+        }
         ServiceLocator.remove(SocketUtil.class);
         WindowUtil.switchToNewWindow(view, ServerConnectionView.class);
     }

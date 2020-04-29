@@ -222,6 +222,7 @@ public final class DeleteAccountController extends Controller {
      */
     @FXML
     private void clickOnDisconnect() {
+        ServiceLocator.remove(LoginEntity.class);
         SocketUtil socket = ServiceLocator.get(SocketUtil.class);
         if (socket != null) { // Not necessary but keeps IDE happy
             socket.close();

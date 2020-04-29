@@ -404,6 +404,10 @@ public final class RegisterController extends Controller implements DisconnectEv
 
     @Override
     public void onDisconnectEvent() {
+        SocketUtil socket = ServiceLocator.get(SocketUtil.class);
+        if (socket != null) { // Not necessary but keeps IDE happy
+            socket.close();
+        }
         ServiceLocator.remove(SocketUtil.class);
         WindowUtil.switchTo(view, ServerConnectionView.class);
     }
