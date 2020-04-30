@@ -21,6 +21,7 @@ package jass.server.message;
 import jass.server.entity.UserEntity;
 import jass.server.repository.UserRepository;
 import jass.server.util.ClientUtil;
+import jass.server.util.ServerSocketUtil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.json.JSONObject;
@@ -73,13 +74,19 @@ public final class Login extends Message {
             user = UserRepository.getSingleton(null).getByUsername(data.getUsername());
         } else {
             logger.info("User " + data.getUsername() + " does not exist");
-            client.send(new Result(new ResultData(data.getId(), false)));
+            client.send(new Result(new ResultData(data.getId(), false, (new JSONObject()).put("reason", LoginData.Result.USER_DOES_NOT_EXIST))));
             return;
         }
 
         // Check if the client used the correct password.
         if (user != null && user.checkPassword(data.getPassword())) {
             logger.info("Client used the correct password");
+
+            // Check if already logged in...
+            if (ServerSocketUtil.exists(user.getUsername())) {
+                client.send(new Result(new ResultData(data.getId(), false, (new JSONObject()).put("reason", LoginData.Result.USER_ALREADY_LOGGED_IN))));
+                return;
+            }
 
             // Update last login time
             user.setOnline()
@@ -92,12 +99,10 @@ public final class Login extends Message {
             client.setToken(token);
 
             // Return the token to the client.
-            JSONObject resultData = new JSONObject();
-            resultData.put("token", token);
-            client.send(new Result(new ResultData(data.getId(), true, resultData)));
+            client.send(new Result(new ResultData(data.getId(), true, (new JSONObject()).put("token", token))));
         } else {
             logger.info("Client used the wrong password");
-            client.send(new Result(new ResultData(data.getId(), false)));
+            client.send(new Result(new ResultData(data.getId(), false, (new JSONObject()).put("reason", LoginData.Result.WRONG_PASSWORD))));
         }
     }
 

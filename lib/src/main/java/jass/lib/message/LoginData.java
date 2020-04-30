@@ -28,6 +28,23 @@ import org.json.JSONObject;
  * @since 0.0.1
  */
 public final class LoginData extends MessageData {
+    public enum Result {
+        /**
+         * The user does not exist.
+         */
+        USER_DOES_NOT_EXIST,
+
+        /**
+         * Client used a different password than stored.
+         */
+        WRONG_PASSWORD,
+
+        /**
+         * User is already logged in, cannot log in more than once.
+         */
+        USER_ALREADY_LOGGED_IN
+    }
+
     /**
      * The username.
      */

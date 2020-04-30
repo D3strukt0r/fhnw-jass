@@ -39,6 +39,11 @@ public final class Login extends Message {
     private final LoginData data;
 
     /**
+     * After the message was sent, this is the result.
+     */
+    private ResultData resultData;
+
+    /**
      * The token.
      */
     private String token = null;
@@ -56,7 +61,7 @@ public final class Login extends Message {
         socket.send(this);
 
         Message result = socket.waitForResultResponse(data.getId());
-        ResultData resultData = (ResultData) result.getRawData();
+        resultData = (ResultData) result.getRawData();
 
         if (resultData.getResult()) {
             token = resultData.getResultData().getString("token");
@@ -69,6 +74,13 @@ public final class Login extends Message {
             ServiceLocator.add(login);
         }
         return resultData.getResult();
+    }
+
+    /**
+     * @return Returns the result.
+     */
+    public ResultData getResultData() {
+        return resultData;
     }
 
     /**
