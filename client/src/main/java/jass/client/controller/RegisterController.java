@@ -377,12 +377,51 @@ public final class RegisterController extends Controller implements DisconnectEv
 
                     WindowUtil.switchTo(view, LobbyView.class);
                 } else {
+                    LoginData.Result reason = loginMsg.getResultData().getResultData().optEnum(LoginData.Result.class, "reason");
+                    if (reason == null) {
+                        setErrorMessage("gui.login.login.failed");
+                    } else {
+                        switch (reason) {
+                            case USER_DOES_NOT_EXIST:
+                                setErrorMessage("gui.login.login.failed.user_does_not_exist");
+                                break;
+                            case WRONG_PASSWORD:
+                                setErrorMessage("gui.login.login.failed.wrong_password");
+                                break;
+                            case USER_ALREADY_LOGGED_IN:
+                                setErrorMessage("gui.login.login.failed.already_logged_in");
+                                break;
+                            default:
+                                setErrorMessage("gui.login.login.failed");
+                                break;
+                        }
+                    }
                     enableAll();
-                    setErrorMessage("gui.login.login.failed");
                 }
             } else {
+                RegisterData.Result reason = registerMsg.getResultData().getResultData().optEnum(RegisterData.Result.class, "reason");
+                if (reason == null) {
+                    setErrorMessage("gui.register.register.failed");
+                } else {
+                    switch (reason) {
+                        case USERNAME_TOO_SHORT:
+                            setErrorMessage("gui.register.register.failed.username_too_short");
+                            break;
+                        case PASSWORD_TOO_SHORT:
+                            setErrorMessage("gui.register.register.failed.password_too_short");
+                            break;
+                        case USERNAME_ALREADY_EXISTS:
+                            setErrorMessage("gui.register.register.failed.username_already_in_use");
+                            break;
+                        case SERVER_ERROR:
+                            setErrorMessage("gui.register.register.failed.server_error");
+                            break;
+                        default:
+                            setErrorMessage("gui.register.register.failed");
+                            break;
+                    }
+                }
                 enableAll();
-                setErrorMessage("gui.register.register.failed");
             }
         }).start();
     }

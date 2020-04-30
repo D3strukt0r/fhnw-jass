@@ -28,6 +28,28 @@ import org.json.JSONObject;
  * @since 0.0.1
  */
 public final class RegisterData extends MessageData {
+    public enum Result {
+        /**
+         * The username is too short.
+         */
+        USERNAME_TOO_SHORT,
+
+        /**
+         * The password is too short.
+         */
+        PASSWORD_TOO_SHORT,
+
+        /**
+         * Username is already in use.
+         */
+        USERNAME_ALREADY_EXISTS,
+
+        /**
+         * Server error, like couldn't save to database.
+         */
+        SERVER_ERROR
+    }
+
     /**
      * The username.
      */

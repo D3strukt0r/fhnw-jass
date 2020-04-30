@@ -26,6 +26,7 @@ import org.apache.logging.log4j.Logger;
 import jass.lib.message.RegisterData;
 import jass.lib.message.MessageData;
 import jass.lib.message.ResultData;
+import org.json.JSONObject;
 
 /**
  * Create a completely new login. After creating an account, the user must still
@@ -66,28 +67,40 @@ public final class Register extends Message {
 
     @Override
     public void process(final ClientUtil client) {
-        boolean result = false;
-
-        // Check for a valid username
-        if (data.getUsername() != null && data.getUsername().length() >= USERNAME_MIN_LENGTH) {
-            // Check for a valid password (lax password requirements)
-            if (data.getPassword() != null && data.getPassword().length() >= PASSWORD_MIN_LENGTH) {
-                // Check whether the username is not already taken
-                if (!UserRepository.getSingleton(null).usernameExists(data.getUsername())) {
-                    UserEntity newUser = (new UserEntity())
-                        .setUsername(data.getUsername())
-                        .setPassword(data.getPassword());
-
-                    // Add the new user to the database, and only return true if it was saved successfully
-                    if (UserRepository.getSingleton(null).add(newUser)) {
-                        logger.info("User " + newUser.getUsername() + " created");
-                        result = true;
-                    }
-                }
-            }
+        // Check if data is available
+        if (data.getUsername() == null || data.getPassword() == null) {
+            client.send(new Result(new ResultData(data.getId(), false)));
+            return;
         }
 
-        client.send(new Result(new ResultData(data.getId(), result)));
-    }
+        // Check for a valid username
+        if (data.getUsername().length() < USERNAME_MIN_LENGTH) {
+            client.send(new Result(new ResultData(data.getId(), false, (new JSONObject()).put("reason", RegisterData.Result.USERNAME_TOO_SHORT))));
+            return;
+        }
 
+        // Check for a valid password (lax password requirements)
+        if (data.getPassword().length() < PASSWORD_MIN_LENGTH) {
+            client.send(new Result(new ResultData(data.getId(), false, (new JSONObject()).put("reason", RegisterData.Result.PASSWORD_TOO_SHORT))));
+            return;
+        }
+
+        // Check whether the username is not already taken
+        if (UserRepository.getSingleton(null).usernameExists(data.getUsername())) {
+            client.send(new Result(new ResultData(data.getId(), false, (new JSONObject()).put("reason", RegisterData.Result.USERNAME_ALREADY_EXISTS))));
+            return;
+        }
+
+        UserEntity newUser = (new UserEntity())
+            .setUsername(data.getUsername())
+            .setPassword(data.getPassword());
+
+        // Add the new user to the database, and only return true if it was saved successfully
+        if (UserRepository.getSingleton(null).add(newUser)) {
+            logger.info("User " + newUser.getUsername() + " created");
+            client.send(new Result(new ResultData(data.getId(), true)));
+        } else {
+            client.send(new Result(new ResultData(data.getId(), false, (new JSONObject()).put("reason", RegisterData.Result.SERVER_ERROR))));
+        }
+    }
 }

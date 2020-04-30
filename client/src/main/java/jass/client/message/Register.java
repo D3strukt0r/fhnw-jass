@@ -37,6 +37,11 @@ public final class Register extends Message {
     private final RegisterData data;
 
     /**
+     * After the message was sent, this is the result.
+     */
+    private ResultData resultData;
+
+    /**
      * @param rawData The data (still not casted)
      */
     public Register(final MessageData rawData) {
@@ -49,8 +54,15 @@ public final class Register extends Message {
         socket.send(this);
 
         Message result = socket.waitForResultResponse(data.getId());
-        ResultData resultData = (ResultData) result.getRawData();
+        resultData = (ResultData) result.getRawData();
 
         return resultData.getResult();
+    }
+
+    /**
+     * @return Returns the result.
+     */
+    public ResultData getResultData() {
+        return resultData;
     }
 }
