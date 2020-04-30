@@ -19,14 +19,12 @@
 
 package jass.server.util;
 
+import jass.lib.Card;
 import jass.lib.message.BroadcastDeckData;
-import jass.lib.message.CardData;
-import jass.server.entity.CardEntity;
 import jass.server.entity.DeckEntity;
 import jass.server.entity.RoundEntity;
 import jass.server.entity.UserEntity;
 import jass.server.message.BroadcastDeck;
-import jass.server.repository.CardRepository;
 import jass.server.repository.DeckRepository;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -34,7 +32,6 @@ import org.apache.logging.log4j.Logger;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import jass.lib.servicelocator.Service;
 
@@ -65,7 +62,8 @@ public final class CardUtil implements Service {
      * @return Returns the four decks created for each player.
      */
     public List<DeckEntity> addDecksForPlayers(final RoundEntity newRound, final UserEntity playerOne, final UserEntity playerTwo, final UserEntity playerThree, final UserEntity playerFour) {
-        List<CardEntity> cards = CardRepository.getSingleton(null).getAll();
+        List<Card> cards = Card.generateJassDeck();
+
         Collections.shuffle(cards);
         logger.info("shuffled cards");
 
@@ -85,7 +83,7 @@ public final class CardUtil implements Service {
      *
      * @return Returns a deck for a specific player.
      */
-    private DeckEntity addNewDeck(final RoundEntity newRound, final UserEntity player, final List<CardEntity> cards, final int i) {
+    private DeckEntity addNewDeck(final RoundEntity newRound, final UserEntity player, final List<Card> cards, final int i) {
         DeckEntity deck = (new DeckEntity())
             .setPlayer(player)
             .setRound(newRound)
@@ -108,9 +106,7 @@ public final class CardUtil implements Service {
      * @param deckEntity The deck to send to the client.
      */
     public void broadcastDeck(final ClientUtil client, final DeckEntity deckEntity) {
-        List<CardData> cards = deckEntity.getCards().stream().map(CardEntity::toCardData).collect(Collectors.toList());
-        BroadcastDeck broadcastDeckMsg = new BroadcastDeck(new BroadcastDeckData(deckEntity.getId(), cards));
-
+        BroadcastDeck broadcastDeckMsg = new BroadcastDeck(new BroadcastDeckData(deckEntity.getId(), deckEntity.getCards()));
         client.send(broadcastDeckMsg);
     }
 }

@@ -2,7 +2,9 @@ package jass.server.entity;
 
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
+import jass.lib.Card;
 import jass.lib.database.Entity;
+import jass.server.persister.CardPersister;
 
 import java.util.ArrayList;
 
@@ -36,56 +38,56 @@ public final class DeckEntity extends Entity {
     /**
      * Card one.
      */
-    @DatabaseField(foreign = true)
-    private CardEntity cardOne;
+    @DatabaseField(persisterClass = CardPersister.class)
+    private Card cardOne;
 
     /**
      * Card two.
      */
-    @DatabaseField(foreign = true)
-    private CardEntity cardTwo;
+    @DatabaseField(persisterClass = CardPersister.class)
+    private Card cardTwo;
 
     /**
      * Card three.
      */
-    @DatabaseField(foreign = true)
-    private CardEntity cardThree;
+    @DatabaseField(persisterClass = CardPersister.class)
+    private Card cardThree;
 
     /**
      * Card four.
      */
-    @DatabaseField(foreign = true)
-    private CardEntity cardFour;
+    @DatabaseField(persisterClass = CardPersister.class)
+    private Card cardFour;
 
     /**
      * Card five.
      */
-    @DatabaseField(foreign = true)
-    private CardEntity cardFive;
+    @DatabaseField(persisterClass = CardPersister.class)
+    private Card cardFive;
 
     /**
      * Card six.
      */
-    @DatabaseField(foreign = true)
-    private CardEntity cardSix;
+    @DatabaseField(persisterClass = CardPersister.class)
+    private Card cardSix;
 
     /**
      * Card seven.
      */
-    @DatabaseField(foreign = true)
-    private CardEntity cardSeven;
+    @DatabaseField(persisterClass = CardPersister.class)
+    private Card cardSeven;
 
     /**
      * Card eight.
      */
-    @DatabaseField(foreign = true)
-    private CardEntity cardEight;
+    @DatabaseField(persisterClass = CardPersister.class)
+    private Card cardEight;
 
     /**
      * Card nine.
      */
-    @DatabaseField(foreign = true)
-    private CardEntity cardNine;
+    @DatabaseField(persisterClass = CardPersister.class)
+    private Card cardNine;
 
     /**
      * For ORMLite all persisted classes must define a no-arg constructor with
@@ -138,7 +140,7 @@ public final class DeckEntity extends Entity {
     /**
      * @return Returns card one.
      */
-    public CardEntity getCardOne() {
+    public Card getCardOne() {
         return cardOne;
     }
 
@@ -147,7 +149,7 @@ public final class DeckEntity extends Entity {
      *
      * @return Returns the object for further processing.
      */
-    public DeckEntity setCardOne(final CardEntity cardOne) {
+    public DeckEntity setCardOne(final Card cardOne) {
         this.cardOne = cardOne;
         return this;
     }
@@ -155,7 +157,7 @@ public final class DeckEntity extends Entity {
     /**
      * @return Returns card two.
      */
-    public CardEntity getCardTwo() {
+    public Card getCardTwo() {
         return cardTwo;
     }
 
@@ -164,7 +166,7 @@ public final class DeckEntity extends Entity {
      *
      * @return Returns the object for further processing.
      */
-    public DeckEntity setCardTwo(final CardEntity cardTwo) {
+    public DeckEntity setCardTwo(final Card cardTwo) {
         this.cardTwo = cardTwo;
         return this;
     }
@@ -172,7 +174,7 @@ public final class DeckEntity extends Entity {
     /**
      * @return Returns card three.
      */
-    public CardEntity getCardThree() {
+    public Card getCardThree() {
         return cardThree;
     }
 
@@ -181,7 +183,7 @@ public final class DeckEntity extends Entity {
      *
      * @return Returns the object for further processing.
      */
-    public DeckEntity setCardThree(final CardEntity cardThree) {
+    public DeckEntity setCardThree(final Card cardThree) {
         this.cardThree = cardThree;
         return this;
     }
@@ -189,7 +191,7 @@ public final class DeckEntity extends Entity {
     /**
      * @return Returns card four.
      */
-    public CardEntity getCardFour() {
+    public Card getCardFour() {
         return cardFour;
     }
 
@@ -198,7 +200,7 @@ public final class DeckEntity extends Entity {
      *
      * @return Returns the object for further processing.
      */
-    public DeckEntity setCardFour(final CardEntity cardFour) {
+    public DeckEntity setCardFour(final Card cardFour) {
         this.cardFour = cardFour;
         return this;
     }
@@ -206,7 +208,7 @@ public final class DeckEntity extends Entity {
     /**
      * @return Returns card five.
      */
-    public CardEntity getCardFive() {
+    public Card getCardFive() {
         return cardFive;
     }
 
@@ -215,7 +217,7 @@ public final class DeckEntity extends Entity {
      *
      * @return Returns the object for further processing.
      */
-    public DeckEntity setCardFive(final CardEntity cardFive) {
+    public DeckEntity setCardFive(final Card cardFive) {
         this.cardFive = cardFive;
         return this;
     }
@@ -223,7 +225,7 @@ public final class DeckEntity extends Entity {
     /**
      * @return Returns card six.
      */
-    public CardEntity getCardSix() {
+    public Card getCardSix() {
         return cardSix;
     }
 
@@ -232,7 +234,7 @@ public final class DeckEntity extends Entity {
      *
      * @return Returns the object for further processing.
      */
-    public DeckEntity setCardSix(final CardEntity cardSix) {
+    public DeckEntity setCardSix(final Card cardSix) {
         this.cardSix = cardSix;
         return this;
     }
@@ -240,7 +242,7 @@ public final class DeckEntity extends Entity {
     /**
      * @return Returns card seven.
      */
-    public CardEntity getCardSeven() {
+    public Card getCardSeven() {
         return cardSeven;
     }
 
@@ -249,7 +251,7 @@ public final class DeckEntity extends Entity {
      *
      * @return Returns the object for further processing.
      */
-    public DeckEntity setCardSeven(final CardEntity cardSeven) {
+    public DeckEntity setCardSeven(final Card cardSeven) {
         this.cardSeven = cardSeven;
         return this;
     }
@@ -257,7 +259,7 @@ public final class DeckEntity extends Entity {
     /**
      * @return Returns card eight.
      */
-    public CardEntity getCardEight() {
+    public Card getCardEight() {
         return cardEight;
     }
 
@@ -266,7 +268,7 @@ public final class DeckEntity extends Entity {
      *
      * @return Returns the object for further processing.
      */
-    public DeckEntity setCardEight(final CardEntity cardEight) {
+    public DeckEntity setCardEight(final Card cardEight) {
         this.cardEight = cardEight;
         return this;
     }
@@ -274,7 +276,7 @@ public final class DeckEntity extends Entity {
     /**
      * @return Returns card nine.
      */
-    public CardEntity getCardNine() {
+    public Card getCardNine() {
         return cardNine;
     }
 
@@ -283,7 +285,7 @@ public final class DeckEntity extends Entity {
      *
      * @return Returns the object for further processing.
      */
-    public DeckEntity setCardNine(final CardEntity cardNine) {
+    public DeckEntity setCardNine(final Card cardNine) {
         this.cardNine = cardNine;
         return this;
     }
@@ -291,8 +293,8 @@ public final class DeckEntity extends Entity {
     /**
      * @return Returns the cards as an array.
      */
-    public ArrayList<CardEntity> getCards() {
-        ArrayList<CardEntity> cards = new ArrayList<>();
+    public ArrayList<Card> getCards() {
+        ArrayList<Card> cards = new ArrayList<>();
         cards.add(cardOne);
         cards.add(cardTwo);
         cards.add(cardThree);

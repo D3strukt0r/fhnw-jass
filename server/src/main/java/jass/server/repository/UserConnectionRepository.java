@@ -20,20 +20,20 @@ package jass.server.repository;
 
 import com.j256.ormlite.dao.Dao;
 import jass.lib.database.Repository;
-import jass.server.entity.SuitEntity;
+import jass.server.entity.UserConnectionEntity;
 
 /**
- * A model with all known suits.
+ * A model with all users.
  *
- * @author Victor Hargrave
+ * @author Manuele Vaccari
  * @version %I%, %G%
  * @since 0.0.1
  */
-public final class SuitRepository extends Repository<Dao<SuitEntity, Integer>, SuitEntity> {
+public final class UserConnectionRepository extends Repository<Dao<UserConnectionEntity, Integer>, UserConnectionEntity> {
     /**
      * The singleton.
      */
-    private static SuitRepository singleton = null;
+    private static UserConnectionRepository singleton = null;
 
     /**
      * Creates a new singleton or returns the existing one.
@@ -42,9 +42,9 @@ public final class SuitRepository extends Repository<Dao<SuitEntity, Integer>, S
      *
      * @return Returns the Repository.
      */
-    public static SuitRepository getSingleton(final Dao<SuitEntity, Integer> dao) {
+    public static UserConnectionRepository getSingleton(final Dao<UserConnectionEntity, Integer> dao) {
         if (singleton == null) {
-            singleton = new SuitRepository(dao);
+            singleton = new UserConnectionRepository(dao);
         }
         return singleton;
     }
@@ -52,7 +52,7 @@ public final class SuitRepository extends Repository<Dao<SuitEntity, Integer>, S
     /**
      * @param dao The DAO to edit inside the database.
      */
-    public SuitRepository(final Dao<SuitEntity, Integer> dao) {
+    public UserConnectionRepository(final Dao<UserConnectionEntity, Integer> dao) {
         super(dao);
     }
 }

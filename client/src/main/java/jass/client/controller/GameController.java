@@ -12,8 +12,8 @@ import jass.client.util.WindowUtil;
 import jass.client.view.GameView;
 import jass.client.view.LoginView;
 import jass.client.view.ServerConnectionView;
+import jass.lib.Card;
 import jass.lib.GameMode;
-import jass.lib.message.CardData;
 import jass.lib.message.LogoutData;
 import jass.lib.servicelocator.ServiceLocator;
 import javafx.application.Platform;
@@ -388,7 +388,7 @@ public final class GameController extends Controller implements DisconnectEventL
         gameUtil = ServiceLocator.get(GameUtil.class);
 
         logger.info("initialising");
-        gameUtil.getPlayerDeck().addListener((ListChangeListener<CardData>) c -> {
+        gameUtil.getPlayerDeck().addListener((ListChangeListener<Card>) c -> {
             logger.info("listener was activated. Now updating cards");
             logger.info("here's a card" + gameUtil.getPlayerDeck().get(0).getSuit());
             if (gameUtil.getPlayerDeck().size() == 9) {
@@ -443,58 +443,58 @@ public final class GameController extends Controller implements DisconnectEventL
      */
     private void updateCardImages() {
         if (gameUtil.getPlayerDeck().size() == 9) {
-            CardData card1 = gameUtil.getPlayerDeck().get(0);
-            CardData card2 = gameUtil.getPlayerDeck().get(1);
-            CardData card3 = gameUtil.getPlayerDeck().get(2);
-            CardData card4 = gameUtil.getPlayerDeck().get(3);
-            CardData card5 = gameUtil.getPlayerDeck().get(4);
-            CardData card6 = gameUtil.getPlayerDeck().get(5);
-            CardData card7 = gameUtil.getPlayerDeck().get(6);
-            CardData card8 = gameUtil.getPlayerDeck().get(7);
-            CardData card9 = gameUtil.getPlayerDeck().get(8);
+            Card card1 = gameUtil.getPlayerDeck().get(0);
+            Card card2 = gameUtil.getPlayerDeck().get(1);
+            Card card3 = gameUtil.getPlayerDeck().get(2);
+            Card card4 = gameUtil.getPlayerDeck().get(3);
+            Card card5 = gameUtil.getPlayerDeck().get(4);
+            Card card6 = gameUtil.getPlayerDeck().get(5);
+            Card card7 = gameUtil.getPlayerDeck().get(6);
+            Card card8 = gameUtil.getPlayerDeck().get(7);
+            Card card9 = gameUtil.getPlayerDeck().get(8);
 
             LoginEntity login = ServiceLocator.get(LoginEntity.class);
             assert login != null;
             if (gameUtil.getGame().getPlayerOne().equals(login.getUsername())) {
-                setImage(getCardPath(card1.getRank(), card1.getSuit()), user1b1);
-                setImage(getCardPath(card2.getRank(), card2.getSuit()), user1b2);
-                setImage(getCardPath(card3.getRank(), card3.getSuit()), user1b3);
-                setImage(getCardPath(card4.getRank(), card4.getSuit()), user1b4);
-                setImage(getCardPath(card5.getRank(), card5.getSuit()), user1b5);
-                setImage(getCardPath(card6.getRank(), card6.getSuit()), user1b6);
-                setImage(getCardPath(card7.getRank(), card7.getSuit()), user1b7);
-                setImage(getCardPath(card8.getRank(), card8.getSuit()), user1b8);
-                setImage(getCardPath(card9.getRank(), card9.getSuit()), user1b9);
+                setImage(getCardPath(card1.getRank().toString(), card1.getSuit().toString()), user1b1);
+                setImage(getCardPath(card2.getRank().toString(), card2.getSuit().toString()), user1b2);
+                setImage(getCardPath(card3.getRank().toString(), card3.getSuit().toString()), user1b3);
+                setImage(getCardPath(card4.getRank().toString(), card4.getSuit().toString()), user1b4);
+                setImage(getCardPath(card5.getRank().toString(), card5.getSuit().toString()), user1b5);
+                setImage(getCardPath(card6.getRank().toString(), card6.getSuit().toString()), user1b6);
+                setImage(getCardPath(card7.getRank().toString(), card7.getSuit().toString()), user1b7);
+                setImage(getCardPath(card8.getRank().toString(), card8.getSuit().toString()), user1b8);
+                setImage(getCardPath(card9.getRank().toString(), card9.getSuit().toString()), user1b9);
             } else if (gameUtil.getGame().getPlayerTwo().equals(login.getUsername())) {
-                setImage(getCardPath(card1.getRank(), card1.getSuit()), user2b1);
-                setImage(getCardPath(card2.getRank(), card2.getSuit()), user2b2);
-                setImage(getCardPath(card3.getRank(), card3.getSuit()), user2b3);
-                setImage(getCardPath(card4.getRank(), card4.getSuit()), user2b4);
-                setImage(getCardPath(card5.getRank(), card5.getSuit()), user2b5);
-                setImage(getCardPath(card6.getRank(), card6.getSuit()), user2b6);
-                setImage(getCardPath(card7.getRank(), card7.getSuit()), user2b7);
-                setImage(getCardPath(card8.getRank(), card8.getSuit()), user2b8);
-                setImage(getCardPath(card9.getRank(), card9.getSuit()), user2b9);
+                setImage(getCardPath(card1.getRank().toString(), card1.getSuit().toString()), user2b1);
+                setImage(getCardPath(card2.getRank().toString(), card2.getSuit().toString()), user2b2);
+                setImage(getCardPath(card3.getRank().toString(), card3.getSuit().toString()), user2b3);
+                setImage(getCardPath(card4.getRank().toString(), card4.getSuit().toString()), user2b4);
+                setImage(getCardPath(card5.getRank().toString(), card5.getSuit().toString()), user2b5);
+                setImage(getCardPath(card6.getRank().toString(), card6.getSuit().toString()), user2b6);
+                setImage(getCardPath(card7.getRank().toString(), card7.getSuit().toString()), user2b7);
+                setImage(getCardPath(card8.getRank().toString(), card8.getSuit().toString()), user2b8);
+                setImage(getCardPath(card9.getRank().toString(), card9.getSuit().toString()), user2b9);
             } else if (gameUtil.getGame().getPlayerThree().equals(login.getUsername())) {
-                setImage(getCardPath(card1.getRank(), card1.getSuit()), user3b1);
-                setImage(getCardPath(card2.getRank(), card2.getSuit()), user3b2);
-                setImage(getCardPath(card3.getRank(), card3.getSuit()), user3b3);
-                setImage(getCardPath(card4.getRank(), card4.getSuit()), user3b4);
-                setImage(getCardPath(card5.getRank(), card5.getSuit()), user3b5);
-                setImage(getCardPath(card6.getRank(), card6.getSuit()), user3b6);
-                setImage(getCardPath(card7.getRank(), card7.getSuit()), user3b7);
-                setImage(getCardPath(card8.getRank(), card8.getSuit()), user3b8);
-                setImage(getCardPath(card9.getRank(), card9.getSuit()), user3b9);
+                setImage(getCardPath(card1.getRank().toString(), card1.getSuit().toString()), user3b1);
+                setImage(getCardPath(card2.getRank().toString(), card2.getSuit().toString()), user3b2);
+                setImage(getCardPath(card3.getRank().toString(), card3.getSuit().toString()), user3b3);
+                setImage(getCardPath(card4.getRank().toString(), card4.getSuit().toString()), user3b4);
+                setImage(getCardPath(card5.getRank().toString(), card5.getSuit().toString()), user3b5);
+                setImage(getCardPath(card6.getRank().toString(), card6.getSuit().toString()), user3b6);
+                setImage(getCardPath(card7.getRank().toString(), card7.getSuit().toString()), user3b7);
+                setImage(getCardPath(card8.getRank().toString(), card8.getSuit().toString()), user3b8);
+                setImage(getCardPath(card9.getRank().toString(), card9.getSuit().toString()), user3b9);
             } else if (gameUtil.getGame().getPlayerFour().equals(login.getUsername())) {
-                setImage(getCardPath(card1.getRank(), card1.getSuit()), user4b1);
-                setImage(getCardPath(card2.getRank(), card2.getSuit()), user4b2);
-                setImage(getCardPath(card3.getRank(), card3.getSuit()), user4b3);
-                setImage(getCardPath(card4.getRank(), card4.getSuit()), user4b4);
-                setImage(getCardPath(card5.getRank(), card5.getSuit()), user4b5);
-                setImage(getCardPath(card6.getRank(), card6.getSuit()), user4b6);
-                setImage(getCardPath(card7.getRank(), card7.getSuit()), user4b7);
-                setImage(getCardPath(card8.getRank(), card8.getSuit()), user4b8);
-                setImage(getCardPath(card9.getRank(), card9.getSuit()), user4b9);
+                setImage(getCardPath(card1.getRank().toString(), card1.getSuit().toString()), user4b1);
+                setImage(getCardPath(card2.getRank().toString(), card2.getSuit().toString()), user4b2);
+                setImage(getCardPath(card3.getRank().toString(), card3.getSuit().toString()), user4b3);
+                setImage(getCardPath(card4.getRank().toString(), card4.getSuit().toString()), user4b4);
+                setImage(getCardPath(card5.getRank().toString(), card5.getSuit().toString()), user4b5);
+                setImage(getCardPath(card6.getRank().toString(), card6.getSuit().toString()), user4b6);
+                setImage(getCardPath(card7.getRank().toString(), card7.getSuit().toString()), user4b7);
+                setImage(getCardPath(card8.getRank().toString(), card8.getSuit().toString()), user4b8);
+                setImage(getCardPath(card9.getRank().toString(), card9.getSuit().toString()), user4b9);
             }
         }
     }

@@ -1,5 +1,6 @@
 package jass.lib.message;
 
+import jass.lib.Card;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -25,13 +26,13 @@ public final class BroadcastDeckData extends MessageData {
     /**
      * The cards.
      */
-    private ArrayList<CardData> cardsClient = null;
+    private final ArrayList<Card> cardsClient = new ArrayList<>();
 
     /**
      * @param deckId The deck ID.
      * @param cards  The cards.
      */
-    public BroadcastDeckData(final int deckId, final List<CardData> cards) {
+    public BroadcastDeckData(final int deckId, final List<Card> cards) {
         super("BroadcastDeck");
         this.deckId = deckId;
         this.cards = new JSONArray(cards);
@@ -44,16 +45,11 @@ public final class BroadcastDeckData extends MessageData {
         super(data);
         deckId = data.getInt("deckId");
         cards = data.getJSONArray("cards");
-        cardsClient = new ArrayList<>();
         for (int i = 0; i < this.cards.length(); i++) {
             JSONObject jsonobject = this.cards.getJSONObject(i);
-            int cardId = jsonobject.getInt("cardId");
-            int suitId = jsonobject.getInt("suitId");
-            String suit = jsonobject.getString("suit");
-            int rankId = jsonobject.getInt("rankId");
-            String rank = jsonobject.getString("rank");
-
-            cardsClient.add(new CardData(cardId, suitId, suit, rankId, rank));
+            Card.Suit suit = jsonobject.getEnum(Card.Suit.class, "suit");
+            Card.Rank rank = jsonobject.getEnum(Card.Rank.class, "rank");
+            cardsClient.add(new Card(suit, rank));
         }
     }
 
@@ -74,7 +70,7 @@ public final class BroadcastDeckData extends MessageData {
     /**
      * @return Returns the cards.
      */
-    public ArrayList<CardData> getCardsClient() {
+    public ArrayList<Card> getCardsClient() {
         return cardsClient;
     }
 }

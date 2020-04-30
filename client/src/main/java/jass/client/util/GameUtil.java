@@ -9,7 +9,6 @@ import jass.lib.Card;
 import jass.lib.GameMode;
 import jass.lib.message.BroadcastDeckData;
 import jass.lib.message.BroadcastGameModeData;
-import jass.lib.message.CardData;
 import jass.lib.message.ChooseGameModeData;
 import jass.lib.message.ChosenGameModeData;
 import jass.lib.message.GameFoundData;
@@ -53,7 +52,7 @@ public final class GameUtil implements Service, BroadcastDeckEventListener, Choo
     /**
      * The deck of the player.
      */
-    private ObservableList<CardData> playerDeck;
+    private ObservableList<Card> playerDeck;
 
     /**
      * The game mode data.
@@ -186,14 +185,14 @@ public final class GameUtil implements Service, BroadcastDeckEventListener, Choo
     /**
      * @return Returns the deck of the player.
      */
-    public ObservableList<CardData> getPlayerDeck() {
+    public ObservableList<Card> getPlayerDeck() {
         return playerDeck;
     }
 
     /**
      * @param playerDeck The deck of the player.
      */
-    public void setPlayerDeck(final ArrayList<CardData> playerDeck) {
+    public void setPlayerDeck(final ArrayList<Card> playerDeck) {
         this.playerDeck = FXCollections.observableArrayList(playerDeck);
     }
 
