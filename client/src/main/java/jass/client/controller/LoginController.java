@@ -357,15 +357,24 @@ public final class LoginController extends Controller implements DisconnectEvent
 
                 WindowUtil.switchTo(view, LobbyView.class);
             } else {
-                LoginData.Result reason = loginMsg.getResultData().getResultData().getEnum(LoginData.Result.class, "reason");
-                if (reason == LoginData.Result.USER_DOES_NOT_EXIST) {
-                    setErrorMessage("gui.login.login.failed.user_does_not_exist");
-                } else if (reason == LoginData.Result.WRONG_PASSWORD) {
-                    setErrorMessage("gui.login.login.failed.wrong_password");
-                } else if (reason == LoginData.Result.USER_ALREADY_LOGGED_IN) {
-                    setErrorMessage("gui.login.login.failed.already_logged_in");
-                } else {
+                LoginData.Result reason = loginMsg.getResultData().getResultData().optEnum(LoginData.Result.class, "reason");
+                if (reason == null) {
                     setErrorMessage("gui.login.login.failed");
+                } else {
+                    switch (reason) {
+                        case USER_DOES_NOT_EXIST:
+                            setErrorMessage("gui.login.login.failed.user_does_not_exist");
+                            break;
+                        case WRONG_PASSWORD:
+                            setErrorMessage("gui.login.login.failed.wrong_password");
+                            break;
+                        case USER_ALREADY_LOGGED_IN:
+                            setErrorMessage("gui.login.login.failed.already_logged_in");
+                            break;
+                        default:
+                            setErrorMessage("gui.login.login.failed");
+                            break;
+                    }
                 }
                 enableAll();
             }
