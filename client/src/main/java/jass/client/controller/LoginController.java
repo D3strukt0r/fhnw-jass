@@ -23,7 +23,9 @@ import com.jfoenix.controls.JFXCheckBox;
 import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
 import jass.client.entity.ServerEntity;
+import jass.client.view.AboutView;
 import jass.client.view.LobbyView;
+import jass.client.view.LoginView;
 import jass.client.view.RegisterView;
 import jass.client.view.ServerConnectionView;
 import javafx.application.Platform;
@@ -45,7 +47,6 @@ import jass.client.util.I18nUtil;
 import jass.client.util.SocketUtil;
 import jass.client.util.WindowUtil;
 import jass.client.util.ViewUtil;
-import jass.client.view.LoginView;
 import jass.lib.message.LoginData;
 import jass.lib.servicelocator.ServiceLocator;
 
@@ -313,6 +314,14 @@ public final class LoginController extends Controller implements DisconnectEvent
     @FXML
     private void clickOnExit() {
         Platform.exit();
+    }
+
+    /**
+     * Opens the about window.
+     */
+    @FXML
+    public void clickOnAbout() {
+        WindowUtil.openInNewWindow(AboutView.class);
     }
 
     /**

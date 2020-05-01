@@ -28,7 +28,7 @@
             <MenuItem fx:id="mEditDelete" text="gui.menu.edit.delete" />
         </Menu>
         <Menu fx:id="mHelp" text="gui.menu.help">
-            <MenuItem fx:id="mHelpAbout" text="gui.menu.help.about" />
+            <MenuItem fx:id="mHelpAbout" text="gui.menu.help.about" onAction="#clickOnAbout" />
         </Menu>
     </MenuBar>
 

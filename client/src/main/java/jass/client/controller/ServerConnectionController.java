@@ -27,6 +27,7 @@ import jass.client.util.I18nUtil;
 import jass.client.util.SocketUtil;
 import jass.client.util.ViewUtil;
 import jass.client.util.WindowUtil;
+import jass.client.view.AboutView;
 import jass.client.view.LoginView;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
@@ -376,6 +377,14 @@ public final class ServerConnectionController extends Controller {
     @FXML
     private void clickOnExit() {
         Platform.exit();
+    }
+
+    /**
+     * Opens the about window.
+     */
+    @FXML
+    public void clickOnAbout() {
+        WindowUtil.openInNewWindow(AboutView.class);
     }
 
     /**

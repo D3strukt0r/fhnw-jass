@@ -25,6 +25,7 @@ import jass.client.mvc.Controller;
 import jass.client.message.ChangePassword;
 import jass.client.util.I18nUtil;
 import jass.client.util.SocketUtil;
+import jass.client.view.AboutView;
 import jass.client.view.ChangePasswordView;
 import jass.client.view.LobbyView;
 import jass.client.view.ServerConnectionView;
@@ -301,6 +302,14 @@ public final class ChangePasswordController extends Controller {
     @FXML
     private void clickOnExit() {
         Platform.exit();
+    }
+
+    /**
+     * Opens the about window.
+     */
+    @FXML
+    public void clickOnAbout() {
+        WindowUtil.openInNewWindow(AboutView.class);
     }
 
     /**

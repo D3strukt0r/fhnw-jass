@@ -12,6 +12,7 @@ import jass.client.util.I18nUtil;
 import jass.client.util.SocketUtil;
 import jass.client.util.ViewUtil;
 import jass.client.util.WindowUtil;
+import jass.client.view.AboutView;
 import jass.client.view.GameView;
 import jass.lib.message.CancelSearchGameData;
 import jass.lib.message.GameFoundData;
@@ -255,6 +256,14 @@ public final class LobbyController extends Controller implements GameFoundEventL
     @FXML
     private void clickOnExit() {
         Platform.exit();
+    }
+
+    /**
+     * Opens the about window.
+     */
+    @FXML
+    public void clickOnAbout() {
+        WindowUtil.openInNewWindow(AboutView.class);
     }
 
     /**

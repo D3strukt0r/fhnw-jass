@@ -25,6 +25,7 @@ import jass.client.message.DeleteLogin;
 import jass.client.message.Logout;
 import jass.client.util.I18nUtil;
 import jass.client.util.SocketUtil;
+import jass.client.view.AboutView;
 import jass.client.view.DeleteAccountView;
 import jass.client.view.GameView;
 import jass.client.view.LoginView;
@@ -237,6 +238,14 @@ public final class DeleteAccountController extends Controller {
     @FXML
     private void clickOnExit() {
         Platform.exit();
+    }
+
+    /**
+     * Opens the about window.
+     */
+    @FXML
+    public void clickOnAbout() {
+        WindowUtil.openInNewWindow(AboutView.class);
     }
 
     /**
