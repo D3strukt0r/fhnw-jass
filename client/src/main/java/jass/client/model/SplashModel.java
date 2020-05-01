@@ -79,7 +79,7 @@ public final class SplashModel extends Model {
             // Initialize the db connection in the service locator
             tasks.add(() -> {
                 try {
-                    DatabaseUtil db = new DatabaseUtil(Main.dbLocation);
+                    DatabaseUtil db = new DatabaseUtil(DatabaseUtil.SupportedDatabase.SQLITE, Main.dbLocation);
                     ServiceLocator.add(db);
                     logger.info("Connection to database created");
                 } catch (SQLException e) {

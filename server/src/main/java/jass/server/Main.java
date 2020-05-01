@@ -107,7 +107,7 @@ public final class Main {
                 dbLocation = cmd.getOptionValue("db-location");
             }
 
-            DatabaseUtil db = new DatabaseUtil(dbLocation);
+            DatabaseUtil db = new DatabaseUtil(DatabaseUtil.SupportedDatabase.SQLITE, dbLocation);
             ServiceLocator.add(db);
             logger.info("Connection to database created");
         } catch (SQLException e) {

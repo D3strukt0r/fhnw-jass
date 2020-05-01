@@ -57,10 +57,17 @@ import java.sql.SQLException;
  * @since 0.0.1
  */
 public final class DatabaseUtil implements Service, Closeable {
+    public enum SupportedDatabase {
+        /**
+         * A list of all the supported database systems.
+         */
+        SQLITE
+    }
+
     /**
      * Default location to store the data.
      */
-    public static final String DEFAULT_LOCATION = "sqlite:data/jass_server.sqlite3";
+    public static final String DEFAULT_LOCATION = "data/jass_server.sqlite3";
 
     /**
      * The database connection.
@@ -110,18 +117,20 @@ public final class DatabaseUtil implements Service, Closeable {
     /**
      * Create a database connection.
      *
+     * @param type             The type of database to use.
      * @param databaseLocation A string containing the location of the file to
      *                         be accessed (and if necessary created).
      *
      * @throws SQLException If an SQL error occurs.
      * @since 0.0.1
      */
-    public DatabaseUtil(final String databaseLocation) throws SQLException {
-        // This uses h2 but you can change it to match your database
-        String databaseUrl = "jdbc:" + databaseLocation;
-
+    public DatabaseUtil(final SupportedDatabase type, final String databaseLocation) throws SQLException {
         // Create our data-source for the database
-        connectionSource = new JdbcConnectionSource(databaseUrl);
+        if (type == SupportedDatabase.SQLITE) {
+            connectionSource = new JdbcConnectionSource("jdbc:sqlite:" + databaseLocation);
+        } else {
+            throw new SQLException();
+        }
 
         // Setup our database and DAOs
         setupDatabase();
