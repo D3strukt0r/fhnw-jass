@@ -20,15 +20,19 @@ package jass.client.util;
 
 import jass.client.eventlistener.BroadcastDeckEventListener;
 import jass.client.eventlistener.BroadcastGameModeEventListener;
+import jass.client.eventlistener.BroadcastPlayedCardEventListener;
 import jass.client.eventlistener.ChooseGameModeEventListener;
 import jass.client.eventlistener.DisconnectEventListener;
 import jass.client.eventlistener.GameFoundEventListener;
+import jass.client.eventlistener.PlayCardEventListener;
 import jass.client.message.Message;
 import jass.lib.message.BroadcastDeckData;
 import jass.lib.message.BroadcastGameModeData;
+import jass.lib.message.BroadcastPlayedCardData;
 import jass.lib.message.ChooseGameModeData;
 import jass.lib.message.GameFoundData;
 import jass.lib.message.MessageData;
+import jass.lib.message.PlayCardData;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import jass.client.entity.LoginEntity;
@@ -104,6 +108,16 @@ public final class SocketUtil extends Thread implements Service, Closeable {
      * A list of objects listening to broadcast game mode event.
      */
     private final ArrayList<BroadcastGameModeEventListener> broadcastGameModeListener = new ArrayList<>();
+
+    /**
+     * A list of all objects listening to a play card event.
+     */
+    private final ArrayList<PlayCardEventListener> playCardListener = new ArrayList<>();
+
+    /**
+     * A list of objects listening to broadcast played card event.
+     */
+    private final ArrayList<BroadcastPlayedCardEventListener> broadcastPlayedCardListener = new ArrayList<>();
 
     /**
      * A list of all messages coming from the server.
@@ -324,6 +338,26 @@ public final class SocketUtil extends Thread implements Service, Closeable {
     }
 
     /**
+     * @param listener A PlayCardEventListener object
+     *
+     * @author Manuele Vaccari
+     * @since 0.0.1
+     */
+    public void addPlayCardEventListener(final PlayCardEventListener listener) {
+        playCardListener.add(listener);
+    }
+
+    /**
+     * @param listener A BroadcastPlayedCardEventListener object
+     *
+     * @author Manuele Vaccari
+     * @since 0.0.1
+     */
+    public void addBroadcastPlayedCardEventListener(final BroadcastPlayedCardEventListener listener) {
+        broadcastPlayedCardListener.add(listener);
+    }
+
+    /**
      * @param msgType Message to send to listener listening to "game-found"
      *                event.
      * @param msgData The message to send to the listeners.
@@ -350,6 +384,18 @@ public final class SocketUtil extends Thread implements Service, Closeable {
                 for (BroadcastGameModeEventListener listener : broadcastGameModeListener) {
                     logger.info("Invoking onBroadcastGameMode event on " + listener.getClass().getName());
                     listener.onBroadcastGameMode((BroadcastGameModeData) msgData);
+                }
+                break;
+            case "PlayCard":
+                for (PlayCardEventListener listener : playCardListener) {
+                    logger.info("Invoking onPlayCard event on " + listener.getClass().getName());
+                    listener.onPlayCard((PlayCardData) msgData);
+                }
+                break;
+            case "BroadcastPlayedCard":
+                for (BroadcastPlayedCardEventListener listener : broadcastPlayedCardListener) {
+                    logger.info("Invoking onBroadcastPlayedCard event on " + listener.getClass().getName());
+                    listener.onBroadcastPlayedCard((BroadcastPlayedCardData) msgData);
                 }
                 break;
             default:

@@ -5,6 +5,7 @@ import jass.lib.message.BroadcastGameModeData;
 import jass.lib.message.ChooseGameModeData;
 import jass.lib.message.ChosenGameModeData;
 import jass.lib.message.GameFoundData;
+import jass.lib.message.PlayedCardData;
 import jass.lib.servicelocator.ServiceLocator;
 import jass.server.entity.DeckEntity;
 import jass.server.entity.GameEntity;
@@ -12,6 +13,7 @@ import jass.server.entity.RoundEntity;
 import jass.server.entity.TeamEntity;
 import jass.server.entity.UserEntity;
 import jass.server.eventlistener.ChosenGameModeEventListener;
+import jass.server.eventlistener.PlayedCardEventListener;
 import jass.server.message.BroadcastGameMode;
 import jass.server.message.ChooseGameMode;
 import jass.server.message.GameFound;
@@ -29,7 +31,7 @@ import java.util.List;
  * @version %I%, %G%
  * @since 0.0.1
  */
-public final class GameUtil implements ChosenGameModeEventListener {
+public final class GameUtil implements ChosenGameModeEventListener, PlayedCardEventListener {
     /**
      * The logger to print to console and save in a .log file.
      */
@@ -86,6 +88,11 @@ public final class GameUtil implements ChosenGameModeEventListener {
         clientPlayerTwo.addChosenGameModeEventListener(this);
         clientPlayerThree.addChosenGameModeEventListener(this);
         clientPlayerFour.addChosenGameModeEventListener(this);
+
+        clientPlayerOne.addPlayedCardEventListener(this);
+        clientPlayerTwo.addPlayedCardEventListener(this);
+        clientPlayerThree.addPlayedCardEventListener(this);
+        clientPlayerFour.addPlayedCardEventListener(this);
 
         // Assign and create Teams
         TeamEntity teamOne = (new TeamEntity()).setPlayerOne(playerOne).setPlayerTwo(playerThree);
@@ -200,5 +207,10 @@ public final class GameUtil implements ChosenGameModeEventListener {
         } else {
             throw new IllegalStateException("Unexpected value: " + currentRound.getGameModeChooser().getUsername());
         }
+    }
+
+    @Override
+    public void onPlayedCard(final PlayedCardData data) {
+        // TODO
     }
 }

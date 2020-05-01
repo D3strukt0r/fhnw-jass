@@ -22,9 +22,11 @@ package jass.server.util;
 import jass.lib.message.ChosenGameModeData;
 import jass.lib.message.MessageData;
 import jass.lib.message.MessageErrorData;
+import jass.lib.message.PlayedCardData;
 import jass.lib.servicelocator.ServiceLocator;
 import jass.server.entity.UserEntity;
 import jass.server.eventlistener.ChosenGameModeEventListener;
+import jass.server.eventlistener.PlayedCardEventListener;
 import jass.server.message.Message;
 import jass.server.repository.UserRepository;
 import org.apache.logging.log4j.LogManager;
@@ -79,6 +81,11 @@ public final class ClientUtil extends Thread {
      * A list of all objects listening to a choose game mode event.
      */
     private final ArrayList<ChosenGameModeEventListener> chosenGameModeListener = new ArrayList<>();
+
+    /**
+     * A list of all objects listening to a played card event.
+     */
+    private final ArrayList<PlayedCardEventListener> playedCardListener = new ArrayList<>();
 
     /**
      * Create a new client object, communicating over the given socket.
@@ -153,10 +160,15 @@ public final class ClientUtil extends Thread {
      * @author Thomas Weber, Manuele Vaccari
      */
     public void handleEventListenerOnMessage(final String msgType, final MessageData msgData) {
-        if ("ChosenGameMode".equals(msgType)) {
+        if (msgType.equals("ChosenGameMode")) {
             for (ChosenGameModeEventListener listener : chosenGameModeListener) {
                 logger.info("Invoking onChosenGameMode event on " + listener.getClass().getName());
                 listener.onChosenGameMode((ChosenGameModeData) msgData);
+            }
+        } else if (msgType.equals("PlayedCard")) {
+            for (PlayedCardEventListener listener : playedCardListener) {
+                logger.info("Invoking onChosenGameMode event on " + listener.getClass().getName());
+                listener.onPlayedCard((PlayedCardData) msgData);
             }
         }
     }
@@ -169,6 +181,16 @@ public final class ClientUtil extends Thread {
      */
     public void addChosenGameModeEventListener(final ChosenGameModeEventListener listener) {
         this.chosenGameModeListener.add(listener);
+    }
+
+    /**
+     * @param listener A PlayedCardEventListener object
+     *
+     * @author Manuele Vaccari
+     * @since 0.0.1
+     */
+    public void addPlayedCardEventListener(final PlayedCardEventListener listener) {
+        this.playedCardListener.add(listener);
     }
 
     /**

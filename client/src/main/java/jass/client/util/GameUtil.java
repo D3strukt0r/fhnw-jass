@@ -3,16 +3,20 @@ package jass.client.util;
 import jass.client.entity.LoginEntity;
 import jass.client.eventlistener.BroadcastDeckEventListener;
 import jass.client.eventlistener.BroadcastGameModeEventListener;
+import jass.client.eventlistener.BroadcastPlayedCardEventListener;
 import jass.client.eventlistener.ChooseGameModeEventListener;
+import jass.client.eventlistener.PlayCardEventListener;
 import jass.client.message.ChosenGameMode;
 import jass.lib.Card;
 import jass.lib.GameMode;
 import jass.lib.message.BroadcastDeckData;
 import jass.lib.message.BroadcastGameModeData;
+import jass.lib.message.BroadcastPlayedCardData;
 import jass.lib.message.CardData;
 import jass.lib.message.ChooseGameModeData;
 import jass.lib.message.ChosenGameModeData;
 import jass.lib.message.GameFoundData;
+import jass.lib.message.PlayCardData;
 import jass.lib.servicelocator.ServiceLocator;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleObjectProperty;
@@ -34,7 +38,7 @@ import java.util.List;
  * @version %I%, %G%
  * @since 0.0.1
  */
-public final class GameUtil implements Service, BroadcastDeckEventListener, ChooseGameModeEventListener, BroadcastGameModeEventListener {
+public final class GameUtil implements Service, BroadcastDeckEventListener, ChooseGameModeEventListener, BroadcastGameModeEventListener, PlayCardEventListener, BroadcastPlayedCardEventListener {
     /**
      * The logger to print to console and save in a .log file.
      */
@@ -153,6 +157,16 @@ public final class GameUtil implements Service, BroadcastDeckEventListener, Choo
             trumpf.setValue(data.getTrumpfSuit());
         }
         gameMode.setValue(data.getGameMode());
+    }
+
+    @Override
+    public void onPlayCard(final PlayCardData data) {
+        // TODO
+    }
+
+    @Override
+    public void onBroadcastPlayedCard(final BroadcastPlayedCardData data) {
+        // TODO
     }
 
     /**
