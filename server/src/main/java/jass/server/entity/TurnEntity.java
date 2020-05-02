@@ -158,4 +158,5 @@ public final class TurnEntity extends Entity {
     public void setCardFour(CardEntity cardFour) {
         this.cardFour = cardFour;
     }
+
 }
