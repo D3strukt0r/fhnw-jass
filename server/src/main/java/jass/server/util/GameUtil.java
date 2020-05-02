@@ -65,6 +65,11 @@ public final class GameUtil implements ChosenGameModeEventListener, PlayedCardEv
     private RoundEntity currentRound;
 
     /**
+     * The current turn in the game.
+     */
+    private TurnEntity currentTurn;
+
+    /**
      * @param clientPlayerOne   Player one.
      * @param clientPlayerTwo   Player two.
      * @param clientPlayerThree Player three.
@@ -209,6 +214,8 @@ public final class GameUtil implements ChosenGameModeEventListener, PlayedCardEv
     @Override
     public void onPlayedCard(final PlayedCardData data) {
         // TODO
+
+        // If playedCard is first card in current turn no validations have to be made, just set the playedCard as first card of turn
     }
 
     /**
@@ -222,10 +229,10 @@ public final class GameUtil implements ChosenGameModeEventListener, PlayedCardEv
      * @return True if the move is valid, false if invalid
      */
     private boolean validateMoveTrump(CardEntity playedCard, DeckEntity deck) {
-        CardEntity firstCardOfTurn = playedCard; //TODO - get first card of current turn
+        CardEntity firstCardOfTurn = currentTurn.getCardOne();
 
         // In case the playedCard is first card of current turn the move is always valid
-        if(firstCardOfTurn == playedCard) { return true; }
+        if(firstCardOfTurn.equals(playedCard)) { return true; }
 
         // If playedCard equals the trump suit, the move is always valid
         if (playedCard.getSuit().equals(currentRound.getTrumpfSuit())) {
