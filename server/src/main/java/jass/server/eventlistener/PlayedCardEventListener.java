@@ -14,5 +14,5 @@ public interface PlayedCardEventListener {
      *
      * @param data The data (basically the ID).
      */
-    void onPlayedCard(PlayedCardData data, ClientUtil client);
+    void onPlayedCard(PlayedCardData data);
 }

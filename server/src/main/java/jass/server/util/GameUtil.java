@@ -64,6 +64,26 @@ public final class GameUtil implements ChosenGameModeEventListener, PlayedCardEv
     private TurnEntity currentTurn;
 
     /**
+     * The current deck of player one in the game.
+     */
+    private DeckEntity currentDeckPlayerOne;
+
+    /**
+     * The current deck of player two in the game.
+     */
+    private DeckEntity currentDeckPlayerTwo;
+
+    /**
+     * The current deck of player three in the game.
+     */
+    private DeckEntity currentDeckPlayerThree;
+
+    /**
+     * The current deck of player four in the game.
+     */
+    private DeckEntity currentDeckPlayerFour;
+
+    /**
      * @param clientPlayerOne   Player one.
      * @param clientPlayerTwo   Player two.
      * @param clientPlayerThree Player three.
@@ -120,9 +140,13 @@ public final class GameUtil implements ChosenGameModeEventListener, PlayedCardEv
         // Send a deck to each user
         List<DeckEntity> decks = cardUtil.addDecksForPlayers(currentRound, playerOne, playerTwo, playerThree, playerFour);
         cardUtil.broadcastDeck(clientPlayerOne, decks.get(0));
+        currentDeckPlayerOne = decks.get(0);
         cardUtil.broadcastDeck(clientPlayerTwo, decks.get(1));
+        currentDeckPlayerTwo = decks.get(1);
         cardUtil.broadcastDeck(clientPlayerThree, decks.get(2));
+        currentDeckPlayerThree = decks.get(2);
         cardUtil.broadcastDeck(clientPlayerFour, decks.get(3));
+        currentDeckPlayerFour = decks.get(3);
 
         // Send a message to player one to choose a game mode
         sendChooseGameMode();
@@ -214,8 +238,8 @@ public final class GameUtil implements ChosenGameModeEventListener, PlayedCardEv
     private boolean validateMove(PlayedCardData data) {
         boolean isValidMove = false;
         if (currentRound.getGameMode() == GameMode.TRUMPF) {
-
-            //isValidMove = validateMoveTrump(data.getCardId(), );
+            // TODO - Once merged with branch make_player_move: Get correct deckId of the player which played this card
+            isValidMove = validateMoveTrump(data.getCardId(), currentDeckPlayerOne.getId());
         }
 
         return isValidMove;
