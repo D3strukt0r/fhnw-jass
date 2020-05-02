@@ -31,7 +31,7 @@ public final class TurnEntity extends Entity {
     /**
      * The winning user of this turn
      */
-    @DatabaseField(foreign = true, defaultValue = "null")
+    @DatabaseField(foreign = true)
     private UserEntity winningUser;
 
     /**
