@@ -238,7 +238,7 @@ public final class GameUtil implements ChosenGameModeEventListener, PlayedCardEv
     private boolean validateMove(PlayedCardData data) {
         boolean isValidMove = false;
         if (currentRound.getGameMode() == GameMode.TRUMPF) {
-            // TODO - Once merged with branch make_player_move: Get correct deckId of the player which played this card
+            // TODO - Once merged with branch "make_player_move": Get correct deckId of the player which played this card
             isValidMove = validateMoveTrump(data.getCardId(), currentDeckPlayerOne.getId());
         }
 
@@ -261,7 +261,7 @@ public final class GameUtil implements ChosenGameModeEventListener, PlayedCardEv
         DeckEntity deck = DeckRepository.getSingleton(null).getById(deckId);
 
         // In case the playedCard is first card of current turn the move is always valid
-        if(firstCardOfTurn.equals(playedCard)) { return true; }
+        if(firstCardOfTurn.equals(playedCard) || firstCardOfTurn.equals(null)) { return true; }
 
         // If playedCard equals the trump suit, the move is always valid
         if (playedCard.getSuit().equals(currentRound.getTrumpfSuit())) {
@@ -278,9 +278,9 @@ public final class GameUtil implements ChosenGameModeEventListener, PlayedCardEv
             ArrayList<Boolean> cardsHaveBeenPlayed = deck.getCardsHaveBeenPlayed();
 
             for (int i = 0; i < cardsInDeck.size(); i++) {
-                // Only unplayed cards should be checked & already played cards ignored
+                // Only unplayed cards should be checked
                 if (cardsHaveBeenPlayed.get(i) == false) {
-                    // If a card has the same suite as the firstCardOfTurn this has to be played and thus the move is invalid
+                    // If a card has the same suite as the firstCardOfTurn, this card has to have been played and thus this move is invalid
                     if (cardsInDeck.get(i).getSuit().equals(firstCardOfTurn.getSuit())) {
 
                         // Check exception of trump jack as you are never forced to play this card.
