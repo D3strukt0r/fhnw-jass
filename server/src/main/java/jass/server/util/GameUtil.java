@@ -212,6 +212,8 @@ public final class GameUtil implements ChosenGameModeEventListener, PlayedCardEv
     }
 
     /**
+     * @author: Thomas Weber
+     *
      * Validates a move from one of the clients for the game mode "Trump"
      *
      * @param playedCard The card which has been played
@@ -232,13 +234,13 @@ public final class GameUtil implements ChosenGameModeEventListener, PlayedCardEv
 
         boolean isValidMove = true;
 
-        // If suit of the playedCard does not equal the suit of the first card of the turn, it might be an invalid move.
+        // If the suit of the playedCard does not equal the suit of the firstCardOfTurn, it might be an invalid move - depending on if the client had another card in his hands which he must have played.
         if (!firstCardOfTurn.getSuit().equals(playedCard.getSuit())) {
             // TODO - get only the unplayed cards of deck, not complete deck of player.
             ArrayList<CardEntity> unplayedCards = deck.getCards();
 
             for (int i = 0; i < unplayedCards.size(); i++) {
-                // If a card has the same suite as the firstCardOfTurn this has to be played and the move is invalid
+                // If a card has the same suite as the firstCardOfTurn this has to be played and thus the move is invalid
                 if (unplayedCards.get(i).getSuit().equals(firstCardOfTurn.getSuit())) {
 
                     // Check exception of trump jack as you are never forced to play this card.
