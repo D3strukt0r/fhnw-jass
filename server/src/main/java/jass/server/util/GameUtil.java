@@ -7,11 +7,7 @@ import jass.lib.message.ChosenGameModeData;
 import jass.lib.message.GameFoundData;
 import jass.lib.message.PlayedCardData;
 import jass.lib.servicelocator.ServiceLocator;
-import jass.server.entity.DeckEntity;
-import jass.server.entity.GameEntity;
-import jass.server.entity.RoundEntity;
-import jass.server.entity.TeamEntity;
-import jass.server.entity.UserEntity;
+import jass.server.entity.*;
 import jass.server.eventlistener.ChosenGameModeEventListener;
 import jass.server.eventlistener.PlayedCardEventListener;
 import jass.server.message.BroadcastGameMode;
@@ -24,6 +20,7 @@ import jass.server.repository.TeamRepository;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -212,5 +209,54 @@ public final class GameUtil implements ChosenGameModeEventListener, PlayedCardEv
     @Override
     public void onPlayedCard(final PlayedCardData data) {
         // TODO
+    }
+
+    /**
+     * Validates a move from one of the clients for the game mode "Trump"
+     *
+     * @param playedCard The card which has been played
+     * @param deck The deck of the client to have made the move
+     *
+     * @return True if the move is valid, false if invalid
+     */
+    private boolean validateMoveTrump(CardEntity playedCard, DeckEntity deck) {
+        CardEntity firstCardOfTurn = playedCard; //TODO - get first card of current turn
+
+        // In case the playedCard is first card of current turn the move is always valid
+        if(firstCardOfTurn == playedCard) { return true; }
+
+        // If playedCard equals the trump suit, the move is always valid
+        if (playedCard.getSuit().equals(currentRound.getTrumpfSuit())) {
+            return true;
+        }
+
+        boolean isValidMove = true;
+
+        // If suit of the playedCard does not equal the suit of the first card of the turn, it might be an invalid move.
+        if (!firstCardOfTurn.getSuit().equals(playedCard.getSuit())) {
+            // TODO - get only the unplayed cards of deck, not complete deck of player.
+            ArrayList<CardEntity> unplayedCards = deck.getCards();
+
+            for (int i = 0; i < unplayedCards.size(); i++) {
+                // If a card has the same suite as the firstCardOfTurn this has to be played and the move is invalid
+                if (unplayedCards.get(i).getSuit().equals(firstCardOfTurn.getSuit())) {
+
+                    // Check exception of trump jack as you are never forced to play this card.
+                    if (unplayedCards.get(i).getSuit().equals(currentRound.getTrumpfSuit())) {
+                        if (unplayedCards.get(i).getRank().getId() != 6) {
+                            isValidMove = false;
+                            break;
+                        }
+                    } else {
+                        isValidMove = false;
+                        break;
+                    }
+
+                }
+            }
+
+        }
+
+        return isValidMove;
     }
 }
