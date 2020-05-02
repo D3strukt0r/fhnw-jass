@@ -91,11 +91,12 @@ public final class Login extends Message {
             // Update last login time
             user.setOnline()
                 .setLastLogin(Date.from(Instant.now()));
+            String token = createToken();
+            user.setToken(token);
             UserRepository.getSingleton(null).update(user);
 
             // Save the user to this connection.
             client.setUser(user);
-            String token = createToken();
             client.setToken(token);
 
             // Return the token to the client.

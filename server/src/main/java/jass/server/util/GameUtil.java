@@ -214,17 +214,30 @@ public final class GameUtil implements ChosenGameModeEventListener, PlayedCardEv
         }
     }
 
-    @Override
-    public void onPlayedCard(final PlayedCardData data) {
+
+    public void onPlayedCard(final PlayCardData data) {
         // TODO
+        boolean isValid = validateMove(data);
+        ClientUtil clientUtil = this.getClientUtilByUsername(data.getUsername());
 
         // If playedCard is first card in current turn no validations have to be made, just set the playedCard as first card of turn
+        PlayedCard result = new PlayedCard(new PlayedCardData(isValid));
+        clientUtil.send(result);
     }
 
     private TurnEntity addNewTurn(UserEntity startingPlayer, RoundEntity round) {
         TurnEntity turn = new TurnEntity(round, startingPlayer);
         TurnRepository.getSingleton(null).add(turn);
         return turn;
+    }
+
+    private boolean validateMove(PlayCardData data) {
+        double randomNumberBetween0And10 = Math.round(Math.random() * 10);
+        if(randomNumberBetween0And10 > 5) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     /**
@@ -276,5 +289,18 @@ public final class GameUtil implements ChosenGameModeEventListener, PlayedCardEv
         }
 
         return isValidMove;
+    }
+
+    private ClientUtil getClientUtilByUsername(String username) {
+        if (username.equals(clientPlayerOne.getUsername())) {
+            return clientPlayerOne;
+        } else if (username.equals(clientPlayerTwo.getUsername())) {
+            return clientPlayerTwo;
+        } else if (username.equals(clientPlayerThree.getUsername())) {
+            return clientPlayerThree;
+        } else if (username.equals(clientPlayerFour.getUsername())) {
+            return clientPlayerFour;
+        }
+        return null;
     }
 }

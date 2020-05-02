@@ -7,16 +7,10 @@ import jass.client.eventlistener.BroadcastTurnEventListener;
 import jass.client.eventlistener.ChooseGameModeEventListener;
 import jass.client.eventlistener.PlayCardEventListener;
 import jass.client.message.ChosenGameMode;
+import jass.client.message.PlayCard;
 import jass.lib.Card;
 import jass.lib.GameMode;
-import jass.lib.message.BroadcastDeckData;
-import jass.lib.message.BroadcastGameModeData;
-import jass.lib.message.BroadcastTurnData;
-import jass.lib.message.CardData;
-import jass.lib.message.ChooseGameModeData;
-import jass.lib.message.ChosenGameModeData;
-import jass.lib.message.GameFoundData;
-import jass.lib.message.PlayCardData;
+import jass.lib.message.*;
 import jass.lib.servicelocator.ServiceLocator;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleObjectProperty;
@@ -62,9 +56,9 @@ public final class GameUtil implements Service, BroadcastDeckEventListener, Choo
 
     private int turnId;
 
-    private SimpleStringProperty startingPlayerUsername;
+    private SimpleStringProperty startingPlayerUsername = new SimpleStringProperty();
 
-    private SimpleStringProperty winningPlayerUsername;
+    private SimpleStringProperty winningPlayerUsername = new SimpleStringProperty();
 
     private ObservableList<CardData> playedCards;
 
@@ -89,6 +83,7 @@ public final class GameUtil implements Service, BroadcastDeckEventListener, Choo
         socket.addChooseGameModeEventListener(this);
         socket.addBroadcastGameModeEventListener(this);
         playerDeck = FXCollections.observableArrayList(new ArrayList<>());
+        playedCards = FXCollections.observableArrayList(new ArrayList<>());
     }
 
     @Override
@@ -169,8 +164,10 @@ public final class GameUtil implements Service, BroadcastDeckEventListener, Choo
     }
 
     @Override
-    public void onPlayCard(final PlayCardData data) {
-        // TODO
+    public void onPlayedCard(final PlayedCardData data) {
+        if(data.getplayedCardValid()) {
+            // TODO show error
+        };
     }
 
     @Override
@@ -181,6 +178,15 @@ public final class GameUtil implements Service, BroadcastDeckEventListener, Choo
         setWinningPlayerUsername(data.getWinningPlayer());
         playedCards.clear();
         playerDeck.addAll(data.getPlayedCardsClient());
+    }
+
+    public void playCard(int cardId) {
+        PlayCard playedCard = new PlayCard(new PlayCardData(this.turnId, cardId));
+
+        SocketUtil socket = ServiceLocator.get(SocketUtil.class);
+        assert socket != null;
+        socket.send(playedCard);
+        logger.info("Sent played card!");
     }
 
     public void setGame(final GameFoundData msgData) {

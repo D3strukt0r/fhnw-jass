@@ -32,12 +32,13 @@ import jass.lib.message.BroadcastTurnData;
 import jass.lib.message.ChooseGameModeData;
 import jass.lib.message.GameFoundData;
 import jass.lib.message.MessageData;
-import jass.lib.message.PlayCardData;
+import jass.lib.message.PlayedCardData;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import jass.client.entity.LoginEntity;
 import jass.lib.servicelocator.Service;
 import jass.lib.servicelocator.ServiceLocator;
+import sun.rmi.runtime.Log;
 
 import javax.net.SocketFactory;
 import javax.net.ssl.KeyManagerFactory;
@@ -256,6 +257,11 @@ public final class SocketUtil extends Thread implements Service, Closeable {
      */
     public void send(final Message msg) {
         try {
+            LoginEntity login = ServiceLocator.get(LoginEntity.class);
+            if(isLoggedIn()) {
+                msg.getRawData().setToken(login.getToken());
+                msg.getRawData().setUsername(login.getUsername());
+            }
             OutputStreamWriter out = new OutputStreamWriter(socket.getOutputStream());
             logger.info("Sending message: " + msg.toString());
             out.write(msg.toString() + "\n"); // This will send the serialized MessageData object
@@ -389,7 +395,7 @@ public final class SocketUtil extends Thread implements Service, Closeable {
             case "PlayCard":
                 for (PlayCardEventListener listener : playCardListener) {
                     logger.info("Invoking onPlayCard event on " + listener.getClass().getName());
-                    listener.onPlayCard((PlayCardData) msgData);
+                    listener.onPlayCard((PlayedCardData) msgData);
                 }
                 break;
             case "BroadcastTurn":

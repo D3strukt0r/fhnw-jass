@@ -76,6 +76,16 @@ public abstract class MessageData implements Serializable {
     private final int id;
 
     /**
+     * The Auth token.
+     */
+    private String token;
+
+    /**
+     * The Username.
+     */
+    private String username;
+
+    /**
      * The type (object name).
      */
     private final String messageType;
@@ -92,7 +102,7 @@ public abstract class MessageData implements Serializable {
      * @param id          The ID of the message.
      * @param messageType The type (object name).
      */
-    public MessageData(final int id, final String messageType) {
+    public MessageData(final int id, final String messageType, final String token) {
         this.id = id;
         this.messageType = messageType;
     }
@@ -102,6 +112,8 @@ public abstract class MessageData implements Serializable {
      */
     public MessageData(final JSONObject data) {
         id = data.getInt("id");
+        token = data.getString("token");
+        username = data.getString("username");
         messageType = data.getString("messageType");
     }
 
@@ -125,5 +137,21 @@ public abstract class MessageData implements Serializable {
      */
     public String getMessageType() {
         return messageType;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getUsername() {
+        return username;
     }
 }

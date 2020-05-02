@@ -1,43 +1,22 @@
-/*
- * fhnw-jass is jass game programmed in java for a school project.
- * Copyright (C) 2020 Manuele Vaccari
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <https://www.gnu.org/licenses/>.
- */
-
 package jass.lib.message;
 
 import org.json.JSONObject;
 
 /**
- * @author Manuele Vaccari
+ * @author Victor Hargrave & Manuele Vaccari
  * @version %I%, %G%
  * @since 0.0.1
  */
 public final class PlayCardData extends MessageData {
-    /**
-     * The game ID.
-     */
-    private final int gameId;
 
-    /**
-     * This is used by the server to notify the client to give an appropriate
-     * answer back.
-     */
-    public PlayCardData(int gameId) {
+    private final int turnId;
+
+    private final int cardId;
+
+    public PlayCardData(final int turnId, final int cardId) {
         super("PlayCard");
-        this.gameId = gameId;
+        this.turnId = turnId;
+        this.cardId = cardId;
     }
 
     /**
@@ -45,13 +24,16 @@ public final class PlayCardData extends MessageData {
      */
     public PlayCardData(final JSONObject data) {
         super(data);
-        this.gameId = data.getInt("gameId");
+        turnId = data.getInt("turnId");
+        cardId = data.getInt("cardId");
     }
 
-    /**
-     * @return Returns the game ID.
-     */
-    public int getGameId() {
-        return gameId;
+
+    public int getTurnId() {
+        return turnId;
+    }
+
+    public int getCardId() {
+        return cardId;
     }
 }

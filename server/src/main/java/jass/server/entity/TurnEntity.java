@@ -29,7 +29,7 @@ public final class TurnEntity extends Entity {
     /**
      * The round that this turn belongs to.
      */
-    @DatabaseField(foreign = true)
+    @DatabaseField(foreign = true, canBeNull = false)
     private RoundEntity round;
 
     /**
@@ -41,7 +41,7 @@ public final class TurnEntity extends Entity {
     /**
      * The starting player of this turn
      */
-    @DatabaseField(foreign = true)
+    @DatabaseField(foreign = true, canBeNull = false)
     private UserEntity startingPlayer;
 
     /**

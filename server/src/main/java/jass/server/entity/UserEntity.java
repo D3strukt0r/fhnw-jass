@@ -62,6 +62,9 @@ public final class UserEntity extends Entity {
     @DatabaseField(canBeNull = false)
     private String password;
 
+    @DatabaseField
+    private String token;
+
     /**
      * Whether the user is currently online (connected) or not.
      */
@@ -205,5 +208,13 @@ public final class UserEntity extends Entity {
     public UserEntity setLastLogin(final Date lastLogin) {
         this.lastLogin = lastLogin;
         return this;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
+
+    public String getToken() {
+        return this.token;
     }
 }

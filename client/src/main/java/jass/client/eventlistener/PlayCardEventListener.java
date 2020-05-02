@@ -1,6 +1,6 @@
 package jass.client.eventlistener;
 
-import jass.lib.message.PlayCardData;
+import jass.lib.message.PlayedCardData;
 
 /**
  * @author Manuele Vaccari
@@ -13,5 +13,5 @@ public interface PlayCardEventListener {
      *
      * @param data The data (basically the ID).
      */
-    void onPlayCard(PlayCardData data);
+    void onPlayCard(PlayedCardData data);
 }
