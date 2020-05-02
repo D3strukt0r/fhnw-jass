@@ -26,11 +26,11 @@ import jass.server.util.ClientUtil;
  * @version %I%, %G%
  * @since 0.0.1
  */
-public final class BroadcastPlayedCard extends Message {
+public final class BroadcastTurn extends Message {
     /**
      * @param rawData The data (still not casted)
      */
-    public BroadcastPlayedCard(final MessageData rawData) {
+    public BroadcastTurn(final MessageData rawData) {
         super(rawData);
     }
 

@@ -3,7 +3,7 @@ package jass.client.util;
 import jass.client.entity.LoginEntity;
 import jass.client.eventlistener.BroadcastDeckEventListener;
 import jass.client.eventlistener.BroadcastGameModeEventListener;
-import jass.client.eventlistener.BroadcastPlayedCardEventListener;
+import jass.client.eventlistener.BroadcastTurnEventListener;
 import jass.client.eventlistener.ChooseGameModeEventListener;
 import jass.client.eventlistener.PlayCardEventListener;
 import jass.client.message.ChosenGameMode;
@@ -11,7 +11,7 @@ import jass.lib.Card;
 import jass.lib.GameMode;
 import jass.lib.message.BroadcastDeckData;
 import jass.lib.message.BroadcastGameModeData;
-import jass.lib.message.BroadcastPlayedCardData;
+import jass.lib.message.BroadcastTurnData;
 import jass.lib.message.CardData;
 import jass.lib.message.ChooseGameModeData;
 import jass.lib.message.ChosenGameModeData;
@@ -20,6 +20,7 @@ import jass.lib.message.PlayCardData;
 import jass.lib.servicelocator.ServiceLocator;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.ChoiceDialog;
@@ -38,7 +39,7 @@ import java.util.List;
  * @version %I%, %G%
  * @since 0.0.1
  */
-public final class GameUtil implements Service, BroadcastDeckEventListener, ChooseGameModeEventListener, BroadcastGameModeEventListener, PlayCardEventListener, BroadcastPlayedCardEventListener {
+public final class GameUtil implements Service, BroadcastDeckEventListener, ChooseGameModeEventListener, BroadcastGameModeEventListener, PlayCardEventListener, BroadcastTurnEventListener {
     /**
      * The logger to print to console and save in a .log file.
      */
@@ -58,6 +59,14 @@ public final class GameUtil implements Service, BroadcastDeckEventListener, Choo
      * The deck of the player.
      */
     private ObservableList<CardData> playerDeck;
+
+    private int turnId;
+
+    private SimpleStringProperty startingPlayerUsername;
+
+    private SimpleStringProperty winningPlayerUsername;
+
+    private ObservableList<CardData> playedCards;
 
     /**
      * The game mode data.
@@ -165,63 +174,72 @@ public final class GameUtil implements Service, BroadcastDeckEventListener, Choo
     }
 
     @Override
-    public void onBroadcastPlayedCard(final BroadcastPlayedCardData data) {
-        // TODO
+    public void onBroadcastTurn(final BroadcastTurnData data) {
+        logger.info("Successfully received turn!");
+        turnId = data.getTurnId();
+        setStartingPlayerUsername(data.getStartingPlayer());
+        setWinningPlayerUsername(data.getWinningPlayer());
+        playedCards.clear();
+        playerDeck.addAll(data.getPlayedCardsClient());
     }
 
-    /**
-     * @param msgData The game.
-     */
     public void setGame(final GameFoundData msgData) {
         this.game = msgData;
     }
 
-    /**
-     * @return Returns the game.
-     */
     public GameFoundData getGame() {
         return game;
     }
 
-    /**
-     * @return Returns the deck ID.
-     */
     public int getDeckId() {
         return deckId;
     }
 
-    /**
-     * @param deckId The deck ID.
-     */
     public void setDeckId(final int deckId) {
         this.deckId = deckId;
     }
 
-    /**
-     * @return Returns the deck of the player.
-     */
     public ObservableList<CardData> getPlayerDeck() {
         return playerDeck;
     }
 
-    /**
-     * @param playerDeck The deck of the player.
-     */
     public void setPlayerDeck(final ArrayList<CardData> playerDeck) {
         this.playerDeck = FXCollections.observableArrayList(playerDeck);
     }
 
-    /**
-     * @return Returns the game mode property.
-     */
     public SimpleObjectProperty<GameMode> getGameModeProperty() {
         return gameMode;
     }
 
-    /**
-     * @return Returns the trumpf property.
-     */
     public SimpleObjectProperty<Card.Suit> getTrumpfProperty() {
         return trumpf;
+    }
+
+    public int getTurnId() {
+        return turnId;
+    }
+
+    public void setTurnId(int turnId) {
+        this.turnId = turnId;
+    }
+
+    public SimpleStringProperty getStartingPlayerUsername() {
+        return startingPlayerUsername;
+    }
+
+    public void setStartingPlayerUsername(String startingPlayerUsername) {
+        this.startingPlayerUsername.set(startingPlayerUsername);
+    }
+
+    public SimpleStringProperty getWinningPlayerUsername() {
+        return winningPlayerUsername;
+    }
+
+    public void setWinningPlayerUsername(String winningPlayerUsername) {
+        this.winningPlayerUsername.set(winningPlayerUsername);
+    }
+
+    public ObservableList<CardData> getPlayedCards() {
+        return playedCards;
     }
 }

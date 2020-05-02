@@ -397,7 +397,7 @@ public final class GameController extends Controller implements DisconnectEventL
             }
         });
         logger.info("listener created for cards");
-        enableButtons();
+        disableButtons(true);
         logger.info("buttons enabled");
         updateUserNames();
         logger.info("updated user names");
@@ -582,7 +582,7 @@ public final class GameController extends Controller implements DisconnectEventL
      *
      * @author Sasa Trajkova
      */
-    public void enableButtons() {
+    public void disableButtons(boolean disable) {
         //TODO enable buttons for the cards that could be played in the round based on game mode
 
         LoginEntity login = ServiceLocator.get(LoginEntity.class);

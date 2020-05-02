@@ -1,27 +1,22 @@
 package jass.server.util;
 
 import jass.lib.GameMode;
-import jass.lib.message.BroadcastGameModeData;
-import jass.lib.message.ChooseGameModeData;
-import jass.lib.message.ChosenGameModeData;
-import jass.lib.message.GameFoundData;
-import jass.lib.message.PlayedCardData;
+import jass.lib.message.*;
 import jass.lib.servicelocator.ServiceLocator;
 import jass.server.entity.*;
 import jass.server.eventlistener.ChosenGameModeEventListener;
 import jass.server.eventlistener.PlayedCardEventListener;
-import jass.server.message.BroadcastGameMode;
-import jass.server.message.ChooseGameMode;
-import jass.server.message.GameFound;
-import jass.server.message.Message;
+import jass.server.message.*;
 import jass.server.repository.GameRepository;
 import jass.server.repository.RoundRepository;
 import jass.server.repository.TeamRepository;
+import jass.server.repository.TurnRepository;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author Thomas Weber, Manuele Vaccari
@@ -163,6 +158,14 @@ public final class GameUtil implements ChosenGameModeEventListener, PlayedCardEv
             }
             RoundRepository.getSingleton(null).update(currentRound);
             broadcast(broadcastGameMode);
+
+            // send turn information to clients
+            TurnEntity turn = addNewTurn(client.getUser(), currentRound);
+            BroadcastTurn broadcastTurn = new BroadcastTurn(new BroadcastTurnData(turn.getId(),
+                turn.getStartingPlayer().getUsername(), null,
+                turn.getCards().stream().map(CardEntity::toCardData).collect(Collectors.toList())
+                ));
+            broadcast(broadcastTurn);
         }
     }
 
@@ -216,6 +219,12 @@ public final class GameUtil implements ChosenGameModeEventListener, PlayedCardEv
         // TODO
 
         // If playedCard is first card in current turn no validations have to be made, just set the playedCard as first card of turn
+    }
+
+    private TurnEntity addNewTurn(UserEntity startingPlayer, RoundEntity round) {
+        TurnEntity turn = new TurnEntity(round, startingPlayer);
+        TurnRepository.getSingleton(null).add(turn);
+        return turn;
     }
 
     /**

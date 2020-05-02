@@ -5,6 +5,10 @@ import com.j256.ormlite.table.DatabaseTable;
 import jass.lib.Card;
 import jass.lib.GameMode;
 import jass.lib.database.Entity;
+import jass.lib.message.CardData;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A model with all known (and cached) turns.
@@ -35,6 +39,12 @@ public final class TurnEntity extends Entity {
     private UserEntity winningUser;
 
     /**
+     * The starting player of this turn
+     */
+    @DatabaseField(foreign = true)
+    private UserEntity startingPlayer;
+
+    /**
      * The first played card of the turn
      */
     @DatabaseField(foreign = true)
@@ -63,6 +73,11 @@ public final class TurnEntity extends Entity {
      * at least package visibility.
      */
     public TurnEntity() {
+    }
+
+    public TurnEntity(RoundEntity round, UserEntity startingPlayer) {
+        this.round = round;
+        this.startingPlayer = startingPlayer;
     }
 
     /**
@@ -101,6 +116,20 @@ public final class TurnEntity extends Entity {
      */
     public void setWinningUser(UserEntity winningUser) {
         this.winningUser = winningUser;
+    }
+
+    /**
+     * @return Returns the starting player.
+     */
+    public UserEntity  getStartingPlayer() {
+        return startingPlayer;
+    }
+
+    /**
+     * @param startingPlayer
+     */
+    public void setStartingPlayer(UserEntity startingPlayer) {
+        this.startingPlayer = startingPlayer;
     }
 
     /**
@@ -157,5 +186,14 @@ public final class TurnEntity extends Entity {
      */
     public void setCardFour(CardEntity cardFour) {
         this.cardFour = cardFour;
+    }
+
+    public ArrayList<CardEntity> getCards() {
+        ArrayList<CardEntity> cards = new ArrayList<>();
+        if(cardOne != null) cards.add(cardOne);
+        if(cardTwo != null) cards.add(cardTwo);
+        if(cardThree != null) cards.add(cardThree);
+        if(cardFour != null) cards.add(cardFour);
+        return cards;
     }
 }
