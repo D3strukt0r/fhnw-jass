@@ -5,7 +5,7 @@ import jass.client.eventlistener.BroadcastDeckEventListener;
 import jass.client.eventlistener.BroadcastGameModeEventListener;
 import jass.client.eventlistener.BroadcastTurnEventListener;
 import jass.client.eventlistener.ChooseGameModeEventListener;
-import jass.client.eventlistener.PlayCardEventListener;
+import jass.client.eventlistener.PlayedCardEventListener;
 import jass.client.message.ChosenGameMode;
 import jass.client.message.PlayCard;
 import jass.lib.Card;
@@ -17,6 +17,8 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.ChoiceDialog;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
@@ -33,7 +35,7 @@ import java.util.List;
  * @version %I%, %G%
  * @since 0.0.1
  */
-public final class GameUtil implements Service, BroadcastDeckEventListener, ChooseGameModeEventListener, BroadcastGameModeEventListener, PlayCardEventListener, BroadcastTurnEventListener {
+public final class GameUtil implements Service, BroadcastDeckEventListener, ChooseGameModeEventListener, BroadcastGameModeEventListener, PlayedCardEventListener, BroadcastTurnEventListener {
     /**
      * The logger to print to console and save in a .log file.
      */
@@ -165,8 +167,14 @@ public final class GameUtil implements Service, BroadcastDeckEventListener, Choo
 
     @Override
     public void onPlayedCard(final PlayedCardData data) {
-        if(data.getplayedCardValid()) {
-            // TODO show error
+        if(data.getplayedCardValid() == false) {
+            // TODO translate error
+            Alert alert = new Alert(Alert.AlertType.ERROR, "Move invalid", ButtonType.YES);
+            alert.showAndWait();
+
+            if (alert.getResult() == ButtonType.YES) {
+                alert.close();
+            }
         };
     }
 

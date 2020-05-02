@@ -18,7 +18,7 @@ public final class PlayedCardData extends MessageData {
      * answer back.
      */
     public PlayedCardData(boolean playedCardValid) {
-        super("PlayedCardValid");
+        super("PlayedCard");
         this.playedCardValid = playedCardValid;
     }
 

@@ -24,7 +24,7 @@ import jass.client.eventlistener.BroadcastTurnEventListener;
 import jass.client.eventlistener.ChooseGameModeEventListener;
 import jass.client.eventlistener.DisconnectEventListener;
 import jass.client.eventlistener.GameFoundEventListener;
-import jass.client.eventlistener.PlayCardEventListener;
+import jass.client.eventlistener.PlayedCardEventListener;
 import jass.client.message.Message;
 import jass.lib.message.BroadcastDeckData;
 import jass.lib.message.BroadcastGameModeData;
@@ -38,7 +38,6 @@ import org.apache.logging.log4j.Logger;
 import jass.client.entity.LoginEntity;
 import jass.lib.servicelocator.Service;
 import jass.lib.servicelocator.ServiceLocator;
-import sun.rmi.runtime.Log;
 
 import javax.net.SocketFactory;
 import javax.net.ssl.KeyManagerFactory;
@@ -113,7 +112,7 @@ public final class SocketUtil extends Thread implements Service, Closeable {
     /**
      * A list of all objects listening to a play card event.
      */
-    private final ArrayList<PlayCardEventListener> playCardListener = new ArrayList<>();
+    private final ArrayList<PlayedCardEventListener> playCardListener = new ArrayList<>();
 
     /**
      * A list of objects listening to broadcast played card event.
@@ -349,7 +348,7 @@ public final class SocketUtil extends Thread implements Service, Closeable {
      * @author Manuele Vaccari & Victor Hargrave
      * @since 0.0.1
      */
-    public void addPlayCardEventListener(final PlayCardEventListener listener) {
+    public void addPlayCardEventListener(final PlayedCardEventListener listener) {
         playCardListener.add(listener);
     }
 
@@ -392,10 +391,10 @@ public final class SocketUtil extends Thread implements Service, Closeable {
                     listener.onBroadcastGameMode((BroadcastGameModeData) msgData);
                 }
                 break;
-            case "PlayCard":
-                for (PlayCardEventListener listener : playCardListener) {
+            case "PlayedCard":
+                for (PlayedCardEventListener listener : playCardListener) {
                     logger.info("Invoking onPlayCard event on " + listener.getClass().getName());
-                    listener.onPlayCard((PlayedCardData) msgData);
+                    listener.onPlayedCard((PlayedCardData) msgData);
                 }
                 break;
             case "BroadcastTurn":

@@ -96,15 +96,19 @@ public abstract class MessageData implements Serializable {
     public MessageData(final String messageType) {
         id = createId();
         this.messageType = messageType;
+        this.username = this.username != "" || this.username != null ? "" : this.getUsername();
+        this.token = this.token != "" || this.token != null ? "" : this.getToken();
     }
 
     /**
      * @param id          The ID of the message.
      * @param messageType The type (object name).
      */
-    public MessageData(final int id, final String messageType, final String token) {
+    public MessageData(final int id, final String messageType) {
         this.id = id;
         this.messageType = messageType;
+        this.username = this.username != "" || this.username != null ? "" : this.getUsername();
+        this.token = this.token != "" || this.token != null ? "" : this.getToken();
     }
 
     /**

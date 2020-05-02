@@ -47,25 +47,25 @@ public final class TurnEntity extends Entity {
     /**
      * The first played card of the turn
      */
-    @DatabaseField(foreign = true)
+    @DatabaseField(foreign = true, foreignAutoRefresh = true)
     private CardEntity cardOne;
 
     /**
      * The second played card of the turn
      */
-    @DatabaseField(foreign = true)
+    @DatabaseField(foreign = true, foreignAutoRefresh = true)
     private CardEntity cardTwo;
 
     /**
      * The third played card of the turn
      */
-    @DatabaseField(foreign = true)
+    @DatabaseField(foreign = true, foreignAutoRefresh = true)
     private CardEntity cardThree;
 
     /**
      * The fourth played card of the turn
      */
-    @DatabaseField(foreign = true)
+    @DatabaseField(foreign = true, foreignAutoRefresh = true)
     private CardEntity cardFour;
 
     /**
@@ -195,5 +195,12 @@ public final class TurnEntity extends Entity {
         if(cardThree != null) cards.add(cardThree);
         if(cardFour != null) cards.add(cardFour);
         return cards;
+    }
+
+    public void addCard(CardEntity card) {
+        if(cardOne == null) cardOne = card;
+        else if (cardTwo == null) cardTwo = card;
+        else if (cardThree == null) cardThree = card;
+        else if (cardFour == null) cardFour = card;
     }
 }

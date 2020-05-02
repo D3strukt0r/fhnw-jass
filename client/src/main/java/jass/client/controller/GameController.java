@@ -398,10 +398,13 @@ public final class GameController extends Controller implements DisconnectEventL
         initializePlayerDeckListener();
         initializeGameModeListener();
         initializeStartingPlayerListener();
+        initializePlayedCardsListener();
         initializeWinningPlayerListener();
-        logger.info("listeners created");
+        logger.info("observable listeners created");
         disableButtons(true);
-        logger.info("card buttons disabled");
+        logger.info("buttons disabled");
+        addClickListenerToCardButtons();
+        logger.info("button click listeners created");
         updateUserNames();
         logger.info("updated user names");
 
@@ -434,10 +437,17 @@ public final class GameController extends Controller implements DisconnectEventL
     private void initializePlayerDeckListener() {
         gameUtil.getPlayerDeck().addListener((ListChangeListener<CardData>) c -> {
             logger.info("listener was activated. Now updating cards");
-            logger.info("here's a card" + gameUtil.getPlayerDeck().get(0).getSuit());
             if (gameUtil.getPlayerDeck().size() == 9) {
                 updateCardImages();
             }
+        });
+    }
+
+    private void initializePlayedCardsListener() {
+        gameUtil.getPlayedCards().addListener((ListChangeListener<CardData>) c -> {
+            Platform.runLater(() -> {
+                updatePlayedCardImages();
+            });
         });
     }
 
@@ -483,7 +493,56 @@ public final class GameController extends Controller implements DisconnectEventL
         });
     }
 
+    /**
+     * Disconnect from the server and returns to the server connection window.
+     */
+    @FXML
+    private void clickOnDisconnect() {
+        ServiceLocator.remove(LoginEntity.class);
+        SocketUtil socket = ServiceLocator.get(SocketUtil.class);
+        if (socket != null) { // Not necessary but keeps IDE happy
+            socket.close();
+        }
+        ServiceLocator.remove(SocketUtil.class);
+        WindowUtil.switchToNewWindow(view, ServerConnectionView.class);
+    }
 
+    /**
+     * Keeps the server connection but returns to the login window.
+     */
+    @FXML
+    public void clickOnLogout() {
+        SocketUtil socket = ServiceLocator.get(SocketUtil.class);
+        assert socket != null;
+
+        Logout logoutMsg = new Logout(new LogoutData());
+        socket.send(logoutMsg);
+        ServiceLocator.remove(LoginEntity.class);
+        WindowUtil.switchToNewWindow(view, LoginView.class);
+    }
+
+    /**
+     * Shuts down the application.
+     */
+    @FXML
+    private void clickOnExit() {
+        Platform.exit();
+    }
+
+    /**
+     * Opens the about window.
+     */
+    @FXML
+    public void clickOnAbout() {
+        WindowUtil.openInNewWindow(AboutView.class);
+    }
+
+    /**
+     * @param view The view.
+     */
+    public void setView(final GameView view) {
+        this.view = view;
+    }
 
     /**
      * Display card images in the right player pane.
@@ -546,6 +605,40 @@ public final class GameController extends Controller implements DisconnectEventL
         }
     }
 
+    private void updatePlayedCardImages() {
+        CardData card1 = gameUtil.getPlayedCards().get(0);
+        CardData card2 = gameUtil.getPlayedCards().get(1);
+        CardData card3 = gameUtil.getPlayedCards().get(2);
+        CardData card4 = gameUtil.getPlayedCards().get(3);
+
+        LoginEntity login = ServiceLocator.get(LoginEntity.class);
+        assert login != null;
+        if (gameUtil.getGame().getPlayerOne().equals(gameUtil.getStartingPlayerUsername())) {
+            if(card1 != null) setImage(getCardPath(card1.getRank(), card1.getSuit()), user1played);
+            if(card2 != null) setImage(getCardPath(card2.getRank(), card2.getSuit()), user2played);
+            if(card3 != null) setImage(getCardPath(card3.getRank(), card3.getSuit()), user3played);
+            if(card4 != null) setImage(getCardPath(card4.getRank(), card4.getSuit()), user4played);
+        }
+        if (gameUtil.getGame().getPlayerTwo().equals(gameUtil.getStartingPlayerUsername())) {
+            if(card1 != null) setImage(getCardPath(card1.getRank(), card1.getSuit()), user2played);
+            if(card2 != null) setImage(getCardPath(card2.getRank(), card2.getSuit()), user3played);
+            if(card3 != null) setImage(getCardPath(card3.getRank(), card3.getSuit()), user4played);
+            if(card4 != null) setImage(getCardPath(card4.getRank(), card4.getSuit()), user1played);
+        }
+        if (gameUtil.getGame().getPlayerThree().equals(gameUtil.getStartingPlayerUsername())) {
+            if(card1 != null) setImage(getCardPath(card1.getRank(), card1.getSuit()), user3played);
+            if(card2 != null) setImage(getCardPath(card2.getRank(), card2.getSuit()), user4played);
+            if(card3 != null) setImage(getCardPath(card3.getRank(), card3.getSuit()), user1played);
+            if(card4 != null) setImage(getCardPath(card4.getRank(), card4.getSuit()), user2played);
+        }
+        if (gameUtil.getGame().getPlayerFour().equals(gameUtil.getStartingPlayerUsername())) {
+            if(card1 != null) setImage(getCardPath(card1.getRank(), card1.getSuit()), user4played);
+            if(card2 != null) setImage(getCardPath(card2.getRank(), card2.getSuit()), user1played);
+            if(card3 != null) setImage(getCardPath(card3.getRank(), card3.getSuit()), user2played);
+            if(card4 != null) setImage(getCardPath(card4.getRank(), card4.getSuit()), user3played);
+        }
+    }
+
     /**
      * @param rank The rank of the card.
      * @param suit The suit of the card.
@@ -569,57 +662,6 @@ public final class GameController extends Controller implements DisconnectEventL
             new BackgroundSize(74, 113, true, true, true, false));
         Background background = new Background(backgroundImage);
         button.setBackground(background);
-    }
-
-    /**
-     * Disconnect from the server and returns to the server connection window.
-     */
-    @FXML
-    private void clickOnDisconnect() {
-        ServiceLocator.remove(LoginEntity.class);
-        SocketUtil socket = ServiceLocator.get(SocketUtil.class);
-        if (socket != null) { // Not necessary but keeps IDE happy
-            socket.close();
-        }
-        ServiceLocator.remove(SocketUtil.class);
-        WindowUtil.switchToNewWindow(view, ServerConnectionView.class);
-    }
-
-    /**
-     * Keeps the server connection but returns to the login window.
-     */
-    @FXML
-    public void clickOnLogout() {
-        SocketUtil socket = ServiceLocator.get(SocketUtil.class);
-        assert socket != null;
-
-        Logout logoutMsg = new Logout(new LogoutData());
-        socket.send(logoutMsg);
-        ServiceLocator.remove(LoginEntity.class);
-        WindowUtil.switchToNewWindow(view, LoginView.class);
-    }
-
-    /**
-     * Shuts down the application.
-     */
-    @FXML
-    private void clickOnExit() {
-        Platform.exit();
-    }
-
-    /**
-     * Opens the about window.
-     */
-    @FXML
-    public void clickOnAbout() {
-        WindowUtil.openInNewWindow(AboutView.class);
-    }
-
-    /**
-     * @param view The view.
-     */
-    public void setView(final GameView view) {
-        this.view = view;
     }
 
     /**
@@ -789,11 +831,9 @@ public final class GameController extends Controller implements DisconnectEventL
         for (int i = 0; i < 9; i++) {
             Button button = cardButtons.get(i);
             int finalI = i;
-            button.setOnAction(new EventHandler<ActionEvent>() {
-                @Override public void handle(ActionEvent e) {
-                    CardData card = gameUtil.getPlayerDeck().get(finalI);
-                    gameUtil.playCard(card.getCardId());
-                }
+            button.setOnAction(e -> {
+                CardData card = gameUtil.getPlayerDeck().get(finalI);
+                gameUtil.playCard(card.getCardId());
             });
         }
     }

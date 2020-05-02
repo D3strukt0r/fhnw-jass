@@ -7,11 +7,11 @@ import jass.lib.message.PlayedCardData;
  * @version %I%, %G%
  * @since 0.0.1
  */
-public interface PlayCardEventListener {
+public interface PlayedCardEventListener {
     /**
      * Executes when a user is requested to play a card.
      *
      * @param data The data (basically the ID).
      */
-    void onPlayCard(PlayedCardData data);
+    void onPlayedCard(PlayedCardData data);
 }

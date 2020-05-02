@@ -180,7 +180,7 @@ public final class ClientUtil extends Thread {
      */
     private boolean AuthenticateRequest(MessageData msgData) {
         UserEntity user = UserRepository.getSingleton(null).getByUsername(msgData.getUsername());
-        if(user != null && user.getToken() == msgData.getToken()) {
+        if(user != null && user.getToken().equals(msgData.getToken())) {
             return true;
         }
         return false;
