@@ -459,4 +459,23 @@ public final class DeckEntity extends Entity {
         cards.add(cardNine);
         return cards;
     }
+
+    /**
+     * @return Returns booleans if cards were played as an array.
+     */
+    public ArrayList<Boolean> getCardsHaveBeenPlayed() {
+        ArrayList<Boolean> cardsHaveBeenPlayed = new ArrayList<>();
+        cardsHaveBeenPlayed.add(cardOneHasBeenPlayed);
+        cardsHaveBeenPlayed.add(cardTwoHasBeenPlayed);
+        cardsHaveBeenPlayed.add(cardThreeHasBeenPlayed);
+        cardsHaveBeenPlayed.add(cardFourHasBeenPlayed);
+        cardsHaveBeenPlayed.add(cardFiveHasBeenPlayed);
+        cardsHaveBeenPlayed.add(cardSixHasBeenPlayed);
+        cardsHaveBeenPlayed.add(cardSevenHasBeenPlayed);
+        cardsHaveBeenPlayed.add(cardEightHasBeenPlayed);
+        cardsHaveBeenPlayed.add(cardNineHasBeenPlayed);
+        return cardsHaveBeenPlayed;
+    }
+
+
 }
