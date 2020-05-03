@@ -55,6 +55,15 @@ public class GameUtilTest {
     private static CardEntity firstCardOfTurnT3 = new CardEntity();
     private static CardEntity playedCardT3 = new CardEntity();
 
+    /**
+     * Test four properties
+     * Test for validateMoveTrump() function
+     */
+    private static DeckEntity deckT4 = new DeckEntity();
+    private static RoundEntity roundT4 = new RoundEntity();
+    private static CardEntity firstCardOfTurnT4 = new CardEntity();
+    private static CardEntity playedCardT4 = new CardEntity();
+
     @Before
     public void createTestData() {
         ranks = insertRankSeedData();
@@ -64,6 +73,7 @@ public class GameUtilTest {
         insertTestOneData();
         insertTestTwoData();
         insertTestThreeData();
+        insertTestFourData();
     }
 
     /**
@@ -92,11 +102,11 @@ public class GameUtilTest {
         deckT1.setCardFiveHasBeenPlayed(true);
         deckT1.setCardSix(cards.get(28));
         deckT1.setCardSixHasBeenPlayed(false);
-        deckT1.setCardSeven(cards.get(29));
+        deckT1.setCardSeven(cards.get(26));
         deckT1.setCardSevenHasBeenPlayed(false);
         deckT1.setCardEight(cards.get(30));
         deckT1.setCardEightHasBeenPlayed(true);
-        deckT1.setCardNine(cards.get(6));
+        deckT1.setCardNine(cards.get(5));
         deckT1.setCardNineHasBeenPlayed(false);
 
         firstCardOfTurnT1 = cards.get(0);
@@ -136,18 +146,18 @@ public class GameUtilTest {
         deckT2.setCardNine(cards.get(35));
         deckT2.setCardNineHasBeenPlayed(false);
 
-        firstCardOfTurnT2 = cards.get(27);
+        firstCardOfTurnT2 = cards.get(24);
         playedCardT2 = deckT2.getCardThree();
     }
 
     /**
-     * Test two data:
+     * Test three data:
      * - Game Mode Trump
      * - Trump Suite Clubs
      * - First turn of round is queen of Spades
      * - The player has two cards with suit spade in his hand, one already played & one still in his hands
      * - The player plays an Ace of hearts.
-     * - Assertion is that this move is false/invalid, as he must have played one of the spades.
+     * - Assertion is that this move is false/invalid, as he must have played the remaining spade.
      */
     private void insertTestThreeData() {
         roundT3.setGameMode(GameMode.TRUMPF);
@@ -158,7 +168,7 @@ public class GameUtilTest {
         deckT3.setCardOneHasBeenPlayed(true);
         deckT3.setCardTwo(cards.get(23));
         deckT3.setCardTwoHasBeenPlayed(false);
-        deckT3.setCardThree(cards.get(9));
+        deckT3.setCardThree(cards.get(8));
         deckT3.setCardThreeHasBeenPlayed(false);
         deckT3.setCardFour(cards.get(30));
         deckT3.setCardFourHasBeenPlayed(false);
@@ -173,8 +183,45 @@ public class GameUtilTest {
         deckT3.setCardNine(cards.get(35));
         deckT3.setCardNineHasBeenPlayed(false);
 
-        firstCardOfTurnT3 = cards.get(27);
+        firstCardOfTurnT3 = cards.get(24);
         playedCardT3 = deckT3.getCardThree();
+    }
+
+    /**
+     * Test four data:
+     * - Game Mode Trump
+     * - Trump Suite Clubs
+     * - First turn of round is queen of Spades
+     * - The player had two cards with suit spade in his hand but has already played both before this turn
+     * - The player plays an Ace of clubs.
+     * - Assertion is that this move is true/valid, as clubs are trump.
+     */
+    private void insertTestFourData() {
+        roundT4.setGameMode(GameMode.TRUMPF);
+        roundT4.setTrumpfSuit(Card.Suit.Clubs);
+        deckT4.setRound(roundT4);
+
+        deckT4.setCardOne(cards.get(20));
+        deckT4.setCardOneHasBeenPlayed(true);
+        deckT4.setCardTwo(cards.get(23));
+        deckT4.setCardTwoHasBeenPlayed(true);
+        deckT4.setCardThree(cards.get(9));
+        deckT4.setCardThreeHasBeenPlayed(false);
+        deckT4.setCardFour(cards.get(30));
+        deckT4.setCardFourHasBeenPlayed(false);
+        deckT4.setCardFive(cards.get(31));
+        deckT4.setCardFiveHasBeenPlayed(true);
+        deckT4.setCardSix(cards.get(32));
+        deckT4.setCardSixHasBeenPlayed(false);
+        deckT4.setCardSeven(cards.get(33));
+        deckT4.setCardSevenHasBeenPlayed(false);
+        deckT4.setCardEight(cards.get(34));
+        deckT4.setCardEightHasBeenPlayed(false);
+        deckT4.setCardNine(cards.get(35));
+        deckT4.setCardNineHasBeenPlayed(false);
+
+        firstCardOfTurnT4 = cards.get(24);
+        playedCardT4 = deckT4.getCardNine();
     }
 
     @Test
@@ -182,6 +229,7 @@ public class GameUtilTest {
         assertTrue(GameUtil.validateMoveTrump(playedCardT1, deckT1, firstCardOfTurnT1, String.valueOf(roundT1.getTrumpfSuit())));
         assertTrue(GameUtil.validateMoveTrump(playedCardT2, deckT2, firstCardOfTurnT2, String.valueOf(roundT2.getTrumpfSuit())));
         assertFalse(GameUtil.validateMoveTrump(playedCardT3, deckT3, firstCardOfTurnT3, String.valueOf(roundT3.getTrumpfSuit())));
+        assertTrue(GameUtil.validateMoveTrump(playedCardT4, deckT4, firstCardOfTurnT4, String.valueOf(roundT4.getTrumpfSuit())));
     }
 
     /**
@@ -189,7 +237,6 @@ public class GameUtilTest {
      */
     private ArrayList<RankEntity> insertRankSeedData() {
         ArrayList<RankEntity> createdRanks = new ArrayList<>();
-        createdRanks.add(new RankEntity().setId(1).setKey("6").setPointsTrumpf(0).setPointsObeAbe(0).setPointsOndeufe(11));
         createdRanks.add(new RankEntity().setId(1).setKey("6").setPointsTrumpf(0).setPointsObeAbe(0).setPointsOndeufe(11));
         createdRanks.add(new RankEntity().setId(2).setKey("7").setPointsTrumpf(0).setPointsObeAbe(0).setPointsOndeufe(0));
         createdRanks.add(new RankEntity().setId(3).setKey("8").setPointsTrumpf(0).setPointsObeAbe(8).setPointsOndeufe(8));
@@ -221,7 +268,7 @@ public class GameUtilTest {
         ArrayList<CardEntity> createdCards = new ArrayList<>();
         int addend = 0;
         for (int i = 0; i <= 3; i++) {
-            for (int j = 0; j <= 9; j++) {
+            for (int j = 0; j <= 8; j++) {
                 createdCards.add((new CardEntity())
                     .setId(j + addend)
                     .setRank(ranks.get(j))
@@ -234,7 +281,7 @@ public class GameUtilTest {
                 System.out.println(" Suit: " + suits.get(i).getKey());
 
             }
-            addend += 10;
+            addend += 9;
         }
         return createdCards;
     }

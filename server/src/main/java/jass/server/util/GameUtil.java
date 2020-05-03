@@ -252,7 +252,7 @@ public final class GameUtil implements ChosenGameModeEventListener, PlayedCardEv
     /**
      * @author: Thomas Weber
      *
-     * Validates a move from one of the clients for the game mode "Trump"
+     * Validates a move from one of the clients for the game mode "Trump". Unit test of this method in "GameUtilTest"
      *
      * @param playedCard The card which has been played
      * @param deck The deck of the client to have made the move
