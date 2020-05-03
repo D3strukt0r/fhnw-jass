@@ -197,26 +197,26 @@ public final class GameUtil implements Service, BroadcastDeckEventListener, Choo
         if(getGame().getPlayerOne().equals(getStartingPlayerUsername().getValue())) {
             if(numberOfPlayedCards == 0) player = getGame().getPlayerOne();
             if(numberOfPlayedCards == 1) player = getGame().getPlayerTwo();
-            if(numberOfPlayedCards == 3) player = getGame().getPlayerThree();
-            if(numberOfPlayedCards == 4) player = getGame().getPlayerFour();
+            if(numberOfPlayedCards == 2) player = getGame().getPlayerThree();
+            if(numberOfPlayedCards == 3) player = getGame().getPlayerFour();
         }
         if(getGame().getPlayerTwo().equals(getStartingPlayerUsername().getValue())) {
             if(numberOfPlayedCards == 0) player = getGame().getPlayerTwo();
             if(numberOfPlayedCards == 1) player = getGame().getPlayerThree();
-            if(numberOfPlayedCards == 3) player = getGame().getPlayerFour();
-            if(numberOfPlayedCards == 4) player = getGame().getPlayerOne();
+            if(numberOfPlayedCards == 2) player = getGame().getPlayerFour();
+            if(numberOfPlayedCards == 3) player = getGame().getPlayerOne();
         }
         if(getGame().getPlayerThree().equals(getStartingPlayerUsername().getValue())) {
             if(numberOfPlayedCards == 0) player = getGame().getPlayerThree();
             if(numberOfPlayedCards == 1) player = getGame().getPlayerFour();
-            if(numberOfPlayedCards == 3) player = getGame().getPlayerOne();
-            if(numberOfPlayedCards == 4) player = getGame().getPlayerTwo();
+            if(numberOfPlayedCards == 2) player = getGame().getPlayerOne();
+            if(numberOfPlayedCards == 3) player = getGame().getPlayerTwo();
         }
         if(getGame().getPlayerFour().equals(getStartingPlayerUsername().getValue())) {
             if(numberOfPlayedCards == 0) player = getGame().getPlayerFour();
             if(numberOfPlayedCards == 1) player = getGame().getPlayerOne();
-            if(numberOfPlayedCards == 3) player = getGame().getPlayerTwo();
-            if(numberOfPlayedCards == 4) player = getGame().getPlayerThree();
+            if(numberOfPlayedCards == 2) player = getGame().getPlayerTwo();
+            if(numberOfPlayedCards == 3) player = getGame().getPlayerThree();
         }
         LoginEntity login = ServiceLocator.get(LoginEntity.class);
         return login.getUsername().equals(player);

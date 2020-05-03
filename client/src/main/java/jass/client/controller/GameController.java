@@ -399,7 +399,7 @@ public final class GameController extends Controller implements DisconnectEventL
         initializeWinningPlayerListener();
         initializeDisableButtonsListener();
         logger.info("observable listeners created");
-        disableButtons(true);
+        this.gameUtil.setDisableButtons(true);
         logger.info("buttons disabled");
         cardButtons = cardButtonsToArray();
         addClickListenerToCardButtons();
