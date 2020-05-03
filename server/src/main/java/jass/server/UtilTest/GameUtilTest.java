@@ -1,8 +1,7 @@
-package jass.server.Test;
+package jass.server.UtilTest;
 
 import static org.junit.Assert.*;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 
 import jass.lib.Card;
