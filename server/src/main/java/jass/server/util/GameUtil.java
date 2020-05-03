@@ -13,6 +13,7 @@ import org.apache.logging.log4j.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Callable;
 import java.util.stream.Collectors;
 
 /**
@@ -32,6 +33,21 @@ public final class GameUtil implements ChosenGameModeEventListener, PlayedCardEv
     private final ClientUtil clientPlayerOne;
 
     /**
+     * The client for player two.
+     */
+    private final ClientUtil clientPlayerTwo;
+
+    /**
+     * The client for player three.
+     */
+    private final ClientUtil clientPlayerThree;
+
+    /**
+     * The client for player four.
+     */
+    private final ClientUtil clientPlayerFour;
+
+    /**
      * The game.
      */
     private final GameEntity game;
@@ -48,20 +64,30 @@ public final class GameUtil implements ChosenGameModeEventListener, PlayedCardEv
 
     /**
      * @param clientPlayerOne   Player one.
+     * @param clientPlayerTwo   Player two.
+     * @param clientPlayerThree Player three.
+     * @param clientPlayerFour  Player four.
      */
-    public GameUtil(final ClientUtil clientPlayerOne) {
+    public GameUtil(final ClientUtil clientPlayerOne, final ClientUtil clientPlayerTwo, final ClientUtil clientPlayerThree, final ClientUtil clientPlayerFour) {
         this.clientPlayerOne = clientPlayerOne;
         UserEntity playerOne = clientPlayerOne.getUser();
-
-        UserRepository userRepository = UserRepository.getSingleton(null);
-        UserEntity playerTwo = userRepository.getByUsername("test2");
-        UserEntity playerThree = userRepository.getByUsername("test3");
-        UserEntity playerFour = userRepository.getByUsername("test4");
+        this.clientPlayerTwo = clientPlayerTwo;
+        UserEntity playerTwo = clientPlayerTwo.getUser();
+        this.clientPlayerThree = clientPlayerThree;
+        UserEntity playerThree = clientPlayerThree.getUser();
+        this.clientPlayerFour = clientPlayerFour;
+        UserEntity playerFour = clientPlayerFour.getUser();
 
         // Add event listeners
         clientPlayerOne.addChosenGameModeEventListener(this);
+        clientPlayerTwo.addChosenGameModeEventListener(this);
+        clientPlayerThree.addChosenGameModeEventListener(this);
+        clientPlayerFour.addChosenGameModeEventListener(this);
 
         clientPlayerOne.addPlayedCardEventListener(this);
+        clientPlayerTwo.addPlayedCardEventListener(this);
+        clientPlayerThree.addPlayedCardEventListener(this);
+        clientPlayerFour.addPlayedCardEventListener(this);
 
         // Assign and create Teams
         TeamEntity teamOne = (new TeamEntity()).setPlayerOne(playerOne).setPlayerTwo(playerThree);
@@ -93,6 +119,9 @@ public final class GameUtil implements ChosenGameModeEventListener, PlayedCardEv
         // Send a deck to each user
         List<DeckEntity> decks = cardUtil.addDecksForPlayers(currentRound, playerOne, playerTwo, playerThree, playerFour);
         cardUtil.broadcastDeck(clientPlayerOne, decks.get(0));
+        cardUtil.broadcastDeck(clientPlayerTwo, decks.get(1));
+        cardUtil.broadcastDeck(clientPlayerThree, decks.get(2));
+        cardUtil.broadcastDeck(clientPlayerFour, decks.get(3));
 
         // Send a message to player one to choose a game mode
         sendChooseGameMode();
@@ -103,7 +132,17 @@ public final class GameUtil implements ChosenGameModeEventListener, PlayedCardEv
         // Get the right client to compare to.
         String gameModeChooserUsername = currentRound.getGameModeChooser().getUsername();
         ClientUtil client;
-        client = clientPlayerOne;
+        if (gameModeChooserUsername.equals(clientPlayerOne.getUsername())) {
+            client = clientPlayerOne;
+        } else if (gameModeChooserUsername.equals(clientPlayerTwo.getUsername())) {
+            client = clientPlayerTwo;
+        } else if (gameModeChooserUsername.equals(clientPlayerThree.getUsername())) {
+            client = clientPlayerThree;
+        } else if (gameModeChooserUsername.equals(clientPlayerFour.getUsername())) {
+            client = clientPlayerFour;
+        } else {
+            throw new IllegalStateException("Unexpected value: " + gameModeChooserUsername);
+        }
 
         // Check with token if player one actually is the one who sent the data.
         if (data.getToken().equals(client.getToken())) {
@@ -134,6 +173,9 @@ public final class GameUtil implements ChosenGameModeEventListener, PlayedCardEv
      */
     private void broadcast(final Message message) {
         clientPlayerOne.send(message);
+        clientPlayerTwo.send(message);
+        clientPlayerThree.send(message);
+        clientPlayerFour.send(message);
     }
 
     /**
@@ -158,11 +200,21 @@ public final class GameUtil implements ChosenGameModeEventListener, PlayedCardEv
     private void sendChooseGameMode() {
         ChooseGameMode chooseGameMode = new ChooseGameMode(new ChooseGameModeData());
         String gameModeChooserUsername = currentRound.getGameModeChooser().getUsername();
-        clientPlayerOne.send(chooseGameMode);
+        if (gameModeChooserUsername.equals(clientPlayerOne.getUsername())) {
+            clientPlayerOne.send(chooseGameMode);
+        } else if (gameModeChooserUsername.equals(clientPlayerTwo.getUsername())) {
+            clientPlayerTwo.send(chooseGameMode);
+        } else if (gameModeChooserUsername.equals(clientPlayerThree.getUsername())) {
+            clientPlayerThree.send(chooseGameMode);
+        } else if (gameModeChooserUsername.equals(clientPlayerFour.getUsername())) {
+            clientPlayerFour.send(chooseGameMode);
+        } else {
+            throw new IllegalStateException("Unexpected value: " + currentRound.getGameModeChooser().getUsername());
+        }
     }
 
 
-    public void onPlayedCard(final PlayCardData data) {
+    public void onPlayedCard(final PlayCardData data) throws InterruptedException {
         // TODO
         boolean isValid = validateMove(data);
         ClientUtil clientUtil = this.getClientUtilByUsername(data.getUsername());
@@ -178,7 +230,12 @@ public final class GameUtil implements ChosenGameModeEventListener, PlayedCardEv
                     turn.addCard(card);
                 }
                 if(turn.getCardFour() != null) {
-                    // TODO set winning player
+                    // TODO set proper winning player
+                    UserRepository userRepository = UserRepository.getSingleton(null);
+                    UserEntity winningUser = userRepository.getByUsername(data.getUsername());
+                    if(winningUser != null) {
+                        turn.setWinningUser(winningUser);
+                    }
                 }
                 turnRepository.update(turn);
                 String winningUsername = turn.getWinningUser() != null ? turn.getWinningUser().getUsername() : "";
@@ -187,6 +244,19 @@ public final class GameUtil implements ChosenGameModeEventListener, PlayedCardEv
                     turn.getCards().stream().map(CardEntity::toCardData).collect(Collectors.toList())
                 ));
                 broadcast(broadcastTurn);
+
+                // start new turn after 3 seconds
+                if(turn.getWinningUser() != null) {
+                    Thread.sleep(3000);
+                    TurnEntity newTurn = addNewTurn(turn.getWinningUser(), currentRound);
+
+                    turnRepository.add(newTurn);
+                    BroadcastTurn newBroadcastTurn = new BroadcastTurn(new BroadcastTurnData(newTurn.getId(),
+                        newTurn.getStartingPlayer().getUsername(), "",
+                        newTurn.getCards().stream().map(CardEntity::toCardData).collect(Collectors.toList())
+                    ));
+                    broadcast(newBroadcastTurn);
+                }
             }
         } else {
             // If playedCard is first card in current turn no validations have to be made, just set the playedCard as first card of turn
@@ -203,7 +273,7 @@ public final class GameUtil implements ChosenGameModeEventListener, PlayedCardEv
 
     private boolean validateMove(PlayCardData data) {
         double randomNumberBetween0And10 = Math.round(Math.random() * 10);
-        if(randomNumberBetween0And10 >= 2) {
+        if(randomNumberBetween0And10 >= 4) {
             return true;
         } else {
             return false;
@@ -262,6 +332,17 @@ public final class GameUtil implements ChosenGameModeEventListener, PlayedCardEv
     }
 
     private ClientUtil getClientUtilByUsername(String username) {
-        return clientPlayerOne;
+        if (username.equals(clientPlayerOne.getUsername())) {
+            return clientPlayerOne;
+        } else if (username.equals(clientPlayerTwo.getUsername())) {
+            return clientPlayerTwo;
+        } else if (username.equals(clientPlayerThree.getUsername())) {
+            return clientPlayerThree;
+        } else if (username.equals(clientPlayerFour.getUsername())) {
+            return clientPlayerFour;
+        }
+        return null;
     }
 }
+
+

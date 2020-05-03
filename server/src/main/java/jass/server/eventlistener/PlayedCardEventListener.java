@@ -14,5 +14,5 @@ public interface PlayedCardEventListener {
      *
      * @param data The data (basically the ID).
      */
-    void onPlayedCard(PlayCardData data);
+    void onPlayedCard(PlayCardData data) throws InterruptedException;
 }

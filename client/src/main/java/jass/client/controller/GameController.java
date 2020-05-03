@@ -599,7 +599,7 @@ public final class GameController extends Controller implements DisconnectEventL
     }
 
     private void updatePlayedCardImages() {
-        if(gameUtil.getPlayedCards() == null || gameUtil.getPlayedCards().size() < 1) {
+        if(gameUtil.getPlayedCards() == null) {
             return;
         }
         CardData card1 = gameUtil.getPlayedCards().size() > 0 ? gameUtil.getPlayedCards().get(0) : null;
@@ -610,28 +610,28 @@ public final class GameController extends Controller implements DisconnectEventL
         LoginEntity login = ServiceLocator.get(LoginEntity.class);
         assert login != null;
         if (gameUtil.getGame().getPlayerOne().equals(gameUtil.getStartingPlayerUsername().getValue())) {
-            if(card1 != null) setImage(getCardPath(card1), user1played);
-            if(card2 != null) setImage(getCardPath(card2), user2played);
-            if(card3 != null) setImage(getCardPath(card3), user3played);
-            if(card4 != null) setImage(getCardPath(card4), user4played);
+            setImage(getCardPath(card1), user1played);
+            setImage(getCardPath(card2), user2played);
+            setImage(getCardPath(card3), user3played);
+            setImage(getCardPath(card4), user4played);
         }
         if (gameUtil.getGame().getPlayerTwo().equals(gameUtil.getStartingPlayerUsername().getValue())) {
-            if(card1 != null) setImage(getCardPath(card1), user2played);
-            if(card2 != null) setImage(getCardPath(card2), user3played);
-            if(card3 != null) setImage(getCardPath(card3), user4played);
-            if(card4 != null) setImage(getCardPath(card4), user1played);
+            setImage(getCardPath(card1), user2played);
+            setImage(getCardPath(card2), user3played);
+            setImage(getCardPath(card3), user4played);
+            setImage(getCardPath(card4), user1played);
         }
         if (gameUtil.getGame().getPlayerThree().equals(gameUtil.getStartingPlayerUsername().getValue())) {
-            if(card1 != null) setImage(getCardPath(card1), user3played);
-            if(card2 != null) setImage(getCardPath(card2), user4played);
-            if(card3 != null) setImage(getCardPath(card3), user1played);
-            if(card4 != null) setImage(getCardPath(card4), user2played);
+            setImage(getCardPath(card1), user3played);
+            setImage(getCardPath(card2), user4played);
+            setImage(getCardPath(card3), user1played);
+            setImage(getCardPath(card4), user2played);
         }
         if (gameUtil.getGame().getPlayerFour().equals(gameUtil.getStartingPlayerUsername().getValue())) {
-            if(card1 != null) setImage(getCardPath(card1), user4played);
-            if(card2 != null) setImage(getCardPath(card2), user1played);
-            if(card3 != null) setImage(getCardPath(card3), user2played);
-            if(card4 != null) setImage(getCardPath(card4), user3played);
+            setImage(getCardPath(card1), user4played);
+            setImage(getCardPath(card2), user1played);
+            setImage(getCardPath(card3), user2played);
+            setImage(getCardPath(card4), user3played);
         }
     }
 
@@ -640,7 +640,7 @@ public final class GameController extends Controller implements DisconnectEventL
      * @return Returns the image path to the corresponding card.
      */
     private String getCardPath(final CardData card) {
-        if(card.isPlayed) {
+        if(card == null || card.isPlayed) {
             return null;
         }
         return "/images/cards/" + card.getRank() + "_of_" + card.getSuit() + ".png";
@@ -844,7 +844,7 @@ public final class GameController extends Controller implements DisconnectEventL
             button.setOnAction(e -> {
                 CardData card = gameUtil.getPlayerDeck().get(finalI);
                 gameUtil.playCard(card.getCardId());
-                disableButtons(true);
+                gameUtil.setDisableButtons(true);
             });
         }
     }
