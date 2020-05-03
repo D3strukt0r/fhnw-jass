@@ -120,8 +120,9 @@ public final class GameUtil implements ChosenGameModeEventListener, PlayedCardEv
 
             // send turn information to clients
             TurnEntity turn = addNewTurn(client.getUser(), currentRound);
+            TurnRepository.getSingleton(null).add(turn);
             BroadcastTurn broadcastTurn = new BroadcastTurn(new BroadcastTurnData(turn.getId(),
-                turn.getStartingPlayer().getUsername(), null,
+                turn.getStartingPlayer().getUsername(), "",
                 turn.getCards().stream().map(CardEntity::toCardData).collect(Collectors.toList())
                 ));
             broadcast(broadcastTurn);
@@ -172,19 +173,21 @@ public final class GameUtil implements ChosenGameModeEventListener, PlayedCardEv
             TurnRepository turnRepository = TurnRepository.getSingleton(null);
             TurnEntity turn = turnRepository.getById(data.getTurnId());
             CardEntity card = CardRepository.getSingleton(null).getById(data.getCardId());
-            if(turn != null && card != null) {
-                turn.addCard(card);
+            if(turn != null) {
+                if(card != null) {
+                    turn.addCard(card);
+                }
+                if(turn.getCardFour() != null) {
+                    // TODO set winning player
+                }
+                turnRepository.update(turn);
+                String winningUsername = turn.getWinningUser() != null ? turn.getWinningUser().getUsername() : "";
+                BroadcastTurn broadcastTurn = new BroadcastTurn(new BroadcastTurnData(turn.getId(),
+                    turn.getStartingPlayer().getUsername(), winningUsername,
+                    turn.getCards().stream().map(CardEntity::toCardData).collect(Collectors.toList())
+                ));
+                broadcast(broadcastTurn);
             }
-            if(turn.getCardFour() != null) {
-                // TODO set winning player
-            }
-            turnRepository.update(turn);
-            String winningUsername = turn.getWinningUser() != null ? turn.getWinningUser().getUsername() : null;
-            BroadcastTurn broadcastTurn = new BroadcastTurn(new BroadcastTurnData(turn.getId(),
-                turn.getStartingPlayer().getUsername(), winningUsername,
-                turn.getCards().stream().map(CardEntity::toCardData).collect(Collectors.toList())
-            ));
-            broadcast(broadcastTurn);
         } else {
             // If playedCard is first card in current turn no validations have to be made, just set the playedCard as first card of turn
             PlayedCard result = new PlayedCard(new PlayedCardData(isValid));
@@ -200,7 +203,7 @@ public final class GameUtil implements ChosenGameModeEventListener, PlayedCardEv
 
     private boolean validateMove(PlayCardData data) {
         double randomNumberBetween0And10 = Math.round(Math.random() * 10);
-        if(randomNumberBetween0And10 > 5) {
+        if(randomNumberBetween0And10 >= 2) {
             return true;
         } else {
             return false;

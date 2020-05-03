@@ -35,13 +35,13 @@ public final class TurnEntity extends Entity {
     /**
      * The winning user of this turn
      */
-    @DatabaseField(foreign = true)
+    @DatabaseField(foreign = true, foreignAutoRefresh = true)
     private UserEntity winningUser;
 
     /**
      * The starting player of this turn
      */
-    @DatabaseField(foreign = true, canBeNull = false)
+    @DatabaseField(foreign = true, canBeNull = false, foreignAutoRefresh = true)
     private UserEntity startingPlayer;
 
     /**

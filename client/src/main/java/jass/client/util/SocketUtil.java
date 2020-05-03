@@ -112,7 +112,7 @@ public final class SocketUtil extends Thread implements Service, Closeable {
     /**
      * A list of all objects listening to a play card event.
      */
-    private final ArrayList<PlayedCardEventListener> playCardListener = new ArrayList<>();
+    private final ArrayList<PlayedCardEventListener> playedCardListener = new ArrayList<>();
 
     /**
      * A list of objects listening to broadcast played card event.
@@ -343,20 +343,14 @@ public final class SocketUtil extends Thread implements Service, Closeable {
     }
 
     /**
-     * @param listener A PlayCardEventListener object
-     *
-     * @author Manuele Vaccari & Victor Hargrave
-     * @since 0.0.1
+     * @author Victor Hargrave
      */
-    public void addPlayCardEventListener(final PlayedCardEventListener listener) {
-        playCardListener.add(listener);
+    public void addPlayedCardEventListener(final PlayedCardEventListener listener) {
+        playedCardListener.add(listener);
     }
 
     /**
-     * @param listener A BroadcastTurnEventListener object
-     *
-     * @author Manuele Vaccari & Victor Hargrave
-     * @since 0.0.1
+     * @author Victor Hargrave
      */
     public void addBroadcastedTurnEventListener(final BroadcastTurnEventListener listener) {
         broadcastTurnListener.add(listener);
@@ -392,7 +386,7 @@ public final class SocketUtil extends Thread implements Service, Closeable {
                 }
                 break;
             case "PlayedCard":
-                for (PlayedCardEventListener listener : playCardListener) {
+                for (PlayedCardEventListener listener : playedCardListener) {
                     logger.info("Invoking onPlayCard event on " + listener.getClass().getName());
                     listener.onPlayedCard((PlayedCardData) msgData);
                 }

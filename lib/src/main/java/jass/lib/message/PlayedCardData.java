@@ -30,10 +30,7 @@ public final class PlayedCardData extends MessageData {
         this.playedCardValid = data.getBoolean("playedCardValid");
     }
 
-    /**
-     * @return Returns the game ID.
-     */
-    public boolean getplayedCardValid() {
+    public boolean getPlayedCardValid() {
         return playedCardValid;
     }
 }

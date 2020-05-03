@@ -19,11 +19,11 @@
 package jass.client.message;
 
 import jass.client.util.SocketUtil;
-import jass.lib.message.BroadcastGameModeData;
+import jass.lib.message.BroadcastTurnData;
 import jass.lib.message.MessageData;
 
 /**
- * @author Manuele Vaccari
+ * @author Victor Hargrave & Manuele Vaccari
  * @version %I%, %G%
  * @since 0.0.1
  */
@@ -31,14 +31,14 @@ public final class BroadcastTurn extends Message {
     /**
      * The data of the message.
      */
-    private final BroadcastGameModeData data;
+    private final BroadcastTurnData data;
 
     /**
      * @param rawData The data (still not casted)
      */
     public BroadcastTurn(final MessageData rawData) {
         super(rawData);
-        data = (BroadcastGameModeData) rawData;
+        data = (BroadcastTurnData) rawData;
     }
 
     @Override

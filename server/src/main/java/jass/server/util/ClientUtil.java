@@ -166,7 +166,7 @@ public final class ClientUtil extends Thread {
                 logger.info("Invoking onChosenGameMode event on " + listener.getClass().getName());
                 listener.onChosenGameMode((ChosenGameModeData) msgData);
             }
-        } else if (msgType.equals("PlayedCard")) {
+        } else if (msgType.equals("PlayCard")) {
             for (PlayedCardEventListener listener : playedCardListener) {
                 logger.info("Invoking onChosenGameMode event on " + listener.getClass().getName());
                 listener.onPlayedCard((PlayCardData) msgData);

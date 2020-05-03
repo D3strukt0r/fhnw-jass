@@ -20,8 +20,6 @@ import jass.lib.message.LogoutData;
 import jass.lib.servicelocator.ServiceLocator;
 import javafx.application.Platform;
 import javafx.collections.ListChangeListener;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -397,9 +395,9 @@ public final class GameController extends Controller implements DisconnectEventL
         logger.info("initialising");
         initializePlayerDeckListener();
         initializeGameModeListener();
-        initializeStartingPlayerListener();
         initializePlayedCardsListener();
         initializeWinningPlayerListener();
+        initializeDisableButtonsListener();
         logger.info("observable listeners created");
         disableButtons(true);
         logger.info("buttons disabled");
@@ -445,9 +443,9 @@ public final class GameController extends Controller implements DisconnectEventL
 
     private void initializePlayedCardsListener() {
         gameUtil.getPlayedCards().addListener((ListChangeListener<CardData>) c -> {
-            Platform.runLater(() -> {
-                updatePlayedCardImages();
-            });
+            updatePlayedCardImages();
+            /*gameUtil.getPlayerDeck().removeAll(gameUtil.getPlayedCards());
+            updateCardImages();*/
         });
     }
 
@@ -466,30 +464,21 @@ public final class GameController extends Controller implements DisconnectEventL
         });
     }
 
-    private void initializeStartingPlayerListener() {
-        gameUtil.getStartingPlayerUsername().addListener((obs, oldStartingPlayer, newStartingPlayer) -> {
-            Platform.runLater(() -> {
-                // when starting player changes
-                if(oldStartingPlayer != newStartingPlayer) {
-                    LoginEntity login = ServiceLocator.get(LoginEntity.class);
-                    if(login != null && login.getUsername() == newStartingPlayer) {
-                        disableButtons(false);
-                    }
-                }
-            });
+    private void initializeWinningPlayerListener() {
+        gameUtil.getWinningPlayerUsername().addListener((obs, oldWinningPlayer, newWinningPlayer) -> {
+            // when there is a new winning player
+            if(oldWinningPlayer != newWinningPlayer && !StringHelper.isNullOrEmpty(newWinningPlayer)) {
+                // TODO show dialog
+                //
+                gameUtil.setWinningPlayerUsername("");
+            }
         });
     }
 
-    private void initializeWinningPlayerListener() {
-        gameUtil.getWinningPlayerUsername().addListener((obs, oldWinningPlayer, newWinningPlayer) -> {
-            Platform.runLater(() -> {
-                // when there is a new winning player
-                if(oldWinningPlayer != newWinningPlayer && !StringHelper.isNullOrEmpty(newWinningPlayer)) {
-                    // TODO show dialog
-                    //
-                    gameUtil.setWinningPlayerUsername("");
-                }
-            });
+    private void initializeDisableButtonsListener() {
+        gameUtil.getDisableButtons().addListener((obs, oldDisableButtons, newDisableButtons) -> {
+            // when there is a new winning player
+            disableButtons(newDisableButtons);
         });
     }
 
@@ -606,32 +595,35 @@ public final class GameController extends Controller implements DisconnectEventL
     }
 
     private void updatePlayedCardImages() {
-        CardData card1 = gameUtil.getPlayedCards().get(0);
-        CardData card2 = gameUtil.getPlayedCards().get(1);
-        CardData card3 = gameUtil.getPlayedCards().get(2);
-        CardData card4 = gameUtil.getPlayedCards().get(3);
+        if(gameUtil.getPlayedCards() == null || gameUtil.getPlayedCards().size() < 1) {
+            return;
+        }
+        CardData card1 = gameUtil.getPlayedCards().size() > 0 ? gameUtil.getPlayedCards().get(0) : null;
+        CardData card2 = gameUtil.getPlayedCards().size() > 1 ? gameUtil.getPlayedCards().get(1) : null;
+        CardData card3 = gameUtil.getPlayedCards().size() > 2 ? gameUtil.getPlayedCards().get(2) : null;
+        CardData card4 = gameUtil.getPlayedCards().size() > 3 ? gameUtil.getPlayedCards().get(3) : null;
 
         LoginEntity login = ServiceLocator.get(LoginEntity.class);
         assert login != null;
-        if (gameUtil.getGame().getPlayerOne().equals(gameUtil.getStartingPlayerUsername())) {
+        if (gameUtil.getGame().getPlayerOne().equals(gameUtil.getStartingPlayerUsername().getValue())) {
             if(card1 != null) setImage(getCardPath(card1.getRank(), card1.getSuit()), user1played);
             if(card2 != null) setImage(getCardPath(card2.getRank(), card2.getSuit()), user2played);
             if(card3 != null) setImage(getCardPath(card3.getRank(), card3.getSuit()), user3played);
             if(card4 != null) setImage(getCardPath(card4.getRank(), card4.getSuit()), user4played);
         }
-        if (gameUtil.getGame().getPlayerTwo().equals(gameUtil.getStartingPlayerUsername())) {
+        if (gameUtil.getGame().getPlayerTwo().equals(gameUtil.getStartingPlayerUsername().getValue())) {
             if(card1 != null) setImage(getCardPath(card1.getRank(), card1.getSuit()), user2played);
             if(card2 != null) setImage(getCardPath(card2.getRank(), card2.getSuit()), user3played);
             if(card3 != null) setImage(getCardPath(card3.getRank(), card3.getSuit()), user4played);
             if(card4 != null) setImage(getCardPath(card4.getRank(), card4.getSuit()), user1played);
         }
-        if (gameUtil.getGame().getPlayerThree().equals(gameUtil.getStartingPlayerUsername())) {
+        if (gameUtil.getGame().getPlayerThree().equals(gameUtil.getStartingPlayerUsername().getValue())) {
             if(card1 != null) setImage(getCardPath(card1.getRank(), card1.getSuit()), user3played);
             if(card2 != null) setImage(getCardPath(card2.getRank(), card2.getSuit()), user4played);
             if(card3 != null) setImage(getCardPath(card3.getRank(), card3.getSuit()), user1played);
             if(card4 != null) setImage(getCardPath(card4.getRank(), card4.getSuit()), user2played);
         }
-        if (gameUtil.getGame().getPlayerFour().equals(gameUtil.getStartingPlayerUsername())) {
+        if (gameUtil.getGame().getPlayerFour().equals(gameUtil.getStartingPlayerUsername().getValue())) {
             if(card1 != null) setImage(getCardPath(card1.getRank(), card1.getSuit()), user4played);
             if(card2 != null) setImage(getCardPath(card2.getRank(), card2.getSuit()), user1played);
             if(card3 != null) setImage(getCardPath(card3.getRank(), card3.getSuit()), user2played);
@@ -676,45 +668,45 @@ public final class GameController extends Controller implements DisconnectEventL
         LoginEntity login = ServiceLocator.get(LoginEntity.class);
         assert login != null;
         if (gameUtil.getGame().getPlayerOne().equals(login.getUsername())) {
-            user1b1.setDisable(false);
-            user1b2.setDisable(false);
-            user1b3.setDisable(false);
-            user1b4.setDisable(false);
-            user1b5.setDisable(false);
-            user1b6.setDisable(false);
-            user1b7.setDisable(false);
-            user1b8.setDisable(false);
-            user1b9.setDisable(false);
+            user1b1.setDisable(disable);
+            user1b2.setDisable(disable);
+            user1b3.setDisable(disable);
+            user1b4.setDisable(disable);
+            user1b5.setDisable(disable);
+            user1b6.setDisable(disable);
+            user1b7.setDisable(disable);
+            user1b8.setDisable(disable);
+            user1b9.setDisable(disable);
         } else if (gameUtil.getGame().getPlayerTwo().equals(login.getUsername())) {
-            user2b1.setDisable(false);
-            user2b2.setDisable(false);
-            user2b3.setDisable(false);
-            user2b4.setDisable(false);
-            user2b5.setDisable(false);
-            user2b6.setDisable(false);
-            user2b7.setDisable(false);
-            user2b8.setDisable(false);
-            user2b9.setDisable(false);
+            user2b1.setDisable(disable);
+            user2b2.setDisable(disable);
+            user2b3.setDisable(disable);
+            user2b4.setDisable(disable);
+            user2b5.setDisable(disable);
+            user2b6.setDisable(disable);
+            user2b7.setDisable(disable);
+            user2b8.setDisable(disable);
+            user2b9.setDisable(disable);
         } else if (gameUtil.getGame().getPlayerThree().equals(login.getUsername())) {
-            user3b1.setDisable(false);
-            user3b2.setDisable(false);
-            user3b3.setDisable(false);
-            user3b4.setDisable(false);
-            user3b5.setDisable(false);
-            user3b6.setDisable(false);
-            user3b7.setDisable(false);
-            user3b8.setDisable(false);
-            user3b9.setDisable(false);
+            user3b1.setDisable(disable);
+            user3b2.setDisable(disable);
+            user3b3.setDisable(disable);
+            user3b4.setDisable(disable);
+            user3b5.setDisable(disable);
+            user3b6.setDisable(disable);
+            user3b7.setDisable(disable);
+            user3b8.setDisable(disable);
+            user3b9.setDisable(disable);
         } else if (gameUtil.getGame().getPlayerFour().equals(login.getUsername())) {
-            user4b1.setDisable(false);
-            user4b2.setDisable(false);
-            user4b3.setDisable(false);
-            user4b4.setDisable(false);
-            user4b5.setDisable(false);
-            user4b6.setDisable(false);
-            user4b7.setDisable(false);
-            user4b8.setDisable(false);
-            user4b9.setDisable(false);
+            user4b1.setDisable(disable);
+            user4b2.setDisable(disable);
+            user4b3.setDisable(disable);
+            user4b4.setDisable(disable);
+            user4b5.setDisable(disable);
+            user4b6.setDisable(disable);
+            user4b7.setDisable(disable);
+            user4b8.setDisable(disable);
+            user4b9.setDisable(disable);
         }
     }
 
@@ -834,6 +826,7 @@ public final class GameController extends Controller implements DisconnectEventL
             button.setOnAction(e -> {
                 CardData card = gameUtil.getPlayerDeck().get(finalI);
                 gameUtil.playCard(card.getCardId());
+                disableButtons(true);
             });
         }
     }
