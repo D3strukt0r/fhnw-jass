@@ -14,9 +14,9 @@ import org.junit.Test;
 /**
  * Test Class for the validation of the different game modes.
  *
- * The card id's with the corresponding suit and rank values are copied at the bottom of this document.
+ * The card id's with the corresponding suit and rank values are copied at the bottom of this document as an assistance.
  *
- * @author Thomas Weber, Manuele Vaccari
+ * @author Thomas Weber
  * @version %I%, %G%
  * @since 0.0.1
  */

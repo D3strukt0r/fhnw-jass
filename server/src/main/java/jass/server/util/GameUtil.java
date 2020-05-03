@@ -309,8 +309,8 @@ public final class GameUtil implements ChosenGameModeEventListener, PlayedCardEv
      * @author: Thomas Weber
      *
      * Validates a move from one of the clients for the game mode "Trump". This method contains the same logic as validateMoveTrump(cardID,
-     * deckID) but slightly changed in order to easily test the functionality of the method with unit tests.
-     * All data which get fetched from the database are here passed in as parameter.
+     * deckID) but slightly changed in order to be able to test the functionality of the method with unit tests.
+     * All data which get fetched from the database in the validateMoveTrump() function are here passed in as parameter.
      *
      * @param firstCardOfTurn The first card of the turn
      * @param playedCard The playedCard
