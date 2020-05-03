@@ -31,6 +31,8 @@ public final class CardData {
      */
     private final String rank;
 
+    public boolean isPlayed;
+
     /**
      * @param cardId The card ID.
      * @param suitId The suit ID.
@@ -79,5 +81,13 @@ public final class CardData {
      */
     public int getRankId() {
         return rankId;
+    }
+
+    public boolean getIsPlayed() {
+        return isPlayed;
+    }
+
+    public void setIsPlayed(boolean isPlayed) {
+        this.isPlayed = isPlayed;
     }
 }

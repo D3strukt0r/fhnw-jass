@@ -64,6 +64,8 @@ public final class GameUtil implements Service, BroadcastDeckEventListener, Choo
 
     private String moveInvalidErrorMessage = "";
 
+    private int cardIdToRemove = 0;
+
     public GameUtil() {
         SocketUtil socket = ServiceLocator.get(SocketUtil.class);
         assert socket != null;
@@ -184,6 +186,7 @@ public final class GameUtil implements Service, BroadcastDeckEventListener, Choo
     }
 
     public void playCard(int cardId) {
+        cardIdToRemove = cardId;
         PlayCard playedCard = new PlayCard(new PlayCardData(this.turnId, cardId));
 
         SocketUtil socket = ServiceLocator.get(SocketUtil.class);
@@ -288,5 +291,9 @@ public final class GameUtil implements Service, BroadcastDeckEventListener, Choo
 
     public ObservableList<CardData> getPlayedCards() {
         return playedCards;
+    }
+
+    public int getCardIdToRemove() {
+        return cardIdToRemove;
     }
 }

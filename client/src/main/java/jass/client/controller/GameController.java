@@ -37,6 +37,7 @@ import org.apache.logging.log4j.Logger;
 
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 /**
@@ -444,8 +445,11 @@ public final class GameController extends Controller implements DisconnectEventL
     private void initializePlayedCardsListener() {
         gameUtil.getPlayedCards().addListener((ListChangeListener<CardData>) c -> {
             updatePlayedCardImages();
-            /*gameUtil.getPlayerDeck().removeAll(gameUtil.getPlayedCards());
-            updateCardImages();*/
+            Optional<CardData> card = gameUtil.getPlayerDeck().stream().filter(d -> d.getCardId() == gameUtil.getCardIdToRemove()).findFirst();
+            if(card.isPresent()) {
+                card.get().isPlayed = true;
+            }
+            updateCardImages();
         });
     }
 
@@ -551,45 +555,45 @@ public final class GameController extends Controller implements DisconnectEventL
             LoginEntity login = ServiceLocator.get(LoginEntity.class);
             assert login != null;
             if (gameUtil.getGame().getPlayerOne().equals(login.getUsername())) {
-                setImage(getCardPath(card1.getRank(), card1.getSuit()), user1b1);
-                setImage(getCardPath(card2.getRank(), card2.getSuit()), user1b2);
-                setImage(getCardPath(card3.getRank(), card3.getSuit()), user1b3);
-                setImage(getCardPath(card4.getRank(), card4.getSuit()), user1b4);
-                setImage(getCardPath(card5.getRank(), card5.getSuit()), user1b5);
-                setImage(getCardPath(card6.getRank(), card6.getSuit()), user1b6);
-                setImage(getCardPath(card7.getRank(), card7.getSuit()), user1b7);
-                setImage(getCardPath(card8.getRank(), card8.getSuit()), user1b8);
-                setImage(getCardPath(card9.getRank(), card9.getSuit()), user1b9);
+                setImage(getCardPath(card1), user1b1);
+                setImage(getCardPath(card2), user1b2);
+                setImage(getCardPath(card3), user1b3);
+                setImage(getCardPath(card4), user1b4);
+                setImage(getCardPath(card5), user1b5);
+                setImage(getCardPath(card6), user1b6);
+                setImage(getCardPath(card7), user1b7);
+                setImage(getCardPath(card8), user1b8);
+                setImage(getCardPath(card9), user1b9);
             } else if (gameUtil.getGame().getPlayerTwo().equals(login.getUsername())) {
-                setImage(getCardPath(card1.getRank(), card1.getSuit()), user2b1);
-                setImage(getCardPath(card2.getRank(), card2.getSuit()), user2b2);
-                setImage(getCardPath(card3.getRank(), card3.getSuit()), user2b3);
-                setImage(getCardPath(card4.getRank(), card4.getSuit()), user2b4);
-                setImage(getCardPath(card5.getRank(), card5.getSuit()), user2b5);
-                setImage(getCardPath(card6.getRank(), card6.getSuit()), user2b6);
-                setImage(getCardPath(card7.getRank(), card7.getSuit()), user2b7);
-                setImage(getCardPath(card8.getRank(), card8.getSuit()), user2b8);
-                setImage(getCardPath(card9.getRank(), card9.getSuit()), user2b9);
+                setImage(getCardPath(card1), user2b1);
+                setImage(getCardPath(card2), user2b2);
+                setImage(getCardPath(card3), user2b3);
+                setImage(getCardPath(card4), user2b4);
+                setImage(getCardPath(card5), user2b5);
+                setImage(getCardPath(card6), user2b6);
+                setImage(getCardPath(card7), user2b7);
+                setImage(getCardPath(card8), user2b8);
+                setImage(getCardPath(card9), user2b9);
             } else if (gameUtil.getGame().getPlayerThree().equals(login.getUsername())) {
-                setImage(getCardPath(card1.getRank(), card1.getSuit()), user3b1);
-                setImage(getCardPath(card2.getRank(), card2.getSuit()), user3b2);
-                setImage(getCardPath(card3.getRank(), card3.getSuit()), user3b3);
-                setImage(getCardPath(card4.getRank(), card4.getSuit()), user3b4);
-                setImage(getCardPath(card5.getRank(), card5.getSuit()), user3b5);
-                setImage(getCardPath(card6.getRank(), card6.getSuit()), user3b6);
-                setImage(getCardPath(card7.getRank(), card7.getSuit()), user3b7);
-                setImage(getCardPath(card8.getRank(), card8.getSuit()), user3b8);
-                setImage(getCardPath(card9.getRank(), card9.getSuit()), user3b9);
+                setImage(getCardPath(card1), user3b1);
+                setImage(getCardPath(card2), user3b2);
+                setImage(getCardPath(card3), user3b3);
+                setImage(getCardPath(card4), user3b4);
+                setImage(getCardPath(card5), user3b5);
+                setImage(getCardPath(card6), user3b6);
+                setImage(getCardPath(card7), user3b7);
+                setImage(getCardPath(card8), user3b8);
+                setImage(getCardPath(card9), user3b9);
             } else if (gameUtil.getGame().getPlayerFour().equals(login.getUsername())) {
-                setImage(getCardPath(card1.getRank(), card1.getSuit()), user4b1);
-                setImage(getCardPath(card2.getRank(), card2.getSuit()), user4b2);
-                setImage(getCardPath(card3.getRank(), card3.getSuit()), user4b3);
-                setImage(getCardPath(card4.getRank(), card4.getSuit()), user4b4);
-                setImage(getCardPath(card5.getRank(), card5.getSuit()), user4b5);
-                setImage(getCardPath(card6.getRank(), card6.getSuit()), user4b6);
-                setImage(getCardPath(card7.getRank(), card7.getSuit()), user4b7);
-                setImage(getCardPath(card8.getRank(), card8.getSuit()), user4b8);
-                setImage(getCardPath(card9.getRank(), card9.getSuit()), user4b9);
+                setImage(getCardPath(card1), user4b1);
+                setImage(getCardPath(card2), user4b2);
+                setImage(getCardPath(card3), user4b3);
+                setImage(getCardPath(card4), user4b4);
+                setImage(getCardPath(card5), user4b5);
+                setImage(getCardPath(card6), user4b6);
+                setImage(getCardPath(card7), user4b7);
+                setImage(getCardPath(card8), user4b8);
+                setImage(getCardPath(card9), user4b9);
             }
         }
     }
@@ -606,39 +610,40 @@ public final class GameController extends Controller implements DisconnectEventL
         LoginEntity login = ServiceLocator.get(LoginEntity.class);
         assert login != null;
         if (gameUtil.getGame().getPlayerOne().equals(gameUtil.getStartingPlayerUsername().getValue())) {
-            if(card1 != null) setImage(getCardPath(card1.getRank(), card1.getSuit()), user1played);
-            if(card2 != null) setImage(getCardPath(card2.getRank(), card2.getSuit()), user2played);
-            if(card3 != null) setImage(getCardPath(card3.getRank(), card3.getSuit()), user3played);
-            if(card4 != null) setImage(getCardPath(card4.getRank(), card4.getSuit()), user4played);
+            if(card1 != null) setImage(getCardPath(card1), user1played);
+            if(card2 != null) setImage(getCardPath(card2), user2played);
+            if(card3 != null) setImage(getCardPath(card3), user3played);
+            if(card4 != null) setImage(getCardPath(card4), user4played);
         }
         if (gameUtil.getGame().getPlayerTwo().equals(gameUtil.getStartingPlayerUsername().getValue())) {
-            if(card1 != null) setImage(getCardPath(card1.getRank(), card1.getSuit()), user2played);
-            if(card2 != null) setImage(getCardPath(card2.getRank(), card2.getSuit()), user3played);
-            if(card3 != null) setImage(getCardPath(card3.getRank(), card3.getSuit()), user4played);
-            if(card4 != null) setImage(getCardPath(card4.getRank(), card4.getSuit()), user1played);
+            if(card1 != null) setImage(getCardPath(card1), user2played);
+            if(card2 != null) setImage(getCardPath(card2), user3played);
+            if(card3 != null) setImage(getCardPath(card3), user4played);
+            if(card4 != null) setImage(getCardPath(card4), user1played);
         }
         if (gameUtil.getGame().getPlayerThree().equals(gameUtil.getStartingPlayerUsername().getValue())) {
-            if(card1 != null) setImage(getCardPath(card1.getRank(), card1.getSuit()), user3played);
-            if(card2 != null) setImage(getCardPath(card2.getRank(), card2.getSuit()), user4played);
-            if(card3 != null) setImage(getCardPath(card3.getRank(), card3.getSuit()), user1played);
-            if(card4 != null) setImage(getCardPath(card4.getRank(), card4.getSuit()), user2played);
+            if(card1 != null) setImage(getCardPath(card1), user3played);
+            if(card2 != null) setImage(getCardPath(card2), user4played);
+            if(card3 != null) setImage(getCardPath(card3), user1played);
+            if(card4 != null) setImage(getCardPath(card4), user2played);
         }
         if (gameUtil.getGame().getPlayerFour().equals(gameUtil.getStartingPlayerUsername().getValue())) {
-            if(card1 != null) setImage(getCardPath(card1.getRank(), card1.getSuit()), user4played);
-            if(card2 != null) setImage(getCardPath(card2.getRank(), card2.getSuit()), user1played);
-            if(card3 != null) setImage(getCardPath(card3.getRank(), card3.getSuit()), user2played);
-            if(card4 != null) setImage(getCardPath(card4.getRank(), card4.getSuit()), user3played);
+            if(card1 != null) setImage(getCardPath(card1), user4played);
+            if(card2 != null) setImage(getCardPath(card2), user1played);
+            if(card3 != null) setImage(getCardPath(card3), user2played);
+            if(card4 != null) setImage(getCardPath(card4), user3played);
         }
     }
 
     /**
-     * @param rank The rank of the card.
-     * @param suit The suit of the card.
      *
      * @return Returns the image path to the corresponding card.
      */
-    private String getCardPath(final String rank, final String suit) {
-        return "/images/cards/" + rank + "_of_" + suit + ".png";
+    private String getCardPath(final CardData card) {
+        if(card.isPlayed) {
+            return null;
+        }
+        return "/images/cards/" + card.getRank() + "_of_" + card.getSuit() + ".png";
     }
 
     /**
@@ -646,14 +651,18 @@ public final class GameController extends Controller implements DisconnectEventL
      * @param button      The button to assign a card image.
      */
     private void setImage(final String pathToImage, final Button button) {
-        BackgroundImage backgroundImage = new BackgroundImage(new Image(
-            getClass().getResource(pathToImage).toExternalForm()),
-            BackgroundRepeat.NO_REPEAT,
-            BackgroundRepeat.NO_REPEAT,
-            BackgroundPosition.CENTER,
-            new BackgroundSize(74, 113, true, true, true, false));
-        Background background = new Background(backgroundImage);
-        button.setBackground(background);
+        if(StringHelper.isNullOrEmpty(pathToImage)) {
+            button.setBackground(null);
+        } else {
+            BackgroundImage backgroundImage = new BackgroundImage(new Image(
+                getClass().getResource(pathToImage).toExternalForm()),
+                BackgroundRepeat.NO_REPEAT,
+                BackgroundRepeat.NO_REPEAT,
+                BackgroundPosition.CENTER,
+                new BackgroundSize(74, 113, true, true, true, false));
+            Background background = new Background(backgroundImage);
+            button.setBackground(background);
+        }
     }
 
     /**
@@ -664,49 +673,58 @@ public final class GameController extends Controller implements DisconnectEventL
      */
     public void disableButtons(boolean disable) {
         //TODO enable buttons for the cards that could be played in the round based on game mode
+        CardData card1 = gameUtil.getPlayerDeck() != null ? gameUtil.getPlayerDeck().get(0) : null;
+        CardData card2 = gameUtil.getPlayerDeck() != null ? gameUtil.getPlayerDeck().get(1) : null;
+        CardData card3 = gameUtil.getPlayerDeck() != null ? gameUtil.getPlayerDeck().get(2) : null;
+        CardData card4 = gameUtil.getPlayerDeck() != null ? gameUtil.getPlayerDeck().get(3) : null;
+        CardData card5 = gameUtil.getPlayerDeck() != null ? gameUtil.getPlayerDeck().get(4) : null;
+        CardData card6 = gameUtil.getPlayerDeck() != null ? gameUtil.getPlayerDeck().get(5) : null;
+        CardData card7 = gameUtil.getPlayerDeck() != null ? gameUtil.getPlayerDeck().get(6) : null;
+        CardData card8 = gameUtil.getPlayerDeck() != null ? gameUtil.getPlayerDeck().get(7) : null;
+        CardData card9 = gameUtil.getPlayerDeck() != null ? gameUtil.getPlayerDeck().get(8) : null;
 
         LoginEntity login = ServiceLocator.get(LoginEntity.class);
         assert login != null;
         if (gameUtil.getGame().getPlayerOne().equals(login.getUsername())) {
-            user1b1.setDisable(disable);
-            user1b2.setDisable(disable);
-            user1b3.setDisable(disable);
-            user1b4.setDisable(disable);
-            user1b5.setDisable(disable);
-            user1b6.setDisable(disable);
-            user1b7.setDisable(disable);
-            user1b8.setDisable(disable);
-            user1b9.setDisable(disable);
+            user1b1.setDisable(card1 != null && card1.isPlayed ? card1.isPlayed : disable);
+            user1b2.setDisable(card2 != null && card2.isPlayed ? card2.isPlayed : disable);
+            user1b3.setDisable(card3 != null && card3.isPlayed ? card3.isPlayed : disable);
+            user1b4.setDisable(card4 != null && card4.isPlayed ? card4.isPlayed : disable);
+            user1b5.setDisable(card5 != null && card5.isPlayed ? card5.isPlayed : disable);
+            user1b6.setDisable(card6 != null && card6.isPlayed ? card6.isPlayed : disable);
+            user1b7.setDisable(card7 != null && card7.isPlayed ? card7.isPlayed : disable);
+            user1b8.setDisable(card8 != null && card8.isPlayed ? card8.isPlayed : disable);
+            user1b9.setDisable(card9 != null && card9.isPlayed ? card9.isPlayed : disable);
         } else if (gameUtil.getGame().getPlayerTwo().equals(login.getUsername())) {
-            user2b1.setDisable(disable);
-            user2b2.setDisable(disable);
-            user2b3.setDisable(disable);
-            user2b4.setDisable(disable);
-            user2b5.setDisable(disable);
-            user2b6.setDisable(disable);
-            user2b7.setDisable(disable);
-            user2b8.setDisable(disable);
-            user2b9.setDisable(disable);
+            user2b1.setDisable(card1 != null && card1.isPlayed ? card1.isPlayed : disable);
+            user2b2.setDisable(card2 != null && card2.isPlayed ? card2.isPlayed : disable);
+            user2b3.setDisable(card3 != null && card3.isPlayed ? card3.isPlayed : disable);
+            user2b4.setDisable(card4 != null && card4.isPlayed ? card4.isPlayed : disable);
+            user2b5.setDisable(card5 != null && card5.isPlayed ? card5.isPlayed : disable);
+            user2b6.setDisable(card6 != null && card6.isPlayed ? card6.isPlayed : disable);
+            user2b7.setDisable(card7 != null && card7.isPlayed ? card7.isPlayed : disable);
+            user2b8.setDisable(card8 != null && card8.isPlayed ? card8.isPlayed : disable);
+            user2b9.setDisable(card9 != null && card9.isPlayed ? card9.isPlayed : disable);
         } else if (gameUtil.getGame().getPlayerThree().equals(login.getUsername())) {
-            user3b1.setDisable(disable);
-            user3b2.setDisable(disable);
-            user3b3.setDisable(disable);
-            user3b4.setDisable(disable);
-            user3b5.setDisable(disable);
-            user3b6.setDisable(disable);
-            user3b7.setDisable(disable);
-            user3b8.setDisable(disable);
-            user3b9.setDisable(disable);
+            user3b1.setDisable(card1 != null && card1.isPlayed ? card1.isPlayed : disable);
+            user3b2.setDisable(card2 != null && card2.isPlayed ? card2.isPlayed : disable);
+            user3b3.setDisable(card3 != null && card3.isPlayed ? card3.isPlayed : disable);
+            user3b4.setDisable(card4 != null && card4.isPlayed ? card4.isPlayed : disable);
+            user3b5.setDisable(card5 != null && card5.isPlayed ? card5.isPlayed : disable);
+            user3b6.setDisable(card6 != null && card6.isPlayed ? card6.isPlayed : disable);
+            user3b7.setDisable(card7 != null && card7.isPlayed ? card7.isPlayed : disable);
+            user3b8.setDisable(card8 != null && card8.isPlayed ? card8.isPlayed : disable);
+            user3b9.setDisable(card9 != null && card9.isPlayed ? card9.isPlayed : disable);
         } else if (gameUtil.getGame().getPlayerFour().equals(login.getUsername())) {
-            user4b1.setDisable(disable);
-            user4b2.setDisable(disable);
-            user4b3.setDisable(disable);
-            user4b4.setDisable(disable);
-            user4b5.setDisable(disable);
-            user4b6.setDisable(disable);
-            user4b7.setDisable(disable);
-            user4b8.setDisable(disable);
-            user4b9.setDisable(disable);
+            user4b1.setDisable(card1 != null && card1.isPlayed ? card1.isPlayed : disable);
+            user4b2.setDisable(card2 != null && card2.isPlayed ? card2.isPlayed : disable);
+            user4b3.setDisable(card3 != null && card3.isPlayed ? card3.isPlayed : disable);
+            user4b4.setDisable(card4 != null && card4.isPlayed ? card4.isPlayed : disable);
+            user4b5.setDisable(card5 != null && card5.isPlayed ? card5.isPlayed : disable);
+            user4b6.setDisable(card6 != null && card6.isPlayed ? card6.isPlayed : disable);
+            user4b7.setDisable(card7 != null && card7.isPlayed ? card7.isPlayed : disable);
+            user4b8.setDisable(card8 != null && card8.isPlayed ? card8.isPlayed : disable);
+            user4b9.setDisable(card9 != null && card9.isPlayed ? card9.isPlayed : disable);
         }
     }
 
