@@ -42,7 +42,7 @@ public final class SearchGameUtil extends Thread implements Service, Closeable {
     /**
      * How many players are required to be inside a game (min and max).
      */
-    private static final int PLAYERS_PER_GAME = 4;
+    private static final int PLAYERS_PER_GAME = 1;
 
     /**
      * The logger to print to console and save in a .log file.
@@ -88,7 +88,7 @@ public final class SearchGameUtil extends Thread implements Service, Closeable {
                 }
 
                 // Create the game.
-                GameUtil newGame = new GameUtil(playersToPlay.get(0), playersToPlay.get(1), playersToPlay.get(2), playersToPlay.get(3));
+                GameUtil newGame = new GameUtil(playersToPlay.get(0));
                 runningGames.add(newGame);
 
                 // Remove the players from searching.
