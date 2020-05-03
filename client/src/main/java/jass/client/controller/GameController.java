@@ -403,6 +403,7 @@ public final class GameController extends Controller implements DisconnectEventL
         logger.info("observable listeners created");
         disableButtons(true);
         logger.info("buttons disabled");
+        cardButtons = cardButtonsToArray();
         addClickListenerToCardButtons();
         logger.info("button click listeners created");
         updateUserNames();
@@ -412,7 +413,6 @@ public final class GameController extends Controller implements DisconnectEventL
             updateCardImages();
             logger.info("updated card images");
         }
-        cardButtons = cardButtonsToArray();
 
 
         SocketUtil socket = ServiceLocator.get(SocketUtil.class);
