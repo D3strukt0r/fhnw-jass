@@ -260,12 +260,13 @@ public final class GameUtil implements ChosenGameModeEventListener, PlayedCardEv
         CardEntity firstCardOfTurn =  currentTurn.getCardOne();
         CardEntity playedCard = CardRepository.getSingleton(null).getById(cardId);
         DeckEntity deck = DeckRepository.getSingleton(null).getById(deckId);
+        String trumpSuit = String.valueOf(currentRound.getTrumpfSuit());
 
         // In case the playedCard is first card of current turn the move is always valid
         if(firstCardOfTurn.getId() == playedCard.getId() || firstCardOfTurn.equals(null)) { return true; }
 
         // If playedCard equals the trump suit, the move is always valid
-        if (playedCard.getSuit().getKey().equals(currentRound.getTrumpfSuit())) {
+        if (playedCard.getSuit().getKey().equals(trumpSuit)) {
             return true;
         }
 
@@ -285,7 +286,7 @@ public final class GameUtil implements ChosenGameModeEventListener, PlayedCardEv
                     if (cardsInDeck.get(i).getSuit().getKey().equals(firstCardOfTurn.getSuit().getKey())) {
 
                         // Check exception of trump jack as you are never forced to play this card.
-                        if (cardsInDeck.get(i).getSuit().getKey().equals(currentRound.getTrumpfSuit())) {
+                        if (cardsInDeck.get(i).getSuit().getKey().equals(trumpSuit)) {
                             if (cardsInDeck.get(i).getRank().getId() != 6) {
                                 isValidMove = false;
                                 break;
@@ -318,11 +319,13 @@ public final class GameUtil implements ChosenGameModeEventListener, PlayedCardEv
      * @return True if the move is valid, false if invalid
      */
     public static boolean validateMoveTrumpTest(RoundEntity testRound, CardEntity firstCardOfTurn, CardEntity playedCard, DeckEntity deck) {
+        String trumpSuit = String.valueOf(testRound.getTrumpfSuit());
+
         // In case the playedCard is first card of current turn the move is always valid
         if(firstCardOfTurn.getId() == playedCard.getId() || firstCardOfTurn.equals(null)) { return true; }
-        
+
         // If playedCard equals the trump suit, the move is always valid
-        if (playedCard.getSuit().getKey().equals(testRound.getTrumpfSuit())) {
+        if (playedCard.getSuit().getKey().equals(trumpSuit)) {
             return true;
         }
 
@@ -342,7 +345,7 @@ public final class GameUtil implements ChosenGameModeEventListener, PlayedCardEv
                     if (cardsInDeck.get(i).getSuit().getKey().equals(firstCardOfTurn.getSuit().getKey())) {
 
                         // Check exception of trump jack as you are never forced to play this card.
-                        if (cardsInDeck.get(i).getSuit().getKey().equals(testRound.getTrumpfSuit())) {
+                        if (cardsInDeck.get(i).getSuit().getKey().equals(trumpSuit)) {
                             if (cardsInDeck.get(i).getRank().getId() != 6) {
                                 isValidMove = false;
                                 break;

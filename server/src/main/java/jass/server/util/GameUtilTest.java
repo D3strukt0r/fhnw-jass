@@ -11,16 +11,48 @@ import jass.server.entity.*;
 import org.junit.Before;
 import org.junit.Test;
 
+/**
+ * Test Class for the validation of the different game modes.
+ *
+ * The card id's with the corresponding suit and rank values are copied at the bottom of this document.
+ *
+ * @author Thomas Weber, Manuele Vaccari
+ * @version %I%, %G%
+ * @since 0.0.1
+ */
+
 public class GameUtilTest {
 
     private static ArrayList<RankEntity> ranks = new ArrayList<>();
     private static ArrayList<SuitEntity> suits = new ArrayList<>();
     private static ArrayList<CardEntity> cards = new ArrayList<>();
 
-    private static DeckEntity deckOne = new DeckEntity();
-    private static RoundEntity round = new RoundEntity();
-    private static CardEntity firstCardOfTurn = new CardEntity();
-    private static CardEntity playedCard = new CardEntity();
+    /**
+     * Test one properties
+     * Test for validateMoveTrump() function
+     */
+    private static DeckEntity deckT1 = new DeckEntity();
+    private static RoundEntity roundT1 = new RoundEntity();
+    private static CardEntity firstCardOfTurnT1 = new CardEntity();
+    private static CardEntity playedCardT1 = new CardEntity();
+
+    /**
+     * Test two properties
+     * Test for validateMoveTrump() function
+     */
+    private static DeckEntity deckT2 = new DeckEntity();
+    private static RoundEntity roundT2 = new RoundEntity();
+    private static CardEntity firstCardOfTurnT2 = new CardEntity();
+    private static CardEntity playedCardT2 = new CardEntity();
+
+    /**
+     * Test three properties
+     * Test for validateMoveTrump() function
+     */
+    private static DeckEntity deckT3 = new DeckEntity();
+    private static RoundEntity roundT3 = new RoundEntity();
+    private static CardEntity firstCardOfTurnT3 = new CardEntity();
+    private static CardEntity playedCardT3 = new CardEntity();
 
     @Before
     public void createTestData() {
@@ -28,74 +60,132 @@ public class GameUtilTest {
         suits = insertSuitSeedData();
         cards = insertCardSeedData();
 
-        round.setGameMode(GameMode.TRUMPF);
-        round.setTrumpfSuit(Card.Suit.Hearts);
-        deckOne.setRound(round);
-
-        ArrayList<CardEntity> deckOneCards = new ArrayList<>();
-        deckOneCards = createNineCardsForTestDeckOne();
-        ArrayList<Boolean> deckOneHasBeenPlayed = new ArrayList<>();
-        deckOneHasBeenPlayed = createNineCardsHaveBeenPlayedForTestDeckOne();
-
-        this.deckOne.setCardOne(deckOneCards.get(0));
-        this.deckOne.setCardOneHasBeenPlayed(deckOneHasBeenPlayed.get(0));
-        this.deckOne.setCardTwo(deckOneCards.get(1));
-        this.deckOne.setCardTwoHasBeenPlayed(deckOneHasBeenPlayed.get(1));
-        this.deckOne.setCardThree(deckOneCards.get(2));
-        this.deckOne.setCardThreeHasBeenPlayed(deckOneHasBeenPlayed.get(2));
-        this.deckOne.setCardFour(deckOneCards.get(3));
-        this.deckOne.setCardFourHasBeenPlayed(deckOneHasBeenPlayed.get(3));
-        this.deckOne.setCardFive(deckOneCards.get(4));
-        this.deckOne.setCardFiveHasBeenPlayed(deckOneHasBeenPlayed.get(4));
-        this.deckOne.setCardSix(deckOneCards.get(5));
-        this.deckOne.setCardSixHasBeenPlayed(deckOneHasBeenPlayed.get(5));
-        this.deckOne.setCardSeven(deckOneCards.get(6));
-        this.deckOne.setCardSevenHasBeenPlayed(deckOneHasBeenPlayed.get(6));
-        this.deckOne.setCardEight(deckOneCards.get(7));
-        this.deckOne.setCardEightHasBeenPlayed(deckOneHasBeenPlayed.get(7));
-        this.deckOne.setCardNine(deckOneCards.get(8));
-        this.deckOne.setCardNineHasBeenPlayed(deckOneHasBeenPlayed.get(8));
-
-        firstCardOfTurn = cards.get(18);
-        playedCard = cards.get(0);
+        insertTestOneData();
+        insertTestTwoData();
+        insertTestThreeData();
     }
 
-    public ArrayList<CardEntity> createNineCardsForTestDeckOne() {
-        ArrayList<CardEntity> testDeckOne = new ArrayList<>();
-        testDeckOne.add(cards.get(0));
-        testDeckOne.add(cards.get(10));
-        testDeckOne.add(cards.get(20));
-        testDeckOne.add(cards.get(15));
-        testDeckOne.add(cards.get(12));
-        testDeckOne.add(cards.get(8));
-        testDeckOne.add(cards.get(29));
-        testDeckOne.add(cards.get(31));
-        testDeckOne.add(cards.get(35));
+    /**
+     * Test one data:
+     * - Game Mode Trump
+     * - Trump Suite Hearts
+     * - First turn of round is Heart 6
+     * - The player only has one card with suit heart which is the jack.
+     * - The player plays an Ace of spades.
+     * - Assertion is that this move is true/valid, as you are never forced to play the jack.
+     */
+    private void insertTestOneData() {
+        roundT1.setGameMode(GameMode.TRUMPF);
+        roundT1.setTrumpfSuit(Card.Suit.Hearts);
+        deckT1.setRound(roundT1);
 
-        return testDeckOne;
+        deckT1.setCardOne(cards.get(10));
+        deckT1.setCardOneHasBeenPlayed(false);
+        deckT1.setCardTwo(cards.get(11));
+        deckT1.setCardTwoHasBeenPlayed(false);
+        deckT1.setCardThree(cards.get(25));
+        deckT1.setCardThreeHasBeenPlayed(false);
+        deckT1.setCardFour(cards.get(26));
+        deckT1.setCardFourHasBeenPlayed(true);
+        deckT1.setCardFive(cards.get(27));
+        deckT1.setCardFiveHasBeenPlayed(true);
+        deckT1.setCardSix(cards.get(28));
+        deckT1.setCardSixHasBeenPlayed(false);
+        deckT1.setCardSeven(cards.get(29));
+        deckT1.setCardSevenHasBeenPlayed(false);
+        deckT1.setCardEight(cards.get(30));
+        deckT1.setCardEightHasBeenPlayed(true);
+        deckT1.setCardNine(cards.get(6));
+        deckT1.setCardNineHasBeenPlayed(false);
+
+        firstCardOfTurnT1 = cards.get(0);
+        playedCardT1 = deckT1.getCardSeven();
     }
 
-    public ArrayList<Boolean> createNineCardsHaveBeenPlayedForTestDeckOne() {
-        ArrayList<Boolean> testDeckOneCardHasBeenPlayed = new ArrayList<>();
-        testDeckOneCardHasBeenPlayed.add(false);
-        testDeckOneCardHasBeenPlayed.add(true);
-        testDeckOneCardHasBeenPlayed.add(false);
-        testDeckOneCardHasBeenPlayed.add(false);
-        testDeckOneCardHasBeenPlayed.add(false);
-        testDeckOneCardHasBeenPlayed.add(true);
-        testDeckOneCardHasBeenPlayed.add(false);
-        testDeckOneCardHasBeenPlayed.add(true);
-        testDeckOneCardHasBeenPlayed.add(false);
+    /**
+     * Test two data:
+     * - Game Mode Trump
+     * - Trump Suite Clubs
+     * - First turn of round is queen of Spades
+     * - The player had two cards with suit spade in his hand but has already played both before this turn
+     * - The player plays an Ace of hearts.
+     * - Assertion is that this move is true/valid, as he has already played out his spades.
+     */
+    private void insertTestTwoData() {
+        roundT2.setGameMode(GameMode.TRUMPF);
+        roundT2.setTrumpfSuit(Card.Suit.Clubs);
+        deckT2.setRound(roundT2);
 
-        return testDeckOneCardHasBeenPlayed;
+        deckT2.setCardOne(cards.get(20));
+        deckT2.setCardOneHasBeenPlayed(true);
+        deckT2.setCardTwo(cards.get(23));
+        deckT2.setCardTwoHasBeenPlayed(true);
+        deckT2.setCardThree(cards.get(9));
+        deckT2.setCardThreeHasBeenPlayed(false);
+        deckT2.setCardFour(cards.get(30));
+        deckT2.setCardFourHasBeenPlayed(false);
+        deckT2.setCardFive(cards.get(31));
+        deckT2.setCardFiveHasBeenPlayed(false);
+        deckT2.setCardSix(cards.get(32));
+        deckT2.setCardSixHasBeenPlayed(false);
+        deckT2.setCardSeven(cards.get(33));
+        deckT2.setCardSevenHasBeenPlayed(false);
+        deckT2.setCardEight(cards.get(34));
+        deckT2.setCardEightHasBeenPlayed(false);
+        deckT2.setCardNine(cards.get(35));
+        deckT2.setCardNineHasBeenPlayed(false);
+
+        firstCardOfTurnT2 = cards.get(27);
+        playedCardT2 = deckT2.getCardThree();
+    }
+
+    /**
+     * Test two data:
+     * - Game Mode Trump
+     * - Trump Suite Clubs
+     * - First turn of round is queen of Spades
+     * - The player has two cards with suit spade in his hand, one already played & one still in his hands
+     * - The player plays an Ace of hearts.
+     * - Assertion is that this move is false/invalid, as he must have played one of the spades.
+     */
+    private void insertTestThreeData() {
+        roundT3.setGameMode(GameMode.TRUMPF);
+        roundT3.setTrumpfSuit(Card.Suit.Clubs);
+        deckT3.setRound(roundT3);
+
+        deckT3.setCardOne(cards.get(20));
+        deckT3.setCardOneHasBeenPlayed(true);
+        deckT3.setCardTwo(cards.get(23));
+        deckT3.setCardTwoHasBeenPlayed(false);
+        deckT3.setCardThree(cards.get(9));
+        deckT3.setCardThreeHasBeenPlayed(false);
+        deckT3.setCardFour(cards.get(30));
+        deckT3.setCardFourHasBeenPlayed(false);
+        deckT3.setCardFive(cards.get(31));
+        deckT3.setCardFiveHasBeenPlayed(true);
+        deckT3.setCardSix(cards.get(32));
+        deckT3.setCardSixHasBeenPlayed(false);
+        deckT3.setCardSeven(cards.get(33));
+        deckT3.setCardSevenHasBeenPlayed(false);
+        deckT3.setCardEight(cards.get(34));
+        deckT3.setCardEightHasBeenPlayed(false);
+        deckT3.setCardNine(cards.get(35));
+        deckT3.setCardNineHasBeenPlayed(false);
+
+        firstCardOfTurnT3 = cards.get(27);
+        playedCardT3 = deckT3.getCardThree();
     }
 
     @Test
-    public void test() {
-        assertFalse(GameUtil.validateMoveTrumpTest(round, firstCardOfTurn, playedCard, deckOne));
+    public void testValidateMoveTrump() {
+        assertTrue(GameUtil.validateMoveTrumpTest(roundT1, firstCardOfTurnT1, playedCardT1, deckT1));
+        assertTrue(GameUtil.validateMoveTrumpTest(roundT2, firstCardOfTurnT2, playedCardT2, deckT2));
+        assertFalse(GameUtil.validateMoveTrumpTest(roundT3, firstCardOfTurnT3, playedCardT3, deckT3));
     }
 
-
+    /**
+     * Generate Rank, Suit and Card Data
+     */
     private ArrayList<RankEntity> insertRankSeedData() {
         ArrayList<RankEntity> createdRanks = new ArrayList<>();
         createdRanks.add(new RankEntity().setId(1).setKey("6").setPointsTrumpf(0).setPointsObeAbe(0).setPointsOndeufe(11));
@@ -124,20 +214,20 @@ public class GameUtilTest {
         ArrayList<CardEntity> createdCards = new ArrayList<>();
         int addend = 0;
         for (int i = 0; i <= 3; i++) {
-            for (int j = 0; j <= 8; j++) {
+            for (int j = 0; j <= 9; j++) {
                 createdCards.add((new CardEntity())
                     .setId(j + addend)
                     .setRank(ranks.get(j))
                     .setSuit(suits.get(i))
                 );
-
+                // Comment out following 4 lines to remove print of cards into console.
                 int id = j + addend;
                 System.out.printf("Card Id: " + id + "\t\t");
                 System.out.printf(" Rank: " + ranks.get(j).getKey() + "\t\t");
                 System.out.println(" Suit: " + suits.get(i).getKey());
 
             }
-            addend += 9;
+            addend += 10;
         }
         return createdCards;
     }
@@ -146,41 +236,44 @@ public class GameUtilTest {
 
 
 /**
- * Card Id: 0		 Rank: 6		 Suit: hearts
+ *Card Id: 0		 Rank: 6		 Suit: hearts
  * Card Id: 1		 Rank: 6		 Suit: hearts
  * Card Id: 2		 Rank: 7		 Suit: hearts
  * Card Id: 3		 Rank: 8		 Suit: hearts
  * Card Id: 4		 Rank: 9		 Suit: hearts
  * Card Id: 5		 Rank: 10		 Suit: hearts
  * Card Id: 6		 Rank: jack		 Suit: hearts
- * Card Id: 7		 Rank: queen		 Suit: hearts
+ * Card Id: 7		 Rank: queen	 Suit: hearts
  * Card Id: 8		 Rank: king		 Suit: hearts
- * Card Id: 9		 Rank: 6		 Suit: diamonds
+ * Card Id: 9		 Rank: ace		 Suit: hearts
  * Card Id: 10		 Rank: 6		 Suit: diamonds
- * Card Id: 11		 Rank: 7		 Suit: diamonds
- * Card Id: 12		 Rank: 8		 Suit: diamonds
- * Card Id: 13		 Rank: 9		 Suit: diamonds
- * Card Id: 14		 Rank: 10		 Suit: diamonds
- * Card Id: 15		 Rank: jack		 Suit: diamonds
- * Card Id: 16		 Rank: queen		 Suit: diamonds
- * Card Id: 17		 Rank: king		 Suit: diamonds
- * Card Id: 18		 Rank: 6		 Suit: spades
- * Card Id: 19		 Rank: 6		 Suit: spades
- * Card Id: 20		 Rank: 7		 Suit: spades
- * Card Id: 21		 Rank: 8		 Suit: spades
- * Card Id: 22		 Rank: 9		 Suit: spades
- * Card Id: 23		 Rank: 10		 Suit: spades
- * Card Id: 24		 Rank: jack		 Suit: spades
- * Card Id: 25		 Rank: queen		 Suit: spades
- * Card Id: 26		 Rank: king		 Suit: spades
- * Card Id: 27		 Rank: 6		 Suit: clubs
- * Card Id: 28		 Rank: 6		 Suit: clubs
- * Card Id: 29		 Rank: 7		 Suit: clubs
- * Card Id: 30		 Rank: 8		 Suit: clubs
- * Card Id: 31		 Rank: 9		 Suit: clubs
- * Card Id: 32		 Rank: 10		 Suit: clubs
- * Card Id: 33		 Rank: jack		 Suit: clubs
- * Card Id: 34		 Rank: queen		 Suit: clubs
- * Card Id: 35		 Rank: king		 Suit: clubs
- *
+ * Card Id: 11		 Rank: 6		 Suit: diamonds
+ * Card Id: 12		 Rank: 7		 Suit: diamonds
+ * Card Id: 13		 Rank: 8		 Suit: diamonds
+ * Card Id: 14		 Rank: 9		 Suit: diamonds
+ * Card Id: 15		 Rank: 10		 Suit: diamonds
+ * Card Id: 16		 Rank: jack		 Suit: diamonds
+ * Card Id: 17		 Rank: queen	 Suit: diamonds
+ * Card Id: 18		 Rank: king		 Suit: diamonds
+ * Card Id: 19		 Rank: ace		 Suit: diamonds
+ * Card Id: 20		 Rank: 6		 Suit: spades
+ * Card Id: 21		 Rank: 6		 Suit: spades
+ * Card Id: 22		 Rank: 7		 Suit: spades
+ * Card Id: 23		 Rank: 8		 Suit: spades
+ * Card Id: 24		 Rank: 9		 Suit: spades
+ * Card Id: 25		 Rank: 10		 Suit: spades
+ * Card Id: 26		 Rank: jack		 Suit: spades
+ * Card Id: 27		 Rank: queen	 Suit: spades
+ * Card Id: 28		 Rank: king		 Suit: spades
+ * Card Id: 29		 Rank: ace		 Suit: spades
+ * Card Id: 30		 Rank: 6		 Suit: clubs
+ * Card Id: 31		 Rank: 6		 Suit: clubs
+ * Card Id: 32		 Rank: 7		 Suit: clubs
+ * Card Id: 33		 Rank: 8		 Suit: clubs
+ * Card Id: 34		 Rank: 9		 Suit: clubs
+ * Card Id: 35		 Rank: 10		 Suit: clubs
+ * Card Id: 36		 Rank: jack		 Suit: clubs
+ * Card Id: 37		 Rank: queen	 Suit: clubs
+ * Card Id: 38		 Rank: king		 Suit: clubs
+ * Card Id: 39		 Rank: ace		 Suit: clubs
  * */
