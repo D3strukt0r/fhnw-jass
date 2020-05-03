@@ -20,20 +20,20 @@ package jass.client.message;
 
 import jass.client.util.SocketUtil;
 import jass.lib.message.MessageData;
-import jass.lib.message.PlayedCardData;
+import jass.lib.message.PlayCardData;
 
 public final class PlayCard extends Message {
     /**
      * The data of the message.
      */
-    private final PlayedCardData data;
+    private final PlayCardData data;
 
     /**
      * @param rawData The data (still not casted)
      */
     public PlayCard(final MessageData rawData) {
         super(rawData);
-        data = (PlayedCardData) rawData;
+        data = (PlayCardData) rawData;
     }
 
     @Override
