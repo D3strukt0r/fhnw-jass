@@ -312,13 +312,14 @@ public final class GameUtil implements ChosenGameModeEventListener, PlayedCardEv
      * deckID) but slightly changed in order to be able to test the functionality of the method with unit tests.
      * All data which get fetched from the database in the validateMoveTrump() function are here passed in as parameter.
      *
+     * @param testRound The test round
      * @param firstCardOfTurn The first card of the turn
      * @param playedCard The playedCard
      * @param deck Deck of the user to have made the move
      *
      * @return True if the move is valid, false if invalid
      */
-    public static boolean validateMoveTrumpTest(RoundEntity testRound, CardEntity firstCardOfTurn, CardEntity playedCard, DeckEntity deck) {
+    public static boolean testingValidateMoveTrumpFunction(RoundEntity testRound, CardEntity firstCardOfTurn, CardEntity playedCard, DeckEntity deck) {
         String trumpSuit = String.valueOf(testRound.getTrumpfSuit());
 
         // In case the playedCard is first card of current turn the move is always valid

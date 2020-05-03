@@ -178,13 +178,13 @@ public class GameUtilTest {
 
     @Test
     public void testValidateMoveTrump() {
-        assertTrue(GameUtil.validateMoveTrumpTest(roundT1, firstCardOfTurnT1, playedCardT1, deckT1));
-        assertTrue(GameUtil.validateMoveTrumpTest(roundT2, firstCardOfTurnT2, playedCardT2, deckT2));
-        assertFalse(GameUtil.validateMoveTrumpTest(roundT3, firstCardOfTurnT3, playedCardT3, deckT3));
+        assertTrue(GameUtil.testingValidateMoveTrumpFunction(roundT1, firstCardOfTurnT1, playedCardT1, deckT1));
+        assertTrue(GameUtil.testingValidateMoveTrumpFunction(roundT2, firstCardOfTurnT2, playedCardT2, deckT2));
+        assertFalse(GameUtil.testingValidateMoveTrumpFunction(roundT3, firstCardOfTurnT3, playedCardT3, deckT3));
     }
 
     /**
-     * Generate Rank, Suit and Card Data
+     * Generate Rank Data
      */
     private ArrayList<RankEntity> insertRankSeedData() {
         ArrayList<RankEntity> createdRanks = new ArrayList<>();
@@ -201,6 +201,9 @@ public class GameUtilTest {
         return createdRanks;
     }
 
+    /**
+     * Generate Suit Data
+     */
     private ArrayList<SuitEntity> insertSuitSeedData() {
         ArrayList<SuitEntity> createdSuits = new ArrayList<>();
         createdSuits.add((new SuitEntity()).setId(1).setKey("hearts"));
@@ -210,6 +213,9 @@ public class GameUtilTest {
         return createdSuits;
     }
 
+    /**
+     * Generate Card Data
+     */
     private ArrayList<CardEntity> insertCardSeedData() {
         ArrayList<CardEntity> createdCards = new ArrayList<>();
         int addend = 0;
