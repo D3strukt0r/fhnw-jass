@@ -238,9 +238,12 @@ public final class GameUtil implements ChosenGameModeEventListener, PlayedCardEv
 
     private boolean validateMove(PlayedCardData data) {
         boolean isValidMove = false;
+        CardEntity playedCard = CardRepository.getSingleton(null).getById(data.getCardId());
+        // TODO - Once merged with branch "make_player_move": Get correct deckId of the player which played this card
+        DeckEntity deckOfPlayer = DeckRepository.getSingleton(null).getById(currentDeckPlayerOne.getId());
+
         if (currentRound.getGameMode() == GameMode.TRUMPF) {
-            // TODO - Once merged with branch "make_player_move": Get correct deckId of the player which played this card
-            isValidMove = validateMoveTrump(data.getCardId(), currentDeckPlayerOne.getId());
+            isValidMove = validateMoveTrump(playedCard, deckOfPlayer, currentTurn.getCardOne(), String.valueOf(currentRound.getTrumpfSuit()));
         }
 
         return isValidMove;
@@ -251,17 +254,14 @@ public final class GameUtil implements ChosenGameModeEventListener, PlayedCardEv
      *
      * Validates a move from one of the clients for the game mode "Trump"
      *
-     * @param cardId The id of the card which has been played
-     * @param deckId The id of the deck of the client to have made the move
+     * @param playedCard The card which has been played
+     * @param deck The deck of the client to have made the move
+     * @param firstCardOfTurn The first card of this turn which was played
+     * @param trumpSuit Suit which is trump in this round
      *
      * @return True if the move is valid, false if invalid
      */
-    private boolean validateMoveTrump(int cardId, int deckId) {
-        CardEntity firstCardOfTurn =  currentTurn.getCardOne();
-        CardEntity playedCard = CardRepository.getSingleton(null).getById(cardId);
-        DeckEntity deck = DeckRepository.getSingleton(null).getById(deckId);
-        String trumpSuit = String.valueOf(currentRound.getTrumpfSuit());
-
+    public static boolean validateMoveTrump(CardEntity playedCard, DeckEntity deck, CardEntity firstCardOfTurn, String trumpSuit) {
         // In case the playedCard is first card of current turn the move is always valid
         if(firstCardOfTurn.getId() == playedCard.getId() || firstCardOfTurn.equals(null)) { return true; }
 

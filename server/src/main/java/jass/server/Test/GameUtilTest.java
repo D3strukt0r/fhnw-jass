@@ -1,4 +1,4 @@
-package jass.server.util;
+package jass.server.Test;
 
 import static org.junit.Assert.*;
 
@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import jass.lib.Card;
 import jass.lib.GameMode;
 import jass.server.entity.*;
+import jass.server.util.GameUtil;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -178,9 +179,9 @@ public class GameUtilTest {
 
     @Test
     public void testValidateMoveTrump() {
-        assertTrue(GameUtil.testingValidateMoveTrumpFunction(roundT1, firstCardOfTurnT1, playedCardT1, deckT1));
-        assertTrue(GameUtil.testingValidateMoveTrumpFunction(roundT2, firstCardOfTurnT2, playedCardT2, deckT2));
-        assertFalse(GameUtil.testingValidateMoveTrumpFunction(roundT3, firstCardOfTurnT3, playedCardT3, deckT3));
+        assertTrue(GameUtil.validateMoveTrump(playedCardT1, deckT1, firstCardOfTurnT1, String.valueOf(roundT1.getTrumpfSuit())));
+        assertTrue(GameUtil.validateMoveTrump(playedCardT2, deckT2, firstCardOfTurnT2, String.valueOf(roundT2.getTrumpfSuit())));
+        assertFalse(GameUtil.validateMoveTrump(playedCardT3, deckT3, firstCardOfTurnT3, String.valueOf(roundT3.getTrumpfSuit())));
     }
 
     /**
