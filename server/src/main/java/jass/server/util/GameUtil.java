@@ -1,5 +1,6 @@
 package jass.server.util;
 
+import jass.lib.Card;
 import jass.lib.GameMode;
 import jass.lib.message.*;
 import jass.lib.servicelocator.ServiceLocator;
@@ -261,17 +262,17 @@ public final class GameUtil implements ChosenGameModeEventListener, PlayedCardEv
         DeckEntity deck = DeckRepository.getSingleton(null).getById(deckId);
 
         // In case the playedCard is first card of current turn the move is always valid
-        if(firstCardOfTurn.equals(playedCard) || firstCardOfTurn.equals(null)) { return true; }
+        if(firstCardOfTurn.getId() == playedCard.getId() || firstCardOfTurn.equals(null)) { return true; }
 
         // If playedCard equals the trump suit, the move is always valid
-        if (playedCard.getSuit().equals(currentRound.getTrumpfSuit())) {
+        if (playedCard.getSuit().getKey().equals(currentRound.getTrumpfSuit())) {
             return true;
         }
 
         boolean isValidMove = true;
 
         // If the suit of the playedCard does not equal the suit of the firstCardOfTurn, it might be an invalid move - depending on if the client had another card in his hands which he must have played.
-        if (!firstCardOfTurn.getSuit().equals(playedCard.getSuit())) {
+        if (!firstCardOfTurn.getSuit().getKey().equals(playedCard.getSuit().getKey())) {
 
             // Get deck of the current player as array and which cards have been played
             ArrayList<CardEntity> cardsInDeck = deck.getCards();
@@ -281,10 +282,10 @@ public final class GameUtil implements ChosenGameModeEventListener, PlayedCardEv
                 // Only unplayed cards should be checked
                 if (cardsHaveBeenPlayed.get(i) == false) {
                     // If a card has the same suite as the firstCardOfTurn, this card has to have been played and thus this move is invalid
-                    if (cardsInDeck.get(i).getSuit().equals(firstCardOfTurn.getSuit())) {
+                    if (cardsInDeck.get(i).getSuit().getKey().equals(firstCardOfTurn.getSuit().getKey())) {
 
                         // Check exception of trump jack as you are never forced to play this card.
-                        if (cardsInDeck.get(i).getSuit().equals(currentRound.getTrumpfSuit())) {
+                        if (cardsInDeck.get(i).getSuit().getKey().equals(currentRound.getTrumpfSuit())) {
                             if (cardsInDeck.get(i).getRank().getId() != 6) {
                                 isValidMove = false;
                                 break;
@@ -302,4 +303,63 @@ public final class GameUtil implements ChosenGameModeEventListener, PlayedCardEv
 
         return isValidMove;
     }
+
+    /**
+     * @author: Thomas Weber
+     *
+     * Validates a move from one of the clients for the game mode "Trump". This method contains the same logic as validateMoveTrump(cardID,
+     * deckID) but slightly changed in order to easily test the functionality of the method with unit tests.
+     * All data which get fetched from the database are here passed in as parameter.
+     *
+     * @param firstCardOfTurn The first card of the turn
+     * @param playedCard The playedCard
+     * @param deck Deck of the user to have made the move
+     *
+     * @return True if the move is valid, false if invalid
+     */
+    public static boolean validateMoveTrumpTest(RoundEntity testRound, CardEntity firstCardOfTurn, CardEntity playedCard, DeckEntity deck) {
+        // In case the playedCard is first card of current turn the move is always valid
+        if(firstCardOfTurn.getId() == playedCard.getId() || firstCardOfTurn.equals(null)) { return true; }
+        
+        // If playedCard equals the trump suit, the move is always valid
+        if (playedCard.getSuit().getKey().equals(testRound.getTrumpfSuit())) {
+            return true;
+        }
+
+        boolean isValidMove = true;
+
+        // If the suit of the playedCard does not equal the suit of the firstCardOfTurn, it might be an invalid move - depending on if the client had another card in his hands which he must have played.
+        if (!firstCardOfTurn.getSuit().getKey().equals(playedCard.getSuit().getKey())) {
+
+            // Get deck of the current player as array and which cards have been played
+            ArrayList<CardEntity> cardsInDeck = deck.getCards();
+            ArrayList<Boolean> cardsHaveBeenPlayed = deck.getCardsHaveBeenPlayed();
+
+            for (int i = 0; i < cardsInDeck.size(); i++) {
+                // Only unplayed cards should be checked
+                if (cardsHaveBeenPlayed.get(i) == false) {
+                    // If a card has the same suite as the firstCardOfTurn, this card has to have been played and thus this move is invalid
+                    if (cardsInDeck.get(i).getSuit().getKey().equals(firstCardOfTurn.getSuit().getKey())) {
+
+                        // Check exception of trump jack as you are never forced to play this card.
+                        if (cardsInDeck.get(i).getSuit().getKey().equals(testRound.getTrumpfSuit())) {
+                            if (cardsInDeck.get(i).getRank().getId() != 6) {
+                                isValidMove = false;
+                                break;
+                            }
+                        } else {
+                            isValidMove = false;
+                            break;
+                        }
+
+                    }
+                }
+            }
+
+        }
+
+        return isValidMove;
+    }
+
+
 }
