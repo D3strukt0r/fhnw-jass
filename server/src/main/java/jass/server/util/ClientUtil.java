@@ -159,7 +159,6 @@ public final class ClientUtil extends Thread {
     public void handleEventListenerOnMessage(final String msgType, final MessageData msgData) {
         if(AuthenticateRequest(msgData) == false) {
             // TODO do something smarter than just return
-            disconnect();
             return;
         }
         if (msgType.equals("ChosenGameMode")) {
