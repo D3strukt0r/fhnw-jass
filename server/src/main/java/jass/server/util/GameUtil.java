@@ -184,7 +184,6 @@ public final class GameUtil implements ChosenGameModeEventListener, PlayedCardEv
 
             // send turn information to clients
             TurnEntity turn = addNewTurn(client.getUser(), currentRound);
-            TurnRepository.getSingleton(null).add(turn);
             BroadcastTurn broadcastTurn = new BroadcastTurn(new BroadcastTurnData(turn.getId(),
                 turn.getStartingPlayer().getUsername(), "",
                 turn.getCards().stream().map(CardEntity::toCardData).collect(Collectors.toList())
