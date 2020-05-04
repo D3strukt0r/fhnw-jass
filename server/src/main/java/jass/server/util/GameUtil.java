@@ -1,5 +1,6 @@
 package jass.server.util;
 
+import jass.lib.Card;
 import jass.lib.GameMode;
 import jass.lib.message.*;
 import jass.lib.servicelocator.ServiceLocator;
@@ -63,6 +64,26 @@ public final class GameUtil implements ChosenGameModeEventListener, PlayedCardEv
     private TurnEntity currentTurn;
 
     /**
+     * The current deck of player one in the game.
+     */
+    private DeckEntity currentDeckPlayerOne;
+
+    /**
+     * The current deck of player two in the game.
+     */
+    private DeckEntity currentDeckPlayerTwo;
+
+    /**
+     * The current deck of player three in the game.
+     */
+    private DeckEntity currentDeckPlayerThree;
+
+    /**
+     * The current deck of player four in the game.
+     */
+    private DeckEntity currentDeckPlayerFour;
+
+    /**
      * @param clientPlayerOne   Player one.
      * @param clientPlayerTwo   Player two.
      * @param clientPlayerThree Player three.
@@ -119,9 +140,13 @@ public final class GameUtil implements ChosenGameModeEventListener, PlayedCardEv
         // Send a deck to each user
         List<DeckEntity> decks = cardUtil.addDecksForPlayers(currentRound, playerOne, playerTwo, playerThree, playerFour);
         cardUtil.broadcastDeck(clientPlayerOne, decks.get(0));
+        currentDeckPlayerOne = decks.get(0);
         cardUtil.broadcastDeck(clientPlayerTwo, decks.get(1));
+        currentDeckPlayerTwo = decks.get(1);
         cardUtil.broadcastDeck(clientPlayerThree, decks.get(2));
+        currentDeckPlayerThree = decks.get(2);
         cardUtil.broadcastDeck(clientPlayerFour, decks.get(3));
+        currentDeckPlayerFour = decks.get(3);
 
         // Send a message to player one to choose a game mode
         sendChooseGameMode();
@@ -219,10 +244,9 @@ public final class GameUtil implements ChosenGameModeEventListener, PlayedCardEv
         boolean isValid = validateMove(data);
         ClientUtil clientUtil = this.getClientUtilByUsername(data.getUsername());
 
-
-
         if(isValid) {
             TurnRepository turnRepository = TurnRepository.getSingleton(null);
+            UserRepository userRepository = UserRepository.getSingleton(null);
             TurnEntity turn = turnRepository.getById(data.getTurnId());
             CardEntity card = CardRepository.getSingleton(null).getById(data.getCardId());
             if(turn != null) {
@@ -231,7 +255,6 @@ public final class GameUtil implements ChosenGameModeEventListener, PlayedCardEv
                 }
                 if(turn.getCardFour() != null) {
                     // TODO set proper winning player
-                    UserRepository userRepository = UserRepository.getSingleton(null);
                     UserEntity winningUser = userRepository.getByUsername(data.getUsername());
                     if(winningUser != null) {
                         turn.setWinningUser(winningUser);
@@ -272,57 +295,66 @@ public final class GameUtil implements ChosenGameModeEventListener, PlayedCardEv
     }
 
     private boolean validateMove(PlayCardData data) {
-        double randomNumberBetween0And10 = Math.round(Math.random() * 10);
-        if(randomNumberBetween0And10 >= 4) {
-            return true;
-        } else {
-            return false;
+        boolean isValidMove = false;
+        CardEntity playedCard = CardRepository.getSingleton(null).getById(data.getCardId());
+        // TODO - Once merged with branch "make_player_move": Get correct deckId of the player which played this card
+        DeckEntity deckOfPlayer = DeckRepository.getSingleton(null).getById(currentDeckPlayerOne.getId());
+
+        if (currentRound.getGameMode() == GameMode.TRUMPF) {
+            isValidMove = validateMoveTrump(playedCard, deckOfPlayer, currentTurn.getCardOne(), String.valueOf(currentRound.getTrumpfSuit()));
         }
+
+        return isValidMove;
     }
 
     /**
      * @author: Thomas Weber
      *
-     * Validates a move from one of the clients for the game mode "Trump"
+     * Validates a move from one of the clients for the game mode "Trump". Unit test of this method in "GameUtilTest"
      *
      * @param playedCard The card which has been played
      * @param deck The deck of the client to have made the move
+     * @param firstCardOfTurn The first card of this turn which was played
+     * @param trumpSuit Suit which is trump in this round
      *
      * @return True if the move is valid, false if invalid
      */
-    private boolean validateMoveTrump(CardEntity playedCard, DeckEntity deck) {
-        CardEntity firstCardOfTurn = currentTurn.getCardOne();
-
+    public static boolean validateMoveTrump(CardEntity playedCard, DeckEntity deck, CardEntity firstCardOfTurn, String trumpSuit) {
         // In case the playedCard is first card of current turn the move is always valid
-        if(firstCardOfTurn.equals(playedCard)) { return true; }
+        if(firstCardOfTurn.getId() == playedCard.getId() || firstCardOfTurn.equals(null)) { return true; }
 
         // If playedCard equals the trump suit, the move is always valid
-        if (playedCard.getSuit().equals(currentRound.getTrumpfSuit())) {
+        if (playedCard.getSuit().getKey().equals(trumpSuit)) {
             return true;
         }
 
         boolean isValidMove = true;
 
         // If the suit of the playedCard does not equal the suit of the firstCardOfTurn, it might be an invalid move - depending on if the client had another card in his hands which he must have played.
-        if (!firstCardOfTurn.getSuit().equals(playedCard.getSuit())) {
-            // TODO - get only the unplayed cards of deck, not complete deck of player.
-            ArrayList<CardEntity> unplayedCards = deck.getCards();
+        if (!firstCardOfTurn.getSuit().getKey().equals(playedCard.getSuit().getKey())) {
 
-            for (int i = 0; i < unplayedCards.size(); i++) {
-                // If a card has the same suite as the firstCardOfTurn this has to be played and thus the move is invalid
-                if (unplayedCards.get(i).getSuit().equals(firstCardOfTurn.getSuit())) {
+            // Get deck of the current player as array and which cards have been played
+            ArrayList<CardEntity> cardsInDeck = deck.getCards();
+            ArrayList<Boolean> cardsHaveBeenPlayed = deck.getCardsHaveBeenPlayed();
 
-                    // Check exception of trump jack as you are never forced to play this card.
-                    if (unplayedCards.get(i).getSuit().equals(currentRound.getTrumpfSuit())) {
-                        if (unplayedCards.get(i).getRank().getId() != 6) {
+            for (int i = 0; i < cardsInDeck.size(); i++) {
+                // Only unplayed cards should be checked
+                if (cardsHaveBeenPlayed.get(i) == false) {
+                    // If a card has the same suite as the firstCardOfTurn, this card has to have been played and thus this move is invalid
+                    if (cardsInDeck.get(i).getSuit().getKey().equals(firstCardOfTurn.getSuit().getKey())) {
+
+                        // Check exception of trump jack as you are never forced to play this card.
+                        if (cardsInDeck.get(i).getSuit().getKey().equals(trumpSuit)) {
+                            if (cardsInDeck.get(i).getRank().getId() != 6) {
+                                isValidMove = false;
+                                break;
+                            }
+                        } else {
                             isValidMove = false;
                             break;
                         }
-                    } else {
-                        isValidMove = false;
-                        break;
-                    }
 
+                    }
                 }
             }
 
