@@ -40,10 +40,23 @@ public final class DeckEntity extends Entity {
     private CardEntity cardOne;
 
     /**
+     * Boolean value if the first card has been played
+     */
+    @DatabaseField(defaultValue = "false", canBeNull = false)
+    private Boolean cardOneHasBeenPlayed;
+
+    /**
      * Card two.
      */
     @DatabaseField(foreign = true)
     private CardEntity cardTwo;
+
+
+    /**
+     * Boolean value if the second card has been played
+     */
+    @DatabaseField(defaultValue = "false", canBeNull = false)
+    private Boolean cardTwoHasBeenPlayed;
 
     /**
      * Card three.
@@ -52,10 +65,23 @@ public final class DeckEntity extends Entity {
     private CardEntity cardThree;
 
     /**
+     * Boolean value if the third card has been played
+     */
+    @DatabaseField(defaultValue = "false", canBeNull = false)
+    private Boolean cardThreeHasBeenPlayed;
+
+    /**
      * Card four.
      */
     @DatabaseField(foreign = true)
     private CardEntity cardFour;
+
+
+    /**
+     * Boolean value if the fourth card has been played
+     */
+    @DatabaseField(defaultValue = "false", canBeNull = false)
+    private Boolean cardFourHasBeenPlayed;
 
     /**
      * Card five.
@@ -64,10 +90,23 @@ public final class DeckEntity extends Entity {
     private CardEntity cardFive;
 
     /**
+     * Boolean value if the fith card has been played
+     */
+    @DatabaseField(defaultValue = "false", canBeNull = false)
+    private Boolean cardFiveHasBeenPlayed;
+
+    /**
      * Card six.
      */
     @DatabaseField(foreign = true)
     private CardEntity cardSix;
+
+    /**
+     * Boolean value if the sixth card has been played
+     */
+    @DatabaseField(defaultValue = "false", canBeNull = false)
+    private Boolean cardSixHasBeenPlayed;
+
 
     /**
      * Card seven.
@@ -76,16 +115,37 @@ public final class DeckEntity extends Entity {
     private CardEntity cardSeven;
 
     /**
+     * Boolean value if the seventh card has been played
+     */
+    @DatabaseField(defaultValue = "false", canBeNull = false)
+    private Boolean cardSevenHasBeenPlayed;
+
+
+    /**
      * Card eight.
      */
     @DatabaseField(foreign = true)
     private CardEntity cardEight;
 
     /**
+     * Boolean value if the eigth card has been played
+     */
+    @DatabaseField(defaultValue = "false", canBeNull = false)
+    private Boolean cardEightHasBeenPlayed;
+
+
+    /**
      * Card nine.
      */
     @DatabaseField(foreign = true)
     private CardEntity cardNine;
+
+    /**
+     * Boolean value if the ninth card has been played
+     */
+    @DatabaseField(defaultValue = "false", canBeNull = false)
+    private Boolean cardNineHasBeenPlayed;
+
 
     /**
      * For ORMLite all persisted classes must define a no-arg constructor with
@@ -153,6 +213,16 @@ public final class DeckEntity extends Entity {
     }
 
     /**
+     * @return Returns boolean value if the first card has been played.
+     */
+    public boolean getCardOneHasBeenPlayed() { return cardOneHasBeenPlayed; }
+
+    /**
+     * @param cardOneHasBeenPlayed The first card has been played boolean.
+     */
+    public void setCardOneHasBeenPlayed(Boolean cardOneHasBeenPlayed) { this.cardOneHasBeenPlayed = cardOneHasBeenPlayed; }
+
+    /**
      * @return Returns card two.
      */
     public CardEntity getCardTwo() {
@@ -168,6 +238,16 @@ public final class DeckEntity extends Entity {
         this.cardTwo = cardTwo;
         return this;
     }
+
+    /**
+     * @return Returns boolean value if the second card has been played.
+     */
+    public boolean getCardTwoHasBeenPlayed() { return cardTwoHasBeenPlayed; }
+
+    /**
+     * @param cardTwoHasBeenPlayed The second card has been played boolean.
+     */
+    public void setCardTwoHasBeenPlayed(Boolean cardTwoHasBeenPlayed) { this.cardTwoHasBeenPlayed = cardTwoHasBeenPlayed; }
 
     /**
      * @return Returns card three.
@@ -187,6 +267,17 @@ public final class DeckEntity extends Entity {
     }
 
     /**
+     * @return Returns boolean value if the third card has been played.
+     */
+    public boolean getCardThreeHasBeenPlayed() { return cardThreeHasBeenPlayed; }
+
+    /**
+     * @param cardThreeHasBeenPlayed The third card has been played boolean.
+     */
+    public void setCardThreeHasBeenPlayed(Boolean cardThreeHasBeenPlayed) { this.cardThreeHasBeenPlayed = cardThreeHasBeenPlayed; }
+
+
+    /**
      * @return Returns card four.
      */
     public CardEntity getCardFour() {
@@ -202,6 +293,16 @@ public final class DeckEntity extends Entity {
         this.cardFour = cardFour;
         return this;
     }
+
+    /**
+     * @return Returns boolean value if the fourth card has been played.
+     */
+    public boolean getCardFourHasBeenPlayed() { return cardFourHasBeenPlayed; }
+
+    /**
+     * @param cardFourHasBeenPlayed The fourth card has been played boolean.
+     */
+    public void setCardFourHasBeenPlayed(Boolean cardFourHasBeenPlayed) { this.cardFourHasBeenPlayed = cardFourHasBeenPlayed; }
 
     /**
      * @return Returns card five.
@@ -221,6 +322,17 @@ public final class DeckEntity extends Entity {
     }
 
     /**
+     * @return Returns boolean value if the fifth card has been played.
+     */
+    public boolean getCardFiveHasBeenPlayed() { return cardFiveHasBeenPlayed; }
+
+    /**
+     * @param cardFiveHasBeenPlayed The fourth card has been played boolean.
+     */
+    public void setCardFiveHasBeenPlayed(Boolean cardFiveHasBeenPlayed) { this.cardFiveHasBeenPlayed = cardFiveHasBeenPlayed; }
+
+
+    /**
      * @return Returns card six.
      */
     public CardEntity getCardSix() {
@@ -236,6 +348,17 @@ public final class DeckEntity extends Entity {
         this.cardSix = cardSix;
         return this;
     }
+
+    /**
+     * @return Returns boolean value if the sixth card has been played.
+     */
+    public boolean getCardSixHasBeenPlayed() { return cardSixHasBeenPlayed; }
+
+    /**
+     * @param cardSixHasBeenPlayed The sixth card has been played boolean.
+     */
+    public void setCardSixHasBeenPlayed(Boolean cardSixHasBeenPlayed) { this.cardSixHasBeenPlayed = cardSixHasBeenPlayed; }
+
 
     /**
      * @return Returns card seven.
@@ -255,6 +378,17 @@ public final class DeckEntity extends Entity {
     }
 
     /**
+     * @return Returns boolean value if the seventh card has been played.
+     */
+    public boolean getCardSevenHasBeenPlayed() { return cardSevenHasBeenPlayed; }
+
+    /**
+     * @param cardSevenHasBeenPlayed The sixth card has been played boolean.
+     */
+    public void setCardSevenHasBeenPlayed(Boolean cardSevenHasBeenPlayed) { this.cardSevenHasBeenPlayed = cardSevenHasBeenPlayed; }
+
+
+    /**
      * @return Returns card eight.
      */
     public CardEntity getCardEight() {
@@ -270,6 +404,17 @@ public final class DeckEntity extends Entity {
         this.cardEight = cardEight;
         return this;
     }
+
+    /**
+     * @return Returns boolean value if the eigth card has been played.
+     */
+    public boolean getCardEightHasBeenPlayed() { return cardEightHasBeenPlayed; }
+
+    /**
+     * @param cardEightHasBeenPlayed The sixth card has been played boolean.
+     */
+    public void setCardEightHasBeenPlayed(Boolean cardEightHasBeenPlayed) { this.cardEightHasBeenPlayed = cardEightHasBeenPlayed; }
+
 
     /**
      * @return Returns card nine.
@@ -289,6 +434,16 @@ public final class DeckEntity extends Entity {
     }
 
     /**
+     * @return Returns boolean value if the ninth card has been played.
+     */
+    public boolean getCardNineHasBeenPlayed() { return cardNineHasBeenPlayed; }
+
+    /**
+     * @param cardNineHasBeenPlayed The sixth card has been played boolean.
+     */
+    public void setCardNineHasBeenPlayed(Boolean cardNineHasBeenPlayed) { this.cardNineHasBeenPlayed = cardNineHasBeenPlayed; }
+
+    /**
      * @return Returns the cards as an array.
      */
     public ArrayList<CardEntity> getCards() {
@@ -304,4 +459,53 @@ public final class DeckEntity extends Entity {
         cards.add(cardNine);
         return cards;
     }
+
+    /**
+     * @return Returns booleans if cards were played as an array.
+     */
+    public ArrayList<Boolean> getCardsHaveBeenPlayed() {
+        ArrayList<Boolean> cardsHaveBeenPlayed = new ArrayList<>();
+        cardsHaveBeenPlayed.add(cardOneHasBeenPlayed);
+        cardsHaveBeenPlayed.add(cardTwoHasBeenPlayed);
+        cardsHaveBeenPlayed.add(cardThreeHasBeenPlayed);
+        cardsHaveBeenPlayed.add(cardFourHasBeenPlayed);
+        cardsHaveBeenPlayed.add(cardFiveHasBeenPlayed);
+        cardsHaveBeenPlayed.add(cardSixHasBeenPlayed);
+        cardsHaveBeenPlayed.add(cardSevenHasBeenPlayed);
+        cardsHaveBeenPlayed.add(cardEightHasBeenPlayed);
+        cardsHaveBeenPlayed.add(cardNineHasBeenPlayed);
+        return cardsHaveBeenPlayed;
+    }
+
+    public void setPlayedCard(int cardId) {
+        if (cardId == cardOne.getId()) {
+            cardOneHasBeenPlayed = true;
+        }
+        else if (cardId == cardTwo.getId()) {
+            cardTwoHasBeenPlayed = true;
+        }
+        else if (cardId == cardThree.getId()) {
+            cardThreeHasBeenPlayed = true;
+        }
+        else if (cardId == cardFour.getId()) {
+            cardFourHasBeenPlayed = true;
+        }
+        else if (cardId == cardFive.getId()) {
+            cardFiveHasBeenPlayed = true;
+        }
+        else if (cardId == cardSix.getId()) {
+            cardSixHasBeenPlayed = true;
+        }
+        else if (cardId == cardSeven.getId()) {
+            cardSevenHasBeenPlayed = true;
+        }
+        else if (cardId == cardEight.getId()) {
+            cardEightHasBeenPlayed = true;
+        }
+        else if (cardId == cardNine.getId()) {
+            cardNineHasBeenPlayed = true;
+        }
+    }
+
+
 }

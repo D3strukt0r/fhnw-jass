@@ -25,22 +25,8 @@ import com.j256.ormlite.jdbc.JdbcConnectionSource;
 import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.TableUtils;
 import jass.lib.servicelocator.Service;
-import jass.server.entity.CardEntity;
-import jass.server.entity.DeckEntity;
-import jass.server.entity.GameEntity;
-import jass.server.entity.RankEntity;
-import jass.server.entity.RoundEntity;
-import jass.server.entity.SuitEntity;
-import jass.server.entity.TeamEntity;
-import jass.server.entity.UserEntity;
-import jass.server.repository.CardRepository;
-import jass.server.repository.DeckRepository;
-import jass.server.repository.GameRepository;
-import jass.server.repository.RankRepository;
-import jass.server.repository.RoundRepository;
-import jass.server.repository.SuitRepository;
-import jass.server.repository.TeamRepository;
-import jass.server.repository.UserRepository;
+import jass.server.entity.*;
+import jass.server.repository.*;
 
 import java.io.Closeable;
 import java.io.IOException;
@@ -115,6 +101,11 @@ public final class DatabaseUtil implements Service, Closeable {
     private Dao<CardEntity, Integer> cardDao;
 
     /**
+     * The DAO for the turns.
+     */
+    private Dao<TurnEntity, Integer> turnDao;
+
+    /**
      * Create a database connection.
      *
      * @param type             The type of database to use.
@@ -162,6 +153,8 @@ public final class DatabaseUtil implements Service, Closeable {
         RoundRepository.getSingleton(roundDao);
         deckDao = DaoManager.createDao(connectionSource, DeckEntity.class);
         DeckRepository.getSingleton(deckDao);
+        turnDao = DaoManager.createDao(connectionSource, TurnEntity.class);
+        TurnRepository.getSingleton(turnDao);
 
         /*
          * Drop and Recreate all the tables except for the user if server
@@ -175,6 +168,7 @@ public final class DatabaseUtil implements Service, Closeable {
         TableUtils.createTableIfNotExists(connectionSource, TeamEntity.class);
         TableUtils.createTableIfNotExists(connectionSource, RoundEntity.class);
         TableUtils.createTableIfNotExists(connectionSource, DeckEntity.class);
+        TableUtils.createTableIfNotExists(connectionSource, TurnEntity.class);
 
         insertSuitSeedData();
         insertRankSeedData();

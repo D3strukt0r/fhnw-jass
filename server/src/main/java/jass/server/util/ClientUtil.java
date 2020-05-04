@@ -19,10 +19,7 @@
 
 package jass.server.util;
 
-import jass.lib.message.ChosenGameModeData;
-import jass.lib.message.MessageData;
-import jass.lib.message.MessageErrorData;
-import jass.lib.message.PlayedCardData;
+import jass.lib.message.*;
 import jass.lib.servicelocator.ServiceLocator;
 import jass.server.entity.UserEntity;
 import jass.server.eventlistener.ChosenGameModeEventListener;
@@ -157,20 +154,40 @@ public final class ClientUtil extends Thread {
      * @param msgType Message type to check against available events.
      * @param msgData The message to send to the listeners.
      *
-     * @author Thomas Weber, Manuele Vaccari
+     * @author Thomas Weber, Manuele Vaccari, Victor Hargrave
      */
     public void handleEventListenerOnMessage(final String msgType, final MessageData msgData) {
+        if(AuthenticateRequest(msgData) == false) {
+            // TODO do something smarter than just return
+            return;
+        }
         if (msgType.equals("ChosenGameMode")) {
             for (ChosenGameModeEventListener listener : chosenGameModeListener) {
                 logger.info("Invoking onChosenGameMode event on " + listener.getClass().getName());
                 listener.onChosenGameMode((ChosenGameModeData) msgData);
             }
-        } else if (msgType.equals("PlayedCard")) {
+        } else if (msgType.equals("PlayCard")) {
             for (PlayedCardEventListener listener : playedCardListener) {
                 logger.info("Invoking onChosenGameMode event on " + listener.getClass().getName());
-                listener.onPlayedCard((PlayedCardData) msgData);
+                try {
+                    listener.onPlayedCard((PlayCardData) msgData);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
         }
+    }
+
+    /**
+     * @author Victor Hargrave
+     * @since 0.0.1
+     */
+    private boolean AuthenticateRequest(MessageData msgData) {
+        UserEntity user = UserRepository.getSingleton(null).getByUsername(msgData.getUsername());
+        if(user != null && user.getToken() != null && user.getToken().equals(msgData.getToken())) {
+            return true;
+        }
+        return false;
     }
 
     /**

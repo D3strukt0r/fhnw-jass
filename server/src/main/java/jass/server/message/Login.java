@@ -1,6 +1,6 @@
 /*
  * fhnw-jass is jass game programmed in java for a school project.
- * Copyright (C) 2020 Manuele Vaccari
+ * Copyright (C) 2020 Manuele Vaccari & Victor Hargrave & Thomas Weber & Sasa Trajkova
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -91,11 +91,12 @@ public final class Login extends Message {
             // Update last login time
             user.setOnline()
                 .setLastLogin(Date.from(Instant.now()));
+            String token = createToken();
+            user.setToken(token);
             UserRepository.getSingleton(null).update(user);
 
             // Save the user to this connection.
             client.setUser(user);
-            String token = createToken();
             client.setToken(token);
 
             // Return the token to the client.

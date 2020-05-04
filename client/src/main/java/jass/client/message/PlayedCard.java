@@ -1,6 +1,6 @@
 /*
  * fhnw-jass is jass game programmed in java for a school project.
- * Copyright (C) 2020 Manuele Vaccari
+ * Copyright (C) 2020 Manuele Vaccari & Victor Hargrave & Thomas Weber & Sasa Trajkova
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,9 +21,10 @@ package jass.client.message;
 import jass.client.util.SocketUtil;
 import jass.lib.message.ChosenGameModeData;
 import jass.lib.message.MessageData;
+import jass.lib.message.PlayedCardData;
 
 /**
- * @author Manuele Vaccari
+ * @author Victor Hargrave
  * @version %I%, %G%
  * @since 0.0.1
  */
@@ -31,14 +32,14 @@ public final class PlayedCard extends Message {
     /**
      * The data of the message.
      */
-    private final ChosenGameModeData data;
+    private final PlayedCardData data;
 
     /**
      * @param rawData The data (still not casted)
      */
     public PlayedCard(final MessageData rawData) {
         super(rawData);
-        data = (ChosenGameModeData) rawData;
+        data = (PlayedCardData) rawData;
     }
 
     @Override

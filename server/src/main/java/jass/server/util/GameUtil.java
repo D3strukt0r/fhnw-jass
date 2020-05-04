@@ -1,30 +1,21 @@
 package jass.server.util;
 
+import jass.lib.Card;
 import jass.lib.GameMode;
-import jass.lib.message.BroadcastGameModeData;
-import jass.lib.message.ChooseGameModeData;
-import jass.lib.message.ChosenGameModeData;
-import jass.lib.message.GameFoundData;
-import jass.lib.message.PlayedCardData;
+import jass.lib.message.*;
 import jass.lib.servicelocator.ServiceLocator;
-import jass.server.entity.DeckEntity;
-import jass.server.entity.GameEntity;
-import jass.server.entity.RoundEntity;
-import jass.server.entity.TeamEntity;
-import jass.server.entity.UserEntity;
+import jass.server.entity.*;
 import jass.server.eventlistener.ChosenGameModeEventListener;
 import jass.server.eventlistener.PlayedCardEventListener;
-import jass.server.message.BroadcastGameMode;
-import jass.server.message.ChooseGameMode;
-import jass.server.message.GameFound;
-import jass.server.message.Message;
-import jass.server.repository.GameRepository;
-import jass.server.repository.RoundRepository;
-import jass.server.repository.TeamRepository;
+import jass.server.message.*;
+import jass.server.repository.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Callable;
+import java.util.stream.Collectors;
 
 /**
  * @author Thomas Weber, Manuele Vaccari
@@ -66,6 +57,31 @@ public final class GameUtil implements ChosenGameModeEventListener, PlayedCardEv
      * The current round in the game.
      */
     private RoundEntity currentRound;
+
+    /**
+     * The current turn in the game.
+     */
+    private TurnEntity currentTurn;
+
+    /**
+     * The current deck of player one in the game.
+     */
+    private DeckEntity currentDeckPlayerOne;
+
+    /**
+     * The current deck of player two in the game.
+     */
+    private DeckEntity currentDeckPlayerTwo;
+
+    /**
+     * The current deck of player three in the game.
+     */
+    private DeckEntity currentDeckPlayerThree;
+
+    /**
+     * The current deck of player four in the game.
+     */
+    private DeckEntity currentDeckPlayerFour;
 
     /**
      * @param clientPlayerOne   Player one.
@@ -124,9 +140,13 @@ public final class GameUtil implements ChosenGameModeEventListener, PlayedCardEv
         // Send a deck to each user
         List<DeckEntity> decks = cardUtil.addDecksForPlayers(currentRound, playerOne, playerTwo, playerThree, playerFour);
         cardUtil.broadcastDeck(clientPlayerOne, decks.get(0));
+        currentDeckPlayerOne = decks.get(0);
         cardUtil.broadcastDeck(clientPlayerTwo, decks.get(1));
+        currentDeckPlayerTwo = decks.get(1);
         cardUtil.broadcastDeck(clientPlayerThree, decks.get(2));
+        currentDeckPlayerThree = decks.get(2);
         cardUtil.broadcastDeck(clientPlayerFour, decks.get(3));
+        currentDeckPlayerFour = decks.get(3);
 
         // Send a message to player one to choose a game mode
         sendChooseGameMode();
@@ -161,6 +181,15 @@ public final class GameUtil implements ChosenGameModeEventListener, PlayedCardEv
             }
             RoundRepository.getSingleton(null).update(currentRound);
             broadcast(broadcastGameMode);
+
+            // send turn information to clients
+            TurnEntity turn = addNewTurn(client.getUser(), currentRound);
+            BroadcastTurn broadcastTurn = new BroadcastTurn(new BroadcastTurnData(turn.getId(),
+                turn.getStartingPlayer().getUsername(), "",
+                turn.getCards().stream().map(CardEntity::toCardData).collect(Collectors.toList())
+                ));
+            this.currentTurn = turn;
+            broadcast(broadcastTurn);
         }
     }
 
@@ -209,8 +238,160 @@ public final class GameUtil implements ChosenGameModeEventListener, PlayedCardEv
         }
     }
 
-    @Override
-    public void onPlayedCard(final PlayedCardData data) {
-        // TODO
+
+    public void onPlayedCard(final PlayCardData data) throws InterruptedException {
+        boolean isValid = validateMove(data);
+        ClientUtil clientUtil = this.getClientUtilByUsername(data.getUsername());
+        DeckEntity currentDeck = this.getCurrentDeckByUsername(data.getUsername());
+
+        if(isValid) {
+            TurnRepository turnRepository = TurnRepository.getSingleton(null);
+            UserRepository userRepository = UserRepository.getSingleton(null);
+            TurnEntity turn = turnRepository.getById(data.getTurnId());
+            CardEntity card = CardRepository.getSingleton(null).getById(data.getCardId());
+            if(turn != null) {
+                if(card != null) {
+                    turn.addCard(card);
+                    currentDeck.setPlayedCard(data.getCardId());
+                    DeckRepository.getSingleton(null).update(currentDeck);
+                }
+                if(turn.getCardFour() != null) {
+                    // TODO set proper winning player
+                    UserEntity winningUser = userRepository.getByUsername(data.getUsername());
+                    if(winningUser != null) {
+                        turn.setWinningUser(winningUser);
+                    }
+                }
+                turnRepository.update(turn);
+                String winningUsername = turn.getWinningUser() != null ? turn.getWinningUser().getUsername() : "";
+                BroadcastTurn broadcastTurn = new BroadcastTurn(new BroadcastTurnData(turn.getId(),
+                    turn.getStartingPlayer().getUsername(), winningUsername,
+                    turn.getCards().stream().map(CardEntity::toCardData).collect(Collectors.toList())
+                ));
+                this.currentTurn = turn;
+                broadcast(broadcastTurn);
+
+                // start new turn after 3 seconds
+                if(turn.getWinningUser() != null) {
+                    Thread.sleep(4000);
+                    TurnEntity newTurn = addNewTurn(turn.getWinningUser(), currentRound);
+
+                    turnRepository.add(newTurn);
+                    BroadcastTurn newBroadcastTurn = new BroadcastTurn(new BroadcastTurnData(newTurn.getId(),
+                        newTurn.getStartingPlayer().getUsername(), "",
+                        newTurn.getCards().stream().map(CardEntity::toCardData).collect(Collectors.toList())
+                    ));
+                    this.currentTurn = newTurn;
+                    broadcast(newBroadcastTurn);
+                }
+            }
+        } else {
+            // If playedCard is first card in current turn no validations have to be made, just set the playedCard as first card of turn
+            PlayedCard result = new PlayedCard(new PlayedCardData(isValid));
+            clientUtil.send(result);
+        }
+    }
+
+    private TurnEntity addNewTurn(UserEntity startingPlayer, RoundEntity round) {
+        TurnEntity turn = new TurnEntity(round, startingPlayer);
+        TurnRepository.getSingleton(null).add(turn);
+        return turn;
+    }
+
+    private boolean validateMove(PlayCardData data) {
+        boolean isValidMove = false;
+        CardEntity playedCard = CardRepository.getSingleton(null).getById(data.getCardId());
+        DeckEntity deckOfPlayer = getCurrentDeckByUsername(data.getUsername());
+
+        if (currentRound.getGameMode() == GameMode.TRUMPF) {
+            CardEntity cardOne = currentTurn.getCardOne() != null ? currentTurn.getCardOne() : null;
+            isValidMove = validateMoveTrump(playedCard, deckOfPlayer, cardOne, String.valueOf(currentRound.getTrumpfSuit()));
+        }
+
+        return isValidMove;
+    }
+
+    /**
+     * @author: Thomas Weber
+     *
+     * Validates a move from one of the clients for the game mode "Trump". Unit test of this method in "GameUtilTest"
+     *
+     * @param playedCard The card which has been played
+     * @param deck The deck of the client to have made the move
+     * @param firstCardOfTurn The first card of this turn which was played
+     * @param trumpSuit Suit which is trump in this round
+     *
+     * @return True if the move is valid, false if invalid
+     */
+    public static boolean validateMoveTrump(CardEntity playedCard, DeckEntity deck, CardEntity firstCardOfTurn, String trumpSuit) {
+        // In case the playedCard is first card of current turn the move is always valid
+        if(firstCardOfTurn == null || firstCardOfTurn.getId() == playedCard.getId()) { return true; }
+
+        // If playedCard equals the trump suit, the move is always valid
+        if (playedCard.getSuit().getKey().equals(trumpSuit)) {
+            return true;
+        }
+
+        boolean isValidMove = true;
+
+        // If the suit of the playedCard does not equal the suit of the firstCardOfTurn, it might be an invalid move - depending on if the client had another card in his hands which he must have played.
+        if (!firstCardOfTurn.getSuit().getKey().equals(playedCard.getSuit().getKey())) {
+
+            // Get deck of the current player as array and which cards have been played
+            ArrayList<CardEntity> cardsInDeck = deck.getCards();
+            ArrayList<Boolean> cardsHaveBeenPlayed = deck.getCardsHaveBeenPlayed();
+
+            for (int i = 0; i < cardsInDeck.size(); i++) {
+                // Only unplayed cards should be checked
+                if (cardsHaveBeenPlayed.get(i) == null || cardsHaveBeenPlayed.get(i) == false) {
+                    // If a card has the same suite as the firstCardOfTurn, this card has to have been played and thus this move is invalid
+                    if (cardsInDeck.get(i).getSuit().getKey().equals(firstCardOfTurn.getSuit().getKey())) {
+
+                        // Check exception of trump jack as you are never forced to play this card.
+                        if (cardsInDeck.get(i).getSuit().getKey().equals(trumpSuit)) {
+                            if (cardsInDeck.get(i).getRank().getId() != 6) {
+                                isValidMove = false;
+                                break;
+                            }
+                        } else {
+                            isValidMove = false;
+                            break;
+                        }
+
+                    }
+                }
+            }
+
+        }
+
+        return isValidMove;
+    }
+
+    private ClientUtil getClientUtilByUsername(String username) {
+        if (username.equals(clientPlayerOne.getUsername())) {
+            return clientPlayerOne;
+        } else if (username.equals(clientPlayerTwo.getUsername())) {
+            return clientPlayerTwo;
+        } else if (username.equals(clientPlayerThree.getUsername())) {
+            return clientPlayerThree;
+        } else if (username.equals(clientPlayerFour.getUsername())) {
+            return clientPlayerFour;
+        }
+        return null;
+    }
+
+    private DeckEntity getCurrentDeckByUsername(String username) {
+        if (username.equals(clientPlayerOne.getUsername())) {
+            return currentDeckPlayerOne;
+        } else if (username.equals(clientPlayerTwo.getUsername())) {
+            return currentDeckPlayerTwo;
+        } else if (username.equals(clientPlayerThree.getUsername())) {
+            return currentDeckPlayerThree;
+        } else if (username.equals(clientPlayerFour.getUsername())) {
+            return currentDeckPlayerFour;
+        }
+        return null;
     }
 }
+
+

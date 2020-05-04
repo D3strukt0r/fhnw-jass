@@ -1,6 +1,6 @@
 /*
  * fhnw-jass is jass game programmed in java for a school project.
- * Copyright (C) 2020 Manuele Vaccari
+ * Copyright (C) 2020 Manuele Vaccari & Victor Hargrave & Thomas Weber & Sasa Trajkova
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -76,6 +76,16 @@ public abstract class MessageData implements Serializable {
     private final int id;
 
     /**
+     * The Auth token.
+     */
+    private String token;
+
+    /**
+     * The Username.
+     */
+    private String username;
+
+    /**
      * The type (object name).
      */
     private final String messageType;
@@ -86,6 +96,8 @@ public abstract class MessageData implements Serializable {
     public MessageData(final String messageType) {
         id = createId();
         this.messageType = messageType;
+        this.username = this.username != "" || this.username != null ? "" : this.getUsername();
+        this.token = this.token != "" || this.token != null ? "" : this.getToken();
     }
 
     /**
@@ -95,6 +107,8 @@ public abstract class MessageData implements Serializable {
     public MessageData(final int id, final String messageType) {
         this.id = id;
         this.messageType = messageType;
+        this.username = this.username != "" || this.username != null ? "" : this.getUsername();
+        this.token = this.token != "" || this.token != null ? "" : this.getToken();
     }
 
     /**
@@ -102,6 +116,8 @@ public abstract class MessageData implements Serializable {
      */
     public MessageData(final JSONObject data) {
         id = data.getInt("id");
+        token = data.getString("token");
+        username = data.getString("username");
         messageType = data.getString("messageType");
     }
 
@@ -125,5 +141,21 @@ public abstract class MessageData implements Serializable {
      */
     public String getMessageType() {
         return messageType;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getUsername() {
+        return username;
     }
 }
