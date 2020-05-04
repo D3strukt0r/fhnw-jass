@@ -269,6 +269,7 @@ public final class GameUtil implements ChosenGameModeEventListener, PlayedCardEv
                     turn.getStartingPlayer().getUsername(), winningUsername,
                     turn.getCards().stream().map(CardEntity::toCardData).collect(Collectors.toList())
                 ));
+                this.currentTurn = turn;
                 broadcast(broadcastTurn);
 
                 // start new turn after 3 seconds
