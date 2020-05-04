@@ -1,6 +1,6 @@
 /*
  * fhnw-jass is jass game programmed in java for a school project.
- * Copyright (C) 2020 Manuele Vaccari
+ * Copyright (C) 2020 Manuele Vaccari & Victor Hargrave & Thomas Weber & Sasa Trajkova
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,19 +20,19 @@ package jass.client.util;
 
 import jass.client.eventlistener.BroadcastDeckEventListener;
 import jass.client.eventlistener.BroadcastGameModeEventListener;
-import jass.client.eventlistener.BroadcastPlayedCardEventListener;
+import jass.client.eventlistener.BroadcastTurnEventListener;
 import jass.client.eventlistener.ChooseGameModeEventListener;
 import jass.client.eventlistener.DisconnectEventListener;
 import jass.client.eventlistener.GameFoundEventListener;
-import jass.client.eventlistener.PlayCardEventListener;
+import jass.client.eventlistener.PlayedCardEventListener;
 import jass.client.message.Message;
 import jass.lib.message.BroadcastDeckData;
 import jass.lib.message.BroadcastGameModeData;
-import jass.lib.message.BroadcastPlayedCardData;
+import jass.lib.message.BroadcastTurnData;
 import jass.lib.message.ChooseGameModeData;
 import jass.lib.message.GameFoundData;
 import jass.lib.message.MessageData;
-import jass.lib.message.PlayCardData;
+import jass.lib.message.PlayedCardData;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import jass.client.entity.LoginEntity;
@@ -112,12 +112,12 @@ public final class SocketUtil extends Thread implements Service, Closeable {
     /**
      * A list of all objects listening to a play card event.
      */
-    private final ArrayList<PlayCardEventListener> playCardListener = new ArrayList<>();
+    private final ArrayList<PlayedCardEventListener> playedCardListener = new ArrayList<>();
 
     /**
      * A list of objects listening to broadcast played card event.
      */
-    private final ArrayList<BroadcastPlayedCardEventListener> broadcastPlayedCardListener = new ArrayList<>();
+    private final ArrayList<BroadcastTurnEventListener> broadcastTurnListener = new ArrayList<>();
 
     /**
      * A list of all messages coming from the server.
@@ -256,6 +256,11 @@ public final class SocketUtil extends Thread implements Service, Closeable {
      */
     public void send(final Message msg) {
         try {
+            LoginEntity login = ServiceLocator.get(LoginEntity.class);
+            if(isLoggedIn()) {
+                msg.getRawData().setToken(login.getToken());
+                msg.getRawData().setUsername(login.getUsername());
+            }
             OutputStreamWriter out = new OutputStreamWriter(socket.getOutputStream());
             logger.info("Sending message: " + msg.toString());
             out.write(msg.toString() + "\n"); // This will send the serialized MessageData object
@@ -338,23 +343,17 @@ public final class SocketUtil extends Thread implements Service, Closeable {
     }
 
     /**
-     * @param listener A PlayCardEventListener object
-     *
-     * @author Manuele Vaccari
-     * @since 0.0.1
+     * @author Victor Hargrave
      */
-    public void addPlayCardEventListener(final PlayCardEventListener listener) {
-        playCardListener.add(listener);
+    public void addPlayedCardEventListener(final PlayedCardEventListener listener) {
+        playedCardListener.add(listener);
     }
 
     /**
-     * @param listener A BroadcastPlayedCardEventListener object
-     *
-     * @author Manuele Vaccari
-     * @since 0.0.1
+     * @author Victor Hargrave
      */
-    public void addBroadcastPlayedCardEventListener(final BroadcastPlayedCardEventListener listener) {
-        broadcastPlayedCardListener.add(listener);
+    public void addBroadcastedTurnEventListener(final BroadcastTurnEventListener listener) {
+        broadcastTurnListener.add(listener);
     }
 
     /**
@@ -386,16 +385,16 @@ public final class SocketUtil extends Thread implements Service, Closeable {
                     listener.onBroadcastGameMode((BroadcastGameModeData) msgData);
                 }
                 break;
-            case "PlayCard":
-                for (PlayCardEventListener listener : playCardListener) {
+            case "PlayedCard":
+                for (PlayedCardEventListener listener : playedCardListener) {
                     logger.info("Invoking onPlayCard event on " + listener.getClass().getName());
-                    listener.onPlayCard((PlayCardData) msgData);
+                    listener.onPlayedCard((PlayedCardData) msgData);
                 }
                 break;
-            case "BroadcastPlayedCard":
-                for (BroadcastPlayedCardEventListener listener : broadcastPlayedCardListener) {
-                    logger.info("Invoking onBroadcastPlayedCard event on " + listener.getClass().getName());
-                    listener.onBroadcastPlayedCard((BroadcastPlayedCardData) msgData);
+            case "BroadcastTurn":
+                for (BroadcastTurnEventListener listener : broadcastTurnListener) {
+                    logger.info("Invoking onBroadcastTurn event on " + listener.getClass().getName());
+                    listener.onBroadcastTurn((BroadcastTurnData) msgData);
                 }
                 break;
             default:

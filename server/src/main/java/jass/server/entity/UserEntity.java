@@ -1,6 +1,6 @@
 /*
  * fhnw-jass is jass game programmed in java for a school project.
- * Copyright (C) 2020 Manuele Vaccari
+ * Copyright (C) 2020 Manuele Vaccari & Victor Hargrave & Thomas Weber & Sasa Trajkova
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -61,6 +61,9 @@ public final class UserEntity extends Entity {
      */
     @DatabaseField(canBeNull = false)
     private String password;
+
+    @DatabaseField
+    private String token;
 
     /**
      * Whether the user is currently online (connected) or not.
@@ -205,5 +208,13 @@ public final class UserEntity extends Entity {
     public UserEntity setLastLogin(final Date lastLogin) {
         this.lastLogin = lastLogin;
         return this;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
+
+    public String getToken() {
+        return this.token;
     }
 }

@@ -32,7 +32,7 @@ public final class GameEntity extends Entity {
     private TeamEntity teamTwo;
 
     /**
-     * Whether the team is still active.
+     * Whether the game is still active.
      */
     @DatabaseField(defaultValue = "true", canBeNull = false)
     private boolean isActive = true;
