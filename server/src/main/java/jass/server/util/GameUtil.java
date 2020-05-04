@@ -344,7 +344,7 @@ public final class GameUtil implements ChosenGameModeEventListener, PlayedCardEv
 
             for (int i = 0; i < cardsInDeck.size(); i++) {
                 // Only unplayed cards should be checked
-                if (cardsHaveBeenPlayed.get(i) == false) {
+                if (cardsHaveBeenPlayed.get(i) == null || cardsHaveBeenPlayed.get(i) == false) {
                     // If a card has the same suite as the firstCardOfTurn, this card has to have been played and thus this move is invalid
                     if (cardsInDeck.get(i).getSuit().getKey().equals(firstCardOfTurn.getSuit().getKey())) {
 
