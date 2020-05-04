@@ -282,7 +282,7 @@ public final class GameUtil implements ChosenGameModeEventListener, PlayedCardEv
                         newTurn.getStartingPlayer().getUsername(), "",
                         newTurn.getCards().stream().map(CardEntity::toCardData).collect(Collectors.toList())
                     ));
-                    this.currentTurn = turn;
+                    this.currentTurn = newTurn;
                     broadcast(newBroadcastTurn);
                 }
             }
