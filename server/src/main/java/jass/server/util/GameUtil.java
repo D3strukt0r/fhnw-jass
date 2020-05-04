@@ -298,6 +298,12 @@ public final class GameUtil implements ChosenGameModeEventListener, PlayedCardEv
         return turn;
     }
 
+    /**
+     * TODO: Who else worked on this?
+     * @author Manuele Vaccari & ...
+     * @param data
+     * @return
+     */
     private boolean validateMove(PlayCardData data) {
         boolean isValidMove = false;
         CardEntity playedCard = CardRepository.getSingleton(null).getById(data.getCardId());
@@ -306,6 +312,9 @@ public final class GameUtil implements ChosenGameModeEventListener, PlayedCardEv
         if (currentRound.getGameMode() == GameMode.TRUMPF) {
             CardEntity cardOne = currentTurn.getCardOne() != null ? currentTurn.getCardOne() : null;
             isValidMove = validateMoveTrump(playedCard, deckOfPlayer, cardOne, String.valueOf(currentRound.getTrumpfSuit()));
+        } else if (currentRound.getGameMode() == GameMode.OBE_ABE) {
+            CardEntity cardOne = currentTurn.getCardOne() != null ? currentTurn.getCardOne() : null;
+            isValidMove = validateMoveObeAbe(playedCard, deckOfPlayer, cardOne);
         }
 
         return isValidMove;
@@ -365,6 +374,48 @@ public final class GameUtil implements ChosenGameModeEventListener, PlayedCardEv
         }
 
         return isValidMove;
+    }
+
+    /**
+     * @param playedCard      The card that the user wants to play.
+     * @param deck            The complete deck of the player who wants to
+     *                        play.
+     * @param firstCardOfTurn The first card played in the current turn.
+     *
+     * @return Returns true if the move is valid otherwise false.
+     *
+     * @author Manuele Vaccari
+     */
+    public static boolean validateMoveObeAbe(final CardEntity playedCard, final DeckEntity deck, final CardEntity firstCardOfTurn) {
+        // In case the playedCard is first card of current turn the move is
+        // always valid
+        if (firstCardOfTurn == null || firstCardOfTurn.getId() == playedCard.getId()) {
+            return true;
+        }
+
+        // If the suit of the playedCard does not equal the suit of the
+        // firstCardOfTurn, it might be an invalid move - depending on if the
+        // client had another card in his hands which he must have played.
+        if (firstCardOfTurn.getSuit().getKey().equals(playedCard.getSuit().getKey())) {
+            return true;
+        }
+
+        // Get deck of the current player as array and which cards have been played
+        ArrayList<CardEntity> cardsInDeck = deck.getCards();
+        ArrayList<Boolean> cardsHaveBeenPlayed = deck.getCardsHaveBeenPlayed();
+
+        for (int i = 0; i < cardsInDeck.size(); i++) {
+            // Only unplayed cards should be checked
+            if (cardsHaveBeenPlayed.get(i) == null || cardsHaveBeenPlayed.get(i) == false) {
+                // If a card has the same suite as the firstCardOfTurn, this
+                // card has to have been played and thus this move is invalid
+                if (cardsInDeck.get(i).getSuit().getKey().equals(firstCardOfTurn.getSuit().getKey())) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
     }
 
     private ClientUtil getClientUtilByUsername(String username) {
