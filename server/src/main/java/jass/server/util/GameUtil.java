@@ -189,6 +189,7 @@ public final class GameUtil implements ChosenGameModeEventListener, PlayedCardEv
                 turn.getStartingPlayer().getUsername(), "",
                 turn.getCards().stream().map(CardEntity::toCardData).collect(Collectors.toList())
                 ));
+            this.currentTurn = turn;
             broadcast(broadcastTurn);
         }
     }
@@ -240,9 +241,9 @@ public final class GameUtil implements ChosenGameModeEventListener, PlayedCardEv
 
 
     public void onPlayedCard(final PlayCardData data) throws InterruptedException {
-        // TODO
         boolean isValid = validateMove(data);
         ClientUtil clientUtil = this.getClientUtilByUsername(data.getUsername());
+        DeckEntity currentDeck = this.getCurrentDeckByUsername(data.getUsername());
 
         if(isValid) {
             TurnRepository turnRepository = TurnRepository.getSingleton(null);
@@ -252,6 +253,8 @@ public final class GameUtil implements ChosenGameModeEventListener, PlayedCardEv
             if(turn != null) {
                 if(card != null) {
                     turn.addCard(card);
+                    currentDeck.setPlayedCard(data.getCardId());
+                    DeckRepository.getSingleton(null).update(currentDeck);
                 }
                 if(turn.getCardFour() != null) {
                     // TODO set proper winning player
@@ -278,6 +281,7 @@ public final class GameUtil implements ChosenGameModeEventListener, PlayedCardEv
                         newTurn.getStartingPlayer().getUsername(), "",
                         newTurn.getCards().stream().map(CardEntity::toCardData).collect(Collectors.toList())
                     ));
+                    this.currentTurn = turn;
                     broadcast(newBroadcastTurn);
                 }
             }
@@ -297,11 +301,11 @@ public final class GameUtil implements ChosenGameModeEventListener, PlayedCardEv
     private boolean validateMove(PlayCardData data) {
         boolean isValidMove = false;
         CardEntity playedCard = CardRepository.getSingleton(null).getById(data.getCardId());
-        // TODO - Once merged with branch "make_player_move": Get correct deckId of the player which played this card
-        DeckEntity deckOfPlayer = DeckRepository.getSingleton(null).getById(currentDeckPlayerOne.getId());
+        DeckEntity deckOfPlayer = getCurrentDeckByUsername(data.getUsername());
 
         if (currentRound.getGameMode() == GameMode.TRUMPF) {
-            isValidMove = validateMoveTrump(playedCard, deckOfPlayer, currentTurn.getCardOne(), String.valueOf(currentRound.getTrumpfSuit()));
+            CardEntity cardOne = currentTurn.getCardOne() != null ? currentTurn.getCardOne() : null;
+            isValidMove = validateMoveTrump(playedCard, deckOfPlayer, cardOne, String.valueOf(currentRound.getTrumpfSuit()));
         }
 
         return isValidMove;
@@ -321,7 +325,7 @@ public final class GameUtil implements ChosenGameModeEventListener, PlayedCardEv
      */
     public static boolean validateMoveTrump(CardEntity playedCard, DeckEntity deck, CardEntity firstCardOfTurn, String trumpSuit) {
         // In case the playedCard is first card of current turn the move is always valid
-        if(firstCardOfTurn.getId() == playedCard.getId() || firstCardOfTurn.equals(null)) { return true; }
+        if(firstCardOfTurn == null || firstCardOfTurn.getId() == playedCard.getId()) { return true; }
 
         // If playedCard equals the trump suit, the move is always valid
         if (playedCard.getSuit().getKey().equals(trumpSuit)) {
@@ -372,6 +376,19 @@ public final class GameUtil implements ChosenGameModeEventListener, PlayedCardEv
             return clientPlayerThree;
         } else if (username.equals(clientPlayerFour.getUsername())) {
             return clientPlayerFour;
+        }
+        return null;
+    }
+
+    private DeckEntity getCurrentDeckByUsername(String username) {
+        if (username.equals(clientPlayerOne.getUsername())) {
+            return currentDeckPlayerOne;
+        } else if (username.equals(clientPlayerTwo.getUsername())) {
+            return currentDeckPlayerTwo;
+        } else if (username.equals(clientPlayerThree.getUsername())) {
+            return currentDeckPlayerThree;
+        } else if (username.equals(clientPlayerFour.getUsername())) {
+            return currentDeckPlayerFour;
         }
         return null;
     }

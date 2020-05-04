@@ -477,5 +477,35 @@ public final class DeckEntity extends Entity {
         return cardsHaveBeenPlayed;
     }
 
+    public void setPlayedCard(int cardId) {
+        if (cardId == cardOne.getId()) {
+            cardOneHasBeenPlayed = true;
+        }
+        else if (cardId == cardTwo.getId()) {
+            cardTwoHasBeenPlayed = true;
+        }
+        else if (cardId == cardThree.getId()) {
+            cardThreeHasBeenPlayed = true;
+        }
+        else if (cardId == cardFour.getId()) {
+            cardFourHasBeenPlayed = true;
+        }
+        else if (cardId == cardFive.getId()) {
+            cardFiveHasBeenPlayed = true;
+        }
+        else if (cardId == cardSix.getId()) {
+            cardSixHasBeenPlayed = true;
+        }
+        else if (cardId == cardSeven.getId()) {
+            cardSevenHasBeenPlayed = true;
+        }
+        else if (cardId == cardEight.getId()) {
+            cardEightHasBeenPlayed = true;
+        }
+        else if (cardId == cardNine.getId()) {
+            cardNineHasBeenPlayed = true;
+        }
+    }
+
 
 }
