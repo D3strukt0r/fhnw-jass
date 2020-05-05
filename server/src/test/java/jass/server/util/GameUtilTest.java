@@ -1,35 +1,38 @@
-package jass.server.UtilTest;
+package jass.server.util;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
 
 import jass.lib.Card;
 import jass.lib.GameMode;
-import jass.server.entity.*;
-import jass.server.util.GameUtil;
+import jass.server.entity.CardEntity;
+import jass.server.entity.DeckEntity;
+import jass.server.entity.RankEntity;
+import jass.server.entity.RoundEntity;
+import jass.server.entity.SuitEntity;
 import org.junit.Before;
 import org.junit.Test;
 
 /**
  * Test Class for the validation of the different game modes.
- *
- * The card id's with the corresponding suit and rank values are copied at the bottom of this document as an assistance.
+ * <p>
+ * The card id's with the corresponding suit and rank values are copied at the
+ * bottom of this document as an assistance.
  *
  * @author Thomas Weber
  * @version %I%, %G%
  * @since 0.0.1
  */
-
-public class GameUtilTest {
-
+public final class GameUtilTest {
     private static ArrayList<RankEntity> ranks = new ArrayList<>();
     private static ArrayList<SuitEntity> suits = new ArrayList<>();
     private static ArrayList<CardEntity> cards = new ArrayList<>();
 
     /**
-     * Test one properties
-     * Test for validateMoveTrump() function
+     * Test one properties.
+     * Test for validateMoveTrump() function.
      */
     private static DeckEntity deckT1 = new DeckEntity();
     private static RoundEntity roundT1 = new RoundEntity();
@@ -37,8 +40,8 @@ public class GameUtilTest {
     private static CardEntity playedCardT1 = new CardEntity();
 
     /**
-     * Test two properties
-     * Test for validateMoveTrump() function
+     * Test two properties.
+     * Test for validateMoveTrump() function.
      */
     private static DeckEntity deckT2 = new DeckEntity();
     private static RoundEntity roundT2 = new RoundEntity();
@@ -46,8 +49,8 @@ public class GameUtilTest {
     private static CardEntity playedCardT2 = new CardEntity();
 
     /**
-     * Test three properties
-     * Test for validateMoveTrump() function
+     * Test three properties.
+     * Test for validateMoveTrump() function.
      */
     private static DeckEntity deckT3 = new DeckEntity();
     private static RoundEntity roundT3 = new RoundEntity();
@@ -55,13 +58,49 @@ public class GameUtilTest {
     private static CardEntity playedCardT3 = new CardEntity();
 
     /**
-     * Test four properties
-     * Test for validateMoveTrump() function
+     * Test four properties.
+     * Test for validateMoveTrump() function.
      */
     private static DeckEntity deckT4 = new DeckEntity();
     private static RoundEntity roundT4 = new RoundEntity();
     private static CardEntity firstCardOfTurnT4 = new CardEntity();
     private static CardEntity playedCardT4 = new CardEntity();
+
+    /**
+     * Test one properties.
+     * Test for validateMoveObeAbe() function.
+     */
+    private static DeckEntity obeabeDeckT1 = new DeckEntity();
+    private static RoundEntity obeabeRoundT1 = new RoundEntity();
+    private static CardEntity obeabeFirstCardOfTurnT1 = new CardEntity();
+    private static CardEntity obeabePlayedCardT1 = new CardEntity();
+
+    /**
+     * Test two properties.
+     * Test for validateMoveObeAbe() function.
+     */
+    private static DeckEntity obeabeDeckT2 = new DeckEntity();
+    private static RoundEntity obeabeRoundT2 = new RoundEntity();
+    private static CardEntity obeabeFirstCardOfTurnT2 = new CardEntity();
+    private static CardEntity obeabePlayedCardT2 = new CardEntity();
+
+    /**
+     * Test three properties.
+     * Test for validateMoveObeAbe() function.
+     */
+    private static DeckEntity obeabeDeckT3 = new DeckEntity();
+    private static RoundEntity obeabeRoundT3 = new RoundEntity();
+    private static CardEntity obeabeFirstCardOfTurnT3 = new CardEntity();
+    private static CardEntity obeabePlayedCardT3 = new CardEntity();
+
+    /**
+     * Test four properties.
+     * Test for validateMoveObeAbe() function.
+     */
+    private static DeckEntity obeabeDeckT4 = new DeckEntity();
+    private static RoundEntity obeabeRoundT4 = new RoundEntity();
+    private static CardEntity obeabeFirstCardOfTurnT4 = new CardEntity();
+    private static CardEntity obeabePlayedCardT4 = new CardEntity();
 
     @Before
     public void createTestData() {
@@ -82,7 +121,8 @@ public class GameUtilTest {
      * - First turn of round is Heart 6
      * - The player only has one card with suit heart which is the jack.
      * - The player plays an Ace of spades.
-     * - Assertion is that this move is true/valid, as you are never forced to play the jack.
+     * - Assertion is that this move is true/valid, as you are never forced to
+     *   play the jack.
      */
     private void insertTestOneData() {
         roundT1.setGameMode(GameMode.TRUMPF);
@@ -117,9 +157,11 @@ public class GameUtilTest {
      * - Game Mode Trump
      * - Trump Suite Clubs
      * - First turn of round is queen of Spades
-     * - The player had two cards with suit spade in his hand but has already played both before this turn
+     * - The player had two cards with suit spade in his hand but has already
+     *   played both before this turn
      * - The player plays an Ace of hearts.
-     * - Assertion is that this move is true/valid, as he has already played out his spades.
+     * - Assertion is that this move is true/valid, as he has already played out
+     *   his spades.
      */
     private void insertTestTwoData() {
         roundT2.setGameMode(GameMode.TRUMPF);
@@ -154,9 +196,11 @@ public class GameUtilTest {
      * - Game Mode Trump
      * - Trump Suite Clubs
      * - First turn of round is queen of Spades
-     * - The player has two cards with suit spade in his hand, one already played & one still in his hands
+     * - The player has two cards with suit spade in his hand, one already
+     *   played & one still in his hands
      * - The player plays an Ace of hearts.
-     * - Assertion is that this move is false/invalid, as he must have played the remaining spade.
+     * - Assertion is that this move is false/invalid, as he must have played
+     *   the remaining spade.
      */
     private void insertTestThreeData() {
         roundT3.setGameMode(GameMode.TRUMPF);
@@ -191,7 +235,8 @@ public class GameUtilTest {
      * - Game Mode Trump
      * - Trump Suite Clubs
      * - First turn of round is queen of Spades
-     * - The player had two cards with suit spade in his hand but has already played both before this turn
+     * - The player had two cards with suit spade in his hand but has already
+     *   played both before this turn
      * - The player plays an Ace of clubs.
      * - Assertion is that this move is true/valid, as clubs are trump.
      */
@@ -231,8 +276,115 @@ public class GameUtilTest {
         assertTrue(GameUtil.validateMoveTrump(playedCardT4, deckT4, firstCardOfTurnT4, String.valueOf(roundT4.getTrumpfSuit())));
     }
 
+    private void insertTestDataObeAbe() {
+
+        /*
+         * - First turn of round is queen of Spades
+         * - The player had two cards with suit spade in his hand but has
+         *   already played both before this turn
+         * - The player plays an Ace of hearts.
+         * - Assertion is that this move is true/valid, as he has already played
+         *   out his spades.
+         */
+        obeabeRoundT2.setGameMode(GameMode.OBE_ABE);
+        obeabeDeckT2.setRound(obeabeRoundT2);
+        obeabeDeckT2.setCardOne(cards.get(20));
+        obeabeDeckT2.setCardOneHasBeenPlayed(true);
+        obeabeDeckT2.setCardTwo(cards.get(23));
+        obeabeDeckT2.setCardTwoHasBeenPlayed(true);
+        obeabeDeckT2.setCardThree(cards.get(9));
+        obeabeDeckT2.setCardThreeHasBeenPlayed(false);
+        obeabeDeckT2.setCardFour(cards.get(30));
+        obeabeDeckT2.setCardFourHasBeenPlayed(false);
+        obeabeDeckT2.setCardFive(cards.get(31));
+        obeabeDeckT2.setCardFiveHasBeenPlayed(false);
+        obeabeDeckT2.setCardSix(cards.get(32));
+        obeabeDeckT2.setCardSixHasBeenPlayed(false);
+        obeabeDeckT2.setCardSeven(cards.get(33));
+        obeabeDeckT2.setCardSevenHasBeenPlayed(false);
+        obeabeDeckT2.setCardEight(cards.get(34));
+        obeabeDeckT2.setCardEightHasBeenPlayed(false);
+        obeabeDeckT2.setCardNine(cards.get(35));
+        obeabeDeckT2.setCardNineHasBeenPlayed(false);
+        obeabeFirstCardOfTurnT2 = cards.get(24);
+        obeabePlayedCardT2 = obeabeDeckT2.getCardThree();
+
+        /*
+         * - First turn of round is queen of Spades
+         * - The player has two cards with suit spade in his hand, one already
+         *   played & one still in his hands
+         * - The player plays an Ace of hearts.
+         * - Assertion is that this move is false/invalid, as he must have
+         *   played the remaining spade.
+         */
+        obeabeRoundT3.setGameMode(GameMode.OBE_ABE);
+        obeabeDeckT3.setRound(obeabeRoundT3);
+        obeabeDeckT3.setCardOne(cards.get(20));
+        obeabeDeckT3.setCardOneHasBeenPlayed(true);
+        obeabeDeckT3.setCardTwo(cards.get(23));
+        obeabeDeckT3.setCardTwoHasBeenPlayed(false);
+        obeabeDeckT3.setCardThree(cards.get(8));
+        obeabeDeckT3.setCardThreeHasBeenPlayed(false);
+        obeabeDeckT3.setCardFour(cards.get(30));
+        obeabeDeckT3.setCardFourHasBeenPlayed(false);
+        obeabeDeckT3.setCardFive(cards.get(31));
+        obeabeDeckT3.setCardFiveHasBeenPlayed(true);
+        obeabeDeckT3.setCardSix(cards.get(32));
+        obeabeDeckT3.setCardSixHasBeenPlayed(false);
+        obeabeDeckT3.setCardSeven(cards.get(33));
+        obeabeDeckT3.setCardSevenHasBeenPlayed(false);
+        obeabeDeckT3.setCardEight(cards.get(34));
+        obeabeDeckT3.setCardEightHasBeenPlayed(false);
+        obeabeDeckT3.setCardNine(cards.get(35));
+        obeabeDeckT3.setCardNineHasBeenPlayed(false);
+        obeabeFirstCardOfTurnT3 = cards.get(24);
+        obeabePlayedCardT3 = obeabeDeckT3.getCardThree();
+
+        /*
+         * - First turn of round is queen of Spades
+         * - The player had two cards with suit spade in his hand but has
+         *   already played both before this turn
+         * - The player plays an Ace of clubs.
+         * - Assertion is that this move is true/valid, as clubs are trump.
+         */
+        obeabeRoundT4.setGameMode(GameMode.OBE_ABE);
+        obeabeDeckT4.setRound(obeabeRoundT4);
+        obeabeDeckT4.setCardOne(cards.get(20));
+        obeabeDeckT4.setCardOneHasBeenPlayed(true);
+        obeabeDeckT4.setCardTwo(cards.get(23));
+        obeabeDeckT4.setCardTwoHasBeenPlayed(true);
+        obeabeDeckT4.setCardThree(cards.get(9));
+        obeabeDeckT4.setCardThreeHasBeenPlayed(false);
+        obeabeDeckT4.setCardFour(cards.get(30));
+        obeabeDeckT4.setCardFourHasBeenPlayed(false);
+        obeabeDeckT4.setCardFive(cards.get(31));
+        obeabeDeckT4.setCardFiveHasBeenPlayed(true);
+        obeabeDeckT4.setCardSix(cards.get(32));
+        obeabeDeckT4.setCardSixHasBeenPlayed(false);
+        obeabeDeckT4.setCardSeven(cards.get(33));
+        obeabeDeckT4.setCardSevenHasBeenPlayed(false);
+        obeabeDeckT4.setCardEight(cards.get(34));
+        obeabeDeckT4.setCardEightHasBeenPlayed(false);
+        obeabeDeckT4.setCardNine(cards.get(35));
+        obeabeDeckT4.setCardNineHasBeenPlayed(false);
+        obeabeFirstCardOfTurnT4 = cards.get(24);
+        obeabePlayedCardT4 = obeabeDeckT4.getCardNine();
+    }
+
     /**
-     * Generate Rank Data
+     * Test some cases during game mode obe abe.
+     */
+    @Test
+    public void testValidateMoveObeAbe() {
+        insertTestDataObeAbe();
+
+        assertTrue(GameUtil.validateMoveObeAbe(obeabePlayedCardT2, obeabeDeckT2, obeabeFirstCardOfTurnT2));
+        assertFalse(GameUtil.validateMoveObeAbe(obeabePlayedCardT3, obeabeDeckT3, obeabeFirstCardOfTurnT3));
+        assertTrue(GameUtil.validateMoveObeAbe(obeabePlayedCardT4, obeabeDeckT4, obeabeFirstCardOfTurnT4));
+    }
+
+    /**
+     * Generate Rank Data.
      */
     private ArrayList<RankEntity> insertRankSeedData() {
         ArrayList<RankEntity> createdRanks = new ArrayList<>();
@@ -249,7 +401,7 @@ public class GameUtilTest {
     }
 
     /**
-     * Generate Suit Data
+     * Generate Suit Data.
      */
     private ArrayList<SuitEntity> insertSuitSeedData() {
         ArrayList<SuitEntity> createdSuits = new ArrayList<>();
@@ -261,7 +413,7 @@ public class GameUtilTest {
     }
 
     /**
-     * Generate Card Data
+     * Generate Card Data.
      */
     private ArrayList<CardEntity> insertCardSeedData() {
         ArrayList<CardEntity> createdCards = new ArrayList<>();
@@ -284,49 +436,47 @@ public class GameUtilTest {
         }
         return createdCards;
     }
-
 }
 
-
-/**
- *Card Id: 0		 Rank: 6		 Suit: hearts
- * Card Id: 1		 Rank: 6		 Suit: hearts
- * Card Id: 2		 Rank: 7		 Suit: hearts
- * Card Id: 3		 Rank: 8		 Suit: hearts
- * Card Id: 4		 Rank: 9		 Suit: hearts
- * Card Id: 5		 Rank: 10		 Suit: hearts
- * Card Id: 6		 Rank: jack		 Suit: hearts
- * Card Id: 7		 Rank: queen	 Suit: hearts
- * Card Id: 8		 Rank: king		 Suit: hearts
- * Card Id: 9		 Rank: ace		 Suit: hearts
- * Card Id: 10		 Rank: 6		 Suit: diamonds
- * Card Id: 11		 Rank: 6		 Suit: diamonds
- * Card Id: 12		 Rank: 7		 Suit: diamonds
- * Card Id: 13		 Rank: 8		 Suit: diamonds
- * Card Id: 14		 Rank: 9		 Suit: diamonds
- * Card Id: 15		 Rank: 10		 Suit: diamonds
- * Card Id: 16		 Rank: jack		 Suit: diamonds
- * Card Id: 17		 Rank: queen	 Suit: diamonds
- * Card Id: 18		 Rank: king		 Suit: diamonds
- * Card Id: 19		 Rank: ace		 Suit: diamonds
- * Card Id: 20		 Rank: 6		 Suit: spades
- * Card Id: 21		 Rank: 6		 Suit: spades
- * Card Id: 22		 Rank: 7		 Suit: spades
- * Card Id: 23		 Rank: 8		 Suit: spades
- * Card Id: 24		 Rank: 9		 Suit: spades
- * Card Id: 25		 Rank: 10		 Suit: spades
- * Card Id: 26		 Rank: jack		 Suit: spades
- * Card Id: 27		 Rank: queen	 Suit: spades
- * Card Id: 28		 Rank: king		 Suit: spades
- * Card Id: 29		 Rank: ace		 Suit: spades
- * Card Id: 30		 Rank: 6		 Suit: clubs
- * Card Id: 31		 Rank: 6		 Suit: clubs
- * Card Id: 32		 Rank: 7		 Suit: clubs
- * Card Id: 33		 Rank: 8		 Suit: clubs
- * Card Id: 34		 Rank: 9		 Suit: clubs
- * Card Id: 35		 Rank: 10		 Suit: clubs
- * Card Id: 36		 Rank: jack		 Suit: clubs
- * Card Id: 37		 Rank: queen	 Suit: clubs
- * Card Id: 38		 Rank: king		 Suit: clubs
- * Card Id: 39		 Rank: ace		 Suit: clubs
- * */
+/*
+ * Card Id: 0  | Rank: 6     | Suit: hearts
+ * Card Id: 1  | Rank: 6     | Suit: hearts
+ * Card Id: 2  | Rank: 7     | Suit: hearts
+ * Card Id: 3  | Rank: 8     | Suit: hearts
+ * Card Id: 4  | Rank: 9     | Suit: hearts
+ * Card Id: 5  | Rank: 10    | Suit: hearts
+ * Card Id: 6  | Rank: jack  | Suit: hearts
+ * Card Id: 7  | Rank: queen | Suit: hearts
+ * Card Id: 8  | Rank: king  | Suit: hearts
+ * Card Id: 9  | Rank: ace   | Suit: hearts
+ * Card Id: 10 | Rank: 6     | Suit: diamonds
+ * Card Id: 11 | Rank: 6     | Suit: diamonds
+ * Card Id: 12 | Rank: 7     | Suit: diamonds
+ * Card Id: 13 | Rank: 8     | Suit: diamonds
+ * Card Id: 14 | Rank: 9     | Suit: diamonds
+ * Card Id: 15 | Rank: 10    | Suit: diamonds
+ * Card Id: 16 | Rank: jack  | Suit: diamonds
+ * Card Id: 17 | Rank: queen | Suit: diamonds
+ * Card Id: 18 | Rank: king  | Suit: diamonds
+ * Card Id: 19 | Rank: ace   | Suit: diamonds
+ * Card Id: 20 | Rank: 6     | Suit: spades
+ * Card Id: 21 | Rank: 6     | Suit: spades
+ * Card Id: 22 | Rank: 7     | Suit: spades
+ * Card Id: 23 | Rank: 8     | Suit: spades
+ * Card Id: 24 | Rank: 9     | Suit: spades
+ * Card Id: 25 | Rank: 10    | Suit: spades
+ * Card Id: 26 | Rank: jack  | Suit: spades
+ * Card Id: 27 | Rank: queen | Suit: spades
+ * Card Id: 28 | Rank: king  | Suit: spades
+ * Card Id: 29 | Rank: ace   | Suit: spades
+ * Card Id: 30 | Rank: 6     | Suit: clubs
+ * Card Id: 31 | Rank: 6     | Suit: clubs
+ * Card Id: 32 | Rank: 7     | Suit: clubs
+ * Card Id: 33 | Rank: 8     | Suit: clubs
+ * Card Id: 34 | Rank: 9     | Suit: clubs
+ * Card Id: 35 | Rank: 10    | Suit: clubs
+ * Card Id: 36 | Rank: jack  | Suit: clubs
+ * Card Id: 37 | Rank: queen | Suit: clubs
+ * Card Id: 38 | Rank: king  | Suit: clubs
+ * Card Id: 39 | Rank: ace   | Suit: clubs
+ */
