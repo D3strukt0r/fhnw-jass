@@ -69,30 +69,69 @@ public final class GameUtil implements Service, BroadcastDeckEventListener, Choo
      */
     private static final Logger logger = LogManager.getLogger(GameUtil.class);
 
+    /**
+     * The game.
+     */
     private GameFoundData game;
 
+    /**
+     * The deck ID.
+     */
     private int deckId;
 
+    /**
+     * The deck of the player.
+     */
     private ObservableList<CardData> playerDeck;
 
+    /**
+     * The current turn ID.
+     */
     private int turnId;
 
+    /**
+     * The username of the user who starts to play.
+     */
     private SimpleStringProperty startingPlayerUsername = new SimpleStringProperty();
 
+    /**
+     * The username of the user who won.
+     */
     private SimpleStringProperty winningPlayerUsername = new SimpleStringProperty();
 
+    /**
+     * Whether to disable the buttons at the moment.
+     */
     private SimpleBooleanProperty disableButtons = new SimpleBooleanProperty();
 
+    /**
+     * The played cards so far.
+     */
     private ObservableList<CardData> playedCards;
 
+    /**
+     * The game mode data.
+     */
     private SimpleObjectProperty<GameMode> gameMode = new SimpleObjectProperty<>();
 
+    /**
+     * The trumpf.
+     */
     private SimpleObjectProperty<Card.Suit> trumpf = new SimpleObjectProperty<>();
 
+    /**
+     * The error message when a move is invalid.
+     */
     private String moveInvalidErrorMessage = "";
 
+    /**
+     * The card ID to be removed.
+     */
     private int cardIdToRemove = 0;
 
+    /**
+     * Initialize GameUtil before a game starts.
+     */
     public GameUtil() {
         SocketUtil socket = ServiceLocator.get(SocketUtil.class);
         assert socket != null;
@@ -185,7 +224,7 @@ public final class GameUtil implements Service, BroadcastDeckEventListener, Choo
 
     @Override
     public void onPlayedCard(final PlayedCardData data) {
-        if(data.getPlayedCardValid() == false) {
+        if (!data.getPlayedCardValid()) {
             Platform.runLater(() -> {
                 moveInvalidErrorMessage = I18nUtil.get("gui.game.error.moveInvalid");
                 Alert alert = new Alert(Alert.AlertType.ERROR, moveInvalidErrorMessage, ButtonType.YES);
@@ -196,7 +235,7 @@ public final class GameUtil implements Service, BroadcastDeckEventListener, Choo
                     alert.close();
                 }
             });
-        };
+        }
     }
 
     @Override
@@ -205,14 +244,17 @@ public final class GameUtil implements Service, BroadcastDeckEventListener, Choo
         turnId = data.getTurnId();
         setStartingPlayerUsername(data.getStartingPlayer());
         setWinningPlayerUsername(data.getWinningPlayer());
-        if(isCurrentPlayersTurn(data.getPlayedCardsClient().size()) == true) {
+        if (isCurrentPlayersTurn(data.getPlayedCardsClient().size())) {
             this.setDisableButtons(false);
         }
         playedCards.clear();
         playedCards.addAll(data.getPlayedCardsClient());
     }
 
-    public void playCard(int cardId) {
+    /**
+     * @param cardId The card ID to be played and sent to the server.
+     */
+    public void playCard(final int cardId) {
         cardIdToRemove = cardId;
         PlayCard playedCard = new PlayCard(new PlayCardData(this.turnId, cardId));
 
@@ -222,104 +264,185 @@ public final class GameUtil implements Service, BroadcastDeckEventListener, Choo
         logger.info("Sent played card!");
     }
 
-    private boolean isCurrentPlayersTurn(int numberOfPlayedCards) {
+    /**
+     * @param numberOfPlayedCards How many cards have been played so far.
+     *
+     * @return Returns true if it's this player's turn, otherwise false.
+     */
+    private boolean isCurrentPlayersTurn(final int numberOfPlayedCards) {
         String player = "";
-        if(getGame().getPlayerOne().equals(getStartingPlayerUsername().getValue())) {
-            if(numberOfPlayedCards == 0) player = getGame().getPlayerOne();
-            if(numberOfPlayedCards == 1) player = getGame().getPlayerTwo();
-            if(numberOfPlayedCards == 2) player = getGame().getPlayerThree();
-            if(numberOfPlayedCards == 3) player = getGame().getPlayerFour();
+        if (getGame().getPlayerOne().equals(getStartingPlayerUsername().getValue())) {
+            if (numberOfPlayedCards == 0) {
+                player = getGame().getPlayerOne();
+            } else if (numberOfPlayedCards == 1) {
+                player = getGame().getPlayerTwo();
+            } else if (numberOfPlayedCards == 2) {
+                player = getGame().getPlayerThree();
+            } else if (numberOfPlayedCards == 3) {
+                player = getGame().getPlayerFour();
+            }
         }
-        if(getGame().getPlayerTwo().equals(getStartingPlayerUsername().getValue())) {
-            if(numberOfPlayedCards == 0) player = getGame().getPlayerTwo();
-            if(numberOfPlayedCards == 1) player = getGame().getPlayerThree();
-            if(numberOfPlayedCards == 2) player = getGame().getPlayerFour();
-            if(numberOfPlayedCards == 3) player = getGame().getPlayerOne();
+        if (getGame().getPlayerTwo().equals(getStartingPlayerUsername().getValue())) {
+            if (numberOfPlayedCards == 0) {
+                player = getGame().getPlayerTwo();
+            } else if (numberOfPlayedCards == 1) {
+                player = getGame().getPlayerThree();
+            } else if (numberOfPlayedCards == 2) {
+                player = getGame().getPlayerFour();
+            } else if (numberOfPlayedCards == 3) {
+                player = getGame().getPlayerOne();
+            }
         }
-        if(getGame().getPlayerThree().equals(getStartingPlayerUsername().getValue())) {
-            if(numberOfPlayedCards == 0) player = getGame().getPlayerThree();
-            if(numberOfPlayedCards == 1) player = getGame().getPlayerFour();
-            if(numberOfPlayedCards == 2) player = getGame().getPlayerOne();
-            if(numberOfPlayedCards == 3) player = getGame().getPlayerTwo();
+        if (getGame().getPlayerThree().equals(getStartingPlayerUsername().getValue())) {
+            if (numberOfPlayedCards == 0) {
+                player = getGame().getPlayerThree();
+            } else if (numberOfPlayedCards == 1) {
+                player = getGame().getPlayerFour();
+            } else if (numberOfPlayedCards == 2) {
+                player = getGame().getPlayerOne();
+            } else if (numberOfPlayedCards == 3) {
+                player = getGame().getPlayerTwo();
+            }
         }
-        if(getGame().getPlayerFour().equals(getStartingPlayerUsername().getValue())) {
-            if(numberOfPlayedCards == 0) player = getGame().getPlayerFour();
-            if(numberOfPlayedCards == 1) player = getGame().getPlayerOne();
-            if(numberOfPlayedCards == 2) player = getGame().getPlayerTwo();
-            if(numberOfPlayedCards == 3) player = getGame().getPlayerThree();
+        if (getGame().getPlayerFour().equals(getStartingPlayerUsername().getValue())) {
+            if (numberOfPlayedCards == 0) {
+                player = getGame().getPlayerFour();
+            } else if (numberOfPlayedCards == 1) {
+                player = getGame().getPlayerOne();
+            } else if (numberOfPlayedCards == 2) {
+                player = getGame().getPlayerTwo();
+            } else if (numberOfPlayedCards == 3) {
+                player = getGame().getPlayerThree();
+            }
         }
         LoginEntity login = ServiceLocator.get(LoginEntity.class);
+        assert login != null;
         return login.getUsername().equals(player);
     }
 
+    /**
+     * @param msgData The game data.
+     */
     public void setGame(final GameFoundData msgData) {
         this.game = msgData;
     }
 
+    /**
+     * @return Returns the game data.
+     */
     public GameFoundData getGame() {
         return game;
     }
 
+    /**
+     * @return Returns the deck ID.
+     */
     public int getDeckId() {
         return deckId;
     }
 
+    /**
+     * @param deckId The deck ID.
+     */
     public void setDeckId(final int deckId) {
         this.deckId = deckId;
     }
 
+    /**
+     * @return Returns the player's deck.
+     */
     public ObservableList<CardData> getPlayerDeck() {
         return playerDeck;
     }
 
+    /**
+     * @param playerDeck The player's deck.
+     */
     public void setPlayerDeck(final ArrayList<CardData> playerDeck) {
         this.playerDeck = FXCollections.observableArrayList(playerDeck);
     }
 
+    /**
+     * @return Returns the property of the game mode variable.
+     */
     public SimpleObjectProperty<GameMode> getGameModeProperty() {
         return gameMode;
     }
 
+    /**
+     * @return Returns the property of the trumpf variable.
+     */
     public SimpleObjectProperty<Card.Suit> getTrumpfProperty() {
         return trumpf;
     }
 
+    /**
+     * @return Returns the turn ID.
+     */
     public int getTurnId() {
         return turnId;
     }
 
-    public void setTurnId(int turnId) {
+    /**
+     * @param turnId The turn ID.
+     */
+    public void setTurnId(final int turnId) {
         this.turnId = turnId;
     }
 
+    /**
+     * @return Returns the username of the player who starts playing.
+     */
     public SimpleStringProperty getStartingPlayerUsername() {
         return startingPlayerUsername;
     }
 
-    public void setStartingPlayerUsername(String startingPlayerUsername) {
+    /**
+     * @param startingPlayerUsername The username of the player who starts
+     *                               playing.
+     */
+    public void setStartingPlayerUsername(final String startingPlayerUsername) {
         this.startingPlayerUsername.setValue(startingPlayerUsername);
     }
 
+    /**
+     * @return Returns the winning player's username.
+     */
     public SimpleStringProperty getWinningPlayerUsername() {
         return winningPlayerUsername;
     }
 
-    public void setDisableButtons(Boolean disableButtons) {
+    /**
+     * @param disableButtons Whether to disable the user's cards or not.
+     */
+    public void setDisableButtons(final boolean disableButtons) {
         this.disableButtons.setValue(disableButtons);
     }
 
+    /**
+     * @return Returns the property of whether to disable the user's cards.
+     */
     public SimpleBooleanProperty getDisableButtons() {
         return disableButtons;
     }
 
-    public void setWinningPlayerUsername(String winningPlayerUsername) {
+    /**
+     * @param winningPlayerUsername The winnings player's username.
+     */
+    public void setWinningPlayerUsername(final String winningPlayerUsername) {
         this.winningPlayerUsername.setValue(winningPlayerUsername);
     }
 
+    /**
+     * @return Returns a list of the user's cards.
+     */
     public ObservableList<CardData> getPlayedCards() {
         return playedCards;
     }
 
+    /**
+     * @return Returns card ID which is supposed to be removed.
+     */
     public int getCardIdToRemove() {
         return cardIdToRemove;
     }
