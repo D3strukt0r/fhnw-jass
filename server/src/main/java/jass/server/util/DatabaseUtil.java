@@ -25,6 +25,7 @@ import com.j256.ormlite.jdbc.JdbcConnectionSource;
 import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.TableUtils;
 import jass.lib.servicelocator.Service;
+import jass.server.database.MysqlDatabaseType;
 import jass.server.entity.CardEntity;
 import jass.server.entity.DeckEntity;
 import jass.server.entity.GameEntity;
@@ -59,17 +60,10 @@ import java.sql.SQLException;
  * @since 0.0.1
  */
 public final class DatabaseUtil implements Service, Closeable {
-    public enum SupportedDatabase {
-        /**
-         * A list of all the supported database systems.
-         */
-        SQLITE
-    }
-
     /**
      * Default location to store the data.
      */
-    public static final String DEFAULT_LOCATION = "data/jass_server.sqlite3";
+    public static final String DEFAULT_LOCATION = "sqlite:jass_server.sqlite3";
 
     /**
      * The database connection.
@@ -123,24 +117,72 @@ public final class DatabaseUtil implements Service, Closeable {
 
     /**
      * Create a database connection.
+     * <p>
+     * Example: sqlite:jass_server.sqlite3
+     * </p>
      *
-     * @param type             The type of database to use.
-     * @param databaseLocation A string containing the location of the file to
-     *                         be accessed (and if necessary created).
+     * @param databaseUrl A string containing the location of the file to be
+     *                    accessed (and if necessary created).
      *
      * @throws SQLException If an SQL error occurs.
      * @since 0.0.1
      */
-    public DatabaseUtil(final SupportedDatabase type, final String databaseLocation) throws SQLException {
+    public DatabaseUtil(final String databaseUrl) throws SQLException {
         // Create our data-source for the database
-        if (type == SupportedDatabase.SQLITE) {
-            connectionSource = new JdbcConnectionSource("jdbc:sqlite:" + databaseLocation);
+        String jdbcDatabaseUrl = "jdbc:" + databaseUrl;
+        String databaseType = extractDbType(jdbcDatabaseUrl);
+        if (databaseType.equals("sqlite")) {
+            connectionSource = new JdbcConnectionSource(jdbcDatabaseUrl);
         } else {
-            throw new SQLException();
+            throw new IllegalArgumentException(databaseType + " is unsupported for the database.");
         }
 
         // Setup our database and DAOs
         setupDatabase();
+    }
+
+    /**
+     * Create a database connection.
+     * <p>
+     * Example: jdbc:mysql://localhost:3306/jass?serverTimezone=UTC
+     * </p>
+     *
+     * @param databaseUrl A string containing the location of the file to be
+     *                    accessed (and if necessary created).
+     * @param username    The username of the database.
+     * @param password    The password of the database.
+     *
+     * @throws SQLException If an SQL error occurs.
+     */
+    public DatabaseUtil(final String databaseUrl, final String username, final String password) throws SQLException {
+        // Create our data-source for the database
+        String jdbcDatabaseUrl = "jdbc:" + databaseUrl;
+        String databaseType = extractDbType(jdbcDatabaseUrl);
+        if (databaseType.equals("mysql")) {
+            connectionSource = new JdbcConnectionSource(jdbcDatabaseUrl, username, password, new MysqlDatabaseType());
+        } else {
+            throw new IllegalArgumentException(databaseType + " is unsupported for the database.");
+        }
+
+        // Setup our database and DAOs
+        setupDatabase();
+    }
+
+    /**
+     * @param databaseUrl The full database url.
+     *
+     * @return Returns the type.
+     */
+    public static String extractDbType(final String databaseUrl) {
+        if (!databaseUrl.startsWith("jdbc:")) {
+            throw new IllegalArgumentException("Database URL was expected to start with jdbc: but was " + databaseUrl);
+        }
+        String[] urlParts = databaseUrl.split(":");
+        if (urlParts.length < 2) {
+            throw new IllegalArgumentException(
+                "Database URL was expected to be in the form: jdbc:db-type:... but was " + databaseUrl);
+        }
+        return urlParts[1];
     }
 
     /**

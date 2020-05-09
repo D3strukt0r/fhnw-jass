@@ -52,7 +52,7 @@ public final class DatabaseUtil implements Service, Closeable {
     /**
      * Default location to store the data.
      */
-    public static final String DEFAULT_LOCATION = "data/jass.sqlite3";
+    public static final String DEFAULT_LOCATION = "jass.sqlite3";
 
     /**
      * The database connection.

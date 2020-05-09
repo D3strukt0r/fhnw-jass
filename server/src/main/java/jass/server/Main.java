@@ -74,6 +74,8 @@ public final class Main {
         options
             .addOption(Option.builder("p").longOpt("port").desc("Defines the port to use").hasArg().build())
             .addOption(Option.builder("l").longOpt("db-location").desc("Define where the database is saved").hasArg().build())
+            .addOption(Option.builder("u").longOpt("db-username").desc("The username required to login to the database").hasArg().build())
+            .addOption(Option.builder("a").longOpt("db-password").desc("The password required to login to the database").hasArg().build())
             .addOption(Option.builder("v").longOpt("verbose").desc("Show more extensive logs").hasArg(false).build())
             .addOption(Option.builder("s").longOpt("ssl").desc("Accept secure connections").hasArg(false).build());
 
@@ -83,7 +85,8 @@ public final class Main {
             cmd = (new DefaultParser()).parse(options, args);
         } catch (ParseException e) {
             // When using an unknown argument
-            System.out.println(e.getMessage()); // Prints "Unrecognized option: ..."
+            // Prints "Unrecognized option: ..."
+            System.out.println(e.getMessage());
             (new HelpFormatter()).printHelp("server.jar", options);
             return;
         }
@@ -103,16 +106,35 @@ public final class Main {
         try {
             String dbLocation = DatabaseUtil.DEFAULT_LOCATION;
 
-            // Check if the user wants to use a different location for the database
+            // Check if the user wants to use a different location for the
+            // database
             if (cmd.hasOption("db-location")) {
                 dbLocation = cmd.getOptionValue("db-location");
+
+                String databaseType = DatabaseUtil.extractDbType("jdbc:" + dbLocation);
+                if (databaseType.equals("mysql")) {
+                    if (!cmd.hasOption("db-username") || !cmd.hasOption("db-password")) {
+                        logger.fatal("When using mysql as database you also need to give a username (--db-username=xxx) and password (--db-password=xxx)");
+                        return;
+                    }
+                }
             }
 
-            DatabaseUtil db = new DatabaseUtil(DatabaseUtil.SupportedDatabase.SQLITE, dbLocation);
+            String databaseType = DatabaseUtil.extractDbType("jdbc:" + dbLocation);
+            DatabaseUtil db;
+            if (databaseType.equals("sqlite")) {
+                db = new DatabaseUtil(dbLocation);
+            } else if (databaseType.equals("mysql")) {
+                db = new DatabaseUtil(dbLocation, cmd.getOptionValue("db-username"), cmd.getOptionValue("db-password"));
+            } else {
+                logger.fatal(databaseType + " is unsupported for the database.");
+                return;
+            }
             ServiceLocator.add(db);
             logger.info("Connection to database created");
         } catch (SQLException e) {
             logger.fatal("Error creating connection to database");
+            logger.fatal(e.getMessage());
             return;
         }
 
