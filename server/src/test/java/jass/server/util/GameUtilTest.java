@@ -480,7 +480,7 @@ public final class GameUtilTest {
         ondeufeDeckT3.setCardNine(cards.get(35));
         ondeufeDeckT3.setCardNineHasBeenPlayed(false);
         ondeufeFirstCardOfTurnT3 = cards.get(24);
-        ondeufePlayedCardT3 = obeabeDeckT3.getCardThree();
+        ondeufePlayedCardT3 = ondeufeDeckT3.getCardThree();
 
         /*
          * - First turn of round is queen of Spades
