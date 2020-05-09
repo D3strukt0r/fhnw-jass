@@ -40,6 +40,7 @@ public final class DeckRepository extends Repository<Dao<DeckEntity, Integer>, D
      * Creates a new singleton or returns the existing one.
      *
      * @param dao The DAO to edit inside the database.
+     *
      * @return Returns the Repository.
      */
     public static DeckRepository getSingleton(final Dao<DeckEntity, Integer> dao) {

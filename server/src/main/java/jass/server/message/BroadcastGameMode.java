@@ -19,7 +19,6 @@
 
 package jass.server.message;
 
-import jass.lib.message.BroadcastGameModeData;
 import jass.lib.message.MessageData;
 import jass.server.util.ClientUtil;
 

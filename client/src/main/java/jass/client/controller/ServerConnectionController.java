@@ -190,8 +190,6 @@ public final class ServerConnectionController extends Controller {
 
     @Override
     public void initialize(final URL location, final ResourceBundle resources) {
-        DatabaseUtil db = ServiceLocator.get(DatabaseUtil.class);
-
         /*
          * Bind all texts
          */
@@ -264,6 +262,7 @@ public final class ServerConnectionController extends Controller {
         chooseServer.getItems().add((new ServerEntity()).setIp(null).setPort(0));
         chooseServer.getSelectionModel().selectFirst();
         // Find all saved element
+        DatabaseUtil db = ServiceLocator.get(DatabaseUtil.class);
         if (db != null) {
             for (ServerEntity server : db.getServerDao()) {
                 chooseServer.getItems().add(server);
@@ -271,7 +270,8 @@ public final class ServerConnectionController extends Controller {
         }
 
         /*
-         * Disable/Enable the Connect button depending on if the inputs are valid
+         * Disable/Enable the Connect button depending on if the inputs are
+         * valid.
          */
         AtomicBoolean serverIpValid = new AtomicBoolean(false);
         AtomicBoolean portValid = new AtomicBoolean(false);
@@ -360,8 +360,10 @@ public final class ServerConnectionController extends Controller {
     public void setErrorMessage(final String translatorKey) {
         Platform.runLater(() -> {
             if (errorMessage.getChildren().size() == 0) {
-                // Make window larger, so it doesn't become crammed, only if we haven't done so yet
-                // TODO: This keeps the window size even after switching to e.g. login
+                // Make window larger, so it doesn't become crammed, only if we
+                // haven't done so yet
+                // TODO: This keeps the window size even after switching to e.g.
+                //  login
                 //view.getStage().setHeight(view.getStage().getHeight() + 30);
                 errorMessage.setPrefHeight(30);
             }
@@ -423,7 +425,8 @@ public final class ServerConnectionController extends Controller {
         // Disable everything to prevent something while working on the data
         disableAll();
 
-        // Connection would freeze window (and the animations) so do it in a different thread.
+        // Connection would freeze window (and the animations) so do it in a
+        // different thread.
         new Thread(() -> {
             ServerEntity server = (new ServerEntity())
                 .setIp(ipOrDomain.getText())

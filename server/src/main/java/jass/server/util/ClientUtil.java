@@ -19,7 +19,10 @@
 
 package jass.server.util;
 
-import jass.lib.message.*;
+import jass.lib.message.ChosenGameModeData;
+import jass.lib.message.MessageData;
+import jass.lib.message.MessageErrorData;
+import jass.lib.message.PlayCardData;
 import jass.lib.servicelocator.ServiceLocator;
 import jass.server.entity.UserEntity;
 import jass.server.eventlistener.ChosenGameModeEventListener;
@@ -107,7 +110,8 @@ public final class ClientUtil extends Thread {
             Message msg = null;
             try {
                 BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-                String msgText = in.readLine(); // Will wait here for complete line
+                // Will wait here for complete line
+                String msgText = in.readLine();
                 logger.info(getUsername() + " - Receiving message: " + msgText);
 
                 if (msgText == null) {
@@ -119,7 +123,8 @@ public final class ClientUtil extends Thread {
                 // Convert JSON string into a workable object
                 MessageData msgData = MessageData.unserialize(msgText);
 
-                // Create a server message object of the correct class, using reflection
+                // Create a server message object of the correct class, using
+                // reflection
                 if (msgData == null) {
                     logger.error("Received invalid message");
                 } else {
@@ -140,11 +145,12 @@ public final class ClientUtil extends Thread {
                 logger.error(e.toString());
             }
 
-            // Note the syntax "Client.this" - writing "this" would reference the Runnable
-            // object
+            // Note the syntax "Client.this" - writing "this" would reference
+            // the Runnable object
             if (msg != null) {
                 msg.process(ClientUtil.this);
-            } else { // Invalid message or broken socket
+            } else {
+                // Invalid message or broken socket
                 send(new MessageError(new MessageErrorData(MessageErrorData.ErrorType.INVALID_COMMAND)));
             }
         }
@@ -157,7 +163,7 @@ public final class ClientUtil extends Thread {
      * @author Thomas Weber, Manuele Vaccari, Victor Hargrave
      */
     public void handleEventListenerOnMessage(final String msgType, final MessageData msgData) {
-        if(AuthenticateRequest(msgData) == false) {
+        if (!authenticateRequest(msgData)) {
             // TODO do something smarter than just return
             return;
         }
@@ -182,12 +188,9 @@ public final class ClientUtil extends Thread {
      * @author Victor Hargrave
      * @since 0.0.1
      */
-    private boolean AuthenticateRequest(MessageData msgData) {
+    private boolean authenticateRequest(final MessageData msgData) {
         UserEntity user = UserRepository.getSingleton(null).getByUsername(msgData.getUsername());
-        if(user != null && user.getToken() != null && user.getToken().equals(msgData.getToken())) {
-            return true;
-        }
-        return false;
+        return user != null && user.getToken() != null && user.getToken().equals(msgData.getToken());
     }
 
     /**
@@ -220,7 +223,8 @@ public final class ClientUtil extends Thread {
         try {
             OutputStreamWriter out = new OutputStreamWriter(socket.getOutputStream());
             logger.info(getUsername() + " - Sending message: " + msg.toString());
-            out.write(msg.toString() + "\n"); // This will send the serialized MessageData object
+            // This will send the serialized MessageData object
+            out.write(msg.toString() + "\n");
             out.flush();
         } catch (IOException e) {
             logger.info(getUsername() + " - Client unreachable; logged out");
@@ -233,7 +237,8 @@ public final class ClientUtil extends Thread {
      */
     public void disconnect() {
         SearchGameUtil searchGameUtil = ServiceLocator.get(SearchGameUtil.class);
-        searchGameUtil.removeClientFromSearchingGame(this);
+        assert searchGameUtil != null;
+        searchGameUtil.remove(this);
 
         // TODO: Close down the game if client was inside.
 

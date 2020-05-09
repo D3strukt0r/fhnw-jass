@@ -92,12 +92,6 @@ public final class ServerSocketUtil extends Thread {
             /*
              * https://docs.oracle.com/javase/8/docs/technotes/guides/security/jsse/JSSERefGuide.html
              * @author https://stackoverflow.com/questions/53323855/sslserversocket-and-certificate-setup
-             *
-             * Key generation
-             * https://gitlab.fhnw.ch/bradley.richards/java-projects/blob/master/src/chatroom/Howto_SSL_Certificates_in_Java.odt
-             * $ keytool -genkeypair -alias server -keystore server.keystore -keyalg RSA
-             * $ keytool -export -alias server -keystore server.keystore -rfc -file key.cert
-             * $ keytool -import -alias client -file key.cert -keystore client.keystore
              */
             // Create and initialize the SSLContext with key material
             char[] trustStorePassword = "JassGame".toCharArray();

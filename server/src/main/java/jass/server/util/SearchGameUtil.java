@@ -116,7 +116,7 @@ public final class SearchGameUtil extends Thread implements Service, Closeable {
      *
      * @param client The client to add.
      */
-    public synchronized void addClientToSearchGame(final ClientUtil client) {
+    public synchronized void add(final ClientUtil client) {
         if (!searchingClients.contains(client)) {
             searchingClients.add(client);
             logger.info("Added new client " + client.getUsername() + " to waiting list. Total of " + searchingClients.size() + " users searching for a game");
@@ -129,7 +129,7 @@ public final class SearchGameUtil extends Thread implements Service, Closeable {
      *
      * @param client The client to remove.
      */
-    public synchronized void removeClientFromSearchingGame(final ClientUtil client) {
+    public synchronized void remove(final ClientUtil client) {
         Iterator<ClientUtil> iterator = searchingClients.iterator();
         while (iterator.hasNext()) {
             ClientUtil c = iterator.next();

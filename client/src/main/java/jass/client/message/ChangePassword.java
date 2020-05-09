@@ -75,7 +75,8 @@ public final class ChangePassword extends Message {
             ServiceLocator.remove(LoginEntity.class);
             ServiceLocator.add(newLogin);
 
-            // Also remove the old login from the database and replace with the new one.
+            // Also remove the old login from the database and replace with the
+            // new one.
             if (!LoginRepository.getSingleton(null).remove(login) || LoginRepository.getSingleton(null).add(newLogin)) {
                 logger.error("Couldn't save login data to local database.");
             }

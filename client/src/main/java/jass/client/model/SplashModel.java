@@ -110,7 +110,8 @@ public final class SplashModel extends Model {
                         logger.info("Backend for login is available...");
                         Login loginMsg = new Login(new LoginData(login.getUsername(), login.getPassword()));
 
-                        // Send the login request to the server. Update locally if successful.
+                        // Send the login request to the server. Update locally
+                        // if successful.
                         if (loginMsg.process(backend)) {
                             login.setToken(loginMsg.getToken());
                             loggedIn = true;
@@ -120,24 +121,15 @@ public final class SplashModel extends Model {
                 }
             });
 
-
             // First, take some time, update progress
-            this.updateProgress(1, tasks.size() + 1); // Start the progress bar with 1 instead of 0
+            // Start the progress bar with 1 instead of 0
+            this.updateProgress(1, tasks.size() + 1);
             for (int i = 0; i < tasks.size(); i++) {
                 tasks.get(i).run();
-
-                // Loading is currently very fast, to appreciate the loading bar, wait a little
-                //try {
-                //    Thread.sleep(200);
-                //} catch (InterruptedException e) { /* Ignore */ }
 
                 this.updateProgress(i + 2, tasks.size() + 1);
             }
 
-            // For better UX, let the user see the full progress bar
-            //try {
-            //    Thread.sleep(500);
-            //} catch (InterruptedException e) { /* Ignore */ }
             return null;
         }
     };

@@ -178,7 +178,8 @@ public final class ChangePasswordController extends Controller {
         cancel.textProperty().bind(I18nUtil.createStringBinding(cancel.getText()));
 
         /*
-         * Disable/Enable the "Change"-button depending on if the inputs are valid
+         * Disable/Enable the "Change"-button depending on if the inputs are
+         * valid
          */
         AtomicBoolean oldPasswordValid = new AtomicBoolean(false);
         AtomicBoolean newPasswordValid = new AtomicBoolean(false);
@@ -273,7 +274,8 @@ public final class ChangePasswordController extends Controller {
     public void setErrorMessage(final String translatorKey) {
         Platform.runLater(() -> {
             if (errorMessage.getChildren().size() == 0) {
-                // Make window larger, so it doesn't become crammed, only if we haven't done so yet
+                // Make window larger, so it doesn't become crammed, only if we
+                // haven't done so yet
                 errorMessage.setPrefHeight(50);
             }
             Text text = ViewUtil.useText(translatorKey);
@@ -324,7 +326,8 @@ public final class ChangePasswordController extends Controller {
         // Disable everything to prevent changing data while working on the data
         disableAll();
 
-        // Connection would freeze window (and the animations) so do it in a different thread.
+        // Connection would freeze window (and the animations) so do it in a
+        // different thread.
         new Thread(() -> {
             LoginEntity login = ServiceLocator.get(LoginEntity.class);
             assert login != null;
@@ -337,7 +340,8 @@ public final class ChangePasswordController extends Controller {
             assert backend != null;
             ChangePassword changePasswordMsg = new ChangePassword(new ChangePasswordData(login.getToken(), newLogin.getPassword()));
 
-            // Send the change password request to the server. Update locally if successful.
+            // Send the change password request to the server. Update locally if
+            // successful.
             if (changePasswordMsg.process(backend)) {
                 ServiceLocator.remove(LoginEntity.class);
                 ServiceLocator.add(newLogin);

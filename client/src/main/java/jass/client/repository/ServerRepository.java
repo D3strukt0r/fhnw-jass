@@ -77,7 +77,8 @@ public final class ServerRepository extends Repository<Dao<ServerEntity, Integer
                     return false;
                 }
             }
-            // Set the new entry to connect automatically (if it is already in the db)
+            // Set the new entry to connect automatically (if it is already in
+            // the db)
             if (s.getId() == server.getId()) {
                 server.setConnectAutomatically(true);
                 result = update(server);

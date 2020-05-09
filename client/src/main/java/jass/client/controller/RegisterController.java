@@ -176,9 +176,8 @@ public final class RegisterController extends Controller implements DisconnectEv
          * Register oneself for disconnect events
          */
         SocketUtil socket = ServiceLocator.get(SocketUtil.class);
-        if (socket != null) { // Not necessary but keeps IDE happy
-            socket.addDisconnectListener(this);
-        }
+        assert socket != null;
+        socket.addDisconnectListener(this);
 
         /*
          * Bind all texts
@@ -356,7 +355,8 @@ public final class RegisterController extends Controller implements DisconnectEv
         // Disable everything to prevent something while working on the data
         disableAll();
 
-        // Connection would freeze window (and the animations) so do it in a different thread.
+        // Connection would freeze window (and the animations) so do it in a
+        // different thread.
         new Thread(() -> {
             LoginEntity login = (new LoginEntity())
                 .setUsername(username.getText())

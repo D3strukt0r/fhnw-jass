@@ -169,9 +169,8 @@ public final class LoginController extends Controller implements DisconnectEvent
          * Register oneself for disconnect events
          */
         SocketUtil socket = ServiceLocator.get(SocketUtil.class);
-        if (socket != null) { // Not necessary but keeps IDE happy
-            socket.addDisconnectListener(this);
-        }
+        assert socket != null;
+        socket.addDisconnectListener(this);
 
         /*
          * Bind all texts
@@ -284,8 +283,10 @@ public final class LoginController extends Controller implements DisconnectEvent
     public void setErrorMessage(final String translatorKey) {
         Platform.runLater(() -> {
             if (errorMessage.getChildren().size() == 0) {
-                // Make window larger, so it doesn't become crammed, only if we haven't done so yet
-                // TODO: This keeps the window size even after switching to e.g. login
+                // Make window larger, so it doesn't become crammed, only if we
+                // haven't done so yet
+                // TODO: This keeps the window size even after switching to e.g.
+                //  login
                 //view.getStage().setHeight(view.getStage().getHeight() + 30);
                 errorMessage.setPrefHeight(50);
             }
@@ -336,7 +337,8 @@ public final class LoginController extends Controller implements DisconnectEvent
         // Disable everything to prevent something while working on the data
         disableAll();
 
-        // Connection would freeze window (and the animations) so do it in a different thread.
+        // Connection would freeze window (and the animations) so do it in a
+        // different thread.
         new Thread(() -> {
             SocketUtil backend = ServiceLocator.get(SocketUtil.class);
             assert backend != null;
@@ -350,7 +352,8 @@ public final class LoginController extends Controller implements DisconnectEvent
                 .setConnectAutomatically(connectAutomatically.isSelected());
             Login loginMsg = new Login(new LoginData(login.getUsername(), login.getPassword()));
 
-            // Send the login request to the server. Update locally if successful.
+            // Send the login request to the server. Update locally if
+            // successful.
             if (loginMsg.process(backend)) {
                 login.setToken(loginMsg.getToken());
 

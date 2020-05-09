@@ -209,7 +209,8 @@ public final class DeleteAccountController extends Controller {
     public void setErrorMessage(final String translatorKey) {
         Platform.runLater(() -> {
             if (errorMessage.getChildren().size() == 0) {
-                // Make window larger, so it doesn't become crammed, only if we haven't done so yet
+                // Make window larger, so it doesn't become crammed, only if we
+                // haven't done so yet
                 view.getStage().setHeight(view.getStage().getHeight() + 30);
             }
             Text text = ViewUtil.useText(translatorKey);
@@ -260,7 +261,8 @@ public final class DeleteAccountController extends Controller {
         // Disable everything to prevent something while working on the data
         disableAll();
 
-        // Connection would freeze window (and the animations) so do it in a different thread.
+        // Connection would freeze window (and the animations) so do it in a
+        // different thread.
         new Thread(() -> {
             SocketUtil backend = ServiceLocator.get(SocketUtil.class);
             LoginEntity login = ServiceLocator.get(LoginEntity.class);

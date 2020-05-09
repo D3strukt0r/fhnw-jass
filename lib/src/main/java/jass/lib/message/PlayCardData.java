@@ -27,11 +27,20 @@ import org.json.JSONObject;
  * @since 0.0.1
  */
 public final class PlayCardData extends MessageData {
-
+    /**
+     * The ID of the turn.
+     */
     private final int turnId;
 
+    /**
+     * The ID of the card.
+     */
     private final int cardId;
 
+    /**
+     * @param turnId The ID of the turn.
+     * @param cardId The ID of the card.
+     */
     public PlayCardData(final int turnId, final int cardId) {
         super("PlayCard");
         this.turnId = turnId;
@@ -47,11 +56,16 @@ public final class PlayCardData extends MessageData {
         cardId = data.getInt("cardId");
     }
 
-
+    /**
+     * @return Returns the turn ID.
+     */
     public int getTurnId() {
         return turnId;
     }
 
+    /**
+     * @return Returns the card ID.
+     */
     public int getCardId() {
         return cardId;
     }

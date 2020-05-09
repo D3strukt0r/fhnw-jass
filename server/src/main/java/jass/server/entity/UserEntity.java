@@ -63,6 +63,9 @@ public final class UserEntity extends Entity {
     @DatabaseField(canBeNull = false)
     private String password;
 
+    /**
+     * The token of the last session.
+     */
     @DatabaseField
     private String token;
 
@@ -211,10 +214,16 @@ public final class UserEntity extends Entity {
         return this;
     }
 
-    public void setToken(String token) {
+    /**
+     * @param token A session token.
+     */
+    public void setToken(final String token) {
         this.token = token;
     }
 
+    /**
+     * @return Returns the last session token.
+     */
     public String getToken() {
         return this.token;
     }

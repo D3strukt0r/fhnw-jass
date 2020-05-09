@@ -21,7 +21,7 @@ package jass.client.controller;
 
 import jass.client.entity.LoginEntity;
 import jass.client.eventlistener.DisconnectEventListener;
-import jass.client.helpers.StringHelper;
+import jass.client.util.StringUtil;
 import jass.client.message.Logout;
 import jass.client.mvc.Controller;
 import jass.client.util.GameUtil;
@@ -395,6 +395,9 @@ public final class GameController extends Controller implements DisconnectEventL
     @FXML
     private Button user4b9;
 
+    /**
+     * The 9 buttons of the current user inside an array.
+     */
     private ArrayList<Button> cardButtons;
 
     /**
@@ -465,7 +468,7 @@ public final class GameController extends Controller implements DisconnectEventL
         gameUtil.getPlayedCards().addListener((ListChangeListener<CardData>) c -> {
             updatePlayedCardImages();
             Optional<CardData> card = gameUtil.getPlayerDeck().stream().filter(d -> d.getCardId() == gameUtil.getCardIdToRemove()).findFirst();
-            if(card.isPresent()) {
+            if (card.isPresent()) {
                 card.get().isPlayed = true;
             }
             updateCardImages();
@@ -490,7 +493,7 @@ public final class GameController extends Controller implements DisconnectEventL
     private void initializeWinningPlayerListener() {
         gameUtil.getWinningPlayerUsername().addListener((obs, oldWinningPlayer, newWinningPlayer) -> {
             // when there is a new winning player
-            if(oldWinningPlayer != newWinningPlayer && !StringHelper.isNullOrEmpty(newWinningPlayer)) {
+            if (oldWinningPlayer != newWinningPlayer && !StringUtil.isNullOrEmpty(newWinningPlayer)) {
                 // TODO show dialog
                 //
                 gameUtil.setWinningPlayerUsername("");
@@ -618,7 +621,7 @@ public final class GameController extends Controller implements DisconnectEventL
     }
 
     private void updatePlayedCardImages() {
-        if(gameUtil.getPlayedCards() == null) {
+        if (gameUtil.getPlayedCards() == null) {
             return;
         }
         CardData card1 = gameUtil.getPlayedCards().size() > 0 ? gameUtil.getPlayedCards().get(0) : null;
@@ -655,11 +658,12 @@ public final class GameController extends Controller implements DisconnectEventL
     }
 
     /**
+     * @param card The card information.
      *
      * @return Returns the image path to the corresponding card.
      */
     private String getCardPath(final CardData card) {
-        if(card == null || card.isPlayed) {
+        if (card == null || card.isPlayed) {
             return null;
         }
         return "/images/cards/" + card.getRank() + "_of_" + card.getSuit() + ".png";
@@ -670,7 +674,7 @@ public final class GameController extends Controller implements DisconnectEventL
      * @param button      The button to assign a card image.
      */
     private void setImage(final String pathToImage, final Button button) {
-        if(StringHelper.isNullOrEmpty(pathToImage)) {
+        if (StringUtil.isNullOrEmpty(pathToImage)) {
             button.setBackground(null);
         } else {
             BackgroundImage backgroundImage = new BackgroundImage(new Image(
@@ -688,9 +692,11 @@ public final class GameController extends Controller implements DisconnectEventL
      * Method to only enable buttons for those cards that are legal for a
      * specific round.
      *
+     * @param disable Whether to disable the buttons of the user or not.
+     *
      * @author Sasa Trajkova
      */
-    public void disableButtons(boolean disable) {
+    public void disableButtons(final boolean disable) {
         //TODO enable buttons for the cards that could be played in the round based on game mode
         CardData card1 = gameUtil.getPlayerDeck() != null ? gameUtil.getPlayerDeck().get(0) : null;
         CardData card2 = gameUtil.getPlayerDeck() != null ? gameUtil.getPlayerDeck().get(1) : null;
@@ -827,7 +833,6 @@ public final class GameController extends Controller implements DisconnectEventL
             buttons.add(user2b9);
         }
 
-
         if (gameUtil.getGame().getPlayerThree().equals(login.getUsername())) {
             buttons.add(user3b1);
             buttons.add(user3b2);
@@ -840,7 +845,6 @@ public final class GameController extends Controller implements DisconnectEventL
             buttons.add(user3b9);
         }
 
-
         if (gameUtil.getGame().getPlayerFour().equals(login.getUsername())) {
             buttons.add(user4b1);
             buttons.add(user4b2);
@@ -852,7 +856,6 @@ public final class GameController extends Controller implements DisconnectEventL
             buttons.add(user4b8);
             buttons.add(user4b9);
         }
-
         return buttons;
     }
 

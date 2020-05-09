@@ -62,8 +62,8 @@ public final class SplashController extends Controller {
         loadingProgress.progressProperty().bind(model.getInitializer().progressProperty());
         model.getInitializer().stateProperty().addListener((o, oldValue, newValue) -> {
             if (newValue == Worker.State.SUCCEEDED) {
-                // If already logged in go to the game directly, if at least connected, go to login screen, otherwise
-                // to server connection
+                // If already logged in go to the game directly, if at least
+                // connected, go to login screen, otherwise to server connection
                 if (model.isLoggedIn()) {
                     WindowUtil.switchToNewWindow(view, LobbyView.class);
                 } else if (model.isConnected()) {

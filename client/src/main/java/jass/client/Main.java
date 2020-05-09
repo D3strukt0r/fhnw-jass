@@ -63,7 +63,8 @@ public final class Main extends Application {
             cmd = (new DefaultParser()).parse(options, args);
         } catch (ParseException e) {
             // When using an unknown argument
-            System.out.println(e.getMessage()); // Prints "Unrecognized option: ..."
+            // Prints "Unrecognized option: ..."
+            System.out.println(e.getMessage());
             (new HelpFormatter()).printHelp("client.jar", options);
             return;
         }

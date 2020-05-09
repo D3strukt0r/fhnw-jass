@@ -170,7 +170,7 @@ public final class RoundEntity extends Entity {
      *
      * @return Returns the object for further processing.
      */
-    public RoundEntity setPointsTeamOne(int pointsTeamOne) {
+    public RoundEntity setPointsTeamOne(final int pointsTeamOne) {
         this.pointsTeamOne = pointsTeamOne;
         return this;
     }
@@ -187,7 +187,7 @@ public final class RoundEntity extends Entity {
      *
      * @return Returns the object for further processing.
      */
-    public RoundEntity setPointsTeamTwo(int pointsTeamTwo) {
+    public RoundEntity setPointsTeamTwo(final int pointsTeamTwo) {
         this.pointsTeamTwo = pointsTeamTwo;
         return this;
     }

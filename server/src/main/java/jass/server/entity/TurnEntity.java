@@ -21,13 +21,9 @@ package jass.server.entity;
 
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
-import jass.lib.Card;
-import jass.lib.GameMode;
 import jass.lib.database.Entity;
-import jass.lib.message.CardData;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * A model with all known (and cached) turns.
@@ -52,37 +48,37 @@ public final class TurnEntity extends Entity {
     private RoundEntity round;
 
     /**
-     * The winning user of this turn
+     * The winning user of this turn.
      */
     @DatabaseField(foreign = true, foreignAutoRefresh = true)
     private UserEntity winningUser;
 
     /**
-     * The starting player of this turn
+     * The starting player of this turn.
      */
     @DatabaseField(foreign = true, canBeNull = false, foreignAutoRefresh = true)
     private UserEntity startingPlayer;
 
     /**
-     * The first played card of the turn
+     * The first played card of the turn.
      */
     @DatabaseField(foreign = true, foreignAutoRefresh = true)
     private CardEntity cardOne;
 
     /**
-     * The second played card of the turn
+     * The second played card of the turn.
      */
     @DatabaseField(foreign = true, foreignAutoRefresh = true)
     private CardEntity cardTwo;
 
     /**
-     * The third played card of the turn
+     * The third played card of the turn.
      */
     @DatabaseField(foreign = true, foreignAutoRefresh = true)
     private CardEntity cardThree;
 
     /**
-     * The fourth played card of the turn
+     * The fourth played card of the turn.
      */
     @DatabaseField(foreign = true, foreignAutoRefresh = true)
     private CardEntity cardFour;
@@ -92,11 +88,6 @@ public final class TurnEntity extends Entity {
      * at least package visibility.
      */
     public TurnEntity() {
-    }
-
-    public TurnEntity(RoundEntity round, UserEntity startingPlayer) {
-        this.round = round;
-        this.startingPlayer = startingPlayer;
     }
 
     /**
@@ -132,23 +123,29 @@ public final class TurnEntity extends Entity {
 
     /**
      * @param winningUser The winning user.
+     *
+     * @return Returns the object for further processing.
      */
-    public void setWinningUser(UserEntity winningUser) {
+    public TurnEntity setWinningUser(final UserEntity winningUser) {
         this.winningUser = winningUser;
+        return this;
     }
 
     /**
      * @return Returns the starting player.
      */
-    public UserEntity  getStartingPlayer() {
+    public UserEntity getStartingPlayer() {
         return startingPlayer;
     }
 
     /**
-     * @param startingPlayer
+     * @param startingPlayer The starting player.
+     *
+     * @return Returns the object for further processing.
      */
-    public void setStartingPlayer(UserEntity startingPlayer) {
+    public TurnEntity setStartingPlayer(final UserEntity startingPlayer) {
         this.startingPlayer = startingPlayer;
+        return this;
     }
 
     /**
@@ -160,9 +157,12 @@ public final class TurnEntity extends Entity {
 
     /**
      * @param cardOne The first card.
+     *
+     * @return Returns the object for further processing.
      */
-    public void setCardOne(CardEntity cardOne) {
+    public TurnEntity setCardOne(final CardEntity cardOne) {
         this.cardOne = cardOne;
+        return this;
     }
 
     /**
@@ -174,9 +174,12 @@ public final class TurnEntity extends Entity {
 
     /**
      * @param cardTwo The second card.
+     *
+     * @return Returns the object for further processing.
      */
-    public void setCardTwo(CardEntity cardTwo) {
+    public TurnEntity setCardTwo(final CardEntity cardTwo) {
         this.cardTwo = cardTwo;
+        return this;
     }
 
     /**
@@ -188,9 +191,12 @@ public final class TurnEntity extends Entity {
 
     /**
      * @param cardThree The third card.
+     *
+     * @return Returns the object for further processing.
      */
-    public void setCardThree(CardEntity cardThree) {
+    public TurnEntity setCardThree(final CardEntity cardThree) {
         this.cardThree = cardThree;
+        return this;
     }
 
     /**
@@ -202,24 +208,46 @@ public final class TurnEntity extends Entity {
 
     /**
      * @param cardFour The fourth card.
+     *
+     * @return Returns the object for further processing.
      */
-    public void setCardFour(CardEntity cardFour) {
+    public TurnEntity setCardFour(final CardEntity cardFour) {
         this.cardFour = cardFour;
+        return this;
     }
 
+    /**
+     * @return Return all cards of the current turn in an array.
+     */
     public ArrayList<CardEntity> getCards() {
         ArrayList<CardEntity> cards = new ArrayList<>();
-        if(cardOne != null) cards.add(cardOne);
-        if(cardTwo != null) cards.add(cardTwo);
-        if(cardThree != null) cards.add(cardThree);
-        if(cardFour != null) cards.add(cardFour);
+        if (cardOne != null) {
+            cards.add(cardOne);
+        }
+        if (cardTwo != null) {
+            cards.add(cardTwo);
+        }
+        if (cardThree != null) {
+            cards.add(cardThree);
+        }
+        if (cardFour != null) {
+            cards.add(cardFour);
+        }
         return cards;
     }
 
-    public void addCard(CardEntity card) {
-        if(cardOne == null) cardOne = card;
-        else if (cardTwo == null) cardTwo = card;
-        else if (cardThree == null) cardThree = card;
-        else if (cardFour == null) cardFour = card;
+    /**
+     * @param card Add next card to the turn.
+     */
+    public void addCard(final CardEntity card) {
+        if (cardOne == null) {
+            cardOne = card;
+        } else if (cardTwo == null) {
+            cardTwo = card;
+        } else if (cardThree == null) {
+            cardThree = card;
+        } else if (cardFour == null) {
+            cardFour = card;
+        }
     }
 }

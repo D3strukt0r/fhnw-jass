@@ -36,7 +36,7 @@ public final class PlayedCardData extends MessageData {
      * This is used by the server to notify the client to give an appropriate
      * answer back.
      */
-    public PlayedCardData(boolean playedCardValid) {
+    public PlayedCardData(final boolean playedCardValid) {
         super("PlayedCard");
         this.playedCardValid = playedCardValid;
     }
@@ -49,6 +49,9 @@ public final class PlayedCardData extends MessageData {
         this.playedCardValid = data.getBoolean("playedCardValid");
     }
 
+    /**
+     * @return Returns whether the played card is a valid move or not.
+     */
     public boolean getPlayedCardValid() {
         return playedCardValid;
     }

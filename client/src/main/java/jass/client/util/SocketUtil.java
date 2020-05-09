@@ -187,7 +187,8 @@ public final class SocketUtil extends Thread implements Service, Closeable {
     public void run() {
         try (BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()))) {
             while (serverReachable) {
-                String msgText = in.readLine(); // Will wait here for complete line
+                // Will wait here for complete line
+                String msgText = in.readLine();
 
                 // In case the server closes the socket
                 if (msgText == null) {
@@ -195,14 +196,16 @@ public final class SocketUtil extends Thread implements Service, Closeable {
                     break;
                 }
 
-                // Create a message object of the correct class, using reflection
+                // Create a message object of the correct class, using
+                // reflection
                 logger.info("Receiving message: " + msgText);
                 MessageData msgData = MessageData.unserialize(msgText);
 
                 if (msgData == null) {
                     logger.error("Received invalid message");
                 } else {
-                    // Create a message object of the correct class, using reflection
+                    // Create a message object of the correct class, using
+                    // reflection
                     Message msg = Message.fromDataObject(msgData);
                     if (msg == null) {
                         logger.error("Received invalid message of type " + msgData.getMessageType());
@@ -258,13 +261,15 @@ public final class SocketUtil extends Thread implements Service, Closeable {
     public void send(final Message msg) {
         try {
             LoginEntity login = ServiceLocator.get(LoginEntity.class);
-            if(isLoggedIn()) {
+            if (isLoggedIn()) {
+                assert login != null;
                 msg.getRawData().setToken(login.getToken());
                 msg.getRawData().setUsername(login.getUsername());
             }
             OutputStreamWriter out = new OutputStreamWriter(socket.getOutputStream());
             logger.info("Sending message: " + msg.toString());
-            out.write(msg.toString() + "\n"); // This will send the serialized MessageData object
+            // This will send the serialized MessageData object
+            out.write(msg.toString() + "\n");
             out.flush();
         } catch (IOException e) {
             logger.info("Server unreachable; logged out");

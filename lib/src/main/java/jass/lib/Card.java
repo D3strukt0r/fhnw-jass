@@ -71,7 +71,8 @@ public final class Card {
 
         @Override
         public String toString() {
-            String str = "ace";  // Assume we have an ace, then cover all other cases
+            // Assume we have an ace, then cover all other cases
+            String str = "ace";
             // Get ordinal value, which ranges from 0 to 12
             int ordinal = this.ordinal();
             if (ordinal <= 8) {

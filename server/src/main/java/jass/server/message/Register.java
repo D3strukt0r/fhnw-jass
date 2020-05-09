@@ -96,7 +96,8 @@ public final class Register extends Message {
             .setUsername(data.getUsername())
             .setPassword(data.getPassword());
 
-        // Add the new user to the database, and only return true if it was saved successfully
+        // Add the new user to the database, and only return true if it was
+        // saved successfully
         if (UserRepository.getSingleton(null).add(newUser)) {
             logger.info("User " + newUser.getUsername() + " created");
             client.send(new Result(new ResultData(data.getId(), true)));

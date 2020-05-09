@@ -81,7 +81,7 @@ public final class RankEntity extends Entity {
      *
      * @return Returns the object for further processing.
      */
-    public RankEntity setId(int id) {
+    public RankEntity setId(final int id) {
         this.id = id;
         return this;
     }

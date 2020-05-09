@@ -29,7 +29,7 @@ import jass.lib.database.Entity;
  * @since 0.0.1
  */
 @DatabaseTable(tableName = "user_connections")
-public class UserConnectionEntity extends Entity {
+public final class UserConnectionEntity extends Entity {
     /**
      * The ID.
      */

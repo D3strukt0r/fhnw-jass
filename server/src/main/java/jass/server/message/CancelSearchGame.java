@@ -58,7 +58,8 @@ public final class CancelSearchGame extends Message {
             result = ServerSocketUtil.exists(data.getUsername());
             if (result) {
                 SearchGameUtil sGU = ServiceLocator.get(SearchGameUtil.class);
-                sGU.removeClientFromSearchingGame(client);
+                assert sGU != null;
+                sGU.remove(client);
             }
         }
 

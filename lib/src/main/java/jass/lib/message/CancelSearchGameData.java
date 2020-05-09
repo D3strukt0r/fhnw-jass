@@ -69,5 +69,4 @@ public final class CancelSearchGameData extends MessageData {
     public String getUsername() {
         return username;
     }
-
 }

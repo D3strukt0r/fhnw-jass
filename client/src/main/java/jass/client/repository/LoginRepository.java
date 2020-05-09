@@ -77,7 +77,8 @@ public final class LoginRepository extends Repository<Dao<LoginEntity, Integer>,
                     return false;
                 }
             }
-            // Set the new entry to connect automatically (if it is already in the db)
+            // Set the new entry to connect automatically (if it is already in
+            // the db)
             if (l.getId() == login.getId()) {
                 login.setConnectAutomatically(true);
                 result = update(login);

@@ -20,7 +20,6 @@
 package jass.client.message;
 
 import jass.client.util.SocketUtil;
-import jass.lib.message.ChosenGameModeData;
 import jass.lib.message.MessageData;
 import jass.lib.message.PlayedCardData;
 

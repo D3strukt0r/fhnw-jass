@@ -144,7 +144,7 @@ public abstract class MessageData implements Serializable {
         return messageType;
     }
 
-    public void setToken(String token) {
+    public void setToken(final String token) {
         this.token = token;
     }
 
@@ -152,7 +152,7 @@ public abstract class MessageData implements Serializable {
         return token;
     }
 
-    public void setUsername(String username) {
+    public void setUsername(final String username) {
         this.username = username;
     }
 

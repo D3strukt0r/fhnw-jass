@@ -102,11 +102,17 @@ public final class CardData {
         return rankId;
     }
 
+    /**
+     * @return Returns whether the card has been played.
+     */
     public boolean getIsPlayed() {
         return isPlayed;
     }
 
-    public void setIsPlayed(boolean isPlayed) {
+    /**
+     * @param isPlayed Whether the card has been played.
+     */
+    public void setIsPlayed(final boolean isPlayed) {
         this.isPlayed = isPlayed;
     }
 }

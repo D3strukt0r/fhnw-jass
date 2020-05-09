@@ -17,16 +17,23 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package jass.client.model;
+package jass.client.util;
 
-import jass.client.mvc.Model;
+public final class StringUtil {
+    /**
+     * Utility classes, which are collections of static members, are not meant
+     * to be instantiated.
+     */
+    private StringUtil() {
+        throw new IllegalStateException("Utility class");
+    }
 
-/**
- * The model for the register view.
- *
- * @author Manuele Vaccari
- * @version %I%, %G%
- * @since 0.0.1
- */
-public final class RegisterModel extends Model {
+    /**
+     * @param str Any string.
+     *
+     * @return Returns true if the object is null or empty, otherwise false.
+     */
+    public static boolean isNullOrEmpty(final String str) {
+        return str == null || str.isEmpty();
+    }
 }
