@@ -421,6 +421,10 @@ public final class GameController extends Controller implements DisconnectEventL
         initializePlayedCardsListener();
         initializeWinningPlayerListener();
         initializeDisableButtonsListener();
+        gameUtil.getPointsRoundProperty().addListener(((observable, oldValue, newValue) -> Platform.runLater(() -> scoreR.setText("Points (Round): " + newValue))));
+        gameUtil.getPointsRoundProperty().setValue(0);
+        gameUtil.getPointsTotalProperty().addListener(((observable, oldValue, newValue) -> Platform.runLater(() -> scoreT.setText("Points (Total): " + newValue))));
+        gameUtil.getPointsTotalProperty().setValue(0);
         logger.info("observable listeners created");
         this.gameUtil.setDisableButtons(true);
         logger.info("buttons disabled");
@@ -434,7 +438,6 @@ public final class GameController extends Controller implements DisconnectEventL
             updateCardImages();
             logger.info("updated card images");
         }
-
 
         SocketUtil socket = ServiceLocator.get(SocketUtil.class);
         assert socket != null;

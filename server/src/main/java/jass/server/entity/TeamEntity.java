@@ -22,6 +22,10 @@ package jass.server.entity;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 import jass.lib.database.Entity;
+import jass.server.repository.TeamRepository;
+import jass.server.repository.UserRepository;
+
+import java.sql.SQLException;
 
 /**
  * A model with all known (and cached) teams.
@@ -45,10 +49,20 @@ public final class TeamEntity extends Entity {
     private UserEntity playerOne;
 
     /**
+     * Whether the variable has been loaded from the database.
+     */
+    private boolean playerOneLoaded = false;
+
+    /**
      * Player two inside the team.
      */
     @DatabaseField(foreign = true)
     private UserEntity playerTwo;
+
+    /**
+     * Whether the variable has been loaded from the database.
+     */
+    private boolean playerTwoLoaded = false;
 
     /**
      * For ORMLite all persisted classes must define a no-arg constructor with
@@ -68,6 +82,14 @@ public final class TeamEntity extends Entity {
      * @return Returns player one.
      */
     public UserEntity getPlayerOne() {
+        if (!playerOneLoaded) {
+            try {
+                UserRepository.getSingleton(null).getDao().refresh(playerOne);
+                playerOneLoaded = true;
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
         return playerOne;
     }
 
@@ -85,6 +107,14 @@ public final class TeamEntity extends Entity {
      * @return Returns player two.
      */
     public UserEntity getPlayerTwo() {
+        if (!playerTwoLoaded) {
+            try {
+                UserRepository.getSingleton(null).getDao().refresh(playerTwo);
+                playerTwoLoaded = true;
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
         return playerTwo;
     }
 
@@ -104,10 +134,6 @@ public final class TeamEntity extends Entity {
      * @return Returns true if the user is inside the team, otherwise false.
      */
     public boolean checkIfPlayerIsInTeam(final UserEntity user) {
-        boolean returnValue = false;
-        if (playerOne.getId() == user.getId() || playerTwo.getId() == user.getId()) {
-            returnValue = true;
-        }
-        return returnValue;
+        return playerOne.equals(user) || playerTwo.equals(user);
     }
 }

@@ -22,6 +22,7 @@ package jass.client.util;
 import jass.client.entity.LoginEntity;
 import jass.client.eventlistener.BroadcastDeckEventListener;
 import jass.client.eventlistener.BroadcastGameModeEventListener;
+import jass.client.eventlistener.BroadcastPointsEventListener;
 import jass.client.eventlistener.BroadcastTurnEventListener;
 import jass.client.eventlistener.ChooseGameModeEventListener;
 import jass.client.eventlistener.PlayedCardEventListener;
@@ -31,6 +32,7 @@ import jass.lib.Card;
 import jass.lib.GameMode;
 import jass.lib.message.BroadcastDeckData;
 import jass.lib.message.BroadcastGameModeData;
+import jass.lib.message.BroadcastPointsData;
 import jass.lib.message.BroadcastTurnData;
 import jass.lib.message.CardData;
 import jass.lib.message.ChooseGameModeData;
@@ -41,6 +43,7 @@ import jass.lib.message.PlayedCardData;
 import jass.lib.servicelocator.ServiceLocator;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -63,7 +66,7 @@ import java.util.List;
  * @version %I%, %G%
  * @since 0.0.1
  */
-public final class GameUtil implements Service, BroadcastDeckEventListener, ChooseGameModeEventListener, BroadcastGameModeEventListener, PlayedCardEventListener, BroadcastTurnEventListener {
+public final class GameUtil implements Service, BroadcastDeckEventListener, ChooseGameModeEventListener, BroadcastGameModeEventListener, PlayedCardEventListener, BroadcastTurnEventListener, BroadcastPointsEventListener {
     /**
      * The logger to print to console and save in a .log file.
      */
@@ -130,6 +133,16 @@ public final class GameUtil implements Service, BroadcastDeckEventListener, Choo
     private int cardIdToRemove = 0;
 
     /**
+     * The current points of the round.
+     */
+    private SimpleIntegerProperty pointsRound = new SimpleIntegerProperty(-1);
+
+    /**
+     * The current points of the game.
+     */
+    private SimpleIntegerProperty pointsTotal = new SimpleIntegerProperty(-1);
+
+    /**
      * Initialize GameUtil before a game starts.
      */
     public GameUtil() {
@@ -141,6 +154,7 @@ public final class GameUtil implements Service, BroadcastDeckEventListener, Choo
         socket.addBroadcastGameModeEventListener(this);
         socket.addPlayedCardEventListener(this);
         socket.addBroadcastedTurnEventListener(this);
+        socket.addBroadcastPointsEventListener(this);
         playerDeck = FXCollections.observableArrayList(new ArrayList<>());
         playedCards = FXCollections.observableArrayList(new ArrayList<>());
     }
@@ -249,6 +263,15 @@ public final class GameUtil implements Service, BroadcastDeckEventListener, Choo
         }
         playedCards.clear();
         playedCards.addAll(data.getPlayedCardsClient());
+    }
+
+    @Override
+    public void onBroadcastPoints(final BroadcastPointsData data) {
+        logger.info("Gained points in this round: " + data.getPoints());
+        pointsRound.setValue(pointsRound.getValue() + data.getPoints());
+        logger.info("Total points round: " + pointsRound.getValue());
+        pointsTotal.setValue(pointsTotal.getValue() + data.getPoints());
+        logger.info("Total points game: " + pointsTotal.getValue());
     }
 
     /**
@@ -445,5 +468,19 @@ public final class GameUtil implements Service, BroadcastDeckEventListener, Choo
      */
     public int getCardIdToRemove() {
         return cardIdToRemove;
+    }
+
+    /**
+     * @return Returns the points of the round property.
+     */
+    public SimpleIntegerProperty getPointsRoundProperty() {
+        return pointsRound;
+    }
+
+    /**
+     * @return Returns the points of the game property.
+     */
+    public SimpleIntegerProperty getPointsTotalProperty() {
+        return pointsTotal;
     }
 }

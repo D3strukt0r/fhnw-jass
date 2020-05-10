@@ -176,6 +176,16 @@ public final class RoundEntity extends Entity {
     }
 
     /**
+     * @param points The points to add for team one.
+     *
+     * @return Returns the object for further processing.
+     */
+    public RoundEntity addPointsTeamOne(final int points) {
+        pointsTeamOne += points;
+        return this;
+    }
+
+    /**
      * @return Returns the total points for team two.
      */
     public int getPointsTeamTwo() {
@@ -189,6 +199,16 @@ public final class RoundEntity extends Entity {
      */
     public RoundEntity setPointsTeamTwo(final int pointsTeamTwo) {
         this.pointsTeamTwo = pointsTeamTwo;
+        return this;
+    }
+
+    /**
+     * @param points The points to add for team one.
+     *
+     * @return Returns the object for further processing.
+     */
+    public RoundEntity addPointsTeamTwo(final int points) {
+        pointsTeamTwo += points;
         return this;
     }
 }

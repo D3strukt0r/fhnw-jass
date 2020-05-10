@@ -21,6 +21,7 @@ package jass.client.util;
 
 import jass.client.eventlistener.BroadcastDeckEventListener;
 import jass.client.eventlistener.BroadcastGameModeEventListener;
+import jass.client.eventlistener.BroadcastPointsEventListener;
 import jass.client.eventlistener.BroadcastTurnEventListener;
 import jass.client.eventlistener.ChooseGameModeEventListener;
 import jass.client.eventlistener.DisconnectEventListener;
@@ -29,6 +30,7 @@ import jass.client.eventlistener.PlayedCardEventListener;
 import jass.client.message.Message;
 import jass.lib.message.BroadcastDeckData;
 import jass.lib.message.BroadcastGameModeData;
+import jass.lib.message.BroadcastPointsData;
 import jass.lib.message.BroadcastTurnData;
 import jass.lib.message.ChooseGameModeData;
 import jass.lib.message.GameFoundData;
@@ -119,6 +121,11 @@ public final class SocketUtil extends Thread implements Service, Closeable {
      * A list of objects listening to broadcast played card event.
      */
     private final ArrayList<BroadcastTurnEventListener> broadcastTurnListener = new ArrayList<>();
+
+    /**
+     * A list of objects listening to broadcast points event.
+     */
+    private final ArrayList<BroadcastPointsEventListener> broadcastPointsListener = new ArrayList<>();
 
     /**
      * A list of all messages coming from the server.
@@ -363,6 +370,16 @@ public final class SocketUtil extends Thread implements Service, Closeable {
     }
 
     /**
+     * @param listener A BroadcastPointsEventListener object
+     *
+     * @author Manuele Vaccari
+     * @since 0.0.1
+     */
+    public void addBroadcastPointsEventListener(final BroadcastPointsEventListener listener) {
+        broadcastPointsListener.add(listener);
+    }
+
+    /**
      * @param msgType Message to send to listener listening to "game-found"
      *                event.
      * @param msgData The message to send to the listeners.
@@ -401,6 +418,12 @@ public final class SocketUtil extends Thread implements Service, Closeable {
                 for (BroadcastTurnEventListener listener : broadcastTurnListener) {
                     logger.info("Invoking onBroadcastTurn event on " + listener.getClass().getName());
                     listener.onBroadcastTurn((BroadcastTurnData) msgData);
+                }
+                break;
+            case "BroadcastPoints":
+                for (BroadcastPointsEventListener listener : broadcastPointsListener) {
+                    logger.info("Invoking onBroadcastPoints event on " + listener.getClass().getName());
+                    listener.onBroadcastPoints((BroadcastPointsData) msgData);
                 }
                 break;
             default:

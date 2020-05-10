@@ -23,6 +23,9 @@ import com.j256.ormlite.dao.Dao;
 import jass.lib.database.Repository;
 import jass.server.entity.RankEntity;
 
+import java.sql.SQLException;
+import java.util.List;
+
 /**
  * A model with all known ranks.
  *
@@ -55,5 +58,25 @@ public final class RankRepository extends Repository<Dao<RankEntity, Integer>, R
      */
     public RankRepository(final Dao<RankEntity, Integer> dao) {
         super(dao);
+    }
+
+    /**
+     * @param name The name of the rank.
+     *
+     * @return Returns the RankEntity of the rank, or null if not found or
+     * something went wrong.
+     */
+    public RankEntity getByName(final String name) {
+        try {
+            // Find all users with the given username (only one)
+            List<RankEntity> results = getDao().queryBuilder().where().eq("key", name).query();
+            if (results.size() != 0) {
+                return results.get(0);
+            } else {
+                return null;
+            }
+        } catch (SQLException e) {
+            return null;
+        }
     }
 }
