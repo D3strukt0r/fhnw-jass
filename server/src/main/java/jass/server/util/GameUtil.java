@@ -558,7 +558,7 @@ public final class GameUtil implements ChosenGameModeEventListener, PlayedCardEv
      *
      * @return Returns the card which wins the current turn.
      *
-     * @author ...
+     * @author Victor Hargrave
      */
     private static CardEntity calculateTurnWinnerOndeufe(final TurnEntity currentTurn) {
         RankRepository rankRepo = RankRepository.getSingleton(null);
