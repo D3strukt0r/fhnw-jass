@@ -388,7 +388,7 @@ public final class GameUtil implements ChosenGameModeEventListener, PlayedCardEv
         for (CardEntity card : cards) {
             if (card.getSuit().equals(trumpfSuit)) {
                 if (card.getRank().getKey().equals("jack")) {
-                    points += 20;
+                    points += 21;
                 } else if (card.getRank().getKey().equals("9")) {
                     points += 14;
                 } else {
