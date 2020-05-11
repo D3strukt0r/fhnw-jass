@@ -22,6 +22,10 @@ package jass.server.repository;
 import com.j256.ormlite.dao.Dao;
 import jass.lib.database.Repository;
 import jass.server.entity.CardEntity;
+import jass.server.entity.RankEntity;
+import jass.server.entity.SuitEntity;
+
+import java.util.ArrayList;
 
 /**
  * A model with all known cards.
@@ -55,5 +59,60 @@ public final class CardRepository extends Repository<Dao<CardEntity, Integer>, C
      */
     public CardRepository(final Dao<CardEntity, Integer> dao) {
         super(dao);
+    }
+
+    /**
+     * @param cards The array of cards to check.
+     * @param suit  The suit to find.
+     *
+     * @return Returns true if there is any card with the same suit, otherwise
+     * false.
+     *
+     * @author Manuele Vaccari
+     */
+    public static boolean isAnyCardOfSuit(final ArrayList<CardEntity> cards, final SuitEntity suit) {
+        for (CardEntity card : cards) {
+            if (card.getSuit().equals(suit)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * @param cards The array of cards to check.
+     * @param suit  The suit to find.
+     * @param rank  The rank to find.
+     *
+     * @return Returns true if there is any card with the same suit and rank,
+     * otherwise false.
+     *
+     * @author Manuele Vaccari
+     */
+    public static boolean isAnyCardOfSuitAndRank(final ArrayList<CardEntity> cards, final SuitEntity suit, final RankEntity rank) {
+        for (CardEntity card : cards) {
+            if (card.getRank().equals(rank) && card.getSuit().equals(suit)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * @param cards The array of cards to check.
+     * @param suit  The suit to find.
+     * @param rank  The rank to find.
+     *
+     * @return Returns the card which has the same suit and rank.
+     *
+     * @author Manuele Vaccari
+     */
+    public static CardEntity getCardOfSuitAndRank(final ArrayList<CardEntity> cards, final SuitEntity suit, final RankEntity rank) {
+        for (CardEntity card : cards) {
+            if (card.getRank().equals(rank) && card.getSuit().equals(suit)) {
+                return card;
+            }
+        }
+        return null;
     }
 }

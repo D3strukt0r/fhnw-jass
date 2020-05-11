@@ -45,24 +45,14 @@ public final class TeamEntity extends Entity {
     /**
      * Player one inside the team.
      */
-    @DatabaseField(foreign = true)
+    @DatabaseField(foreign = true, foreignAutoRefresh = true)
     private UserEntity playerOne;
-
-    /**
-     * Whether the variable has been loaded from the database.
-     */
-    private boolean playerOneLoaded = false;
 
     /**
      * Player two inside the team.
      */
-    @DatabaseField(foreign = true)
+    @DatabaseField(foreign = true, foreignAutoRefresh = true)
     private UserEntity playerTwo;
-
-    /**
-     * Whether the variable has been loaded from the database.
-     */
-    private boolean playerTwoLoaded = false;
 
     /**
      * For ORMLite all persisted classes must define a no-arg constructor with
@@ -82,14 +72,6 @@ public final class TeamEntity extends Entity {
      * @return Returns player one.
      */
     public UserEntity getPlayerOne() {
-        if (!playerOneLoaded) {
-            try {
-                UserRepository.getSingleton(null).getDao().refresh(playerOne);
-                playerOneLoaded = true;
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
         return playerOne;
     }
 
@@ -107,14 +89,6 @@ public final class TeamEntity extends Entity {
      * @return Returns player two.
      */
     public UserEntity getPlayerTwo() {
-        if (!playerTwoLoaded) {
-            try {
-                UserRepository.getSingleton(null).getDao().refresh(playerTwo);
-                playerTwoLoaded = true;
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
         return playerTwo;
     }
 
