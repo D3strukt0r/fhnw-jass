@@ -450,7 +450,7 @@ public final class GameUtil implements ChosenGameModeEventListener, PlayedCardEv
         } else if (currentRound.getGameMode() == GameMode.OBE_ABE) {
             winningCard = calculateTurnWinnerObeAbe(currentTurn);
         } else if (currentRound.getGameMode() == GameMode.ONDE_UFE) {
-            winningCard = calculateTurnWinnerOndeUfe(currentTurn);
+            winningCard = calculateTurnWinnerOndeufe(currentTurn);
         }
 
         if (winningCard == null) {
@@ -558,11 +558,40 @@ public final class GameUtil implements ChosenGameModeEventListener, PlayedCardEv
      *
      * @return Returns the card which wins the current turn.
      *
-     * @author ...
+     * @author Victor Hargrave
      */
-    private static CardEntity calculateTurnWinnerOndeUfe(final TurnEntity currentTurn) {
-        // TODO
-        return null;
+    private static CardEntity calculateTurnWinnerOndeufe(final TurnEntity currentTurn) {
+        RankRepository rankRepo = RankRepository.getSingleton(null);
+        SuitRepository suitRepo = SuitRepository.getSingleton(null);
+
+        // Get suit of first card played
+        SuitEntity suitOfFirstCard = currentTurn.getCardOne().getSuit();
+
+        // Get all 4 cards
+        ArrayList<CardEntity> cards = currentTurn.getCards();
+
+        // Check by order
+        if (CardRepository.isAnyCardOfSuitAndRank(cards, suitOfFirstCard, rankRepo.getByName("6"))) {
+            return CardRepository.getCardOfSuitAndRank(cards, suitOfFirstCard, rankRepo.getByName("6"));
+        } else if (CardRepository.isAnyCardOfSuitAndRank(cards, suitOfFirstCard, rankRepo.getByName("7"))) {
+            return CardRepository.getCardOfSuitAndRank(cards, suitOfFirstCard, rankRepo.getByName("7"));
+        } else if (CardRepository.isAnyCardOfSuitAndRank(cards, suitOfFirstCard, rankRepo.getByName("8"))) {
+            return CardRepository.getCardOfSuitAndRank(cards, suitOfFirstCard, rankRepo.getByName("8"));
+        } else if (CardRepository.isAnyCardOfSuitAndRank(cards, suitOfFirstCard, rankRepo.getByName("9"))) {
+            return CardRepository.getCardOfSuitAndRank(cards, suitOfFirstCard, rankRepo.getByName("9"));
+        } else if (CardRepository.isAnyCardOfSuitAndRank(cards, suitOfFirstCard, rankRepo.getByName("10"))) {
+            return CardRepository.getCardOfSuitAndRank(cards, suitOfFirstCard, rankRepo.getByName("10"));
+        } else if (CardRepository.isAnyCardOfSuitAndRank(cards, suitOfFirstCard, rankRepo.getByName("jack"))) {
+            return CardRepository.getCardOfSuitAndRank(cards, suitOfFirstCard, rankRepo.getByName("jack"));
+        } else if (CardRepository.isAnyCardOfSuitAndRank(cards, suitOfFirstCard, rankRepo.getByName("queen"))) {
+            return CardRepository.getCardOfSuitAndRank(cards, suitOfFirstCard, rankRepo.getByName("queen"));
+        } else if (CardRepository.isAnyCardOfSuitAndRank(cards, suitOfFirstCard, rankRepo.getByName("king"))) {
+            return CardRepository.getCardOfSuitAndRank(cards, suitOfFirstCard, rankRepo.getByName("king"));
+        } else if (CardRepository.isAnyCardOfSuitAndRank(cards, suitOfFirstCard, rankRepo.getByName("ace"))) {
+            return CardRepository.getCardOfSuitAndRank(cards, suitOfFirstCard, rankRepo.getByName("ace"));
+        } else {
+            return null;
+        }
     }
 
     ////////////////////////////////////////////////////////////////////////////
