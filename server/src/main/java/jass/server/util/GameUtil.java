@@ -346,9 +346,9 @@ public final class GameUtil implements ChosenGameModeEventListener, PlayedCardEv
                 this.currentTurn = turn;
                 broadcast(broadcastTurn);
 
-                // start new turn after 3 seconds
+                // start new turn after 4 seconds
                 if (turn.getWinningUser() != null) {
-                    Thread.sleep(3000);
+                    Thread.sleep(4000);
                     TurnEntity newTurn = addNewTurn(turn.getWinningUser(), currentRound);
 
                     turnRepository.add(newTurn);
@@ -388,7 +388,7 @@ public final class GameUtil implements ChosenGameModeEventListener, PlayedCardEv
         for (CardEntity card : cards) {
             if (card.getSuit().equals(trumpfSuit)) {
                 if (card.getRank().getKey().equals("jack")) {
-                    points += 21;
+                    points += 20;
                 } else if (card.getRank().getKey().equals("9")) {
                     points += 14;
                 } else {
@@ -446,11 +446,11 @@ public final class GameUtil implements ChosenGameModeEventListener, PlayedCardEv
     private static UserEntity calculateTurnWinner(final RoundEntity currentRound, final TurnEntity currentTurn) {
         CardEntity winningCard = null;
         if (currentRound.getGameMode() == GameMode.TRUMPF) {
-            winningCard = validateTurnWinnerTrump(currentRound.getTrumpfSuit(), currentTurn);
+            winningCard = calculateTurnWinnerTrump(currentRound.getTrumpfSuit(), currentTurn);
         } else if (currentRound.getGameMode() == GameMode.OBE_ABE) {
-            winningCard = validateTurnWinnerObeAbe(currentTurn);
+            winningCard = calculateTurnWinnerObeAbe(currentTurn);
         } else if (currentRound.getGameMode() == GameMode.ONDE_UFE) {
-            winningCard = validateTurnWinnerOndeUfe(currentTurn);
+            winningCard = calculateTurnWinnerOndeUfe(currentTurn);
         }
 
         if (winningCard == null) {
@@ -479,7 +479,7 @@ public final class GameUtil implements ChosenGameModeEventListener, PlayedCardEv
      *
      * @author Manuele Vaccari
      */
-    private static CardEntity validateTurnWinnerTrump(final Card.Suit trumpf, final TurnEntity currentTurn) {
+    private static CardEntity calculateTurnWinnerTrump(final Card.Suit trumpf, final TurnEntity currentTurn) {
         RankRepository rankRepo = RankRepository.getSingleton(null);
         SuitRepository suitRepo = SuitRepository.getSingleton(null);
 
@@ -548,7 +548,7 @@ public final class GameUtil implements ChosenGameModeEventListener, PlayedCardEv
      *
      * @author ...
      */
-    private static CardEntity validateTurnWinnerObeAbe(final TurnEntity currentTurn) {
+    private static CardEntity calculateTurnWinnerObeAbe(final TurnEntity currentTurn) {
         // TODO
         return null;
     }
@@ -560,7 +560,7 @@ public final class GameUtil implements ChosenGameModeEventListener, PlayedCardEv
      *
      * @author ...
      */
-    private static CardEntity validateTurnWinnerOndeUfe(final TurnEntity currentTurn) {
+    private static CardEntity calculateTurnWinnerOndeUfe(final TurnEntity currentTurn) {
         // TODO
         return null;
     }
