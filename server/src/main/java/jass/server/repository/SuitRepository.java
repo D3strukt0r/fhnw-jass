@@ -23,6 +23,9 @@ import com.j256.ormlite.dao.Dao;
 import jass.lib.database.Repository;
 import jass.server.entity.SuitEntity;
 
+import java.sql.SQLException;
+import java.util.List;
+
 /**
  * A model with all known suits.
  *
@@ -55,5 +58,25 @@ public final class SuitRepository extends Repository<Dao<SuitEntity, Integer>, S
      */
     public SuitRepository(final Dao<SuitEntity, Integer> dao) {
         super(dao);
+    }
+
+    /**
+     * @param name The name of the suit.
+     *
+     * @return Returns the SuitEntity of the suit, or null if not found or
+     * something went wrong.
+     */
+    public SuitEntity getByName(final String name) {
+        try {
+            // Find all users with the given username (only one)
+            List<SuitEntity> results = getDao().queryBuilder().where().eq("key", name).query();
+            if (results.size() != 0) {
+                return results.get(0);
+            } else {
+                return null;
+            }
+        } catch (SQLException e) {
+            return null;
+        }
     }
 }

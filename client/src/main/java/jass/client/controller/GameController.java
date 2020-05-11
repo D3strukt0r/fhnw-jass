@@ -421,6 +421,10 @@ public final class GameController extends Controller implements DisconnectEventL
         initializePlayedCardsListener();
         initializeWinningPlayerListener();
         initializeDisableButtonsListener();
+        gameUtil.getPointsRoundProperty().addListener(((observable, oldValue, newValue) -> Platform.runLater(() -> scoreR.setText("Points (Round): " + newValue))));
+        gameUtil.getPointsRoundProperty().setValue(0);
+        gameUtil.getPointsTotalProperty().addListener(((observable, oldValue, newValue) -> Platform.runLater(() -> scoreT.setText("Points (Total): " + newValue))));
+        gameUtil.getPointsTotalProperty().setValue(0);
         logger.info("observable listeners created");
         this.gameUtil.setDisableButtons(true);
         logger.info("buttons disabled");
@@ -434,7 +438,6 @@ public final class GameController extends Controller implements DisconnectEventL
             updateCardImages();
             logger.info("updated card images");
         }
-
 
         SocketUtil socket = ServiceLocator.get(SocketUtil.class);
         assert socket != null;
@@ -698,15 +701,15 @@ public final class GameController extends Controller implements DisconnectEventL
      */
     public void disableButtons(final boolean disable) {
         //TODO enable buttons for the cards that could be played in the round based on game mode
-        CardData card1 = gameUtil.getPlayerDeck() != null ? gameUtil.getPlayerDeck().get(0) : null;
-        CardData card2 = gameUtil.getPlayerDeck() != null ? gameUtil.getPlayerDeck().get(1) : null;
-        CardData card3 = gameUtil.getPlayerDeck() != null ? gameUtil.getPlayerDeck().get(2) : null;
-        CardData card4 = gameUtil.getPlayerDeck() != null ? gameUtil.getPlayerDeck().get(3) : null;
-        CardData card5 = gameUtil.getPlayerDeck() != null ? gameUtil.getPlayerDeck().get(4) : null;
-        CardData card6 = gameUtil.getPlayerDeck() != null ? gameUtil.getPlayerDeck().get(5) : null;
-        CardData card7 = gameUtil.getPlayerDeck() != null ? gameUtil.getPlayerDeck().get(6) : null;
-        CardData card8 = gameUtil.getPlayerDeck() != null ? gameUtil.getPlayerDeck().get(7) : null;
-        CardData card9 = gameUtil.getPlayerDeck() != null ? gameUtil.getPlayerDeck().get(8) : null;
+        CardData card1 = !gameUtil.getPlayerDeck().isEmpty() ? gameUtil.getPlayerDeck().get(0) : null;
+        CardData card2 = !gameUtil.getPlayerDeck().isEmpty() ? gameUtil.getPlayerDeck().get(1) : null;
+        CardData card3 = !gameUtil.getPlayerDeck().isEmpty() ? gameUtil.getPlayerDeck().get(2) : null;
+        CardData card4 = !gameUtil.getPlayerDeck().isEmpty() ? gameUtil.getPlayerDeck().get(3) : null;
+        CardData card5 = !gameUtil.getPlayerDeck().isEmpty() ? gameUtil.getPlayerDeck().get(4) : null;
+        CardData card6 = !gameUtil.getPlayerDeck().isEmpty() ? gameUtil.getPlayerDeck().get(5) : null;
+        CardData card7 = !gameUtil.getPlayerDeck().isEmpty() ? gameUtil.getPlayerDeck().get(6) : null;
+        CardData card8 = !gameUtil.getPlayerDeck().isEmpty() ? gameUtil.getPlayerDeck().get(7) : null;
+        CardData card9 = !gameUtil.getPlayerDeck().isEmpty() ? gameUtil.getPlayerDeck().get(8) : null;
 
         LoginEntity login = ServiceLocator.get(LoginEntity.class);
         assert login != null;

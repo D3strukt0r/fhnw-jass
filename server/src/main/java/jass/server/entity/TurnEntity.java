@@ -66,10 +66,22 @@ public final class TurnEntity extends Entity {
     private CardEntity cardOne;
 
     /**
+     * The user who played card one.
+     */
+    @DatabaseField(foreign = true, foreignAutoRefresh = true)
+    private UserEntity playerCardOne;
+
+    /**
      * The second played card of the turn.
      */
     @DatabaseField(foreign = true, foreignAutoRefresh = true)
     private CardEntity cardTwo;
+
+    /**
+     * The user who played card two.
+     */
+    @DatabaseField(foreign = true, foreignAutoRefresh = true)
+    private UserEntity playerCardTwo;
 
     /**
      * The third played card of the turn.
@@ -78,10 +90,22 @@ public final class TurnEntity extends Entity {
     private CardEntity cardThree;
 
     /**
+     * The user who played card three.
+     */
+    @DatabaseField(foreign = true, foreignAutoRefresh = true)
+    private UserEntity playerCardThree;
+
+    /**
      * The fourth played card of the turn.
      */
     @DatabaseField(foreign = true, foreignAutoRefresh = true)
     private CardEntity cardFour;
+
+    /**
+     * The user who played card four.
+     */
+    @DatabaseField(foreign = true, foreignAutoRefresh = true)
+    private UserEntity playerCardFour;
 
     /**
      * For ORMLite all persisted classes must define a no-arg constructor with
@@ -166,6 +190,13 @@ public final class TurnEntity extends Entity {
     }
 
     /**
+     * @return Returns the user who played card one.
+     */
+    public UserEntity getPlayerCardOne() {
+        return playerCardOne;
+    }
+
+    /**
      * @return Returns the second card.
      */
     public CardEntity getCardTwo() {
@@ -180,6 +211,13 @@ public final class TurnEntity extends Entity {
     public TurnEntity setCardTwo(final CardEntity cardTwo) {
         this.cardTwo = cardTwo;
         return this;
+    }
+
+    /**
+     * @return Returns the player who played card two.
+     */
+    public UserEntity getPlayerCardTwo() {
+        return playerCardTwo;
     }
 
     /**
@@ -200,6 +238,13 @@ public final class TurnEntity extends Entity {
     }
 
     /**
+     * @return Returns the player who played card three.
+     */
+    public UserEntity getPlayerCardThree() {
+        return playerCardThree;
+    }
+
+    /**
      * @return Returns the fourth card.
      */
     public CardEntity getCardFour() {
@@ -214,6 +259,13 @@ public final class TurnEntity extends Entity {
     public TurnEntity setCardFour(final CardEntity cardFour) {
         this.cardFour = cardFour;
         return this;
+    }
+
+    /**
+     * @return Returns the player who played card four.
+     */
+    public UserEntity getPlayerCardFour() {
+        return playerCardFour;
     }
 
     /**
@@ -238,16 +290,21 @@ public final class TurnEntity extends Entity {
 
     /**
      * @param card Add next card to the turn.
+     * @param user The user who played the card.
      */
-    public void addCard(final CardEntity card) {
+    public void addCard(final CardEntity card, final UserEntity user) {
         if (cardOne == null) {
             cardOne = card;
+            playerCardOne = user;
         } else if (cardTwo == null) {
             cardTwo = card;
+            playerCardTwo = user;
         } else if (cardThree == null) {
             cardThree = card;
+            playerCardThree = user;
         } else if (cardFour == null) {
             cardFour = card;
+            playerCardFour = user;
         }
     }
 }

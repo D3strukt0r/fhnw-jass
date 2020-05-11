@@ -44,7 +44,7 @@
                </Pane>
                <Pane prefHeight="200.0" prefWidth="200.0">
                   <children>
-                     <Label alignment="TOP_CENTER" layoutY="5.0" prefHeight="50.0" prefWidth="202.0" styleClass="navbar-game-panel-text" stylesheets="@../css/app.css" text="Points (Round):">
+                     <Label fx:id="scoreR" alignment="TOP_CENTER" layoutY="5.0" prefHeight="50.0" prefWidth="202.0" styleClass="navbar-game-panel-text" stylesheets="@../css/app.css" text="Points (Round):">
                         <padding>
                            <Insets top="5.0" />
                         </padding></Label>
@@ -52,7 +52,7 @@
                </Pane>
                <Pane prefHeight="200.0" prefWidth="200.0">
                   <children>
-                     <Label alignment="TOP_CENTER" layoutY="5.0" prefHeight="50.0" prefWidth="204.0" styleClass="navbar-game-panel-text" stylesheets="@../css/app.css" text="Points (Total):">
+                     <Label fx:id="scoreT" alignment="TOP_CENTER" layoutY="5.0" prefHeight="50.0" prefWidth="204.0" styleClass="navbar-game-panel-text" stylesheets="@../css/app.css" text="Points (Total):">
                         <padding>
                            <Insets top="5.0" />
                         </padding></Label>

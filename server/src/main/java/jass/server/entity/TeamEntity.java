@@ -22,6 +22,10 @@ package jass.server.entity;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 import jass.lib.database.Entity;
+import jass.server.repository.TeamRepository;
+import jass.server.repository.UserRepository;
+
+import java.sql.SQLException;
 
 /**
  * A model with all known (and cached) teams.
@@ -41,13 +45,13 @@ public final class TeamEntity extends Entity {
     /**
      * Player one inside the team.
      */
-    @DatabaseField(foreign = true)
+    @DatabaseField(foreign = true, foreignAutoRefresh = true)
     private UserEntity playerOne;
 
     /**
      * Player two inside the team.
      */
-    @DatabaseField(foreign = true)
+    @DatabaseField(foreign = true, foreignAutoRefresh = true)
     private UserEntity playerTwo;
 
     /**
@@ -104,10 +108,6 @@ public final class TeamEntity extends Entity {
      * @return Returns true if the user is inside the team, otherwise false.
      */
     public boolean checkIfPlayerIsInTeam(final UserEntity user) {
-        boolean returnValue = false;
-        if (playerOne.getId() == user.getId() || playerTwo.getId() == user.getId()) {
-            returnValue = true;
-        }
-        return returnValue;
+        return playerOne.equals(user) || playerTwo.equals(user);
     }
 }

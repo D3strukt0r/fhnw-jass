@@ -19,8 +19,10 @@
 
 package jass.server.util;
 
+import jass.lib.Card;
 import jass.lib.GameMode;
 import jass.lib.message.BroadcastGameModeData;
+import jass.lib.message.BroadcastPointsData;
 import jass.lib.message.BroadcastTurnData;
 import jass.lib.message.ChooseGameModeData;
 import jass.lib.message.ChosenGameModeData;
@@ -32,12 +34,14 @@ import jass.server.entity.CardEntity;
 import jass.server.entity.DeckEntity;
 import jass.server.entity.GameEntity;
 import jass.server.entity.RoundEntity;
+import jass.server.entity.SuitEntity;
 import jass.server.entity.TeamEntity;
 import jass.server.entity.TurnEntity;
 import jass.server.entity.UserEntity;
 import jass.server.eventlistener.ChosenGameModeEventListener;
 import jass.server.eventlistener.PlayedCardEventListener;
 import jass.server.message.BroadcastGameMode;
+import jass.server.message.BroadcastPoints;
 import jass.server.message.BroadcastTurn;
 import jass.server.message.ChooseGameMode;
 import jass.server.message.GameFound;
@@ -46,10 +50,11 @@ import jass.server.message.PlayedCard;
 import jass.server.repository.CardRepository;
 import jass.server.repository.DeckRepository;
 import jass.server.repository.GameRepository;
+import jass.server.repository.RankRepository;
 import jass.server.repository.RoundRepository;
+import jass.server.repository.SuitRepository;
 import jass.server.repository.TeamRepository;
 import jass.server.repository.TurnRepository;
-import jass.server.repository.UserRepository;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -286,23 +291,53 @@ public final class GameUtil implements ChosenGameModeEventListener, PlayedCardEv
 
         if (isValid) {
             TurnRepository turnRepository = TurnRepository.getSingleton(null);
-            UserRepository userRepository = UserRepository.getSingleton(null);
             TurnEntity turn = turnRepository.getById(data.getTurnId());
             CardEntity card = CardRepository.getSingleton(null).getById(data.getCardId());
             if (turn != null) {
                 if (card != null) {
-                    turn.addCard(card);
+                    turn.addCard(card, clientUtil.getUser());
+                    turnRepository.update(turn);
                     currentDeck.setPlayedCard(data.getCardId());
                     DeckRepository.getSingleton(null).update(currentDeck);
                 }
                 if (turn.getCardFour() != null) {
-                    // TODO set proper winning player
-                    UserEntity winningUser = userRepository.getByUsername(data.getUsername());
+                    UserEntity winningUser = calculateTurnWinner(currentRound, turn);
                     if (winningUser != null) {
                         turn.setWinningUser(winningUser);
+                        turnRepository.update(turn);
+                    }
+
+                    // Calculate points depending on game mode
+                    int points = 0;
+                    if (currentRound.getGameMode() == GameMode.TRUMPF) {
+                        points = calculateCardPointsTrumpf(turn.getCards(), currentRound.getTrumpfSuit());
+                    } else if (currentRound.getGameMode() == GameMode.OBE_ABE) {
+                        points = calculateCardPointsObeAbe(turn.getCards());
+                    } else if (currentRound.getGameMode() == GameMode.ONDE_UFE) {
+                        points = calculateCardPointsOndeUfe(turn.getCards());
+                    } else {
+                        logger.fatal("Unknown game mode to calculate points.");
+                    }
+
+                    // Save points to round in database
+
+
+                    // Update points for the winning team
+                    BroadcastPoints pointsMsg = new BroadcastPoints(new BroadcastPointsData(turn.getId(), points));
+                    if (game.getTeamOne().checkIfPlayerIsInTeam(winningUser)) {
+                        currentRound.addPointsTeamOne(points);
+                        RoundRepository.getSingleton(null).update(currentRound);
+                        getClientUtilByUsername(game.getTeamOne().getPlayerOne().getUsername()).send(pointsMsg);
+                        getClientUtilByUsername(game.getTeamOne().getPlayerTwo().getUsername()).send(pointsMsg);
+                    } else if (game.getTeamTwo().checkIfPlayerIsInTeam(winningUser)) {
+                        currentRound.addPointsTeamTwo(points);
+                        RoundRepository.getSingleton(null).update(currentRound);
+                        getClientUtilByUsername(game.getTeamTwo().getPlayerOne().getUsername()).send(pointsMsg);
+                        getClientUtilByUsername(game.getTeamTwo().getPlayerTwo().getUsername()).send(pointsMsg);
+                    } else {
+                        logger.fatal("User does not belong to any team.");
                     }
                 }
-                turnRepository.update(turn);
                 String winningUsername = turn.getWinningUser() != null ? turn.getWinningUser().getUsername() : "";
                 BroadcastTurn broadcastTurn = new BroadcastTurn(new BroadcastTurnData(turn.getId(),
                     turn.getStartingPlayer().getUsername(), winningUsername,
@@ -311,7 +346,7 @@ public final class GameUtil implements ChosenGameModeEventListener, PlayedCardEv
                 this.currentTurn = turn;
                 broadcast(broadcastTurn);
 
-                // start new turn after 3 seconds
+                // start new turn after 4 seconds
                 if (turn.getWinningUser() != null) {
                     Thread.sleep(4000);
                     TurnEntity newTurn = addNewTurn(turn.getWinningUser(), currentRound);
@@ -331,6 +366,206 @@ public final class GameUtil implements ChosenGameModeEventListener, PlayedCardEv
             clientUtil.send(result);
         }
     }
+
+    ////////////////////////////////////////////////////////////////////////////
+    // Figure out the points for cards.
+    ////////////////////////////////////////////////////////////////////////////
+
+    /**
+     * @param cards  All cards
+     * @param trumpf The trump suit to check
+     *
+     * @return Returns the points of all cards together.
+     *
+     * @author Manuele Vaccari
+     */
+    private static int calculateCardPointsTrumpf(final ArrayList<CardEntity> cards, final Card.Suit trumpf) {
+        // Convert suit enum to database entity
+        SuitEntity trumpfSuit = SuitRepository.getSingleton(null).getByName(trumpf.toString().toLowerCase());
+        assert trumpfSuit != null;
+
+        int points = 0;
+        for (CardEntity card : cards) {
+            if (card.getSuit().equals(trumpfSuit)) {
+                if (card.getRank().getKey().equals("jack")) {
+                    points += 20;
+                } else if (card.getRank().getKey().equals("9")) {
+                    points += 14;
+                } else {
+                    points += card.getRank().getPointsTrumpf();
+                }
+            } else {
+                points += card.getRank().getPointsTrumpf();
+            }
+        }
+        return points;
+    }
+
+    /**
+     * @param cards All cards
+     *
+     * @return Returns the points of all cards together.
+     *
+     * @author Manuele Vaccari
+     */
+    private static int calculateCardPointsObeAbe(final ArrayList<CardEntity> cards) {
+        int points = 0;
+        for (CardEntity card : cards) {
+            points += card.getRank().getPointsObeAbe();
+        }
+        return points;
+    }
+
+    /**
+     * @param cards All cards
+     *
+     * @return Returns the points of all cards together.
+     *
+     * @author Manuele Vaccari
+     */
+    private static int calculateCardPointsOndeUfe(final ArrayList<CardEntity> cards) {
+        int points = 0;
+        for (CardEntity card : cards) {
+            points += card.getRank().getPointsOndeufe();
+        }
+        return points;
+    }
+
+    ////////////////////////////////////////////////////////////////////////////
+    // Figure out the winner of a turn.
+    ////////////////////////////////////////////////////////////////////////////
+
+    /**
+     * @param currentRound The current round.
+     * @param currentTurn  The current turn.
+     *
+     * @return Returns the user who won the current turn.
+     *
+     * @author Manuele Vaccari
+     */
+    private static UserEntity calculateTurnWinner(final RoundEntity currentRound, final TurnEntity currentTurn) {
+        CardEntity winningCard = null;
+        if (currentRound.getGameMode() == GameMode.TRUMPF) {
+            winningCard = calculateTurnWinnerTrump(currentRound.getTrumpfSuit(), currentTurn);
+        } else if (currentRound.getGameMode() == GameMode.OBE_ABE) {
+            winningCard = calculateTurnWinnerObeAbe(currentTurn);
+        } else if (currentRound.getGameMode() == GameMode.ONDE_UFE) {
+            winningCard = calculateTurnWinnerOndeUfe(currentTurn);
+        }
+
+        if (winningCard == null) {
+            return null;
+        }
+
+        // Figure out who played the card and return the user.
+        if (winningCard.equals(currentTurn.getCardOne())) {
+            return currentTurn.getPlayerCardOne();
+        } else if (winningCard.equals(currentTurn.getCardTwo())) {
+            return currentTurn.getPlayerCardTwo();
+        } else if (winningCard.equals(currentTurn.getCardThree())) {
+            return currentTurn.getPlayerCardThree();
+        } else if (winningCard.equals(currentTurn.getCardFour())) {
+            return currentTurn.getPlayerCardFour();
+        } else {
+            return null;
+        }
+    }
+
+    /**
+     * @param trumpf      The trumpf of the current round.
+     * @param currentTurn The current turn.
+     *
+     * @return Returns the card which wins the current turn.
+     *
+     * @author Manuele Vaccari
+     */
+    private static CardEntity calculateTurnWinnerTrump(final Card.Suit trumpf, final TurnEntity currentTurn) {
+        RankRepository rankRepo = RankRepository.getSingleton(null);
+        SuitRepository suitRepo = SuitRepository.getSingleton(null);
+
+        // Get suit of first card played
+        SuitEntity suitOfFirstCard = currentTurn.getCardOne().getSuit();
+
+        // Convert suit enum to database entity
+        SuitEntity trumpfSuit = suitRepo.getByName(trumpf.toString().toLowerCase());
+        assert trumpfSuit != null;
+
+        // Get all 4 cards
+        ArrayList<CardEntity> cards = currentTurn.getCards();
+
+        // Check by order
+        if (CardRepository.isAnyCardOfSuit(cards, trumpfSuit)) {
+            if (CardRepository.isAnyCardOfSuitAndRank(cards, trumpfSuit, rankRepo.getByName("jack"))) {
+                return CardRepository.getCardOfSuitAndRank(cards, trumpfSuit, rankRepo.getByName("jack"));
+            } else if (CardRepository.isAnyCardOfSuitAndRank(cards, trumpfSuit, rankRepo.getByName("9"))) {
+                return CardRepository.getCardOfSuitAndRank(cards, trumpfSuit, rankRepo.getByName("9"));
+            } else if (CardRepository.isAnyCardOfSuitAndRank(cards, trumpfSuit, rankRepo.getByName("ace"))) {
+                return CardRepository.getCardOfSuitAndRank(cards, trumpfSuit, rankRepo.getByName("ace"));
+            } else if (CardRepository.isAnyCardOfSuitAndRank(cards, trumpfSuit, rankRepo.getByName("king"))) {
+                return CardRepository.getCardOfSuitAndRank(cards, trumpfSuit, rankRepo.getByName("king"));
+            } else if (CardRepository.isAnyCardOfSuitAndRank(cards, trumpfSuit, rankRepo.getByName("queen"))) {
+                return CardRepository.getCardOfSuitAndRank(cards, trumpfSuit, rankRepo.getByName("queen"));
+            } else if (CardRepository.isAnyCardOfSuitAndRank(cards, trumpfSuit, rankRepo.getByName("10"))) {
+                return CardRepository.getCardOfSuitAndRank(cards, trumpfSuit, rankRepo.getByName("10"));
+            } else if (CardRepository.isAnyCardOfSuitAndRank(cards, trumpfSuit, rankRepo.getByName("8"))) {
+                return CardRepository.getCardOfSuitAndRank(cards, trumpfSuit, rankRepo.getByName("8"));
+            } else if (CardRepository.isAnyCardOfSuitAndRank(cards, trumpfSuit, rankRepo.getByName("7"))) {
+                return CardRepository.getCardOfSuitAndRank(cards, trumpfSuit, rankRepo.getByName("7"));
+            } else if (CardRepository.isAnyCardOfSuitAndRank(cards, trumpfSuit, rankRepo.getByName("6"))) {
+                return CardRepository.getCardOfSuitAndRank(cards, trumpfSuit, rankRepo.getByName("6"));
+            } else {
+                return null;
+            }
+        } else {
+            if (CardRepository.isAnyCardOfSuitAndRank(cards, suitOfFirstCard, rankRepo.getByName("ace"))) {
+                return CardRepository.getCardOfSuitAndRank(cards, suitOfFirstCard, rankRepo.getByName("ace"));
+            } else if (CardRepository.isAnyCardOfSuitAndRank(cards, suitOfFirstCard, rankRepo.getByName("king"))) {
+                return CardRepository.getCardOfSuitAndRank(cards, suitOfFirstCard, rankRepo.getByName("king"));
+            } else if (CardRepository.isAnyCardOfSuitAndRank(cards, suitOfFirstCard, rankRepo.getByName("queen"))) {
+                return CardRepository.getCardOfSuitAndRank(cards, suitOfFirstCard, rankRepo.getByName("queen"));
+            } else if (CardRepository.isAnyCardOfSuitAndRank(cards, suitOfFirstCard, rankRepo.getByName("jack"))) {
+                return CardRepository.getCardOfSuitAndRank(cards, suitOfFirstCard, rankRepo.getByName("jack"));
+            } else if (CardRepository.isAnyCardOfSuitAndRank(cards, suitOfFirstCard, rankRepo.getByName("10"))) {
+                return CardRepository.getCardOfSuitAndRank(cards, suitOfFirstCard, rankRepo.getByName("10"));
+            } else if (CardRepository.isAnyCardOfSuitAndRank(cards, suitOfFirstCard, rankRepo.getByName("9"))) {
+                return CardRepository.getCardOfSuitAndRank(cards, suitOfFirstCard, rankRepo.getByName("9"));
+            } else if (CardRepository.isAnyCardOfSuitAndRank(cards, suitOfFirstCard, rankRepo.getByName("8"))) {
+                return CardRepository.getCardOfSuitAndRank(cards, suitOfFirstCard, rankRepo.getByName("8"));
+            } else if (CardRepository.isAnyCardOfSuitAndRank(cards, suitOfFirstCard, rankRepo.getByName("7"))) {
+                return CardRepository.getCardOfSuitAndRank(cards, suitOfFirstCard, rankRepo.getByName("7"));
+            } else if (CardRepository.isAnyCardOfSuitAndRank(cards, suitOfFirstCard, rankRepo.getByName("6"))) {
+                return CardRepository.getCardOfSuitAndRank(cards, suitOfFirstCard, rankRepo.getByName("6"));
+            } else {
+                return null;
+            }
+        }
+    }
+
+    /**
+     * @param currentTurn The current turn.
+     *
+     * @return Returns the card which wins the current turn.
+     *
+     * @author ...
+     */
+    private static CardEntity calculateTurnWinnerObeAbe(final TurnEntity currentTurn) {
+        // TODO
+        return null;
+    }
+
+    /**
+     * @param currentTurn The current turn.
+     *
+     * @return Returns the card which wins the current turn.
+     *
+     * @author ...
+     */
+    private static CardEntity calculateTurnWinnerOndeUfe(final TurnEntity currentTurn) {
+        // TODO
+        return null;
+    }
+
+    ////////////////////////////////////////////////////////////////////////////
 
     private TurnEntity addNewTurn(final UserEntity startingPlayer, final RoundEntity round) {
         TurnEntity turn = (new TurnEntity())
@@ -379,7 +614,7 @@ public final class GameUtil implements ChosenGameModeEventListener, PlayedCardEv
      *
      * @author Thomas Weber
      */
-    public static boolean validateMoveTrump(CardEntity playedCard, DeckEntity deck, CardEntity firstCardOfTurn, String trumpSuit) {
+    public static boolean validateMoveTrump(final CardEntity playedCard, final DeckEntity deck, final CardEntity firstCardOfTurn, final String trumpSuit) {
         // In case the playedCard is first card of current turn the move is
         // always valid
         if (firstCardOfTurn == null || firstCardOfTurn.getId() == playedCard.getId()) {
@@ -518,7 +753,7 @@ public final class GameUtil implements ChosenGameModeEventListener, PlayedCardEv
         return true;
     }
 
-    private ClientUtil getClientUtilByUsername(String username) {
+    private ClientUtil getClientUtilByUsername(final String username) {
         if (username.equals(clientPlayerOne.getUsername())) {
             return clientPlayerOne;
         } else if (username.equals(clientPlayerTwo.getUsername())) {
@@ -531,7 +766,7 @@ public final class GameUtil implements ChosenGameModeEventListener, PlayedCardEv
         return null;
     }
 
-    private DeckEntity getCurrentDeckByUsername(String username) {
+    private DeckEntity getCurrentDeckByUsername(final String username) {
         if (username.equals(clientPlayerOne.getUsername())) {
             return currentDeckPlayerOne;
         } else if (username.equals(clientPlayerTwo.getUsername())) {
