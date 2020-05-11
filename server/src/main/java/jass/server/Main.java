@@ -112,7 +112,7 @@ public final class Main {
                 dbLocation = cmd.getOptionValue("db-location");
 
                 String databaseType = DatabaseUtil.extractDbType("jdbc:" + dbLocation);
-                if (databaseType.equals("mysql")) {
+                if (databaseType.equals("mysql") || databaseType.equals("mariadb")) {
                     if (!cmd.hasOption("db-username") || !cmd.hasOption("db-password")) {
                         logger.fatal("When using mysql as database you also need to give a username (--db-username=xxx) and password (--db-password=xxx)");
                         return;
@@ -124,7 +124,7 @@ public final class Main {
             DatabaseUtil db;
             if (databaseType.equals("sqlite")) {
                 db = new DatabaseUtil(dbLocation);
-            } else if (databaseType.equals("mysql")) {
+            } else if (databaseType.equals("mysql") || databaseType.equals("mariadb")) {
                 db = new DatabaseUtil(dbLocation, cmd.getOptionValue("db-username"), cmd.getOptionValue("db-password"));
             } else {
                 logger.fatal(databaseType + " is unsupported for the database.");

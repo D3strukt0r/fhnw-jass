@@ -160,6 +160,8 @@ public final class DatabaseUtil implements Service, Closeable {
         String databaseType = extractDbType(jdbcDatabaseUrl);
         if (databaseType.equals("mysql")) {
             connectionSource = new JdbcConnectionSource(jdbcDatabaseUrl, username, password, new MysqlDatabaseType());
+        } else if (databaseType.equals("mariadb")) {
+            connectionSource = new JdbcConnectionSource(jdbcDatabaseUrl, username, password);
         } else {
             throw new IllegalArgumentException(databaseType + " is unsupported for the database.");
         }
