@@ -17,24 +17,16 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package jass.server.eventlistener;
+package jass.client.eventlistener;
 
-import jass.lib.message.PlayCardData;
-import jass.lib.message.PlayedCardData;
-import jass.server.util.ClientUtil;
-
-import java.sql.SQLException;
+import jass.lib.message.BroadcastAPlayerQuitData;
 
 /**
- * @author Manuele Vaccari & Victor Hargrave
+ * @author Victor Hargrave
  * @version %I%, %G%
  * @since 0.0.1
  */
-public interface PlayedCardEventListener {
-    /**
-     * Executes when a user played a card.
-     *
-     * @param data The data (basically the ID).
-     */
-    void onPlayedCard(PlayCardData data) throws InterruptedException;
+
+public interface BroadcastAPlayerQuitEventListener {
+    void onAPlayerQuit(BroadcastAPlayerQuitData data);
 }

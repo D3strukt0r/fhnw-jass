@@ -66,6 +66,7 @@ public abstract class View {
      * Display the view.
      */
     public void start() {
+        stage.setScene(scene);
         stage.show();
     }
 

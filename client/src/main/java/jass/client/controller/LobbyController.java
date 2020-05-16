@@ -39,6 +39,7 @@ import jass.lib.message.LogoutData;
 import jass.lib.message.SearchGameData;
 import jass.lib.servicelocator.ServiceLocator;
 import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import jass.client.view.LobbyView;
@@ -133,6 +134,7 @@ public final class LobbyController extends Controller implements GameFoundEventL
     @FXML
     private Text searching;
 
+    GameUtil gameUtil;
 
     @Override
     public void initialize(final URL location, final ResourceBundle resources) {
@@ -141,8 +143,11 @@ public final class LobbyController extends Controller implements GameFoundEventL
             socket.setGameFoundEventListener(this);
         }
 
-        GameUtil gameUtil = new GameUtil();
-        ServiceLocator.add(gameUtil);
+        gameUtil = ServiceLocator.get(GameUtil.class);
+        if(gameUtil == null) {
+            gameUtil = new GameUtil();
+            ServiceLocator.add(gameUtil);
+        }
 
         /*
          * Bind all texts
@@ -161,7 +166,19 @@ public final class LobbyController extends Controller implements GameFoundEventL
         findMatch.textProperty().bind(I18nUtil.createStringBinding(findMatch.getText()));
         cancelMatch.textProperty().bind(I18nUtil.createStringBinding(cancelMatch.getText()));
         searching.textProperty().bind(I18nUtil.createStringBinding(searching.getText()));
+        showPlayerLeftNotification();
+    }
 
+    public void showPlayerLeftNotification() {
+        if (gameUtil.getShowNotificationOnLobby()) {
+            Platform.runLater(() -> {
+                String anotherPlayerLeftMessage = I18nUtil.get("gui.lobby.aPlayerLeft");
+                Alert alert = new Alert(Alert.AlertType.ERROR, anotherPlayerLeftMessage, ButtonType.YES);
+                alert.showAndWait();
+
+                alert.close();
+            });
+        }
     }
 
     /**
@@ -238,7 +255,7 @@ public final class LobbyController extends Controller implements GameFoundEventL
         assert gameUtil != null;
         gameUtil.setGame(msgData);
 
-        WindowUtil.switchToNewWindow(view, GameView.class);
+        WindowUtil.switchTo(view, GameView.class);
     }
 
     /**

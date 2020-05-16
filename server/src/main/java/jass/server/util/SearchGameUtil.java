@@ -57,7 +57,7 @@ public final class SearchGameUtil extends Thread implements Service, Closeable {
     /**
      * A list of all currently running games.
      */
-    private static final List<GameUtil> runningGames = Collections.synchronizedList(new ArrayList<>());
+    public static final List<GameUtil> runningGames = Collections.synchronizedList(new ArrayList<>());
 
     /**
      * Run the thread while true.

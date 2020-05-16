@@ -20,6 +20,8 @@
 package jass.client.controller;
 
 import jass.client.entity.LoginEntity;
+import jass.client.eventlistener.BroadcastAPlayerQuitEventListener;
+import jass.client.eventlistener.BroadcastRoundOverEventListener;
 import jass.client.eventlistener.DisconnectEventListener;
 import jass.client.util.StringUtil;
 import jass.client.message.Logout;
@@ -29,21 +31,17 @@ import jass.client.util.I18nUtil;
 import jass.client.util.SocketUtil;
 import jass.client.util.ViewUtil;
 import jass.client.util.WindowUtil;
-import jass.client.view.AboutView;
-import jass.client.view.GameView;
-import jass.client.view.LoginView;
-import jass.client.view.ServerConnectionView;
+import jass.client.view.*;
 import jass.lib.GameMode;
+import jass.lib.message.BroadcastAPlayerQuitData;
+import jass.lib.message.BroadcastRoundOverData;
 import jass.lib.message.CardData;
 import jass.lib.message.LogoutData;
 import jass.lib.servicelocator.ServiceLocator;
 import javafx.application.Platform;
 import javafx.collections.ListChangeListener;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.Menu;
-import javafx.scene.control.MenuItem;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.layout.Background;
@@ -51,6 +49,8 @@ import javafx.scene.layout.BackgroundImage;
 import javafx.scene.layout.BackgroundPosition;
 import javafx.scene.layout.BackgroundRepeat;
 import javafx.scene.layout.BackgroundSize;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Text;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -66,7 +66,7 @@ import java.util.ResourceBundle;
  * @version %I%, %G%
  * @since 0.0.1
  */
-public final class GameController extends Controller implements DisconnectEventListener {
+public final class GameController extends Controller implements DisconnectEventListener, BroadcastAPlayerQuitEventListener, BroadcastRoundOverEventListener {
     /**
      * The logger to print to console and save in a .log file.
      */
@@ -411,6 +411,8 @@ public final class GameController extends Controller implements DisconnectEventL
      */
     private GameUtil gameUtil;
 
+    private boolean roundOverDialogClosed;
+
     @Override
     public void initialize(final URL location, final ResourceBundle resources) {
         gameUtil = ServiceLocator.get(GameUtil.class);
@@ -441,7 +443,7 @@ public final class GameController extends Controller implements DisconnectEventL
 
         SocketUtil socket = ServiceLocator.get(SocketUtil.class);
         assert socket != null;
-        socket.addDisconnectListener(this);
+        addSocketListeners(socket);
 
         /*
          * Bind all texts
@@ -458,6 +460,20 @@ public final class GameController extends Controller implements DisconnectEventL
         mHelpAbout.textProperty().bind(I18nUtil.createStringBinding(mHelpAbout.getText()));
     }
 
+    private void addSocketListeners(SocketUtil socket) {
+        socket.addDisconnectListener(this);
+        socket.addAPlayerQuitEventListener(this);
+        socket.addRoundOverEventListener(this);
+    }
+
+    private void removeListeners() {
+        /*SocketUtil socket = ServiceLocator.get(SocketUtil.class);
+        socket.removeDisconnectListener(this);
+        socket.removeAPlayerQuitEventListener(this);
+        socket.removeRoundOverEventListener(this);*/
+    }
+
+
     private void initializePlayerDeckListener() {
         gameUtil.getPlayerDeck().addListener((ListChangeListener<CardData>) c -> {
             logger.info("listener was activated. Now updating cards");
@@ -465,6 +481,79 @@ public final class GameController extends Controller implements DisconnectEventL
                 updateCardImages();
             }
         });
+    }
+
+    @Override
+    public void onRoundOver(final BroadcastRoundOverData data) {
+        // run on separate thread so events can still come in nicely.
+        Platform.runLater(() -> {
+            showRoundOverMessage(data);
+        });
+    }
+
+    private void showRoundOverMessage(final BroadcastRoundOverData data) {
+        String roundOverMessage = "";
+        if(data.getTeam1Points() > data.getTeam2Points()) {
+            roundOverMessage = I18nUtil.get("gui.game.roundOverWin", data.getTeam1Player1(), data.getTeam1Player2(), data.getTeam1Points());
+        } else if(data.getTeam2Points() > data.getTeam1Points()) {
+            roundOverMessage = I18nUtil.get("gui.game.roundOverWin", data.getTeam1Player1(), data.getTeam2Player1(), data.getTeam2Points());
+        } else if(data.getTeam1Points() == data.getTeam2Points()) {
+            roundOverMessage = I18nUtil.get("gui.game.roundOverDraw", data.getTeam1Points());
+        }
+
+        Alert alert = new Alert(Alert.AlertType.INFORMATION,
+            roundOverMessage,
+            ButtonType.OK,
+            ButtonType.CANCEL);
+
+        alert.setTitle(I18nUtil.get("gui.game.roundOver"));
+        alert.showAndWait();
+        this.roundOverDialogClosed = false;
+
+
+        if (alert.getResult() == ButtonType.OK) {
+            this.roundOverDialogClosed = true;
+            if(this.gameUtil.getAPlayerLeft() == true) {
+                this.gameUtil.cleanupGame();
+                this.gameUtil.setShowNotificationOnLobby(true);
+                initialize(null, null);
+                WindowUtil.switchTo(view, LobbyView.class);
+                // go to lobby
+            } else {
+                this.gameUtil.setDecidedToLeaveGame(true);
+                // resetRound();
+                // TODO Thomas
+            }
+        } else if(alert.getResult() == ButtonType.CANCEL) {
+            this.roundOverDialogClosed = true;
+            // if a player has already left, then just leave the game
+            if(gameUtil.getAPlayerLeft() == true) {
+                this.gameUtil.cleanupGame();
+                initialize(null, null);
+                WindowUtil.switchTo(view, LobbyView.class);
+            }
+            this.gameUtil.setDecidedToLeaveGame(true);
+            // send message to server
+            this.gameUtil.stopPlaying();
+        }
+    }
+
+    @Override
+    public void onAPlayerQuit(BroadcastAPlayerQuitData data) {
+        if(gameUtil.getDecidedToLeaveGame() == true) {
+            this.gameUtil.cleanupGame();
+            initialize(null, null);
+            WindowUtil.switchTo(view, LobbyView.class);
+        }
+        else if(this.roundOverDialogClosed == true) {
+            this.gameUtil.cleanupGame();
+            initialize(null, null);
+            this.gameUtil.setShowNotificationOnLobby(true);
+            WindowUtil.switchTo(view, LobbyView.class);
+        }
+        else {
+            this.gameUtil.setAPlayerLeft(true);
+        }
     }
 
     private void initializePlayedCardsListener() {

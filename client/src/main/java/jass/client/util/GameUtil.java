@@ -20,26 +20,14 @@
 package jass.client.util;
 
 import jass.client.entity.LoginEntity;
-import jass.client.eventlistener.BroadcastDeckEventListener;
-import jass.client.eventlistener.BroadcastGameModeEventListener;
-import jass.client.eventlistener.BroadcastPointsEventListener;
-import jass.client.eventlistener.BroadcastTurnEventListener;
-import jass.client.eventlistener.ChooseGameModeEventListener;
-import jass.client.eventlistener.PlayedCardEventListener;
+import jass.client.eventlistener.*;
 import jass.client.message.ChosenGameMode;
 import jass.client.message.PlayCard;
+import jass.client.message.StopPlaying;
+import jass.client.view.LobbyView;
 import jass.lib.Card;
 import jass.lib.GameMode;
-import jass.lib.message.BroadcastDeckData;
-import jass.lib.message.BroadcastGameModeData;
-import jass.lib.message.BroadcastPointsData;
-import jass.lib.message.BroadcastTurnData;
-import jass.lib.message.CardData;
-import jass.lib.message.ChooseGameModeData;
-import jass.lib.message.ChosenGameModeData;
-import jass.lib.message.GameFoundData;
-import jass.lib.message.PlayCardData;
-import jass.lib.message.PlayedCardData;
+import jass.lib.message.*;
 import jass.lib.servicelocator.ServiceLocator;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -60,13 +48,16 @@ import jass.lib.servicelocator.Service;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * @author Victor Hargrave, Manuele Vaccari
  * @version %I%, %G%
  * @since 0.0.1
  */
-public final class GameUtil implements Service, BroadcastDeckEventListener, ChooseGameModeEventListener, BroadcastGameModeEventListener, PlayedCardEventListener, BroadcastTurnEventListener, BroadcastPointsEventListener {
+public final class GameUtil implements Service, BroadcastDeckEventListener,
+    ChooseGameModeEventListener, BroadcastGameModeEventListener, PlayedCardEventListener,
+    BroadcastTurnEventListener, BroadcastPointsEventListener {
     /**
      * The logger to print to console and save in a .log file.
      */
@@ -141,6 +132,12 @@ public final class GameUtil implements Service, BroadcastDeckEventListener, Choo
      * The current points of the game.
      */
     private SimpleIntegerProperty pointsTotal = new SimpleIntegerProperty(-1);
+
+    private boolean aPlayerLeft;
+
+    private boolean decidedToLeaveGame;
+
+    private boolean showNotificationOnLobby;
 
     /**
      * Initialize GameUtil before a game starts.
@@ -272,6 +269,15 @@ public final class GameUtil implements Service, BroadcastDeckEventListener, Choo
         logger.info("Total points round: " + pointsRound.getValue());
         pointsTotal.setValue(pointsTotal.getValue() + data.getPoints());
         logger.info("Total points game: " + pointsTotal.getValue());
+    }
+
+    public void stopPlaying() {
+        StopPlaying stopPlayingMessage = new StopPlaying(new StopPlayingData());
+
+        SocketUtil socket = ServiceLocator.get(SocketUtil.class);
+        assert socket != null;
+        socket.send(stopPlayingMessage);
+        logger.info("Sent stop playing message!");
     }
 
     /**
@@ -482,5 +488,48 @@ public final class GameUtil implements Service, BroadcastDeckEventListener, Choo
      */
     public SimpleIntegerProperty getPointsTotalProperty() {
         return pointsTotal;
+    }
+
+    public boolean getDecidedToLeaveGame() {
+        return decidedToLeaveGame;
+    }
+
+    public void setDecidedToLeaveGame(boolean decidedToLeaveGame) {
+        this.decidedToLeaveGame = decidedToLeaveGame;
+    }
+
+    public boolean getAPlayerLeft() {
+        return aPlayerLeft;
+    }
+
+    public void setAPlayerLeft(boolean aPlayerLeft) {
+        this.aPlayerLeft = aPlayerLeft;
+    }
+
+    public boolean getShowNotificationOnLobby() {
+        return showNotificationOnLobby;
+    }
+
+    public void setShowNotificationOnLobby(boolean showNotificationOnLobby) {
+        this.showNotificationOnLobby = showNotificationOnLobby;
+    }
+
+    public void cleanupGame() {
+        game = null;
+        deckId = 0;
+        turnId = 0;
+        startingPlayerUsername = new SimpleStringProperty();
+        winningPlayerUsername = new SimpleStringProperty();
+        disableButtons = new SimpleBooleanProperty();
+        gameMode = new SimpleObjectProperty<>();
+        trumpf = new SimpleObjectProperty<>();
+        moveInvalidErrorMessage = "";
+        cardIdToRemove = 0;
+        pointsRound = new SimpleIntegerProperty(-1);
+        pointsTotal = new SimpleIntegerProperty(-1);
+        aPlayerLeft = false;
+        decidedToLeaveGame = false;
+        playerDeck = FXCollections.observableArrayList(new ArrayList<>());
+        playedCards = FXCollections.observableArrayList(new ArrayList<>());
     }
 }

@@ -25,15 +25,19 @@ import javafx.stage.Stage;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * A helper class for the controllers to switch between windows easily.
  *
- * @author Manuele Vaccari
+ * @author Manuele Vaccari & Victor Hargrave
  * @version %I%, %G%
  * @since 0.0.1
  */
 public final class WindowUtil {
+    static Map<Class, View> instantiatedViews = new HashMap<>();
     /**
      * Utility classes, which are collections of static members, are not meant
      * to be instantiated.
@@ -53,7 +57,12 @@ public final class WindowUtil {
             try {
                 Constructor<?> constructor = viewClass.getConstructor(Stage.class);
                 Stage existingStage = oldView.getStage();
-                View view = (View) constructor.newInstance(existingStage);
+                // get instance of already existing view
+                View view = instantiatedViews.get(viewClass);
+                if(view == null) {
+                    view = (View) constructor.newInstance(existingStage);
+                    instantiatedViews.put(viewClass, view);
+                }
                 view.start();
             } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
                 e.printStackTrace();

@@ -19,23 +19,9 @@
 
 package jass.client.util;
 
-import jass.client.eventlistener.BroadcastDeckEventListener;
-import jass.client.eventlistener.BroadcastGameModeEventListener;
-import jass.client.eventlistener.BroadcastPointsEventListener;
-import jass.client.eventlistener.BroadcastTurnEventListener;
-import jass.client.eventlistener.ChooseGameModeEventListener;
-import jass.client.eventlistener.DisconnectEventListener;
-import jass.client.eventlistener.GameFoundEventListener;
-import jass.client.eventlistener.PlayedCardEventListener;
+import jass.client.eventlistener.*;
 import jass.client.message.Message;
-import jass.lib.message.BroadcastDeckData;
-import jass.lib.message.BroadcastGameModeData;
-import jass.lib.message.BroadcastPointsData;
-import jass.lib.message.BroadcastTurnData;
-import jass.lib.message.ChooseGameModeData;
-import jass.lib.message.GameFoundData;
-import jass.lib.message.MessageData;
-import jass.lib.message.PlayedCardData;
+import jass.lib.message.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import jass.client.entity.LoginEntity;
@@ -126,6 +112,16 @@ public final class SocketUtil extends Thread implements Service, Closeable {
      * A list of objects listening to broadcast points event.
      */
     private final ArrayList<BroadcastPointsEventListener> broadcastPointsListener = new ArrayList<>();
+
+    /**
+     * A list of objects listening to round over events.
+     */
+    private final ArrayList<BroadcastRoundOverEventListener> broadcastRoundOverListener = new ArrayList<>();
+
+    /**
+     * A list of objects listening to a player quit events.
+     */
+    private final ArrayList<BroadcastAPlayerQuitEventListener> broadcastAPlayerQuitListener = new ArrayList<>();
 
     /**
      * A list of all messages coming from the server.
@@ -317,6 +313,10 @@ public final class SocketUtil extends Thread implements Service, Closeable {
         disconnectListener.add(listener);
     }
 
+    public void removeDisconnectListener(final DisconnectEventListener listener) {
+        disconnectListener.remove(listener);
+    }
+
     /**
      * @param listener The listener to listen to game found.
      *
@@ -380,6 +380,34 @@ public final class SocketUtil extends Thread implements Service, Closeable {
     }
 
     /**
+     * @param listener A BroadcastRoundOverEventListener object
+     *
+     * @author Victor Hargrave
+     * @since 0.0.1
+     */
+    public void addRoundOverEventListener(final BroadcastRoundOverEventListener listener) {
+        broadcastRoundOverListener.add(listener);
+    }
+
+    public void removeRoundOverEventListener(final BroadcastRoundOverEventListener listener) {
+        broadcastRoundOverListener.remove(listener);
+    }
+
+    /**
+     * @param listener A BroadcastAPlayerQuitEventListener object
+     *
+     * @author Victor Hargrave
+     * @since 0.0.1
+     */
+    public void addAPlayerQuitEventListener(final BroadcastAPlayerQuitEventListener listener) {
+        broadcastAPlayerQuitListener.add(listener);
+    }
+
+    public void removeAPlayerQuitEventListener(final BroadcastAPlayerQuitEventListener listener) {
+        broadcastAPlayerQuitListener.remove(listener);
+    }
+
+    /**
      * @param msgType Message to send to listener listening to "game-found"
      *                event.
      * @param msgData The message to send to the listeners.
@@ -410,7 +438,7 @@ public final class SocketUtil extends Thread implements Service, Closeable {
                 break;
             case "PlayedCard":
                 for (PlayedCardEventListener listener : playedCardListener) {
-                    logger.info("Invoking onPlayCard event on " + listener.getClass().getName());
+                    logger.info("Invoking onPlayedCard event on " + listener.getClass().getName());
                     listener.onPlayedCard((PlayedCardData) msgData);
                 }
                 break;
@@ -424,6 +452,17 @@ public final class SocketUtil extends Thread implements Service, Closeable {
                 for (BroadcastPointsEventListener listener : broadcastPointsListener) {
                     logger.info("Invoking onBroadcastPoints event on " + listener.getClass().getName());
                     listener.onBroadcastPoints((BroadcastPointsData) msgData);
+                }
+            case "BroadcastRoundOver":
+                for (BroadcastRoundOverEventListener listener : broadcastRoundOverListener) {
+                    logger.info("Invoking onRoundOver event on " + listener.getClass().getName());
+                    listener.onRoundOver((BroadcastRoundOverData) msgData);
+                }
+                break;
+            case "BroadcastAPlayerQuit":
+                for (BroadcastAPlayerQuitEventListener listener : broadcastAPlayerQuitListener) {
+                    logger.info("Invoking onAPlayerQuit event on " + listener.getClass().getName());
+                    listener.onAPlayerQuit((BroadcastAPlayerQuitData) msgData);
                 }
                 break;
             default:

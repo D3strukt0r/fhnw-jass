@@ -21,14 +21,7 @@ package jass.server.util;
 
 import jass.lib.Card;
 import jass.lib.GameMode;
-import jass.lib.message.BroadcastGameModeData;
-import jass.lib.message.BroadcastPointsData;
-import jass.lib.message.BroadcastTurnData;
-import jass.lib.message.ChooseGameModeData;
-import jass.lib.message.ChosenGameModeData;
-import jass.lib.message.GameFoundData;
-import jass.lib.message.PlayCardData;
-import jass.lib.message.PlayedCardData;
+import jass.lib.message.*;
 import jass.lib.servicelocator.ServiceLocator;
 import jass.server.entity.CardEntity;
 import jass.server.entity.DeckEntity;
@@ -40,13 +33,8 @@ import jass.server.entity.TurnEntity;
 import jass.server.entity.UserEntity;
 import jass.server.eventlistener.ChosenGameModeEventListener;
 import jass.server.eventlistener.PlayedCardEventListener;
-import jass.server.message.BroadcastGameMode;
-import jass.server.message.BroadcastPoints;
-import jass.server.message.BroadcastTurn;
-import jass.server.message.ChooseGameMode;
-import jass.server.message.GameFound;
-import jass.server.message.Message;
-import jass.server.message.PlayedCard;
+import jass.server.eventlistener.StopPlayingEventListener;
+import jass.server.message.*;
 import jass.server.repository.CardRepository;
 import jass.server.repository.DeckRepository;
 import jass.server.repository.GameRepository;
@@ -58,16 +46,17 @@ import jass.server.repository.TurnRepository;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * @author Thomas Weber, Manuele Vaccari
+ * @author Thomas Weber, Manuele Vaccari, Victor Hargrave
  * @version %I%, %G%
  * @since 0.0.1
  */
-public final class GameUtil implements ChosenGameModeEventListener, PlayedCardEventListener {
+public final class GameUtil implements ChosenGameModeEventListener, PlayedCardEventListener, StopPlayingEventListener {
     /**
      * The logger to print to console and save in a .log file.
      */
@@ -155,6 +144,11 @@ public final class GameUtil implements ChosenGameModeEventListener, PlayedCardEv
         clientPlayerThree.addPlayedCardEventListener(this);
         clientPlayerFour.addPlayedCardEventListener(this);
 
+        clientPlayerOne.addStopPlayingEventListener(this);
+        clientPlayerTwo.addStopPlayingEventListener(this);
+        clientPlayerThree.addStopPlayingEventListener(this);
+        clientPlayerFour.addStopPlayingEventListener(this);
+
         // Assign and create Teams
         TeamEntity teamOne = (new TeamEntity()).setPlayerOne(playerOne).setPlayerTwo(playerThree);
         TeamRepository.getSingleton(null).add(teamOne);
@@ -211,7 +205,7 @@ public final class GameUtil implements ChosenGameModeEventListener, PlayedCardEv
         } else if (gameModeChooserUsername.equals(clientPlayerFour.getUsername())) {
             client = clientPlayerFour;
         } else {
-            throw new IllegalStateException("Unexpected value: " + gameModeChooserUsername);
+            return;
         }
 
         // Check with token if player one actually is the one who sent the data.
@@ -286,8 +280,13 @@ public final class GameUtil implements ChosenGameModeEventListener, PlayedCardEv
     @Override
     public void onPlayedCard(final PlayCardData data) throws InterruptedException {
         boolean isValid = validateMove(data);
+        boolean isRoundOver = false;
         ClientUtil clientUtil = this.getClientUtilByUsername(data.getUsername());
         DeckEntity currentDeck = this.getCurrentDeckByUsername(data.getUsername());
+
+        if(clientUtil == null || currentDeck == null) {
+            return;
+        }
 
         if (isValid) {
             TurnRepository turnRepository = TurnRepository.getSingleton(null);
@@ -308,35 +307,25 @@ public final class GameUtil implements ChosenGameModeEventListener, PlayedCardEv
                     }
 
                     // Calculate points depending on game mode
-                    int points = 0;
-                    if (currentRound.getGameMode() == GameMode.TRUMPF) {
-                        points = calculateCardPointsTrumpf(turn.getCards(), currentRound.getTrumpfSuit());
-                    } else if (currentRound.getGameMode() == GameMode.OBE_ABE) {
-                        points = calculateCardPointsObeAbe(turn.getCards());
-                    } else if (currentRound.getGameMode() == GameMode.ONDE_UFE) {
-                        points = calculateCardPointsOndeUfe(turn.getCards());
-                    } else {
-                        logger.fatal("Unknown game mode to calculate points.");
+                    int points = calculatePointsByGameMode(turn);
+
+                    try {
+                        isRoundOver = isRoundOver(turnRepository, winningUser);
+                    } catch (SQLException e) {
+                        e.printStackTrace();
                     }
-
-                    // Save points to round in database
-
 
                     // Update points for the winning team
-                    BroadcastPoints pointsMsg = new BroadcastPoints(new BroadcastPointsData(turn.getId(), points));
-                    if (game.getTeamOne().checkIfPlayerIsInTeam(winningUser)) {
-                        currentRound.addPointsTeamOne(points);
-                        RoundRepository.getSingleton(null).update(currentRound);
-                        getClientUtilByUsername(game.getTeamOne().getPlayerOne().getUsername()).send(pointsMsg);
-                        getClientUtilByUsername(game.getTeamOne().getPlayerTwo().getUsername()).send(pointsMsg);
-                    } else if (game.getTeamTwo().checkIfPlayerIsInTeam(winningUser)) {
-                        currentRound.addPointsTeamTwo(points);
-                        RoundRepository.getSingleton(null).update(currentRound);
-                        getClientUtilByUsername(game.getTeamTwo().getPlayerOne().getUsername()).send(pointsMsg);
-                        getClientUtilByUsername(game.getTeamTwo().getPlayerTwo().getUsername()).send(pointsMsg);
-                    } else {
-                        logger.fatal("User does not belong to any team.");
-                    }
+                    broadcastPointsToWinningTeam(isRoundOver, turn, winningUser, points);
+
+                }
+                if(isRoundOver) {
+                    BroadcastRoundOver broadcastRoundOver = new BroadcastRoundOver(
+                        new BroadcastRoundOverData(currentRound.getId(), currentRound.getPointsTeamOne(), currentRound.getPointsTeamTwo(),
+                            game.getTeamOne().getPlayerOne().getUsername(), game.getTeamOne().getPlayerTwo().getUsername(),
+                            game.getTeamTwo().getPlayerOne().getUsername(), game.getTeamTwo().getPlayerTwo().getUsername()));
+                    broadcast(broadcastRoundOver);
+                    return;
                 }
                 String winningUsername = turn.getWinningUser() != null ? turn.getWinningUser().getUsername() : "";
                 BroadcastTurn broadcastTurn = new BroadcastTurn(new BroadcastTurnData(turn.getId(),
@@ -365,6 +354,49 @@ public final class GameUtil implements ChosenGameModeEventListener, PlayedCardEv
             PlayedCard result = new PlayedCard(new PlayedCardData(isValid));
             clientUtil.send(result);
         }
+    }
+
+    private void broadcastPointsToWinningTeam(boolean isRoundOver, TurnEntity turn, UserEntity winningUser, int points) {
+        BroadcastPoints pointsMsg = new BroadcastPoints(new BroadcastPointsData(turn.getId(), points));
+        if (game.getTeamOne().checkIfPlayerIsInTeam(winningUser)) {
+            currentRound.addPointsTeamOne(points);
+            RoundRepository.getSingleton(null).update(currentRound);
+            if(!isRoundOver) {
+                getClientUtilByUsername(game.getTeamOne().getPlayerOne().getUsername()).send(pointsMsg);
+                getClientUtilByUsername(game.getTeamOne().getPlayerTwo().getUsername()).send(pointsMsg);
+            }
+        } else if (game.getTeamTwo().checkIfPlayerIsInTeam(winningUser)) {
+            currentRound.addPointsTeamTwo(points);
+            RoundRepository.getSingleton(null).update(currentRound);
+            if(!isRoundOver) {
+                getClientUtilByUsername(game.getTeamTwo().getPlayerOne().getUsername()).send(pointsMsg);
+                getClientUtilByUsername(game.getTeamTwo().getPlayerTwo().getUsername()).send(pointsMsg);
+            }
+        } else {
+            logger.fatal("User does not belong to any team.");
+        }
+    }
+
+    private boolean isRoundOver(TurnRepository turnRepository, UserEntity winningUser) throws SQLException {
+        boolean isRoundOver;
+        int numberOfTurnsPlayed = turnRepository.getDao().queryForEq("round_id", currentRound.getId()).size();
+        // TODO set back to 9
+        isRoundOver = numberOfTurnsPlayed == 1 && winningUser != null;
+        return isRoundOver;
+    }
+
+    private int calculatePointsByGameMode(TurnEntity turn) {
+        int points = 0;
+        if (currentRound.getGameMode() == GameMode.TRUMPF) {
+            points = calculateCardPointsTrumpf(turn.getCards(), currentRound.getTrumpfSuit());
+        } else if (currentRound.getGameMode() == GameMode.OBE_ABE) {
+            points = calculateCardPointsObeAbe(turn.getCards());
+        } else if (currentRound.getGameMode() == GameMode.ONDE_UFE) {
+            points = calculateCardPointsOndeUfe(turn.getCards());
+        } else {
+            logger.fatal("Unknown game mode to calculate points.");
+        }
+        return points;
     }
 
     ////////////////////////////////////////////////////////////////////////////
@@ -835,5 +867,23 @@ public final class GameUtil implements ChosenGameModeEventListener, PlayedCardEv
             return currentDeckPlayerFour;
         }
         return null;
+    }
+
+    @Override
+    public void onStopPlaying(StopPlayingData data) {
+        ClientUtil client = getClientUtilByUsername(data.getUsername());
+        if(client != null) {
+            SetGameToInactive();
+            BroadcastAPlayerQuit broadcastAPlayerQuit = new BroadcastAPlayerQuit(new BroadcastAPlayerQuitData());
+            broadcast(broadcastAPlayerQuit);
+
+            // remove reference to this game to initiate garbage collection
+            SearchGameUtil.runningGames.remove(this);
+        }
+    }
+
+    private void SetGameToInactive() {
+        game.setActive(false);
+        GameRepository.getSingleton(null).update(game);
     }
 }
