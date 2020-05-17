@@ -24,7 +24,7 @@ package jass.lib.servicelocator;
  *
  * @author https://www.geeksforgeeks.org/service-locator-pattern/
  * @version %I%, %G%
- * @since 0.0.1
+ * @since 1.0.0
  */
 public interface Service {
 }

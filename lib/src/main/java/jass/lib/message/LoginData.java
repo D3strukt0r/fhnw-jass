@@ -26,7 +26,7 @@ import org.json.JSONObject;
  *
  * @author Manuele Vaccari
  * @version %I%, %G%
- * @since 0.0.1
+ * @since 1.0.0
  */
 public final class LoginData extends MessageData {
     public enum Result {
@@ -59,6 +59,9 @@ public final class LoginData extends MessageData {
     /**
      * @param username The username.
      * @param password The password.
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     public LoginData(final String username, final String password) {
         super("Login");
@@ -68,6 +71,9 @@ public final class LoginData extends MessageData {
 
     /**
      * @param data The message containing all the data.
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     public LoginData(final JSONObject data) {
         super(data);
@@ -77,6 +83,9 @@ public final class LoginData extends MessageData {
 
     /**
      * @return Returns the username.
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     public String getUsername() {
         return username;
@@ -84,6 +93,9 @@ public final class LoginData extends MessageData {
 
     /**
      * @return Returns the password.
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     public String getPassword() {
         return password;

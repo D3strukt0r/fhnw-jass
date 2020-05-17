@@ -26,7 +26,7 @@ import javafx.fxml.Initializable;
  *
  * @author Manuele Vaccari
  * @version %I%, %G%
- * @since 0.0.1
+ * @since 1.0.0
  */
 public abstract class Controller implements Initializable {
 }

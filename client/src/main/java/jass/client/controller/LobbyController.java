@@ -56,9 +56,9 @@ import java.util.ResourceBundle;
 /**
  * The controller for the lobby view.
  *
- * @author Manuele Vaccari & Thomas Weber & Sasa Trajkova
+ * @author Manuele Vaccari & Thomas Weber & Sasa Trajkova & Victor Hargrave
  * @version %I%, %G%
- * @since 0.0.1
+ * @since 1.0.0
  */
 public final class LobbyController extends Controller implements GameFoundEventListener {
     /**
@@ -133,8 +133,15 @@ public final class LobbyController extends Controller implements GameFoundEventL
     @FXML
     private Text searching;
 
-    GameUtil gameUtil;
+    /**
+     * A quick access variable for the current game.
+     */
+    private GameUtil gameUtil;
 
+    /**
+     * @author Manuele Vaccari & Thomas Weber & Sasa Trajkova & Victor Hargrave
+     * @since 1.0.0
+     */
     @Override
     public void initialize(final URL location, final ResourceBundle resources) {
         SocketUtil socket = ServiceLocator.get(SocketUtil.class);
@@ -172,7 +179,8 @@ public final class LobbyController extends Controller implements GameFoundEventL
      * text "searching" and the logic for searching for a game (client &
      * server).
      *
-     * @author Thomas Weber
+     * @author Thomas Weber & Victor Hargrave & Manuele Vaccari
+     * @since 1.0.0
      */
     @FXML
     public void clickOnFindMatch() {
@@ -202,6 +210,9 @@ public final class LobbyController extends Controller implements GameFoundEventL
     /**
      * After clicking on Cancel match, Find match button appears and text
      * "searching" is hidden.
+     *
+     * @author Thomas Weber & Victor Hargrave & Manuele Vaccari
+     * @since 1.0.0
      */
     @FXML
     public void clickOnCancelMatch() {
@@ -231,6 +242,9 @@ public final class LobbyController extends Controller implements GameFoundEventL
      * Work to do after a game was found.
      *
      * @param msgData The game found data.
+     *
+     * @author ...
+     * @since 1.0.0
      */
     public void onGameFound(final GameFoundData msgData) {
         logger.info("Successfully found game!");
@@ -250,6 +264,9 @@ public final class LobbyController extends Controller implements GameFoundEventL
 
     /**
      * Disconnect from the server and returns to the server connection window.
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     @FXML
     private void clickOnDisconnect() {
@@ -264,6 +281,9 @@ public final class LobbyController extends Controller implements GameFoundEventL
 
     /**
      * Keeps the server connection but returns to the login window.
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     @FXML
     public void clickOnLogout() {
@@ -278,6 +298,9 @@ public final class LobbyController extends Controller implements GameFoundEventL
 
     /**
      * Shuts down the application.
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     @FXML
     private void clickOnExit() {
@@ -286,6 +309,9 @@ public final class LobbyController extends Controller implements GameFoundEventL
 
     /**
      * Opens the about window.
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     @FXML
     public void clickOnAbout() {
@@ -294,6 +320,9 @@ public final class LobbyController extends Controller implements GameFoundEventL
 
     /**
      * @param view The view.
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     public void setView(final LobbyView view) {
         this.view = view;

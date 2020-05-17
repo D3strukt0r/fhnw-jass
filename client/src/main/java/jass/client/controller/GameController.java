@@ -69,9 +69,9 @@ import java.util.ResourceBundle;
 /**
  * The controller for the dashboard (game) view.
  *
- * @author Sasa Trajkova
+ * @author Sasa Trajkova & Victor Hargrave & Manuele Vaccari
  * @version %I%, %G%
- * @since 0.0.1
+ * @since 1.0.0
  */
 public final class GameController extends Controller implements DisconnectEventListener, BroadcastAPlayerQuitEventListener, BroadcastRoundOverEventListener {
     /**
@@ -418,10 +418,25 @@ public final class GameController extends Controller implements DisconnectEventL
      */
     private GameUtil gameUtil;
 
+    /**
+     * Whether the dialog that a round is over is currently closed.
+     */
     private boolean roundOverDialogClosed;
+
+    /**
+     * The socket to the server (quick access).
+     */
     private SocketUtil socket;
+
+    /**
+     * Whether the quit listener was added.
+     */
     private boolean aPlayerQuitEventListenerAdded;
 
+    /**
+     * @author Sasa Trajkova & Victor Hargrave
+     * @since 1.0.0
+     */
     @Override
     public void initialize(final URL location, final ResourceBundle resources) {
         gameUtil = ServiceLocator.get(GameUtil.class);
@@ -469,6 +484,12 @@ public final class GameController extends Controller implements DisconnectEventL
         mHelpAbout.textProperty().bind(I18nUtil.createStringBinding(mHelpAbout.getText()));
     }
 
+    /**
+     * @param socket The socket.
+     *
+     * @author Victor Hargrave
+     * @since 1.0.0
+     */
     private void addSocketListeners(final SocketUtil socket) {
         socket.addDisconnectListener(this);
         socket.addAPlayerQuitEventListener(this);
@@ -476,6 +497,10 @@ public final class GameController extends Controller implements DisconnectEventL
         aPlayerQuitEventListenerAdded = true;
     }
 
+    /**
+     * @author Victor Hargrave
+     * @since 1.0.0
+     */
     private void initializePlayerDeckListener() {
         gameUtil.getPlayerDeck().addListener((ListChangeListener<CardData>) c -> {
             if (gameUtil.getPlayerDeck().size() == 9) {
@@ -492,6 +517,10 @@ public final class GameController extends Controller implements DisconnectEventL
         });
     }
 
+    /**
+     * @author Victor Hargrave
+     * @since 1.0.0
+     */
     @Override
     public void onRoundOver(final BroadcastRoundOverData data) {
         // run on separate thread so events can still come in nicely.
@@ -500,6 +529,12 @@ public final class GameController extends Controller implements DisconnectEventL
         });
     }
 
+    /**
+     * @param data Data from the DTO.
+     *
+     * @author Victor Hargrave
+     * @since 1.0.0
+     */
     private void showRoundOverMessage(final BroadcastRoundOverData data) {
         String roundOverMessage = "";
         if (data.getTeam1Points() > data.getTeam2Points()) {
@@ -540,6 +575,10 @@ public final class GameController extends Controller implements DisconnectEventL
         }
     }
 
+    /**
+     * @author Victor Hargrave
+     * @since 1.0.0
+     */
     @Override
     public void onAPlayerQuit(final BroadcastAPlayerQuitData data) {
         if (gameUtil.getDecidedToLeaveGame()) {
@@ -551,6 +590,10 @@ public final class GameController extends Controller implements DisconnectEventL
         }
     }
 
+    /**
+     * @author Victor Hargrave
+     * @since 1.0.0
+     */
     private void showNotificationThatPlayerLeft() {
         Platform.runLater(() -> {
             String anotherPlayerLeftMessage = I18nUtil.get("gui.lobby.aPlayerLeft");
@@ -565,6 +608,10 @@ public final class GameController extends Controller implements DisconnectEventL
         });
     }
 
+    /**
+     * @author Victor Hargrave
+     * @since 1.0.0
+     */
     private void cleanupGameAndNavigateFromView() {
         updateCardImages();
         this.gameUtil.cleanupGame();
@@ -579,17 +626,25 @@ public final class GameController extends Controller implements DisconnectEventL
         WindowUtil.switchTo(view, LobbyView.class);
     }
 
+    /**
+     * @author ...
+     * @since 1.0.0
+     */
     private void initializePlayedCardsListener() {
         gameUtil.getPlayedCards().addListener((ListChangeListener<CardData>) c -> {
             updatePlayedCardImages();
             Optional<CardData> card = gameUtil.getPlayerDeck().stream().filter(d -> d.getCardId() == gameUtil.getCardIdToRemove()).findFirst();
             if (card.isPresent()) {
-                card.get().isPlayed = true;
+                card.get().setPlayed(true);
             }
             updateCardImages();
         });
     }
 
+    /**
+     * @author ...
+     * @since 1.0.0
+     */
     private void initializeGameModeListener() {
         gameUtil.getGameModeProperty().addListener((obs, oldGameMode, newGameMode) -> {
             Platform.runLater(() -> {
@@ -605,6 +660,10 @@ public final class GameController extends Controller implements DisconnectEventL
         });
     }
 
+    /**
+     * @author ...
+     * @since 1.0.0
+     */
     private void initializeWinningPlayerListener() {
         gameUtil.getWinningPlayerUsername().addListener((obs, oldWinningPlayer, newWinningPlayer) -> {
             // when there is a new winning player
@@ -616,6 +675,10 @@ public final class GameController extends Controller implements DisconnectEventL
         });
     }
 
+    /**
+     * @author ...
+     * @since 1.0.0
+     */
     private void initializeDisableButtonsListener() {
         gameUtil.getDisableButtons().addListener((obs, oldDisableButtons, newDisableButtons) -> {
             // when there is a new winning player
@@ -625,6 +688,9 @@ public final class GameController extends Controller implements DisconnectEventL
 
     /**
      * Disconnect from the server and returns to the server connection window.
+     *
+     * @author Sasa Trajkova & Manuele Vaccari
+     * @since 1.0.0
      */
     @FXML
     private void clickOnDisconnect() {
@@ -639,6 +705,9 @@ public final class GameController extends Controller implements DisconnectEventL
 
     /**
      * Keeps the server connection but returns to the login window.
+     *
+     * @author Sasa Trajkova & Manuele Vaccari
+     * @since 1.0.0
      */
     @FXML
     public void clickOnLogout() {
@@ -653,6 +722,9 @@ public final class GameController extends Controller implements DisconnectEventL
 
     /**
      * Shuts down the application.
+     *
+     * @author Sasa Trajkova
+     * @since 1.0.0
      */
     @FXML
     private void clickOnExit() {
@@ -661,6 +733,9 @@ public final class GameController extends Controller implements DisconnectEventL
 
     /**
      * Opens the about window.
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     @FXML
     public void clickOnAbout() {
@@ -669,6 +744,9 @@ public final class GameController extends Controller implements DisconnectEventL
 
     /**
      * @param view The view.
+     *
+     * @author Sasa Trajkova
+     * @since 1.0.0
      */
     public void setView(final GameView view) {
         this.view = view;
@@ -676,6 +754,9 @@ public final class GameController extends Controller implements DisconnectEventL
 
     /**
      * Display card images in the right player pane.
+     *
+     * @author Sasa Trajkova & Manuele Vaccari & Victor Hargrave
+     * @since 1.0.0
      */
     private void updateCardImages() {
         if (gameUtil.getPlayerDeck().size() == 9) {
@@ -735,6 +816,10 @@ public final class GameController extends Controller implements DisconnectEventL
         }
     }
 
+    /**
+     * @author Sasa Trajkova & Victor Hargrave
+     * @since 1.0.0
+     */
     private void updatePlayedCardImages() {
         if (gameUtil.getPlayedCards() == null) {
             return;
@@ -779,9 +864,12 @@ public final class GameController extends Controller implements DisconnectEventL
      * @param card The card information.
      *
      * @return Returns the image path to the corresponding card.
+     *
+     * @author Manuele Vaccari & Victor Hargrave
+     * @since 1.0.0
      */
     private String getCardPath(final CardData card) {
-        if (card == null || card.isPlayed) {
+        if (card == null || card.isPlayed()) {
             return null;
         }
         return "/images/cards/" + card.getRank() + "_of_" + card.getSuit() + ".png";
@@ -790,6 +878,9 @@ public final class GameController extends Controller implements DisconnectEventL
     /**
      * @param pathToImage The image path.
      * @param button      The button to assign a card image.
+     *
+     * @author Sasa Trajkova
+     * @since 1.0.0
      */
     private void setImage(final String pathToImage, final Button button) {
         if (StringUtil.isNullOrEmpty(pathToImage)) {
@@ -812,7 +903,8 @@ public final class GameController extends Controller implements DisconnectEventL
      *
      * @param disable Whether to disable the buttons of the user or not.
      *
-     * @author Sasa Trajkova
+     * @author Sasa Trajkova & Victor Hargrave & Manuele Vaccari
+     * @since 1.0.0
      */
     public void disableButtons(final boolean disable) {
         //TODO enable buttons for the cards that could be played in the round based on game mode
@@ -830,45 +922,45 @@ public final class GameController extends Controller implements DisconnectEventL
         assert login != null;
         assert gameUtil.getGame() != null;
         if (gameUtil.getGame().getPlayerOne().equals(login.getUsername())) {
-            user1b1.setDisable(card1 != null && card1.isPlayed ? card1.isPlayed : disable);
-            user1b2.setDisable(card2 != null && card2.isPlayed ? card2.isPlayed : disable);
-            user1b3.setDisable(card3 != null && card3.isPlayed ? card3.isPlayed : disable);
-            user1b4.setDisable(card4 != null && card4.isPlayed ? card4.isPlayed : disable);
-            user1b5.setDisable(card5 != null && card5.isPlayed ? card5.isPlayed : disable);
-            user1b6.setDisable(card6 != null && card6.isPlayed ? card6.isPlayed : disable);
-            user1b7.setDisable(card7 != null && card7.isPlayed ? card7.isPlayed : disable);
-            user1b8.setDisable(card8 != null && card8.isPlayed ? card8.isPlayed : disable);
-            user1b9.setDisable(card9 != null && card9.isPlayed ? card9.isPlayed : disable);
+            user1b1.setDisable(card1 != null && card1.isPlayed() ? card1.isPlayed() : disable);
+            user1b2.setDisable(card2 != null && card2.isPlayed() ? card2.isPlayed() : disable);
+            user1b3.setDisable(card3 != null && card3.isPlayed() ? card3.isPlayed() : disable);
+            user1b4.setDisable(card4 != null && card4.isPlayed() ? card4.isPlayed() : disable);
+            user1b5.setDisable(card5 != null && card5.isPlayed() ? card5.isPlayed() : disable);
+            user1b6.setDisable(card6 != null && card6.isPlayed() ? card6.isPlayed() : disable);
+            user1b7.setDisable(card7 != null && card7.isPlayed() ? card7.isPlayed() : disable);
+            user1b8.setDisable(card8 != null && card8.isPlayed() ? card8.isPlayed() : disable);
+            user1b9.setDisable(card9 != null && card9.isPlayed() ? card9.isPlayed() : disable);
         } else if (gameUtil.getGame().getPlayerTwo().equals(login.getUsername())) {
-            user2b1.setDisable(card1 != null && card1.isPlayed ? card1.isPlayed : disable);
-            user2b2.setDisable(card2 != null && card2.isPlayed ? card2.isPlayed : disable);
-            user2b3.setDisable(card3 != null && card3.isPlayed ? card3.isPlayed : disable);
-            user2b4.setDisable(card4 != null && card4.isPlayed ? card4.isPlayed : disable);
-            user2b5.setDisable(card5 != null && card5.isPlayed ? card5.isPlayed : disable);
-            user2b6.setDisable(card6 != null && card6.isPlayed ? card6.isPlayed : disable);
-            user2b7.setDisable(card7 != null && card7.isPlayed ? card7.isPlayed : disable);
-            user2b8.setDisable(card8 != null && card8.isPlayed ? card8.isPlayed : disable);
-            user2b9.setDisable(card9 != null && card9.isPlayed ? card9.isPlayed : disable);
+            user2b1.setDisable(card1 != null && card1.isPlayed() ? card1.isPlayed() : disable);
+            user2b2.setDisable(card2 != null && card2.isPlayed() ? card2.isPlayed() : disable);
+            user2b3.setDisable(card3 != null && card3.isPlayed() ? card3.isPlayed() : disable);
+            user2b4.setDisable(card4 != null && card4.isPlayed() ? card4.isPlayed() : disable);
+            user2b5.setDisable(card5 != null && card5.isPlayed() ? card5.isPlayed() : disable);
+            user2b6.setDisable(card6 != null && card6.isPlayed() ? card6.isPlayed() : disable);
+            user2b7.setDisable(card7 != null && card7.isPlayed() ? card7.isPlayed() : disable);
+            user2b8.setDisable(card8 != null && card8.isPlayed() ? card8.isPlayed() : disable);
+            user2b9.setDisable(card9 != null && card9.isPlayed() ? card9.isPlayed() : disable);
         } else if (gameUtil.getGame().getPlayerThree().equals(login.getUsername())) {
-            user3b1.setDisable(card1 != null && card1.isPlayed ? card1.isPlayed : disable);
-            user3b2.setDisable(card2 != null && card2.isPlayed ? card2.isPlayed : disable);
-            user3b3.setDisable(card3 != null && card3.isPlayed ? card3.isPlayed : disable);
-            user3b4.setDisable(card4 != null && card4.isPlayed ? card4.isPlayed : disable);
-            user3b5.setDisable(card5 != null && card5.isPlayed ? card5.isPlayed : disable);
-            user3b6.setDisable(card6 != null && card6.isPlayed ? card6.isPlayed : disable);
-            user3b7.setDisable(card7 != null && card7.isPlayed ? card7.isPlayed : disable);
-            user3b8.setDisable(card8 != null && card8.isPlayed ? card8.isPlayed : disable);
-            user3b9.setDisable(card9 != null && card9.isPlayed ? card9.isPlayed : disable);
+            user3b1.setDisable(card1 != null && card1.isPlayed() ? card1.isPlayed() : disable);
+            user3b2.setDisable(card2 != null && card2.isPlayed() ? card2.isPlayed() : disable);
+            user3b3.setDisable(card3 != null && card3.isPlayed() ? card3.isPlayed() : disable);
+            user3b4.setDisable(card4 != null && card4.isPlayed() ? card4.isPlayed() : disable);
+            user3b5.setDisable(card5 != null && card5.isPlayed() ? card5.isPlayed() : disable);
+            user3b6.setDisable(card6 != null && card6.isPlayed() ? card6.isPlayed() : disable);
+            user3b7.setDisable(card7 != null && card7.isPlayed() ? card7.isPlayed() : disable);
+            user3b8.setDisable(card8 != null && card8.isPlayed() ? card8.isPlayed() : disable);
+            user3b9.setDisable(card9 != null && card9.isPlayed() ? card9.isPlayed() : disable);
         } else if (gameUtil.getGame().getPlayerFour().equals(login.getUsername())) {
-            user4b1.setDisable(card1 != null && card1.isPlayed ? card1.isPlayed : disable);
-            user4b2.setDisable(card2 != null && card2.isPlayed ? card2.isPlayed : disable);
-            user4b3.setDisable(card3 != null && card3.isPlayed ? card3.isPlayed : disable);
-            user4b4.setDisable(card4 != null && card4.isPlayed ? card4.isPlayed : disable);
-            user4b5.setDisable(card5 != null && card5.isPlayed ? card5.isPlayed : disable);
-            user4b6.setDisable(card6 != null && card6.isPlayed ? card6.isPlayed : disable);
-            user4b7.setDisable(card7 != null && card7.isPlayed ? card7.isPlayed : disable);
-            user4b8.setDisable(card8 != null && card8.isPlayed ? card8.isPlayed : disable);
-            user4b9.setDisable(card9 != null && card9.isPlayed ? card9.isPlayed : disable);
+            user4b1.setDisable(card1 != null && card1.isPlayed() ? card1.isPlayed() : disable);
+            user4b2.setDisable(card2 != null && card2.isPlayed() ? card2.isPlayed() : disable);
+            user4b3.setDisable(card3 != null && card3.isPlayed() ? card3.isPlayed() : disable);
+            user4b4.setDisable(card4 != null && card4.isPlayed() ? card4.isPlayed() : disable);
+            user4b5.setDisable(card5 != null && card5.isPlayed() ? card5.isPlayed() : disable);
+            user4b6.setDisable(card6 != null && card6.isPlayed() ? card6.isPlayed() : disable);
+            user4b7.setDisable(card7 != null && card7.isPlayed() ? card7.isPlayed() : disable);
+            user4b8.setDisable(card8 != null && card8.isPlayed() ? card8.isPlayed() : disable);
+            user4b9.setDisable(card9 != null && card9.isPlayed() ? card9.isPlayed() : disable);
         }
     }
 
@@ -877,6 +969,7 @@ public final class GameController extends Controller implements DisconnectEventL
      * play.
      *
      * @author Sasa Trajkova
+     * @since 1.0.0
      */
     public void changePlayerPaneBackground() {
         //TODO change player pane background
@@ -885,7 +978,8 @@ public final class GameController extends Controller implements DisconnectEventL
     /**
      * Fetch usernames and match them with the right label.
      *
-     * @author Sasa Trajkova
+     * @author Sasa Trajkova & Victor Hargrave
+     * @since 1.0.0
      */
     public void updateUserNames() {
         Platform.runLater(() -> {
@@ -915,6 +1009,10 @@ public final class GameController extends Controller implements DisconnectEventL
         });
     }
 
+    /**
+     * @author Manuele Vaccari
+     * @since 1.0.0
+     */
     @Override
     public void onDisconnectEvent() {
         ServiceLocator.remove(LoginEntity.class);
@@ -926,6 +1024,10 @@ public final class GameController extends Controller implements DisconnectEventL
         WindowUtil.switchToNewWindow(view, ServerConnectionView.class);
     }
 
+    /**
+     * @author ...
+     * @since 1.0.0
+     */
     private ArrayList<Button> cardButtonsToArray() {
         ArrayList<Button> buttons = new ArrayList<>();
         LoginEntity login = ServiceLocator.get(LoginEntity.class);
@@ -981,6 +1083,10 @@ public final class GameController extends Controller implements DisconnectEventL
         return buttons;
     }
 
+    /**
+     * @author ...
+     * @since 1.0.0
+     */
     private void addClickListenerToCardButtons() {
         for (int i = 0; i < 9; i++) {
             Button button = cardButtons.get(i);

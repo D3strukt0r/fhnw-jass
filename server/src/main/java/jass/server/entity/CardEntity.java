@@ -27,9 +27,9 @@ import jass.lib.message.CardData;
 /**
  * A model with all known (and cached) Games.
  *
- * @author Victor Hargrave
+ * @author Victor Hargrave & Manuele Vaccari
  * @version %I%, %G%
- * @since 0.0.1
+ * @since 1.0.0
  */
 @DatabaseTable(tableName = "card")
 public final class CardEntity extends Entity {
@@ -54,12 +54,18 @@ public final class CardEntity extends Entity {
     /**
      * For ORMLite all persisted classes must define a no-arg constructor with
      * at least package visibility.
+     *
+     * @author Victor Hargrave
+     * @since 1.0.0
      */
     public CardEntity() {
     }
 
     /**
      * @return Returns the ID.
+     *
+     * @author Victor Hargrave
+     * @since 1.0.0
      */
     public int getId() {
         return id;
@@ -69,6 +75,9 @@ public final class CardEntity extends Entity {
      * @param id The ID.
      *
      * @return Returns the object for further processing.
+     *
+     * @author Victor Hargrave
+     * @since 1.0.0
      */
     public CardEntity setId(final int id) {
         this.id = id;
@@ -77,6 +86,9 @@ public final class CardEntity extends Entity {
 
     /**
      * @return Returns the rank.
+     *
+     * @author Victor Hargrave
+     * @since 1.0.0
      */
     public RankEntity getRank() {
         return rank;
@@ -86,6 +98,9 @@ public final class CardEntity extends Entity {
      * @param rank The rank.
      *
      * @return Returns the object for further processing.
+     *
+     * @author Victor Hargrave
+     * @since 1.0.0
      */
     public CardEntity setRank(final RankEntity rank) {
         this.rank = rank;
@@ -94,6 +109,9 @@ public final class CardEntity extends Entity {
 
     /**
      * @return Returns the suit.
+     *
+     * @author Victor Hargrave
+     * @since 1.0.0
      */
     public SuitEntity getSuit() {
         return suit;
@@ -103,6 +121,9 @@ public final class CardEntity extends Entity {
      * @param suit The suit.
      *
      * @return Returns the object for further processing.
+     *
+     * @author Victor Hargrave
+     * @since 1.0.0
      */
     public CardEntity setSuit(final SuitEntity suit) {
         this.suit = suit;
@@ -113,11 +134,22 @@ public final class CardEntity extends Entity {
      * @param cardEntity The card.
      *
      * @return Returns a card DTO.
+     *
+     * @author Victor Hargrave
+     * @since 1.0.0
      */
     public static CardData toCardData(final CardEntity cardEntity) {
         return new CardData(cardEntity.id, cardEntity.suit.getId(), cardEntity.suit.getKey(), cardEntity.rank.getId(), cardEntity.rank.getKey());
     }
 
+    /**
+     * @param o The card.
+     *
+     * @return Returns whether it's the same card or not.
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
+     */
     @Override
     public boolean equals(final Object o) {
         if (this == o) {
@@ -132,6 +164,12 @@ public final class CardEntity extends Entity {
         return id == that.id;
     }
 
+    /**
+     * @return Returns the hashcode.
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
+     */
     @Override
     public int hashCode() {
         return id;

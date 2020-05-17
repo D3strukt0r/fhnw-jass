@@ -21,11 +21,19 @@ package jass.client.eventlistener;
 
 import jass.lib.message.GameFoundData;
 
+/**
+ * @author ...
+ * @version %I%, %G%
+ * @since 1.0.0
+ */
 public interface GameFoundEventListener {
     /**
      * Executes when a game is found.
      *
      * @param msgData The game found data.
+     *
+     * @author ...
+     * @since 1.0.0
      */
     void onGameFound(GameFoundData msgData);
 }

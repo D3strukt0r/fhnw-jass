@@ -36,11 +36,14 @@ import java.io.IOException;
  *
  * @author Manuele Vaccari
  * @version %I%, %G%
- * @since 0.0.1
+ * @since 1.0.0
  */
 public final class RegisterView extends View {
     /**
      * @param stage The stage of the window.
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     public RegisterView(final Stage stage) {
         super(stage);
@@ -52,6 +55,10 @@ public final class RegisterView extends View {
         stage.setOnCloseRequest(event -> Platform.exit());
     }
 
+    /**
+     * @author Manuele Vaccari
+     * @since 1.0.0
+     */
     @Override
     protected Scene createGUI() {
         try {

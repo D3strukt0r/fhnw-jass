@@ -29,7 +29,7 @@ import jass.lib.message.ResultData;
  *
  * @author Manuele Vaccari
  * @version %I%, %G%
- * @since 0.0.1
+ * @since 1.0.0
  */
 public final class Logout extends Message {
     /**
@@ -39,6 +39,10 @@ public final class Logout extends Message {
         super(rawData);
     }
 
+    /**
+     * @author Manuele Vaccari
+     * @since 1.0.0
+     */
     @Override
     public boolean process(final SocketUtil socket) {
         socket.send(this);

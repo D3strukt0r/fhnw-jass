@@ -31,7 +31,7 @@ import java.lang.reflect.InvocationTargetException;
  *
  * @author Manuele Vaccari
  * @version %I%, %G%
- * @since 0.0.1
+ * @since 1.0.0
  */
 public abstract class Message {
     /**
@@ -41,6 +41,9 @@ public abstract class Message {
 
     /**
      * @param rawData The data (still not casted)
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     public Message(final MessageData rawData) {
         this.rawData = rawData;
@@ -48,6 +51,9 @@ public abstract class Message {
 
     /**
      * @return Returns the ID of the message.
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     public int getId() {
         return rawData.getId();
@@ -55,6 +61,9 @@ public abstract class Message {
 
     /**
      * @return Returns the data.
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     public MessageData getRawData() {
         return rawData;
@@ -67,6 +76,9 @@ public abstract class Message {
      * @param socket The socket object, to perform actions with the server.
      *
      * @return Returns true if message succeeded, otherwise false.
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     public abstract boolean process(SocketUtil socket);
 
@@ -78,6 +90,7 @@ public abstract class Message {
      * @return Returns a message object using the data.
      *
      * @author Bradley Richards
+     * @since 1.0.0
      */
     public static Message fromDataObject(final MessageData messageData) {
         String messageClassName = Message.class.getPackage().getName() + "." + messageData.getMessageType();
@@ -94,6 +107,9 @@ public abstract class Message {
      * A message is really just a bunch of strings separated by vertical bars.
      *
      * @return Returns the serialized JSON string.
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     @Override
     public String toString() {

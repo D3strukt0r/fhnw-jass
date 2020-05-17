@@ -67,7 +67,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
  *
  * @author Manuele Vaccari
  * @version %I%, %G%
- * @since 0.0.1
+ * @since 1.0.0
  */
 public final class ServerConnectionController extends Controller {
     /**
@@ -188,6 +188,10 @@ public final class ServerConnectionController extends Controller {
     @FXML
     private JFXButton connect;
 
+    /**
+     * @author Manuele Vaccari
+     * @since 1.0.0
+     */
     @Override
     public void initialize(final URL location, final ResourceBundle resources) {
         /*
@@ -305,7 +309,8 @@ public final class ServerConnectionController extends Controller {
     /**
      * Disables all the input fields in the view.
      *
-     * @since 0.0.1
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     public void disableInputs() {
         ipOrDomain.setDisable(true);
@@ -317,7 +322,8 @@ public final class ServerConnectionController extends Controller {
     /**
      * Disables all the form fields in the view.
      *
-     * @since 0.0.1
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     public void disableAll() {
         disableInputs();
@@ -327,7 +333,8 @@ public final class ServerConnectionController extends Controller {
     /**
      * Enables all the input fields in the view.
      *
-     * @since 0.0.1
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     public void enableInputs() {
         ipOrDomain.setDisable(false);
@@ -339,7 +346,8 @@ public final class ServerConnectionController extends Controller {
     /**
      * Enables all the form fields in the view, if it's a new entry.
      *
-     * @since 0.0.1
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     public void enableAllIfNew() {
         ServerEntity server = chooseServer.getSelectionModel().getSelectedItem();
@@ -355,7 +363,8 @@ public final class ServerConnectionController extends Controller {
      *
      * @param translatorKey The key of the translation.
      *
-     * @since 0.0.1
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     public void setErrorMessage(final String translatorKey) {
         Platform.runLater(() -> {
@@ -376,6 +385,9 @@ public final class ServerConnectionController extends Controller {
 
     /**
      * Shuts down the application.
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     @FXML
     private void clickOnExit() {
@@ -384,6 +396,9 @@ public final class ServerConnectionController extends Controller {
 
     /**
      * Opens the about window.
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     @FXML
     public void clickOnAbout() {
@@ -394,7 +409,8 @@ public final class ServerConnectionController extends Controller {
      * Updates the view depending if we create a new element or choose an
      * existing one.
      *
-     * @since 0.0.1
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     @FXML
     private void clickOnChooseServer() {
@@ -418,7 +434,8 @@ public final class ServerConnectionController extends Controller {
      * Handles the click on the connect button. Inputs should already be
      * checked. This will try to connect to the server.
      *
-     * @since 0.0.1
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     @FXML
     private void clickOnConnect() {
@@ -470,6 +487,9 @@ public final class ServerConnectionController extends Controller {
 
     /**
      * @return Returns the connect button
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     public JFXButton getConnect() {
         return connect;
@@ -477,6 +497,9 @@ public final class ServerConnectionController extends Controller {
 
     /**
      * @param view The view.
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     public void setView(final ServerConnectionView view) {
         this.view = view;

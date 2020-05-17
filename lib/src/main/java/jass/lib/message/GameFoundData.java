@@ -25,8 +25,9 @@ import org.json.JSONObject;
  * The data model for the Game Found message.
  *
  * @author Thomas Weber
+ * @version %I%, %G%
+ * @since 1.0.0
  */
-
 public final class GameFoundData extends MessageData {
     /**
      * Game ID.
@@ -107,6 +108,9 @@ public final class GameFoundData extends MessageData {
      * @param playerFourId      Player four ID.
      * @param playerFour        Player four username.
      * @param playerFourTeamId  Player four team ID.
+     *
+     * @author Thomas Weber
+     * @since 1.0.0
      */
     public GameFoundData(final int gameId, final int playerOneId, final String playerOne, final int playerOneTeamId, final int playerTwoId, final String playerTwo, final int playerTwoTeamId, final int playerThreeId, final String playerThree, final int playerThreeTeamId, final int playerFourId, final String playerFour, final int playerFourTeamId) {
         super("GameFound");
@@ -131,6 +135,9 @@ public final class GameFoundData extends MessageData {
 
     /**
      * @param data The message containing all the data.
+     *
+     * @author Thomas Weber
+     * @since 1.0.0
      */
     public GameFoundData(final JSONObject data) {
         super(data);
@@ -155,6 +162,9 @@ public final class GameFoundData extends MessageData {
 
     /**
      * @return Returns the game ID.
+     *
+     * @author Thomas Weber
+     * @since 1.0.0
      */
     public int getGameId() {
         return gameId;
@@ -162,6 +172,9 @@ public final class GameFoundData extends MessageData {
 
     /**
      * @return Returns the player one's ID.
+     *
+     * @author Thomas Weber
+     * @since 1.0.0
      */
     public int getPlayerOneId() {
         return playerOneId;
@@ -169,6 +182,9 @@ public final class GameFoundData extends MessageData {
 
     /**
      * @return Returns the player one's username.
+     *
+     * @author Thomas Weber
+     * @since 1.0.0
      */
     public String getPlayerOne() {
         return playerOne;
@@ -176,6 +192,9 @@ public final class GameFoundData extends MessageData {
 
     /**
      * @return Returns the player one's team ID.
+     *
+     * @author Thomas Weber
+     * @since 1.0.0
      */
     public int getPlayerOneTeamId() {
         return playerOneTeamId;
@@ -183,6 +202,9 @@ public final class GameFoundData extends MessageData {
 
     /**
      * @return Returns the player two's ID.
+     *
+     * @author Thomas Weber
+     * @since 1.0.0
      */
     public int getPlayerTwoId() {
         return playerTwoId;
@@ -190,6 +212,9 @@ public final class GameFoundData extends MessageData {
 
     /**
      * @return Returns the player two's username.
+     *
+     * @author Thomas Weber
+     * @since 1.0.0
      */
     public String getPlayerTwo() {
         return playerTwo;
@@ -197,6 +222,9 @@ public final class GameFoundData extends MessageData {
 
     /**
      * @return Returns the player two's team id.
+     *
+     * @author Thomas Weber
+     * @since 1.0.0
      */
     public int getPlayerTwoTeamId() {
         return playerTwoTeamId;
@@ -204,6 +232,9 @@ public final class GameFoundData extends MessageData {
 
     /**
      * @return Returns the player three's ID.
+     *
+     * @author Thomas Weber
+     * @since 1.0.0
      */
     public int getPlayerThreeId() {
         return playerThreeId;
@@ -211,6 +242,9 @@ public final class GameFoundData extends MessageData {
 
     /**
      * @return Returns the player three's username.
+     *
+     * @author Thomas Weber
+     * @since 1.0.0
      */
     public String getPlayerThree() {
         return playerThree;
@@ -218,6 +252,9 @@ public final class GameFoundData extends MessageData {
 
     /**
      * @return Returns the player three's team ID.
+     *
+     * @author Thomas Weber
+     * @since 1.0.0
      */
     public int getPlayerThreeTeamId() {
         return playerThreeTeamId;
@@ -225,6 +262,9 @@ public final class GameFoundData extends MessageData {
 
     /**
      * @return Returns the player four's ID.
+     *
+     * @author Thomas Weber
+     * @since 1.0.0
      */
     public int getPlayerFourId() {
         return playerFourId;
@@ -232,6 +272,9 @@ public final class GameFoundData extends MessageData {
 
     /**
      * @return Returns the player four's username.
+     *
+     * @author Thomas Weber
+     * @since 1.0.0
      */
     public String getPlayerFour() {
         return playerFour;
@@ -239,6 +282,9 @@ public final class GameFoundData extends MessageData {
 
     /**
      * @return Returns the player four's team ID.
+     *
+     * @author Thomas Weber
+     * @since 1.0.0
      */
     public int getPlayerFourTeamId() {
         return playerFourTeamId;

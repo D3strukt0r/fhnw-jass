@@ -36,7 +36,7 @@ import java.util.Date;
  *
  * @author Manuele Vaccari
  * @version %I%, %G%
- * @since 0.0.1
+ * @since 1.0.0
  */
 @DatabaseTable(tableName = "users")
 public final class UserEntity extends Entity {
@@ -84,12 +84,18 @@ public final class UserEntity extends Entity {
     /**
      * For ORMLite all persisted classes must define a no-arg constructor with
      * at least package visibility.
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     public UserEntity() {
     }
 
     /**
      * @return Returns the ID.
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     public int getId() {
         return id;
@@ -97,6 +103,9 @@ public final class UserEntity extends Entity {
 
     /**
      * @return Returns the username.
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     public String getUsername() {
         return username;
@@ -106,6 +115,9 @@ public final class UserEntity extends Entity {
      * @param username The username.
      *
      * @return Returns the object for further processing.
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     public UserEntity setUsername(final String username) {
         this.username = username;
@@ -114,6 +126,9 @@ public final class UserEntity extends Entity {
 
     /**
      * @return Returns the password.
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     public String getPassword() {
         return password;
@@ -123,6 +138,9 @@ public final class UserEntity extends Entity {
      * @param password The password.
      *
      * @return Returns the object for further processing.
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     public UserEntity setPassword(final String password) {
         try {
@@ -139,6 +157,9 @@ public final class UserEntity extends Entity {
      *
      * @return Returns true if the password matches the one currently being
      * used, otherwise false.
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     public boolean checkPassword(final String password) {
         boolean matched = false;
@@ -154,6 +175,9 @@ public final class UserEntity extends Entity {
 
     /**
      * @return Returns whether the user is currently online or not.
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     public boolean isOnline() {
         return online;
@@ -163,6 +187,9 @@ public final class UserEntity extends Entity {
      * Set the user to being online.
      *
      * @return Returns the object for further processing.
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     public UserEntity setOnline() {
         this.online = true;
@@ -173,6 +200,9 @@ public final class UserEntity extends Entity {
      * Set the user to being offline.
      *
      * @return Returns the object for further processing.
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     public UserEntity setOffline() {
         this.online = false;
@@ -183,6 +213,9 @@ public final class UserEntity extends Entity {
      * Switch between online states.
      *
      * @return Returns the object for further processing.
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     public UserEntity toggleOnline() {
         this.online = !this.online;
@@ -191,6 +224,9 @@ public final class UserEntity extends Entity {
 
     /**
      * @return Returns the last login time.
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     public Date getLastLogin() {
         return lastLogin;
@@ -198,6 +234,9 @@ public final class UserEntity extends Entity {
 
     /**
      * @return Returns the last login time as string.
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     public String getLastLoginFormatted() {
         SimpleDateFormat dateTimeFormatter = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
@@ -208,6 +247,9 @@ public final class UserEntity extends Entity {
      * @param lastLogin The last login time.
      *
      * @return Returns the object for further processing.
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     public UserEntity setLastLogin(final Date lastLogin) {
         this.lastLogin = lastLogin;
@@ -216,6 +258,9 @@ public final class UserEntity extends Entity {
 
     /**
      * @param token A session token.
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     public void setToken(final String token) {
         this.token = token;
@@ -223,11 +268,22 @@ public final class UserEntity extends Entity {
 
     /**
      * @return Returns the last session token.
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     public String getToken() {
         return this.token;
     }
 
+    /**
+     * @param o The user object
+     *
+     * @return Returns whether it's the same object or not.
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
+     */
     @Override
     public boolean equals(final Object o) {
         if (this == o) {
@@ -242,6 +298,12 @@ public final class UserEntity extends Entity {
         return id == that.id;
     }
 
+    /**
+     * @return Returns the hashcode.
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
+     */
     @Override
     public int hashCode() {
         return id;

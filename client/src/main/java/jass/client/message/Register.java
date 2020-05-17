@@ -29,7 +29,7 @@ import jass.lib.message.ResultData;
  *
  * @author Manuele Vaccari
  * @version %I%, %G%
- * @since 0.0.1
+ * @since 1.0.0
  */
 public final class Register extends Message {
     /**
@@ -44,12 +44,19 @@ public final class Register extends Message {
 
     /**
      * @param rawData The data (still not casted)
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     public Register(final MessageData rawData) {
         super(rawData);
         data = (RegisterData) rawData;
     }
 
+    /**
+     * @author Manuele Vaccari
+     * @since 1.0.0
+     */
     @Override
     public boolean process(final SocketUtil socket) {
         socket.send(this);
@@ -62,6 +69,9 @@ public final class Register extends Message {
 
     /**
      * @return Returns the result.
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     public ResultData getResultData() {
         return resultData;

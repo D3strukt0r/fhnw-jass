@@ -35,12 +35,15 @@ import java.security.spec.InvalidKeySpecException;
  *
  * @author https://howtodoinjava.com/security/how-to-generate-secure-password-hash-md5-sha-pbkdf2-bcrypt-examples/
  * @version %I%, %G%
- * @since 0.0.1
+ * @since 1.0.0
  */
 public final class HashUtil {
     /**
      * Utility classes, which are collections of static members, are not meant
      * to be instantiated.
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     private HashUtil() {
         throw new IllegalStateException("Utility class");
@@ -53,6 +56,7 @@ public final class HashUtil {
      *
      * @throws NoSuchAlgorithmException Some security error.
      * @throws InvalidKeySpecException  Some security error.
+     * @since 1.0.0
      */
     public static String generateStrongPasswordHash(final String password) throws NoSuchAlgorithmException, InvalidKeySpecException {
         int iterations = 1000;
@@ -69,6 +73,7 @@ public final class HashUtil {
      * @return Returns the salt.
      *
      * @throws NoSuchAlgorithmException Some security error.
+     * @since 1.0.0
      */
     private static byte[] getSalt() throws NoSuchAlgorithmException {
         SecureRandom sr = SecureRandom.getInstance("SHA1PRNG");
@@ -81,6 +86,8 @@ public final class HashUtil {
      * @param array The array to stringify.
      *
      * @return Returns the hex string.
+     *
+     * @since 1.0.0
      */
     private static String toHex(final byte[] array) {
         BigInteger bi = new BigInteger(1, array);
@@ -101,6 +108,7 @@ public final class HashUtil {
      *
      * @throws NoSuchAlgorithmException Some security error.
      * @throws InvalidKeySpecException  Some security error.
+     * @since 1.0.0
      */
     public static boolean validatePassword(final String originalPassword, final String storedPassword) throws NoSuchAlgorithmException, InvalidKeySpecException {
         String[] parts = storedPassword.split(":");
@@ -123,6 +131,8 @@ public final class HashUtil {
      * @param hex The string to make to a hex string.
      *
      * @return Returns a hex string.
+     *
+     * @since 1.0.0
      */
     private static byte[] fromHex(final String hex) {
         byte[] bytes = new byte[hex.length() / 2];

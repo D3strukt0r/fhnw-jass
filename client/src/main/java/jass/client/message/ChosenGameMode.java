@@ -26,7 +26,7 @@ import jass.lib.message.MessageData;
 /**
  * @author Manuele Vaccari
  * @version %I%, %G%
- * @since 0.0.1
+ * @since 1.0.0
  */
 public final class ChosenGameMode extends Message {
     /**
@@ -36,12 +36,19 @@ public final class ChosenGameMode extends Message {
 
     /**
      * @param rawData The data (still not casted)
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     public ChosenGameMode(final MessageData rawData) {
         super(rawData);
         data = (ChosenGameModeData) rawData;
     }
 
+    /**
+     * @author Manuele Vaccari
+     * @since 1.0.0
+     */
     @Override
     public boolean process(final SocketUtil socket) {
         // No processing required. Is handled in event handlers.

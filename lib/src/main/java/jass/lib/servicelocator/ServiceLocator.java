@@ -25,9 +25,10 @@ import java.util.List;
 /**
  * The service locator, which manages globally available objects.
  *
- * @author https://www.geeksforgeeks.org/service-locator-pattern/
+ * @author https://www.geeksforgeeks.org/service-locator-pattern/ & Manuele
+ * Vaccari
  * @version %I%, %G%
- * @since 0.0.1
+ * @since 1.0.0
  */
 public final class ServiceLocator {
     /**
@@ -38,6 +39,9 @@ public final class ServiceLocator {
     /**
      * Utility classes, which are collections of static members, are not meant
      * to be instantiated.
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     private ServiceLocator() {
         throw new IllegalStateException("Utility class");
@@ -48,6 +52,9 @@ public final class ServiceLocator {
      * @param <S>         The class of of the service.
      *
      * @return Return the service object or null if not found.
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     public static <S extends Service> S get(final Class<S> serviceName) {
         for (Service service : services) {
@@ -63,6 +70,9 @@ public final class ServiceLocator {
     /**
      * @param newService The service to be added to the list.
      * @param <S>        The class of of the service.
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     public static <S extends Service> void add(final S newService) {
         boolean exists = false;
@@ -79,6 +89,9 @@ public final class ServiceLocator {
 
     /**
      * @param serviceName The service to be removed from the list.
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     public static void remove(final Class<? extends Service> serviceName) {
         Service objectFound = null;

@@ -49,7 +49,7 @@ import java.sql.SQLException;
  *
  * @author Manuele Vaccari
  * @version %I%, %G%
- * @since 0.0.1
+ * @since 1.0.0
  */
 public final class Main {
     /**
@@ -60,6 +60,9 @@ public final class Main {
     /**
      * Utility classes, which are collections of static members, are not meant
      * to be instantiated.
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     private Main() {
         throw new IllegalStateException("Utility class");
@@ -67,6 +70,9 @@ public final class Main {
 
     /**
      * @param args The arguments passed in the console.
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     public static void main(final String[] args) {
         // Create all arguments for the command line interface

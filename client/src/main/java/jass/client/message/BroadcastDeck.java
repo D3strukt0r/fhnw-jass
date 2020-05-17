@@ -23,6 +23,11 @@ import jass.client.util.SocketUtil;
 import jass.lib.message.BroadcastDeckData;
 import jass.lib.message.MessageData;
 
+/**
+ * @author Victor Hargrave
+ * @version %I%, %G%
+ * @since 1.0.0
+ */
 public final class BroadcastDeck extends Message {
     /**
      * The data of the message.
@@ -31,12 +36,19 @@ public final class BroadcastDeck extends Message {
 
     /**
      * @param rawData The data (still not casted)
+     *
+     * @author Victor Hargrave
+     * @since 1.0.0
      */
     public BroadcastDeck(final MessageData rawData) {
         super(rawData);
         data = (BroadcastDeckData) rawData;
     }
 
+    /**
+     * @author Victor Hargrave
+     * @since 1.0.0
+     */
     @Override
     public boolean process(final SocketUtil socket) {
         return false;

@@ -31,7 +31,7 @@ import java.util.List;
  *
  * @author Manuele Vaccari
  * @version %I%, %G%
- * @since 0.0.1
+ * @since 1.0.0
  */
 public final class UserRepository extends Repository<Dao<UserEntity, Integer>, UserEntity> {
     /**
@@ -45,6 +45,9 @@ public final class UserRepository extends Repository<Dao<UserEntity, Integer>, U
      * @param dao The DAO to edit inside the database.
      *
      * @return Returns the Repository.
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     public static UserRepository getSingleton(final Dao<UserEntity, Integer> dao) {
         if (singleton == null) {
@@ -55,6 +58,9 @@ public final class UserRepository extends Repository<Dao<UserEntity, Integer>, U
 
     /**
      * @param dao The DAO to edit inside the database.
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     public UserRepository(final Dao<UserEntity, Integer> dao) {
         super(dao);
@@ -65,6 +71,9 @@ public final class UserRepository extends Repository<Dao<UserEntity, Integer>, U
      *
      * @return Returns the UserEntity of the user, or null if not found or
      * something went wrong.
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     public UserEntity getByUsername(final String username) {
         try {
@@ -84,6 +93,9 @@ public final class UserRepository extends Repository<Dao<UserEntity, Integer>, U
      * @param username The username of the user.
      *
      * @return Returns true if the user exists, otherwise false.
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     public boolean usernameExists(final String username) {
         try {

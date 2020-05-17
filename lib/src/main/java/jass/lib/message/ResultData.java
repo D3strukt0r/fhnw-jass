@@ -26,7 +26,7 @@ import org.json.JSONObject;
  *
  * @author Manuele Vaccari
  * @version %I%, %G%
- * @since 0.0.1
+ * @since 1.0.0
  */
 public final class ResultData extends MessageData {
     /**
@@ -42,6 +42,9 @@ public final class ResultData extends MessageData {
     /**
      * @param id     The ID of the message to respond to.
      * @param result The result of the message to respond to.
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     public ResultData(final int id, final boolean result) {
         super(id, "Result");
@@ -53,6 +56,9 @@ public final class ResultData extends MessageData {
      * @param id         The ID of the message to respond to.
      * @param result     The result of the message to respond to.
      * @param resultData Additional data for the returning message.
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     public ResultData(final int id, final boolean result, final JSONObject resultData) {
         super(id, "Result");
@@ -62,6 +68,9 @@ public final class ResultData extends MessageData {
 
     /**
      * @param data The message containing all the data.
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     public ResultData(final JSONObject data) {
         super(data);
@@ -71,6 +80,9 @@ public final class ResultData extends MessageData {
 
     /**
      * @return Returns the result.
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     public boolean getResult() {
         return result;
@@ -78,6 +90,9 @@ public final class ResultData extends MessageData {
 
     /**
      * @return Returns the additional data.
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     public JSONObject getResultData() {
         return resultData;

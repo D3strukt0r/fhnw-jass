@@ -27,7 +27,7 @@ import org.json.JSONObject;
 /**
  * @author Manuele Vaccari
  * @version %I%, %G%
- * @since 0.0.1
+ * @since 1.0.0
  */
 public final class ChosenGameModeData extends MessageData {
     /**
@@ -52,6 +52,9 @@ public final class ChosenGameModeData extends MessageData {
      * @param id       The ID.
      * @param token    The token for the current session.
      * @param gameMode The game mode.
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     public ChosenGameModeData(final int id, final String token, final GameMode gameMode) {
         super(id, "ChosenGameMode");
@@ -68,6 +71,9 @@ public final class ChosenGameModeData extends MessageData {
      * @param token      The token for the current session.
      * @param gameMode   The game mode.
      * @param trumpfSuit The trumpf suit.
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     public ChosenGameModeData(final int id, final String token, final GameMode gameMode, final Card.Suit trumpfSuit) {
         super(id, "ChosenGameMode");
@@ -78,6 +84,9 @@ public final class ChosenGameModeData extends MessageData {
 
     /**
      * @param data The message containing all the data.
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     public ChosenGameModeData(final JSONObject data) {
         super(data);
@@ -94,6 +103,9 @@ public final class ChosenGameModeData extends MessageData {
 
     /**
      * @return Returns the token.
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     public String getToken() {
         return token;
@@ -101,6 +113,9 @@ public final class ChosenGameModeData extends MessageData {
 
     /**
      * @return Returns the game mode.
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     public GameMode getGameMode() {
         return gameMode;
@@ -108,6 +123,9 @@ public final class ChosenGameModeData extends MessageData {
 
     /**
      * @return Returns the trumpf suit.
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     public Card.Suit getTrumpfSuit() {
         return trumpfSuit;

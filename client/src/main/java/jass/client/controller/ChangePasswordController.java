@@ -52,7 +52,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
  *
  * @author Manuele Vaccari
  * @version %I%, %G%
- * @since 0.0.1
+ * @since 1.0.0
  */
 public final class ChangePasswordController extends Controller {
     /**
@@ -150,6 +150,10 @@ public final class ChangePasswordController extends Controller {
     @FXML
     private JFXButton cancel;
 
+    /**
+     * @author Manuele Vaccari
+     * @since 1.0.0
+     */
     @Override
     public void initialize(final URL location, final ResourceBundle resources) {
         /*
@@ -222,7 +226,8 @@ public final class ChangePasswordController extends Controller {
     /**
      * Disables all the input fields in the view.
      *
-     * @since 0.0.1
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     public void disableInputs() {
         oldPassword.setDisable(true);
@@ -233,7 +238,8 @@ public final class ChangePasswordController extends Controller {
     /**
      * Disables all the form fields in the view.
      *
-     * @since 0.0.1
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     public void disableAll() {
         disableInputs();
@@ -244,7 +250,8 @@ public final class ChangePasswordController extends Controller {
     /**
      * Enables all the input fields in the view.
      *
-     * @since 0.0.1
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     public void enableInputs() {
         oldPassword.setDisable(false);
@@ -255,7 +262,8 @@ public final class ChangePasswordController extends Controller {
     /**
      * Enables all the form fields in the view.
      *
-     * @since 0.0.1
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     public void enableAll() {
         enableInputs();
@@ -269,7 +277,8 @@ public final class ChangePasswordController extends Controller {
      *
      * @param translatorKey The key of the translation.
      *
-     * @since 0.0.1
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     public void setErrorMessage(final String translatorKey) {
         Platform.runLater(() -> {
@@ -287,6 +296,9 @@ public final class ChangePasswordController extends Controller {
 
     /**
      * Disconnect from the server and returns to the server connection window.
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     @FXML
     private void clickOnDisconnect() {
@@ -301,6 +313,9 @@ public final class ChangePasswordController extends Controller {
 
     /**
      * Shuts down the application.
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     @FXML
     private void clickOnExit() {
@@ -309,6 +324,9 @@ public final class ChangePasswordController extends Controller {
 
     /**
      * Opens the about window.
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     @FXML
     public void clickOnAbout() {
@@ -319,7 +337,8 @@ public final class ChangePasswordController extends Controller {
      * Handles the click on the change button. Inputs should already be checked.
      * This will send it to the server, and update local values if successful.
      *
-     * @since 0.0.1
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     @FXML
     public void clickOnChange() {
@@ -355,6 +374,9 @@ public final class ChangePasswordController extends Controller {
 
     /**
      * After clicking on cancel, return to the lobby.
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     @FXML
     public void clickOnCancel() {
@@ -363,6 +385,9 @@ public final class ChangePasswordController extends Controller {
 
     /**
      * @param view The view.
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     public void setView(final ChangePasswordView view) {
         this.view = view;
@@ -370,6 +395,9 @@ public final class ChangePasswordController extends Controller {
 
     /**
      * @return Returns the change button
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     public JFXButton getChange() {
         return change;

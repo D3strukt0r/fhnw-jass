@@ -26,7 +26,7 @@ import jass.lib.message.MessageData;
 /**
  * @author Victor Hargrave
  * @version %I%, %G%
- * @since 0.0.1
+ * @since 1.0.0
  */
 public final class BroadcastRoundOver extends Message {
     /**
@@ -36,12 +36,19 @@ public final class BroadcastRoundOver extends Message {
 
     /**
      * @param rawData The data (still not casted)
+     *
+     * @author Victor Hargrave
+     * @since 1.0.0
      */
     public BroadcastRoundOver(final MessageData rawData) {
         super(rawData);
         data = (BroadcastRoundOverData) rawData;
     }
 
+    /**
+     * @author Victor Hargrave
+     * @since 1.0.0
+     */
     @Override
     public boolean process(final SocketUtil socket) {
         // No processing required. Is handled in event handlers.

@@ -28,7 +28,7 @@ import jass.lib.message.MessageData;
  *
  * @author Manuele Vaccari
  * @version %I%, %G%
- * @since 0.0.1
+ * @since 1.0.0
  */
 public final class BroadcastPoints extends Message {
     /**
@@ -38,12 +38,19 @@ public final class BroadcastPoints extends Message {
 
     /**
      * @param rawData The data (still not casted)
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     public BroadcastPoints(final MessageData rawData) {
         super(rawData);
         data = (BroadcastPointsData) rawData;
     }
 
+    /**
+     * @author Manuele Vaccari
+     * @since 1.0.0
+     */
     @Override
     public boolean process(final SocketUtil socket) {
         return false;
@@ -51,6 +58,9 @@ public final class BroadcastPoints extends Message {
 
     /**
      * @return Returns the data.
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     public BroadcastPointsData getData() {
         return data;

@@ -28,6 +28,8 @@ import org.json.JSONObject;
  * The data model for the BroadcastDeckData message.
  *
  * @author Victor Hargrave
+ * @version %I%, %G%
+ * @since 1.0.0
  */
 public final class BroadcastGameModeData extends MessageData {
     /**
@@ -42,6 +44,9 @@ public final class BroadcastGameModeData extends MessageData {
 
     /**
      * @param gameMode The game mode.
+     *
+     * @author Victor Hargrave
+     * @since 1.0.0
      */
     public BroadcastGameModeData(final GameMode gameMode) {
         super("BroadcastGameMode");
@@ -51,6 +56,9 @@ public final class BroadcastGameModeData extends MessageData {
 
     /**
      * @param gameMode The game mode.
+     *
+     * @author Victor Hargrave
+     * @since 1.0.0
      */
     public BroadcastGameModeData(final GameMode gameMode, final Card.Suit trumpfSuit) {
         super("BroadcastGameMode");
@@ -60,6 +68,9 @@ public final class BroadcastGameModeData extends MessageData {
 
     /**
      * @param data The message containing all the data.
+     *
+     * @author Victor Hargrave
+     * @since 1.0.0
      */
     public BroadcastGameModeData(final JSONObject data) {
         super(data);
@@ -75,6 +86,9 @@ public final class BroadcastGameModeData extends MessageData {
 
     /**
      * @return Returns the game mode.
+     *
+     * @author Victor Hargrave
+     * @since 1.0.0
      */
     public GameMode getGameMode() {
         return gameMode;
@@ -82,6 +96,9 @@ public final class BroadcastGameModeData extends MessageData {
 
     /**
      * @return Returns the trumpf suit.
+     *
+     * @author Victor Hargrave
+     * @since 1.0.0
      */
     public Card.Suit getTrumpfSuit() {
         return trumpfSuit;

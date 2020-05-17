@@ -28,7 +28,7 @@ import jass.server.entity.GameEntity;
  *
  * @author Thomas Weber
  * @version %I%, %G%
- * @since 0.0.1
+ * @since 1.0.0
  */
 public final class GameRepository extends Repository<Dao<GameEntity, Integer>, GameEntity> {
     /**
@@ -42,6 +42,9 @@ public final class GameRepository extends Repository<Dao<GameEntity, Integer>, G
      * @param dao The DAO to edit inside the database.
      *
      * @return Returns the Repository.
+     *
+     * @author Thomas Weber
+     * @since 1.0.0
      */
     public static GameRepository getSingleton(final Dao<GameEntity, Integer> dao) {
         if (singleton == null) {
@@ -52,6 +55,9 @@ public final class GameRepository extends Repository<Dao<GameEntity, Integer>, G
 
     /**
      * @param dao The DAO to edit inside the database.
+     *
+     * @author Thomas Weber
+     * @since 1.0.0
      */
     public GameRepository(final Dao<GameEntity, Integer> dao) {
         super(dao);

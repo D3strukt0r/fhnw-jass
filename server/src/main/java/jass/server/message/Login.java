@@ -40,7 +40,7 @@ import java.util.Date;
  *
  * @author Manuele Vaccari
  * @version %I%, %G%
- * @since 0.0.1
+ * @since 1.0.0
  */
 public final class Login extends Message {
     /**
@@ -59,13 +59,20 @@ public final class Login extends Message {
     private static final SecureRandom rand = new SecureRandom();
 
     /**
-     * @param rawData The data (still not casted)
+     * @param rawData The data (still not casted).
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     public Login(final MessageData rawData) {
         super(rawData);
         data = (LoginData) rawData;
     }
 
+    /**
+     * @author Manuele Vaccari
+     * @since 1.0.0
+     */
     @Override
     public void process(final ClientUtil client) {
         // Find existing login matching the username.
@@ -112,6 +119,7 @@ public final class Login extends Message {
      * @return Returns a generated token.
      *
      * @author Bradley Richards
+     * @since 1.0.0
      */
     public static String createToken() {
         byte[] token = new byte[16];
@@ -125,6 +133,7 @@ public final class Login extends Message {
      * @return Returns a converted string.
      *
      * @author https://stackoverflow.com/questions/9655181/how-to-convert-a-byte-array-to-a-hex-string-in-java
+     * @since 1.0.0
      */
     public static String bytesToHex(final byte[] bytes) {
         final char[] hexArray = "0123456789ABCDEF".toCharArray();

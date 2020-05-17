@@ -39,7 +39,7 @@ import java.sql.SQLException;
  *
  * @author Manuele Vaccari
  * @version %I%, %G%
- * @since 0.0.1
+ * @since 1.0.0
  */
 public final class DatabaseUtil implements Service, Closeable {
     public enum SupportedDatabase {
@@ -77,7 +77,8 @@ public final class DatabaseUtil implements Service, Closeable {
      *                         be accessed (and if necessary created).
      *
      * @throws SQLException If an SQL error occurs.
-     * @since 0.0.1
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     public DatabaseUtil(final SupportedDatabase type, final String databaseLocation) throws SQLException {
         // Create our data-source for the database
@@ -95,7 +96,8 @@ public final class DatabaseUtil implements Service, Closeable {
      * Setup our database and DAOs, for the created connection.
      *
      * @throws SQLException If an SQL error occurs.
-     * @since 0.0.1
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     private void setupDatabase() throws SQLException {
         /*
@@ -116,7 +118,8 @@ public final class DatabaseUtil implements Service, Closeable {
     /**
      * Close the database connection.
      *
-     * @since 0.0.1
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     @Override
     public void close() {
@@ -132,7 +135,8 @@ public final class DatabaseUtil implements Service, Closeable {
     /**
      * @return DAO object for the saved logins
      *
-     * @since 0.0.1
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     public Dao<LoginEntity, Integer> getLoginDao() {
         return loginDao;
@@ -141,7 +145,8 @@ public final class DatabaseUtil implements Service, Closeable {
     /**
      * @return DAO object for the saved servers
      *
-     * @since 0.0.1
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     public Dao<ServerEntity, Integer> getServerDao() {
         return serverDao;

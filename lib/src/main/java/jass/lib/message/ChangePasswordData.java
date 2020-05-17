@@ -26,7 +26,7 @@ import org.json.JSONObject;
  *
  * @author Manuele Vaccari
  * @version %I%, %G%
- * @since 0.0.1
+ * @since 1.0.0
  */
 public final class ChangePasswordData extends MessageData {
     /**
@@ -42,6 +42,9 @@ public final class ChangePasswordData extends MessageData {
     /**
      * @param token       The token for the current session.
      * @param newPassword The new password.
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     public ChangePasswordData(final String token, final String newPassword) {
         super("ChangePassword");
@@ -51,6 +54,9 @@ public final class ChangePasswordData extends MessageData {
 
     /**
      * @param data The message containing all the data.
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     public ChangePasswordData(final JSONObject data) {
         super(data);
@@ -60,6 +66,9 @@ public final class ChangePasswordData extends MessageData {
 
     /**
      * @return Returns the token.
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     public String getToken() {
         return token;
@@ -67,6 +76,9 @@ public final class ChangePasswordData extends MessageData {
 
     /**
      * @return Returns the new password.
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     public String getNewPassword() {
         return newPassword;

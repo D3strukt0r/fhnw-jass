@@ -48,7 +48,7 @@ import java.util.ArrayList;
  *
  * @author Manuele Vaccari
  * @version %I%, %G%
- * @since 0.0.1
+ * @since 1.0.0
  */
 public final class SplashModel extends Model {
     /**
@@ -136,6 +136,9 @@ public final class SplashModel extends Model {
 
     /**
      * Initialized the loader.
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     public void initialize() {
         new Thread(initializer).start();
@@ -143,6 +146,9 @@ public final class SplashModel extends Model {
 
     /**
      * @return Returns the initializer.
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     public Task<Void> getInitializer() {
         return initializer;
@@ -150,6 +156,9 @@ public final class SplashModel extends Model {
 
     /**
      * @return Returns whether we are already connected or not.
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     public boolean isConnected() {
         return connected;
@@ -157,6 +166,9 @@ public final class SplashModel extends Model {
 
     /**
      * @return Returns whether we are already logged in or not.
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     public boolean isLoggedIn() {
         return loggedIn;

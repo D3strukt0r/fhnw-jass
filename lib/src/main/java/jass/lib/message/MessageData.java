@@ -26,11 +26,19 @@ import java.io.Serializable;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
+/**
+ * @author Manuele Vaccari & Victor Hargrave
+ * @version %I%, %G%
+ * @since 1.0.0
+ */
 public abstract class MessageData implements Serializable {
     /**
      * @param jsonString The JSON string to be converted.
      *
      * @return Returns the object from the JSON string.
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     public static MessageData unserialize(final String jsonString) {
         JSONObject data;
@@ -57,6 +65,9 @@ public abstract class MessageData implements Serializable {
      * @param messageData The message to be converted.
      *
      * @return Returns the object serialized as a JSON string.
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     public static String serialize(final MessageData messageData) {
         JSONObject data = new JSONObject(messageData);
@@ -93,6 +104,9 @@ public abstract class MessageData implements Serializable {
 
     /**
      * @param messageType The type (object name).
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     public MessageData(final String messageType) {
         id = createId();
@@ -104,6 +118,9 @@ public abstract class MessageData implements Serializable {
     /**
      * @param id          The ID of the message.
      * @param messageType The type (object name).
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     public MessageData(final int id, final String messageType) {
         this.id = id;
@@ -114,6 +131,9 @@ public abstract class MessageData implements Serializable {
 
     /**
      * @param data The message containing all the data.
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     public MessageData(final JSONObject data) {
         id = data.getInt("id");
@@ -124,6 +144,9 @@ public abstract class MessageData implements Serializable {
 
     /**
      * @return Returns an ID for the message to easily identify responses.
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     public static int createId() {
         idCounter = idCounter + 1;
@@ -132,6 +155,9 @@ public abstract class MessageData implements Serializable {
 
     /**
      * @return Returns the ID.
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     public int getId() {
         return id;
@@ -139,23 +165,50 @@ public abstract class MessageData implements Serializable {
 
     /**
      * @return Returns the message type.
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     public String getMessageType() {
         return messageType;
     }
 
+    /**
+     * @param token The token.
+     *
+     * @author Victor Hargrave
+     * @since 1.0.0
+     */
     public void setToken(final String token) {
         this.token = token;
     }
 
+    /**
+     * @return Returns the token.
+     *
+     * @author Victor Hargrave
+     * @since 1.0.0
+     */
     public String getToken() {
         return token;
     }
 
+    /**
+     * @param username The username.
+     *
+     * @author Victor Hargrave
+     * @since 1.0.0
+     */
     public void setUsername(final String username) {
         this.username = username;
     }
 
+    /**
+     * @return Returns the username.
+     *
+     * @author Victor Hargrave
+     * @since 1.0.0
+     */
     public String getUsername() {
         return username;
     }

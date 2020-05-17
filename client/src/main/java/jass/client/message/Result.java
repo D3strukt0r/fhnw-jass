@@ -28,11 +28,14 @@ import jass.lib.message.MessageData;
  *
  * @author Manuele Vaccari
  * @version %I%, %G%
- * @since 0.0.1
+ * @since 1.0.0
  */
 public final class Result extends Message {
     /**
      * @param rawData The data (still not casted)
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     public Result(final MessageData rawData) {
         super(rawData);
@@ -40,6 +43,9 @@ public final class Result extends Message {
 
     /**
      * This message type does no processing at all (only the server).
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     @Override
     public boolean process(final SocketUtil socket) {

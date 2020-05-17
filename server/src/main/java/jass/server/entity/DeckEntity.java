@@ -28,9 +28,9 @@ import java.util.ArrayList;
 /**
  * A model with all known (and cached) teams.
  *
- * @author Victor Hargrave
+ * @author Victor Hargrave & Thomas Weber
  * @version %I%, %G%
- * @since 0.0.1
+ * @since 1.0.0
  */
 @DatabaseTable(tableName = "deck")
 public final class DeckEntity extends Entity {
@@ -163,12 +163,18 @@ public final class DeckEntity extends Entity {
     /**
      * For ORMLite all persisted classes must define a no-arg constructor with
      * at least package visibility.
+     *
+     * @author Victor Hargrave
+     * @since 1.0.0
      */
     public DeckEntity() {
     }
 
     /**
      * @return Returns the ID.
+     *
+     * @author Victor Hargrave
+     * @since 1.0.0
      */
     public int getId() {
         return id;
@@ -176,6 +182,9 @@ public final class DeckEntity extends Entity {
 
     /**
      * @return Returns the player
+     *
+     * @author Victor Hargrave
+     * @since 1.0.0
      */
     public UserEntity getPlayer() {
         return player;
@@ -185,6 +194,9 @@ public final class DeckEntity extends Entity {
      * @param player The player.
      *
      * @return Returns the object for further processing.
+     *
+     * @author Victor Hargrave
+     * @since 1.0.0
      */
     public DeckEntity setPlayer(final UserEntity player) {
         this.player = player;
@@ -193,6 +205,9 @@ public final class DeckEntity extends Entity {
 
     /**
      * @return Returns the round.
+     *
+     * @author Victor Hargrave
+     * @since 1.0.0
      */
     public RoundEntity getRound() {
         return round;
@@ -202,6 +217,9 @@ public final class DeckEntity extends Entity {
      * @param round The round.
      *
      * @return Returns the object for further processing.
+     *
+     * @author Victor Hargrave
+     * @since 1.0.0
      */
     public DeckEntity setRound(final RoundEntity round) {
         this.round = round;
@@ -210,6 +228,9 @@ public final class DeckEntity extends Entity {
 
     /**
      * @return Returns card one.
+     *
+     * @author Victor Hargrave
+     * @since 1.0.0
      */
     public CardEntity getCardOne() {
         return cardOne;
@@ -219,6 +240,9 @@ public final class DeckEntity extends Entity {
      * @param cardOne Card one.
      *
      * @return Returns the object for further processing.
+     *
+     * @author Victor Hargrave
+     * @since 1.0.0
      */
     public DeckEntity setCardOne(final CardEntity cardOne) {
         this.cardOne = cardOne;
@@ -227,6 +251,9 @@ public final class DeckEntity extends Entity {
 
     /**
      * @return Returns boolean value if the first card has been played.
+     *
+     * @author Thomas Weber
+     * @since 1.0.0
      */
     public boolean getCardOneHasBeenPlayed() {
         return cardOneHasBeenPlayed;
@@ -234,6 +261,9 @@ public final class DeckEntity extends Entity {
 
     /**
      * @param cardOneHasBeenPlayed The first card has been played boolean.
+     *
+     * @author Thomas Weber
+     * @since 1.0.0
      */
     public void setCardOneHasBeenPlayed(final boolean cardOneHasBeenPlayed) {
         this.cardOneHasBeenPlayed = cardOneHasBeenPlayed;
@@ -241,6 +271,9 @@ public final class DeckEntity extends Entity {
 
     /**
      * @return Returns card two.
+     *
+     * @author Victor Hargrave
+     * @since 1.0.0
      */
     public CardEntity getCardTwo() {
         return cardTwo;
@@ -250,6 +283,9 @@ public final class DeckEntity extends Entity {
      * @param cardTwo Card two.
      *
      * @return Returns the object for further processing.
+     *
+     * @author Victor Hargrave
+     * @since 1.0.0
      */
     public DeckEntity setCardTwo(final CardEntity cardTwo) {
         this.cardTwo = cardTwo;
@@ -258,6 +294,9 @@ public final class DeckEntity extends Entity {
 
     /**
      * @return Returns boolean value if the second card has been played.
+     *
+     * @author Thomas Weber
+     * @since 1.0.0
      */
     public boolean getCardTwoHasBeenPlayed() {
         return cardTwoHasBeenPlayed;
@@ -265,6 +304,9 @@ public final class DeckEntity extends Entity {
 
     /**
      * @param cardTwoHasBeenPlayed The second card has been played boolean.
+     *
+     * @author Thomas Weber
+     * @since 1.0.0
      */
     public void setCardTwoHasBeenPlayed(final boolean cardTwoHasBeenPlayed) {
         this.cardTwoHasBeenPlayed = cardTwoHasBeenPlayed;
@@ -272,6 +314,9 @@ public final class DeckEntity extends Entity {
 
     /**
      * @return Returns card three.
+     *
+     * @author Victor Hargrave
+     * @since 1.0.0
      */
     public CardEntity getCardThree() {
         return cardThree;
@@ -281,6 +326,9 @@ public final class DeckEntity extends Entity {
      * @param cardThree Card three.
      *
      * @return Returns the object for further processing.
+     *
+     * @author Victor Hargrave
+     * @since 1.0.0
      */
     public DeckEntity setCardThree(final CardEntity cardThree) {
         this.cardThree = cardThree;
@@ -289,6 +337,9 @@ public final class DeckEntity extends Entity {
 
     /**
      * @return Returns boolean value if the third card has been played.
+     *
+     * @author Thomas Weber
+     * @since 1.0.0
      */
     public boolean getCardThreeHasBeenPlayed() {
         return cardThreeHasBeenPlayed;
@@ -296,6 +347,9 @@ public final class DeckEntity extends Entity {
 
     /**
      * @param cardThreeHasBeenPlayed The third card has been played boolean.
+     *
+     * @author Thomas Weber
+     * @since 1.0.0
      */
     public void setCardThreeHasBeenPlayed(final boolean cardThreeHasBeenPlayed) {
         this.cardThreeHasBeenPlayed = cardThreeHasBeenPlayed;
@@ -304,6 +358,9 @@ public final class DeckEntity extends Entity {
 
     /**
      * @return Returns card four.
+     *
+     * @author Victor Hargrave
+     * @since 1.0.0
      */
     public CardEntity getCardFour() {
         return cardFour;
@@ -313,6 +370,9 @@ public final class DeckEntity extends Entity {
      * @param cardFour Card four.
      *
      * @return Returns the object for further processing.
+     *
+     * @author Victor Hargrave
+     * @since 1.0.0
      */
     public DeckEntity setCardFour(final CardEntity cardFour) {
         this.cardFour = cardFour;
@@ -321,6 +381,9 @@ public final class DeckEntity extends Entity {
 
     /**
      * @return Returns boolean value if the fourth card has been played.
+     *
+     * @author Thomas Weber
+     * @since 1.0.0
      */
     public boolean getCardFourHasBeenPlayed() {
         return cardFourHasBeenPlayed;
@@ -328,6 +391,9 @@ public final class DeckEntity extends Entity {
 
     /**
      * @param cardFourHasBeenPlayed The fourth card has been played boolean.
+     *
+     * @author Thomas Weber
+     * @since 1.0.0
      */
     public void setCardFourHasBeenPlayed(final boolean cardFourHasBeenPlayed) {
         this.cardFourHasBeenPlayed = cardFourHasBeenPlayed;
@@ -335,6 +401,9 @@ public final class DeckEntity extends Entity {
 
     /**
      * @return Returns card five.
+     *
+     * @author Victor Hargrave
+     * @since 1.0.0
      */
     public CardEntity getCardFive() {
         return cardFive;
@@ -344,6 +413,9 @@ public final class DeckEntity extends Entity {
      * @param cardFive Card five.
      *
      * @return Returns the object for further processing.
+     *
+     * @author Victor Hargrave
+     * @since 1.0.0
      */
     public DeckEntity setCardFive(final CardEntity cardFive) {
         this.cardFive = cardFive;
@@ -352,6 +424,9 @@ public final class DeckEntity extends Entity {
 
     /**
      * @return Returns boolean value if the fifth card has been played.
+     *
+     * @author Thomas Weber
+     * @since 1.0.0
      */
     public boolean getCardFiveHasBeenPlayed() {
         return cardFiveHasBeenPlayed;
@@ -359,6 +434,9 @@ public final class DeckEntity extends Entity {
 
     /**
      * @param cardFiveHasBeenPlayed The fourth card has been played boolean.
+     *
+     * @author Thomas Weber
+     * @since 1.0.0
      */
     public void setCardFiveHasBeenPlayed(final boolean cardFiveHasBeenPlayed) {
         this.cardFiveHasBeenPlayed = cardFiveHasBeenPlayed;
@@ -367,6 +445,9 @@ public final class DeckEntity extends Entity {
 
     /**
      * @return Returns card six.
+     *
+     * @author Victor Hargrave
+     * @since 1.0.0
      */
     public CardEntity getCardSix() {
         return cardSix;
@@ -376,6 +457,9 @@ public final class DeckEntity extends Entity {
      * @param cardSix Card six.
      *
      * @return Returns the object for further processing.
+     *
+     * @author Victor Hargrave
+     * @since 1.0.0
      */
     public DeckEntity setCardSix(final CardEntity cardSix) {
         this.cardSix = cardSix;
@@ -384,6 +468,9 @@ public final class DeckEntity extends Entity {
 
     /**
      * @return Returns boolean value if the sixth card has been played.
+     *
+     * @author Thomas Weber
+     * @since 1.0.0
      */
     public boolean getCardSixHasBeenPlayed() {
         return cardSixHasBeenPlayed;
@@ -391,6 +478,9 @@ public final class DeckEntity extends Entity {
 
     /**
      * @param cardSixHasBeenPlayed The sixth card has been played boolean.
+     *
+     * @author Thomas Weber
+     * @since 1.0.0
      */
     public void setCardSixHasBeenPlayed(final boolean cardSixHasBeenPlayed) {
         this.cardSixHasBeenPlayed = cardSixHasBeenPlayed;
@@ -399,6 +489,9 @@ public final class DeckEntity extends Entity {
 
     /**
      * @return Returns card seven.
+     *
+     * @author Victor Hargrave
+     * @since 1.0.0
      */
     public CardEntity getCardSeven() {
         return cardSeven;
@@ -408,6 +501,9 @@ public final class DeckEntity extends Entity {
      * @param cardSeven Card seven.
      *
      * @return Returns the object for further processing.
+     *
+     * @author Victor Hargrave
+     * @since 1.0.0
      */
     public DeckEntity setCardSeven(final CardEntity cardSeven) {
         this.cardSeven = cardSeven;
@@ -416,6 +512,9 @@ public final class DeckEntity extends Entity {
 
     /**
      * @return Returns boolean value if the seventh card has been played.
+     *
+     * @author Thomas Weber
+     * @since 1.0.0
      */
     public boolean getCardSevenHasBeenPlayed() {
         return cardSevenHasBeenPlayed;
@@ -423,6 +522,9 @@ public final class DeckEntity extends Entity {
 
     /**
      * @param cardSevenHasBeenPlayed The sixth card has been played boolean.
+     *
+     * @author Thomas Weber
+     * @since 1.0.0
      */
     public void setCardSevenHasBeenPlayed(final boolean cardSevenHasBeenPlayed) {
         this.cardSevenHasBeenPlayed = cardSevenHasBeenPlayed;
@@ -431,6 +533,9 @@ public final class DeckEntity extends Entity {
 
     /**
      * @return Returns card eight.
+     *
+     * @author Victor Hargrave
+     * @since 1.0.0
      */
     public CardEntity getCardEight() {
         return cardEight;
@@ -440,6 +545,9 @@ public final class DeckEntity extends Entity {
      * @param cardEight Card eight.
      *
      * @return Returns the object for further processing.
+     *
+     * @author Victor Hargrave
+     * @since 1.0.0
      */
     public DeckEntity setCardEight(final CardEntity cardEight) {
         this.cardEight = cardEight;
@@ -448,6 +556,9 @@ public final class DeckEntity extends Entity {
 
     /**
      * @return Returns boolean value if the eight card has been played.
+     *
+     * @author Thomas Weber
+     * @since 1.0.0
      */
     public boolean getCardEightHasBeenPlayed() {
         return cardEightHasBeenPlayed;
@@ -455,6 +566,9 @@ public final class DeckEntity extends Entity {
 
     /**
      * @param cardEightHasBeenPlayed The sixth card has been played boolean.
+     *
+     * @author Thomas Weber
+     * @since 1.0.0
      */
     public void setCardEightHasBeenPlayed(final boolean cardEightHasBeenPlayed) {
         this.cardEightHasBeenPlayed = cardEightHasBeenPlayed;
@@ -463,6 +577,9 @@ public final class DeckEntity extends Entity {
 
     /**
      * @return Returns card nine.
+     *
+     * @author Victor Hargrave
+     * @since 1.0.0
      */
     public CardEntity getCardNine() {
         return cardNine;
@@ -472,6 +589,9 @@ public final class DeckEntity extends Entity {
      * @param cardNine Card nine.
      *
      * @return Returns the object for further processing.
+     *
+     * @author Victor Hargrave
+     * @since 1.0.0
      */
     public DeckEntity setCardNine(final CardEntity cardNine) {
         this.cardNine = cardNine;
@@ -480,6 +600,9 @@ public final class DeckEntity extends Entity {
 
     /**
      * @return Returns boolean value if the ninth card has been played.
+     *
+     * @author Thomas Weber
+     * @since 1.0.0
      */
     public boolean getCardNineHasBeenPlayed() {
         return cardNineHasBeenPlayed;
@@ -487,6 +610,9 @@ public final class DeckEntity extends Entity {
 
     /**
      * @param cardNineHasBeenPlayed The sixth card has been played boolean.
+     *
+     * @author Thomas Weber
+     * @since 1.0.0
      */
     public void setCardNineHasBeenPlayed(final boolean cardNineHasBeenPlayed) {
         this.cardNineHasBeenPlayed = cardNineHasBeenPlayed;
@@ -494,6 +620,9 @@ public final class DeckEntity extends Entity {
 
     /**
      * @return Returns the cards as an array.
+     *
+     * @author Victor Hargrave
+     * @since 1.0.0
      */
     public ArrayList<CardEntity> getCards() {
         ArrayList<CardEntity> cards = new ArrayList<>();
@@ -511,6 +640,9 @@ public final class DeckEntity extends Entity {
 
     /**
      * @return Returns booleans if cards were played as an array.
+     *
+     * @author Thomas Weber
+     * @since 1.0.0
      */
     public ArrayList<Boolean> getCardsHaveBeenPlayed() {
         ArrayList<Boolean> cardsHaveBeenPlayed = new ArrayList<>();
@@ -528,6 +660,9 @@ public final class DeckEntity extends Entity {
 
     /**
      * @param cardId Set the given card as played.
+     *
+     * @author Victor Hargrave
+     * @since 1.0.0
      */
     public void setPlayedCard(final int cardId) {
         if (cardId == cardOne.getId()) {

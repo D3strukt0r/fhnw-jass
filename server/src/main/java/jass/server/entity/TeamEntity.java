@@ -28,7 +28,7 @@ import jass.lib.database.Entity;
  *
  * @author Thomas Weber
  * @version %I%, %G%
- * @since 0.0.1
+ * @since 1.0.0
  */
 @DatabaseTable(tableName = "team")
 public final class TeamEntity extends Entity {
@@ -53,12 +53,18 @@ public final class TeamEntity extends Entity {
     /**
      * For ORMLite all persisted classes must define a no-arg constructor with
      * at least package visibility.
+     *
+     * @author Thomas Weber
+     * @since 1.0.0
      */
     public TeamEntity() {
     }
 
     /**
      * @return Returns the ID.
+     *
+     * @author Thomas Weber
+     * @since 1.0.0
      */
     public int getId() {
         return id;
@@ -66,6 +72,9 @@ public final class TeamEntity extends Entity {
 
     /**
      * @return Returns player one.
+     *
+     * @author Thomas Weber
+     * @since 1.0.0
      */
     public UserEntity getPlayerOne() {
         return playerOne;
@@ -75,6 +84,9 @@ public final class TeamEntity extends Entity {
      * @param playerOne Player one.
      *
      * @return Returns the object for further processing.
+     *
+     * @author Thomas Weber
+     * @since 1.0.0
      */
     public TeamEntity setPlayerOne(final UserEntity playerOne) {
         this.playerOne = playerOne;
@@ -83,6 +95,9 @@ public final class TeamEntity extends Entity {
 
     /**
      * @return Returns player two.
+     *
+     * @author Thomas Weber
+     * @since 1.0.0
      */
     public UserEntity getPlayerTwo() {
         return playerTwo;
@@ -92,6 +107,9 @@ public final class TeamEntity extends Entity {
      * @param playerTwo Player two.
      *
      * @return Returns the object for further processing.
+     *
+     * @author Thomas Weber
+     * @since 1.0.0
      */
     public TeamEntity setPlayerTwo(final UserEntity playerTwo) {
         this.playerTwo = playerTwo;
@@ -102,6 +120,9 @@ public final class TeamEntity extends Entity {
      * @param user The user to check.
      *
      * @return Returns true if the user is inside the team, otherwise false.
+     *
+     * @author Thomas Weber
+     * @since 1.0.0
      */
     public boolean checkIfPlayerIsInTeam(final UserEntity user) {
         return playerOne.equals(user) || playerTwo.equals(user);

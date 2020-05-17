@@ -35,7 +35,7 @@ import jass.lib.servicelocator.ServiceLocator;
  *
  * @author Manuele Vaccari
  * @version %I%, %G%
- * @since 0.0.1
+ * @since 1.0.0
  */
 public final class DeleteLogin extends Message {
     /**
@@ -50,12 +50,19 @@ public final class DeleteLogin extends Message {
 
     /**
      * @param rawData The data (still not casted)
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     public DeleteLogin(final MessageData rawData) {
         super(rawData);
         data = (LoginData) rawData;
     }
 
+    /**
+     * @author Manuele Vaccari
+     * @since 1.0.0
+     */
     @Override
     public boolean process(final SocketUtil socket) {
         socket.send(this);

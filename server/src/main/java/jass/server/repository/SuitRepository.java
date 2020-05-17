@@ -31,7 +31,7 @@ import java.util.List;
  *
  * @author Victor Hargrave
  * @version %I%, %G%
- * @since 0.0.1
+ * @since 1.0.0
  */
 public final class SuitRepository extends Repository<Dao<SuitEntity, Integer>, SuitEntity> {
     /**
@@ -45,6 +45,9 @@ public final class SuitRepository extends Repository<Dao<SuitEntity, Integer>, S
      * @param dao The DAO to edit inside the database.
      *
      * @return Returns the Repository.
+     *
+     * @author Victor Hargrave
+     * @since 1.0.0
      */
     public static SuitRepository getSingleton(final Dao<SuitEntity, Integer> dao) {
         if (singleton == null) {
@@ -55,6 +58,9 @@ public final class SuitRepository extends Repository<Dao<SuitEntity, Integer>, S
 
     /**
      * @param dao The DAO to edit inside the database.
+     *
+     * @author Victor Hargrave
+     * @since 1.0.0
      */
     public SuitRepository(final Dao<SuitEntity, Integer> dao) {
         super(dao);
@@ -65,6 +71,9 @@ public final class SuitRepository extends Repository<Dao<SuitEntity, Integer>, S
      *
      * @return Returns the SuitEntity of the suit, or null if not found or
      * something went wrong.
+     *
+     * @author Victor Hargrave
+     * @since 1.0.0
      */
     public SuitEntity getByName(final String name) {
         try {

@@ -19,9 +19,17 @@
 
 package jass.client.eventlistener;
 
+/**
+ * @author Manuele Vaccari
+ * @version %I%, %G%
+ * @since 1.0.0
+ */
 public interface DisconnectEventListener {
     /**
      * Executes when the connection is lost.
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     void onDisconnectEvent();
 }

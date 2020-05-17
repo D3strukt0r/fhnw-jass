@@ -24,8 +24,16 @@ import jass.lib.message.StopPlayingData;
 /**
  * @author Victor Hargrave
  * @version %I%, %G%
- * @since 0.0.1
+ * @since 1.0.0
  */
 public interface StopPlayingEventListener {
+    /**
+     * Executes when a user says he wants to stop playing.
+     *
+     * @param data The data (basically the ID).
+     *
+     * @author Victor Hargrave
+     * @since 1.0.0
+     */
     void onStopPlaying(StopPlayingData data);
 }

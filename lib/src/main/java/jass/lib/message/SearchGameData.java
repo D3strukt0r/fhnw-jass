@@ -25,8 +25,9 @@ import org.json.JSONObject;
  * The data model for the Search Game message.
  *
  * @author Thomas Weber
+ * @version %I%, %G%
+ * @since 1.0.0
  */
-
 public final class SearchGameData extends MessageData {
     /**
      * The token of the current session.
@@ -41,6 +42,9 @@ public final class SearchGameData extends MessageData {
     /**
      * @param token    The token of the current session.
      * @param username The username of the player searching.
+     *
+     * @author Thomas Weber
+     * @since 1.0.0
      */
     public SearchGameData(final String token, final String username) {
         super("SearchGame");
@@ -50,6 +54,9 @@ public final class SearchGameData extends MessageData {
 
     /**
      * @param data The message containing all the data.
+     *
+     * @author Thomas Weber
+     * @since 1.0.0
      */
     public SearchGameData(final JSONObject data) {
         super(data);
@@ -59,6 +66,9 @@ public final class SearchGameData extends MessageData {
 
     /**
      * @return Returns the token.
+     *
+     * @author Thomas Weber
+     * @since 1.0.0
      */
     public String getToken() {
         return token;
@@ -66,6 +76,9 @@ public final class SearchGameData extends MessageData {
 
     /**
      * @return Returns the username.
+     *
+     * @author Thomas Weber
+     * @since 1.0.0
      */
     public String getUsername() {
         return username;

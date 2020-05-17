@@ -29,6 +29,7 @@ import java.util.List;
  * @param <E> The entity
  *
  * @author Victor Hargrave & Manuele Vaccari
+ * @since 1.0.0
  */
 public abstract class Repository<D extends Dao<E, Integer>, E extends Entity> {
     /**
@@ -38,6 +39,9 @@ public abstract class Repository<D extends Dao<E, Integer>, E extends Entity> {
 
     /**
      * @param dao The DAO for editing the database.
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     public Repository(final D dao) {
         this.dao = dao;
@@ -45,6 +49,9 @@ public abstract class Repository<D extends Dao<E, Integer>, E extends Entity> {
 
     /**
      * @return Returns the DAO.
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     public D getDao() {
         return dao;
@@ -54,6 +61,9 @@ public abstract class Repository<D extends Dao<E, Integer>, E extends Entity> {
      * @param entity The entity to be added.
      *
      * @return Returns true if successful and false if failed.
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     public boolean add(final E entity) {
         try {
@@ -69,6 +79,9 @@ public abstract class Repository<D extends Dao<E, Integer>, E extends Entity> {
      * @param entity The entity to be removed.
      *
      * @return Returns true if successful and false if failed.
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     public boolean remove(final E entity) {
         try {
@@ -84,6 +97,9 @@ public abstract class Repository<D extends Dao<E, Integer>, E extends Entity> {
      * @param entity The entity to be updated.
      *
      * @return Returns true if successful and false if failed.
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     public boolean update(final E entity) {
         try {
@@ -99,6 +115,9 @@ public abstract class Repository<D extends Dao<E, Integer>, E extends Entity> {
      * @param id The id of the tuple to find.
      *
      * @return Returns the entity or null if not found.
+     *
+     * @author Victor Hargrave
+     * @since 1.0.0
      */
     public E getById(final int id) {
         try {
@@ -110,6 +129,9 @@ public abstract class Repository<D extends Dao<E, Integer>, E extends Entity> {
 
     /**
      * @return Returns all tuples or null if an error happened.
+     *
+     * @author Victor Hargrave
+     * @since 1.0.0
      */
     public List<E> getAll() {
         try {

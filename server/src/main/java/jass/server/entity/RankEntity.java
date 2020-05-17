@@ -26,9 +26,9 @@ import jass.lib.database.Entity;
 /**
  * A model with all known (and cached) Games.
  *
- * @author Victor Hargrave
+ * @author Victor Hargrave & Manuele Vaccari
  * @version %I%, %G%
- * @since 0.0.1
+ * @since 1.0.0
  */
 @DatabaseTable(tableName = "rank")
 public final class RankEntity extends Entity {
@@ -65,12 +65,18 @@ public final class RankEntity extends Entity {
     /**
      * For ORMLite all persisted classes must define a no-arg constructor with
      * at least package visibility.
+     *
+     * @author Victor Hargrave
+     * @since 1.0.0
      */
     public RankEntity() {
     }
 
     /**
      * @return Returns the ID.
+     *
+     * @author Victor Hargrave
+     * @since 1.0.0
      */
     public int getId() {
         return id;
@@ -80,6 +86,9 @@ public final class RankEntity extends Entity {
      * @param id The ID.
      *
      * @return Returns the object for further processing.
+     *
+     * @author Victor Hargrave
+     * @since 1.0.0
      */
     public RankEntity setId(final int id) {
         this.id = id;
@@ -88,6 +97,9 @@ public final class RankEntity extends Entity {
 
     /**
      * @return Returns the rank.
+     *
+     * @author Victor Hargrave
+     * @since 1.0.0
      */
     public String getKey() {
         return key;
@@ -97,6 +109,9 @@ public final class RankEntity extends Entity {
      * @param key The kex.
      *
      * @return Returns the object for further processing.
+     *
+     * @author Victor Hargrave
+     * @since 1.0.0
      */
     public RankEntity setKey(final String key) {
         this.key = key;
@@ -105,6 +120,9 @@ public final class RankEntity extends Entity {
 
     /**
      * @return Returns the points for trumpf.
+     *
+     * @author Victor Hargrave
+     * @since 1.0.0
      */
     public int getPointsTrumpf() {
         return pointsTrumpf;
@@ -114,6 +132,9 @@ public final class RankEntity extends Entity {
      * @param pointsTrumpf Points trumpf.
      *
      * @return Returns the object for further processing.
+     *
+     * @author Victor Hargrave
+     * @since 1.0.0
      */
     public RankEntity setPointsTrumpf(final int pointsTrumpf) {
         this.pointsTrumpf = pointsTrumpf;
@@ -122,6 +143,9 @@ public final class RankEntity extends Entity {
 
     /**
      * @return Returns the points for obe abe.
+     *
+     * @author Victor Hargrave
+     * @since 1.0.0
      */
     public int getPointsObeAbe() {
         return pointsObeAbe;
@@ -131,6 +155,9 @@ public final class RankEntity extends Entity {
      * @param pointsObeAbe Points obe abe.
      *
      * @return Returns the object for further processing.
+     *
+     * @author Victor Hargrave
+     * @since 1.0.0
      */
     public RankEntity setPointsObeAbe(final int pointsObeAbe) {
         this.pointsObeAbe = pointsObeAbe;
@@ -139,6 +166,9 @@ public final class RankEntity extends Entity {
 
     /**
      * @return Returns the points for onde ufe
+     *
+     * @author Victor Hargrave
+     * @since 1.0.0
      */
     public int getPointsOndeufe() {
         return pointsOndeufe;
@@ -148,12 +178,23 @@ public final class RankEntity extends Entity {
      * @param pointsOndeufe Points onde ufe.
      *
      * @return Returns the object for further processing.
+     *
+     * @author Victor Hargrave
+     * @since 1.0.0
      */
     public RankEntity setPointsOndeufe(final int pointsOndeufe) {
         this.pointsOndeufe = pointsOndeufe;
         return this;
     }
 
+    /**
+     * @param o The rank object
+     *
+     * @return Returns whether it's the same object or not.
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
+     */
     @Override
     public boolean equals(final Object o) {
         if (this == o) {
@@ -168,6 +209,12 @@ public final class RankEntity extends Entity {
         return id == that.id;
     }
 
+    /**
+     * @return Returns the hashcode.
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
+     */
     @Override
     public int hashCode() {
         return id;

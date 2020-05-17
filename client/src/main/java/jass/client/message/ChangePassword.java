@@ -34,7 +34,7 @@ import jass.lib.servicelocator.ServiceLocator;
  *
  * @author Manuele Vaccari
  * @version %I%, %G%
- * @since 0.0.1
+ * @since 1.0.0
  */
 public final class ChangePassword extends Message {
     /**
@@ -49,12 +49,19 @@ public final class ChangePassword extends Message {
 
     /**
      * @param rawData The data (still not casted)
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     public ChangePassword(final MessageData rawData) {
         super(rawData);
         data = (ChangePasswordData) rawData;
     }
 
+    /**
+     * @author Manuele Vaccari
+     * @since 1.0.0
+     */
     @Override
     public boolean process(final SocketUtil socket) {
         socket.send(this);

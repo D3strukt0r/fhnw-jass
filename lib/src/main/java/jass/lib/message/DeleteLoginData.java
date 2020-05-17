@@ -26,7 +26,7 @@ import org.json.JSONObject;
  *
  * @author Manuele Vaccari
  * @version %I%, %G%
- * @since 0.0.1
+ * @since 1.0.0
  */
 public final class DeleteLoginData extends MessageData {
     /**
@@ -36,6 +36,9 @@ public final class DeleteLoginData extends MessageData {
 
     /**
      * @param token The token for the current session.
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     public DeleteLoginData(final String token) {
         super("DeleteLogin");
@@ -44,6 +47,9 @@ public final class DeleteLoginData extends MessageData {
 
     /**
      * @param data The message containing all the data.
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     public DeleteLoginData(final JSONObject data) {
         super(data);
@@ -52,6 +58,9 @@ public final class DeleteLoginData extends MessageData {
 
     /**
      * @return Returns the token.
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     public String getToken() {
         return token;

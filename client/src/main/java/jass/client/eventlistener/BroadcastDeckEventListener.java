@@ -21,11 +21,19 @@ package jass.client.eventlistener;
 
 import jass.lib.message.BroadcastDeckData;
 
+/**
+ * @author Victor Hargrave
+ * @version %I%, %G%
+ * @since 1.0.0
+ */
 public interface BroadcastDeckEventListener {
     /**
      * Executes when a game is found.
      *
      * @param msgData The deck of the user.
+     *
+     * @author Victor Hargrave
+     * @since 1.0.0
      */
     void onBroadcastDeck(BroadcastDeckData msgData);
 }

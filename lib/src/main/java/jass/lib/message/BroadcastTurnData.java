@@ -28,24 +28,44 @@ import java.util.List;
 /**
  * @author Victor Hargrave
  * @version %I%, %G%
- * @since 0.0.1
+ * @since 1.0.0
  */
 public final class BroadcastTurnData extends MessageData {
-
+    /**
+     * The turn.
+     */
     private final int turnId;
 
+    /**
+     * The username of the player who starts.
+     */
     private final String startingPlayer;
 
+    /**
+     * The username of the player who won.
+     */
     private final String winningPlayer;
 
+    /**
+     * The played cards in the turn.
+     */
     private final JSONArray playedCards;
 
+    /**
+     * The played cards (unserialized).
+     */
     private ArrayList<CardData> playedCardsClient = null;
 
-    public BroadcastTurnData(final int turnId,
-                             final String startingPlayer,
-                             final String winningPlayer,
-                             final List<CardData> playedCards) {
+    /**
+     * @param turnId         The turn.
+     * @param startingPlayer The username of the player who starts.
+     * @param winningPlayer  The username of the player who won.
+     * @param playedCards    The played cards in the turn.
+     *
+     * @author Victor Hargrave
+     * @since 1.0.0
+     */
+    public BroadcastTurnData(final int turnId, final String startingPlayer, final String winningPlayer, final List<CardData> playedCards) {
         super("BroadcastTurn");
         this.turnId = turnId;
         this.startingPlayer = startingPlayer;
@@ -75,22 +95,52 @@ public final class BroadcastTurnData extends MessageData {
         }
     }
 
+    /**
+     * @return Returns the turn.
+     *
+     * @author Victor Hargrave
+     * @since 1.0.0
+     */
     public int getTurnId() {
         return turnId;
     }
 
+    /**
+     * @return Returns the username of the player who starts.
+     *
+     * @author Victor Hargrave
+     * @since 1.0.0
+     */
     public String getStartingPlayer() {
         return startingPlayer;
     }
 
+    /**
+     * @return Returns the username of the player who won.
+     *
+     * @author Victor Hargrave
+     * @since 1.0.0
+     */
     public String getWinningPlayer() {
         return winningPlayer;
     }
 
+    /**
+     * @return Returns the played cards in the turn.
+     *
+     * @author Victor Hargrave
+     * @since 1.0.0
+     */
     public JSONArray getPlayedCards() {
         return playedCards;
     }
 
+    /**
+     * @return Returns the played cards (unserialized).
+     *
+     * @author Victor Hargrave
+     * @since 1.0.0
+     */
     public ArrayList<CardData> getPlayedCardsClient() {
         return playedCardsClient;
     }

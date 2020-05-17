@@ -22,9 +22,9 @@ package jass.lib.message;
 import org.json.JSONObject;
 
 /**
- * @author Victor Hargrave & Manuele Vaccari
+ * @author Victor Hargrave
  * @version %I%, %G%
- * @since 0.0.1
+ * @since 1.0.0
  */
 public final class PlayCardData extends MessageData {
     /**
@@ -40,6 +40,9 @@ public final class PlayCardData extends MessageData {
     /**
      * @param turnId The ID of the turn.
      * @param cardId The ID of the card.
+     *
+     * @author Victor Hargrave
+     * @since 1.0.0
      */
     public PlayCardData(final int turnId, final int cardId) {
         super("PlayCard");
@@ -49,6 +52,9 @@ public final class PlayCardData extends MessageData {
 
     /**
      * @param data The message containing all the data.
+     *
+     * @author Victor Hargrave
+     * @since 1.0.0
      */
     public PlayCardData(final JSONObject data) {
         super(data);
@@ -58,6 +64,9 @@ public final class PlayCardData extends MessageData {
 
     /**
      * @return Returns the turn ID.
+     *
+     * @author Victor Hargrave
+     * @since 1.0.0
      */
     public int getTurnId() {
         return turnId;
@@ -65,6 +74,9 @@ public final class PlayCardData extends MessageData {
 
     /**
      * @return Returns the card ID.
+     *
+     * @author Victor Hargrave
+     * @since 1.0.0
      */
     public int getCardId() {
         return cardId;

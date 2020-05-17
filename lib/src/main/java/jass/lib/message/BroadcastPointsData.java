@@ -25,6 +25,8 @@ import org.json.JSONObject;
  * The data model for the BroadcastPointsData message.
  *
  * @author Manuele Vaccari
+ * @version %I%, %G%
+ * @since 1.0.0
  */
 public final class BroadcastPointsData extends MessageData {
     /**
@@ -39,7 +41,10 @@ public final class BroadcastPointsData extends MessageData {
 
     /**
      * @param turnId The deck ID.
-     * @param points  The cards.
+     * @param points The cards.
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     public BroadcastPointsData(final int turnId, final int points) {
         super("BroadcastPoints");
@@ -49,6 +54,9 @@ public final class BroadcastPointsData extends MessageData {
 
     /**
      * @param data The message containing all the data.
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     public BroadcastPointsData(final JSONObject data) {
         super(data);
@@ -58,6 +66,9 @@ public final class BroadcastPointsData extends MessageData {
 
     /**
      * @return Returns the turn ID.
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     public int getTurnId() {
         return turnId;
@@ -65,6 +76,9 @@ public final class BroadcastPointsData extends MessageData {
 
     /**
      * @return Returns the points.
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     public int getPoints() {
         return points;

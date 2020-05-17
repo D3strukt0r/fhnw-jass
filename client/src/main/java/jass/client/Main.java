@@ -39,7 +39,7 @@ import jass.client.util.WindowUtil;
  *
  * @author Manuele Vaccari
  * @version %I%, %G%
- * @since 0.0.1
+ * @since 1.0.0
  */
 public final class Main extends Application {
     /**
@@ -49,6 +49,9 @@ public final class Main extends Application {
 
     /**
      * @param args The arguments passed in the console.
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     public static void main(final String[] args) {
         // Create all arguments for the command line interface
@@ -83,6 +86,10 @@ public final class Main extends Application {
         launch(args);
     }
 
+    /**
+     * @author Manuele Vaccari
+     * @since 1.0.0
+     */
     @Override
     public void start(final Stage primaryStage) {
         WindowUtil.openInNewWindow(SplashView.class);

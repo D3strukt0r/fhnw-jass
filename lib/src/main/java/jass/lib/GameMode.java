@@ -19,6 +19,11 @@
 
 package jass.lib;
 
+/**
+ * @author Manuele Vaccari
+ * @version %I%, %G%
+ * @since 1.0.0
+ */
 public enum GameMode {
     /**
      * Trumpf game mode.
@@ -35,6 +40,10 @@ public enum GameMode {
      */
     ONDE_UFE;
 
+    /**
+     * @author Manuele Vaccari
+     * @since 1.0.0
+     */
     @Override
     public String toString() {
         switch (this) {
@@ -53,6 +62,9 @@ public enum GameMode {
      * @param string The game mode as string.
      *
      * @return Returns the corresponding game mode object.
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     public static GameMode fromString(final String string) {
         switch (string) {

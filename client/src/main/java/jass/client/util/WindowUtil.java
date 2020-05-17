@@ -33,14 +33,20 @@ import java.util.Map;
  *
  * @author Manuele Vaccari & Victor Hargrave
  * @version %I%, %G%
- * @since 0.0.1
+ * @since 1.0.0
  */
 public final class WindowUtil {
-    static Map<Class, View> instantiatedViews = new HashMap<>();
+    /**
+     * All the views that have already been created.
+     */
+    private static final Map<Class<? extends View>, View> instantiatedViews = new HashMap<>();
 
     /**
      * Utility classes, which are collections of static members, are not meant
      * to be instantiated.
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     private WindowUtil() {
         throw new IllegalStateException("Utility class");
@@ -51,6 +57,9 @@ public final class WindowUtil {
      *
      * @param oldView   The old view.
      * @param viewClass The new view.
+     *
+     * @author Manuele Vaccari & Victor Hargrave
+     * @since 1.0.0
      */
     public static void switchTo(final View oldView, final Class<? extends View> viewClass) {
         Platform.runLater(() -> {
@@ -75,6 +84,9 @@ public final class WindowUtil {
      *
      * @param oldView   The old view.
      * @param viewClass The new view.
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     public static void switchToNewWindow(final View oldView, final Class<? extends View> viewClass) {
         openInNewWindow(viewClass);
@@ -85,6 +97,9 @@ public final class WindowUtil {
      * Opens the view in a new window.
      *
      * @param viewClass The new view.
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     public static void openInNewWindow(final Class<? extends View> viewClass) {
         Platform.runLater(() -> {

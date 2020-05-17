@@ -26,7 +26,7 @@ import org.json.JSONObject;
  *
  * @author Manuele Vaccari
  * @version %I%, %G%
- * @since 0.0.1
+ * @since 1.0.0
  */
 public final class MessageErrorData extends MessageData {
     /**
@@ -43,6 +43,9 @@ public final class MessageErrorData extends MessageData {
 
     /**
      * @param errorMessage The error type that occurred.
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     public MessageErrorData(final ErrorType errorMessage) {
         super("MessageError");
@@ -51,6 +54,9 @@ public final class MessageErrorData extends MessageData {
 
     /**
      * @param data The message containing all the data.
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     public MessageErrorData(final JSONObject data) {
         super(data);
@@ -59,6 +65,9 @@ public final class MessageErrorData extends MessageData {
 
     /**
      * @return Returns the error type that occurred.
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     public ErrorType getErrorMessage() {
         return errorMessage;

@@ -30,7 +30,7 @@ import jass.server.util.ServerSocketUtil;
  *
  * @author Manuele Vaccari
  * @version %I%, %G%
- * @since 0.0.1
+ * @since 1.0.0
  */
 public final class UserOnline extends Message {
     /**
@@ -39,7 +39,10 @@ public final class UserOnline extends Message {
     private final UserOnlineData data;
 
     /**
-     * @param rawData The data (still not casted)
+     * @param rawData The data (still not casted).
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     public UserOnline(final MessageData rawData) {
         super(rawData);
@@ -51,6 +54,9 @@ public final class UserOnline extends Message {
      * <p>
      * Note that "false" can also mean that the user asking the question is not
      * logged in, and therefore cannot ask this question.
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     @Override
     public void process(final ClientUtil client) {

@@ -27,16 +27,23 @@ import jass.server.util.ClientUtil;
  *
  * @author Manuele Vaccari
  * @version %I%, %G%
- * @since 0.0.1
+ * @since 1.0.0
  */
 public final class BroadcastPoints extends Message {
     /**
-     * @param rawData The data (still not casted)
+     * @param rawData The data (still not casted).
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     public BroadcastPoints(final MessageData rawData) {
         super(rawData);
     }
 
+    /**
+     * @author Manuele Vaccari
+     * @since 1.0.0
+     */
     @Override
     public void process(final ClientUtil client) {
         client.send(this);

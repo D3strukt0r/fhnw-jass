@@ -23,6 +23,11 @@ import jass.client.util.SocketUtil;
 import jass.lib.message.GameFoundData;
 import jass.lib.message.MessageData;
 
+/**
+ * @author Thomas Weber
+ * @version %I%, %G%
+ * @since 1.0.0
+ */
 public final class GameFound extends Message {
     /**
      * The data of the message.
@@ -31,12 +36,19 @@ public final class GameFound extends Message {
 
     /**
      * @param rawData The data (still not casted)
+     *
+     * @author Thomas Weber
+     * @since 1.0.0
      */
     public GameFound(final MessageData rawData) {
         super(rawData);
         data = (GameFoundData) rawData;
     }
 
+    /**
+     * @author Thomas Weber
+     * @since 1.0.0
+     */
     @Override
     public boolean process(final SocketUtil socket) {
         return false;

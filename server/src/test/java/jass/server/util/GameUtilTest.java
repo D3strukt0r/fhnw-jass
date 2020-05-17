@@ -42,7 +42,7 @@ import org.junit.Test;
  *
  * @author Thomas Weber, Manuele Vaccari, Sasa Trajkova
  * @version %I%, %G%
- * @since 0.0.1
+ * @since 1.0.0
  */
 public final class GameUtilTest {
     /*
@@ -107,6 +107,7 @@ public final class GameUtilTest {
      * Generates all cards before testing.
      *
      * @author Thomas Weber
+     * @since 1.0.0
      */
     @Before
     public void createTestData() {
@@ -119,6 +120,7 @@ public final class GameUtilTest {
      * Generate Rank Data.
      *
      * @author Thomas Weber
+     * @since 1.0.0
      */
     private ArrayList<RankEntity> insertRankSeedData() {
         ArrayList<RankEntity> createdRanks = new ArrayList<>();
@@ -138,6 +140,7 @@ public final class GameUtilTest {
      * Generate Suit Data.
      *
      * @author Thomas Weber
+     * @since 1.0.0
      */
     private ArrayList<SuitEntity> insertSuitSeedData() {
         ArrayList<SuitEntity> createdSuits = new ArrayList<>();
@@ -152,6 +155,7 @@ public final class GameUtilTest {
      * Generate Card Data.
      *
      * @author Thomas Weber
+     * @since 1.0.0
      */
     private ArrayList<CardEntity> insertCardSeedData() {
         ArrayList<CardEntity> createdCards = new ArrayList<>();
@@ -188,6 +192,7 @@ public final class GameUtilTest {
 
     /**
      * @author Thomas Weber
+     * @since 1.0.0
      */
     @Test
     public void testValidateMoveTrump1() {
@@ -235,6 +240,7 @@ public final class GameUtilTest {
 
     /**
      * @author Thomas Weber
+     * @since 1.0.0
      */
     @Test
     public void testValidateMoveTrump2() {
@@ -281,6 +287,7 @@ public final class GameUtilTest {
 
     /**
      * @author Thomas Weber
+     * @since 1.0.0
      */
     @Test
     public void testValidateMoveTrump3() {
@@ -327,6 +334,7 @@ public final class GameUtilTest {
 
     /**
      * @author Thomas Weber
+     * @since 1.0.0
      */
     @Test
     public void testValidateMoveTrump4() {
@@ -371,6 +379,7 @@ public final class GameUtilTest {
 
     /**
      * @author Manuele Vaccari
+     * @since 1.0.0
      */
     @Test
     public void testValidateMoveObeAbe1() {
@@ -414,6 +423,7 @@ public final class GameUtilTest {
 
     /**
      * @author Manuele Vaccari
+     * @since 1.0.0
      */
     @Test
     public void testValidateMoveObeAbe2() {
@@ -456,6 +466,7 @@ public final class GameUtilTest {
 
     /**
      * @author Manuele Vaccari
+     * @since 1.0.0
      */
     @Test
     public void testValidateMoveObeAbe3() {
@@ -499,6 +510,7 @@ public final class GameUtilTest {
 
     /**
      * @author Sasa Trajkova
+     * @since 1.0.0
      */
     @Test
     public void testValidateMoveOndeUfe1() {
@@ -541,6 +553,7 @@ public final class GameUtilTest {
 
     /**
      * @author Sasa Trajkova
+     * @since 1.0.0
      */
     @Test
     public void testValidateMoveOndeUfe2() {
@@ -583,6 +596,7 @@ public final class GameUtilTest {
 
     /**
      * @author Sasa Trajkova
+     * @since 1.0.0
      */
     @Test
     public void testValidateMoveOndeUfe3() {

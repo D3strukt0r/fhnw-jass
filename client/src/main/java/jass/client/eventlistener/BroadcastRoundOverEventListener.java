@@ -24,8 +24,16 @@ import jass.lib.message.BroadcastRoundOverData;
 /**
  * @author Victor Hargrave
  * @version %I%, %G%
- * @since 0.0.1
+ * @since 1.0.0
  */
 public interface BroadcastRoundOverEventListener {
+    /**
+     * Executes when the server says that a round is over.
+     *
+     * @param data The data.
+     *
+     * @author Victor Hargrave
+     * @since 1.0.0
+     */
     void onRoundOver(BroadcastRoundOverData data);
 }

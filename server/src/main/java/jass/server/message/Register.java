@@ -35,7 +35,7 @@ import org.json.JSONObject;
  *
  * @author Manuele Vaccari
  * @version %I%, %G%
- * @since 0.0.1
+ * @since 1.0.0
  */
 public final class Register extends Message {
     /**
@@ -59,13 +59,20 @@ public final class Register extends Message {
     private static final int PASSWORD_MIN_LENGTH = 3;
 
     /**
-     * @param rawData The data (still not casted)
+     * @param rawData The data (still not casted).
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     public Register(final MessageData rawData) {
         super(rawData);
         data = (RegisterData) rawData;
     }
 
+    /**
+     * @author Manuele Vaccari
+     * @since 1.0.0
+     */
     @Override
     public void process(final ClientUtil client) {
         // Check if data is available

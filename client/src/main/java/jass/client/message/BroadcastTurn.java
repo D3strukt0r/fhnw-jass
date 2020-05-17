@@ -24,9 +24,9 @@ import jass.lib.message.BroadcastTurnData;
 import jass.lib.message.MessageData;
 
 /**
- * @author Victor Hargrave & Manuele Vaccari
+ * @author Victor Hargrave
  * @version %I%, %G%
- * @since 0.0.1
+ * @since 1.0.0
  */
 public final class BroadcastTurn extends Message {
     /**
@@ -36,12 +36,19 @@ public final class BroadcastTurn extends Message {
 
     /**
      * @param rawData The data (still not casted)
+     *
+     * @author Victor Hargrave
+     * @since 1.0.0
      */
     public BroadcastTurn(final MessageData rawData) {
         super(rawData);
         data = (BroadcastTurnData) rawData;
     }
 
+    /**
+     * @author Victor Hargrave
+     * @since 1.0.0
+     */
     @Override
     public boolean process(final SocketUtil socket) {
         // No processing required. Is handled in event handlers.

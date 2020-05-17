@@ -27,16 +27,23 @@ import jass.server.util.ClientUtil;
  *
  * @author Thomas Weber
  * @version %I%, %G%
- * @since 0.0.1
+ * @since 1.0.0
  */
 public final class GameFound extends Message {
     /**
-     * @param rawData The data (still not casted)
+     * @param rawData The data (still not casted).
+     *
+     * @author Thomas Weber
+     * @since 1.0.0
      */
     public GameFound(final MessageData rawData) {
         super(rawData);
     }
 
+    /**
+     * @author Thomas Weber
+     * @since 1.0.0
+     */
     @Override
     public void process(final ClientUtil client) {
         client.send(this);

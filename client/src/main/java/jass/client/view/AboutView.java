@@ -34,11 +34,14 @@ import java.io.IOException;
  *
  * @author Manuele Vaccari
  * @version %I%, %G%
- * @since 0.0.1
+ * @since 1.0.0
  */
 public final class AboutView extends View {
     /**
      * @param stage The stage of the window.
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     public AboutView(final Stage stage) {
         super(stage);
@@ -47,6 +50,10 @@ public final class AboutView extends View {
         stage.setWidth(300);
     }
 
+    /**
+     * @author Manuele Vaccari
+     * @since 1.0.0
+     */
     @Override
     protected Scene createGUI() {
         try {

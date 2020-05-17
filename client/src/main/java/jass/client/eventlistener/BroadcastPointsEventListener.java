@@ -24,7 +24,7 @@ import jass.lib.message.BroadcastPointsData;
 /**
  * @author Manuele Vaccari
  * @version %I%, %G%
- * @since 0.0.1
+ * @since 1.0.0
  */
 public interface BroadcastPointsEventListener {
     /**
@@ -33,6 +33,7 @@ public interface BroadcastPointsEventListener {
      * @param data The points gained in a turn.
      *
      * @author Manuele Vaccari
+     * @since 1.0.0
      */
     void onBroadcastPoints(BroadcastPointsData data);
 }

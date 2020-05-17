@@ -36,7 +36,7 @@ import jass.lib.servicelocator.Service;
  *
  * @author Thomas Weber, Manuele Vaccari
  * @version %I%, %G%
- * @since 0.0.1
+ * @since 1.0.0
  */
 public final class SearchGameUtil extends Thread implements Service, Closeable {
     /**
@@ -66,11 +66,18 @@ public final class SearchGameUtil extends Thread implements Service, Closeable {
 
     /**
      * Empty constructor.
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     public SearchGameUtil() {
         // TODO Restore running games after server maybe crashed/stopped
     }
 
+    /**
+     * @author Thomas Weber, Manuele Vaccari
+     * @since 1.0.0
+     */
     @Override
     public void run() {
         while (running) {
@@ -105,6 +112,10 @@ public final class SearchGameUtil extends Thread implements Service, Closeable {
         }
     }
 
+    /**
+     * @author Manuele Vaccari
+     * @since 1.0.0
+     */
     @Override
     public void close() {
         running = false;
@@ -115,6 +126,9 @@ public final class SearchGameUtil extends Thread implements Service, Closeable {
      * searching list remove the client.
      *
      * @param client The client to add.
+     *
+     * @author Thomas Weber
+     * @since 1.0.0
      */
     public synchronized void add(final ClientUtil client) {
         if (!searchingClients.contains(client)) {
@@ -128,6 +142,9 @@ public final class SearchGameUtil extends Thread implements Service, Closeable {
      * been found.
      *
      * @param client The client to remove.
+     *
+     * @author Thomas Weber
+     * @since 1.0.0
      */
     public synchronized void remove(final ClientUtil client) {
         Iterator<ClientUtil> iterator = searchingClients.iterator();

@@ -24,9 +24,17 @@ import jass.lib.message.BroadcastAPlayerQuitData;
 /**
  * @author Victor Hargrave
  * @version %I%, %G%
- * @since 0.0.1
+ * @since 1.0.0
  */
-
 public interface BroadcastAPlayerQuitEventListener {
+    /**
+     * Executes when the server broadcasts that one player has already left the
+     * game.
+     *
+     * @param data The data (basically the ID).
+     *
+     * @author Victor Hargrave
+     * @since 1.0.0
+     */
     void onAPlayerQuit(BroadcastAPlayerQuitData data);
 }

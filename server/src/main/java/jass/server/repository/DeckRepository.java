@@ -28,7 +28,7 @@ import jass.server.entity.DeckEntity;
  *
  * @author Victor Hargrave
  * @version %I%, %G%
- * @since 0.0.1
+ * @since 1.0.0
  */
 public final class DeckRepository extends Repository<Dao<DeckEntity, Integer>, DeckEntity> {
     /**
@@ -42,6 +42,9 @@ public final class DeckRepository extends Repository<Dao<DeckEntity, Integer>, D
      * @param dao The DAO to edit inside the database.
      *
      * @return Returns the Repository.
+     *
+     * @author Victor Hargrave
+     * @since 1.0.0
      */
     public static DeckRepository getSingleton(final Dao<DeckEntity, Integer> dao) {
         if (singleton == null) {
@@ -52,6 +55,9 @@ public final class DeckRepository extends Repository<Dao<DeckEntity, Integer>, D
 
     /**
      * @param dao The DAO to edit inside the database.
+     *
+     * @author Victor Hargrave
+     * @since 1.0.0
      */
     public DeckRepository(final Dao<DeckEntity, Integer> dao) {
         super(dao);

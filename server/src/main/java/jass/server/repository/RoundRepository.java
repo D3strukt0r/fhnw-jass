@@ -28,7 +28,7 @@ import jass.server.entity.RoundEntity;
  *
  * @author Victor Hargrave
  * @version %I%, %G%
- * @since 0.0.1
+ * @since 1.0.0
  */
 public final class RoundRepository extends Repository<Dao<RoundEntity, Integer>, RoundEntity> {
     /**
@@ -42,6 +42,9 @@ public final class RoundRepository extends Repository<Dao<RoundEntity, Integer>,
      * @param dao The DAO to edit inside the database.
      *
      * @return Returns the Repository.
+     *
+     * @author Victor Hargrave
+     * @since 1.0.0
      */
     public static RoundRepository getSingleton(final Dao<RoundEntity, Integer> dao) {
         if (singleton == null) {
@@ -52,6 +55,9 @@ public final class RoundRepository extends Repository<Dao<RoundEntity, Integer>,
 
     /**
      * @param dao The DAO to edit inside the database.
+     *
+     * @author Victor Hargrave
+     * @since 1.0.0
      */
     public RoundRepository(final Dao<RoundEntity, Integer> dao) {
         super(dao);

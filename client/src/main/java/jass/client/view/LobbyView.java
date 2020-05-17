@@ -35,11 +35,14 @@ import java.io.IOException;
  *
  * @author Sasa Trajkova
  * @version %I%, %G%
- * @since 0.0.1
+ * @since 1.0.0
  */
 public final class LobbyView extends View {
     /**
      * @param stage The stage of the window.
+     *
+     * @author Sasa Trajkova
+     * @since 1.0.0
      */
     public LobbyView(final Stage stage) {
         super(stage);
@@ -51,6 +54,10 @@ public final class LobbyView extends View {
         stage.setOnCloseRequest(event -> Platform.exit());
     }
 
+    /**
+     * @author Sasa Trajkova
+     * @since 1.0.0
+     */
     @Override
     protected Scene createGUI() {
         try {

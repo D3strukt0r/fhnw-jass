@@ -57,7 +57,7 @@ import java.sql.SQLException;
  *
  * @author Manuele Vaccari & Victor Hargrave
  * @version %I%, %G%
- * @since 0.0.1
+ * @since 1.0.0
  */
 public final class DatabaseUtil implements Service, Closeable {
     /**
@@ -125,7 +125,8 @@ public final class DatabaseUtil implements Service, Closeable {
      *                    accessed (and if necessary created).
      *
      * @throws SQLException If an SQL error occurs.
-     * @since 0.0.1
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     public DatabaseUtil(final String databaseUrl) throws SQLException {
         // Create our data-source for the database
@@ -153,6 +154,8 @@ public final class DatabaseUtil implements Service, Closeable {
      * @param password    The password of the database.
      *
      * @throws SQLException If an SQL error occurs.
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     public DatabaseUtil(final String databaseUrl, final String username, final String password) throws SQLException {
         // Create our data-source for the database
@@ -174,6 +177,9 @@ public final class DatabaseUtil implements Service, Closeable {
      * @param databaseUrl The full database url.
      *
      * @return Returns the type.
+     *
+     * @author ORMLite library
+     * @since 1.0.0
      */
     public static String extractDbType(final String databaseUrl) {
         if (!databaseUrl.startsWith("jdbc:")) {
@@ -191,7 +197,8 @@ public final class DatabaseUtil implements Service, Closeable {
      * Setup our database and DAOs, for the created connection.
      *
      * @throws SQLException If an SQL error occurs.
-     * @since 0.0.1
+     * @author Manuele Vaccari & Thomas Weber & Victor Hargrave
+     * @since 1.0.0
      */
     private void setupDatabase() throws SQLException {
         /*
@@ -235,6 +242,10 @@ public final class DatabaseUtil implements Service, Closeable {
         insertCardSeedData();
     }
 
+    /**
+     * @author Victor Hargrave
+     * @since 1.0.0
+     */
     private void insertRankSeedData() throws SQLException {
         if (!rankDao.idExists(1)) {
             rankDao.create((new RankEntity().setId(1).setKey("6").setPointsTrumpf(0).setPointsObeAbe(0).setPointsOndeufe(11)));
@@ -265,6 +276,10 @@ public final class DatabaseUtil implements Service, Closeable {
         }
     }
 
+    /**
+     * @author Victor Hargrave
+     * @since 1.0.0
+     */
     private void insertSuitSeedData() throws SQLException {
         if (!suitDao.idExists(1)) {
             suitDao.create((new SuitEntity()).setId(1).setKey("hearts"));
@@ -280,6 +295,10 @@ public final class DatabaseUtil implements Service, Closeable {
         }
     }
 
+    /**
+     * @author Victor Hargrave
+     * @since 1.0.0
+     */
     private void insertCardSeedData() throws SQLException {
         int addend = 0;
         for (int i = 1; i <= 4; i++) {
@@ -299,7 +318,8 @@ public final class DatabaseUtil implements Service, Closeable {
     /**
      * Close the database connection.
      *
-     * @since 0.0.1
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     @Override
     public void close() {

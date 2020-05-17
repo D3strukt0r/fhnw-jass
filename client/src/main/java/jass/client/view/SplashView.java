@@ -34,17 +34,24 @@ import java.io.IOException;
  *
  * @author Manuele Vaccari
  * @version %I%, %G%
- * @since 0.0.1
+ * @since 1.0.0
  */
 public final class SplashView extends View {
     /**
      * @param stage The stage of the window.
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     public SplashView(final Stage stage) {
         super(stage);
         stage.initStyle(StageStyle.TRANSPARENT); // Also undecorated
     }
 
+    /**
+     * @author Manuele Vaccari
+     * @since 1.0.0
+     */
     @Override
     protected Scene createGUI() {
         try {

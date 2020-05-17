@@ -26,9 +26,9 @@ import jass.lib.database.Entity;
 /**
  * A model with all known (and cached) Games.
  *
- * @author Victor Hargrave
+ * @author Victor Hargrave & Manuele Vaccari
  * @version %I%, %G%
- * @since 0.0.1
+ * @since 1.0.0
  */
 @DatabaseTable(tableName = "suit")
 public final class SuitEntity extends Entity {
@@ -47,12 +47,18 @@ public final class SuitEntity extends Entity {
     /**
      * For ORMLite all persisted classes must define a no-arg constructor with
      * at least package visibility.
+     *
+     * @author Victor Hargrave
+     * @since 1.0.0
      */
     public SuitEntity() {
     }
 
     /**
      * @return Returns the ID.
+     *
+     * @author Victor Hargrave
+     * @since 1.0.0
      */
     public int getId() {
         return id;
@@ -62,6 +68,9 @@ public final class SuitEntity extends Entity {
      * @param id The ID.
      *
      * @return Returns the object for further processing.
+     *
+     * @author Victor Hargrave
+     * @since 1.0.0
      */
     public SuitEntity setId(final int id) {
         this.id = id;
@@ -70,6 +79,9 @@ public final class SuitEntity extends Entity {
 
     /**
      * @return Returns the suit.
+     *
+     * @author Victor Hargrave
+     * @since 1.0.0
      */
     public String getKey() {
         return key;
@@ -79,12 +91,23 @@ public final class SuitEntity extends Entity {
      * @param key The Key.
      *
      * @return Returns the object for further processing.
+     *
+     * @author Victor Hargrave
+     * @since 1.0.0
      */
     public SuitEntity setKey(final String key) {
         this.key = key;
         return this;
     }
 
+    /**
+     * @param o The suit object
+     *
+     * @return Returns whether it's the same object or not.
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
+     */
     @Override
     public boolean equals(final Object o) {
         if (this == o) {
@@ -99,6 +122,12 @@ public final class SuitEntity extends Entity {
         return id == that.id;
     }
 
+    /**
+     * @return Returns the hashcode.
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
+     */
     @Override
     public int hashCode() {
         return id;

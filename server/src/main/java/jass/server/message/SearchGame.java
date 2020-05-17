@@ -33,7 +33,7 @@ import jass.server.util.ServerSocketUtil;
  *
  * @author Thomas Weber
  * @version %I%, %G%
- * @since 0.0.1
+ * @since 1.0.0
  */
 public final class SearchGame extends Message {
     /**
@@ -42,13 +42,20 @@ public final class SearchGame extends Message {
     private final SearchGameData data;
 
     /**
-     * @param rawData The data (still not casted)
+     * @param rawData The data (still not casted).
+     *
+     * @author Thomas Weber
+     * @since 1.0.0
      */
     public SearchGame(final MessageData rawData) {
         super(rawData);
         data = (SearchGameData) rawData;
     }
 
+    /**
+     * @author Thomas Weber
+     * @since 1.0.0
+     */
     @Override
     public void process(final ClientUtil client) {
         boolean result = false;

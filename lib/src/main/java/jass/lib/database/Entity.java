@@ -21,6 +21,7 @@ package jass.lib.database;
 
 /**
  * @author Manuele Vaccari
+ * @since 1.0.0
  */
 public abstract class Entity {
 }

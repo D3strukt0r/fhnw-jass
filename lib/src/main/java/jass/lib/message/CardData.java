@@ -23,6 +23,8 @@ package jass.lib.message;
  * The data model for the Card Data.
  *
  * @author Victor Hargrave
+ * @version %I%, %G%
+ * @since 1.0.0
  */
 public final class CardData {
     /**
@@ -50,7 +52,10 @@ public final class CardData {
      */
     private final String rank;
 
-    public boolean isPlayed;
+    /**
+     * Whether the card was already played.
+     */
+    private boolean isPlayed;
 
     /**
      * @param cardId The card ID.
@@ -58,6 +63,9 @@ public final class CardData {
      * @param suit   The suit name.
      * @param rankId The rank ID.
      * @param rank   The rank name.
+     *
+     * @author Victor Hargrave
+     * @since 1.0.0
      */
     public CardData(final int cardId, final int suitId, final String suit, final int rankId, final String rank) {
         this.cardId = cardId;
@@ -69,6 +77,9 @@ public final class CardData {
 
     /**
      * @return Returns the suit.
+     *
+     * @author Victor Hargrave
+     * @since 1.0.0
      */
     public String getSuit() {
         return suit;
@@ -76,6 +87,9 @@ public final class CardData {
 
     /**
      * @return Returns the rank.
+     *
+     * @author Victor Hargrave
+     * @since 1.0.0
      */
     public String getRank() {
         return rank;
@@ -83,6 +97,9 @@ public final class CardData {
 
     /**
      * @return Returns the card ID.
+     *
+     * @author Victor Hargrave
+     * @since 1.0.0
      */
     public int getCardId() {
         return cardId;
@@ -90,6 +107,9 @@ public final class CardData {
 
     /**
      * @return Returns the suit ID.
+     *
+     * @author Victor Hargrave
+     * @since 1.0.0
      */
     public int getSuitId() {
         return suitId;
@@ -97,6 +117,9 @@ public final class CardData {
 
     /**
      * @return Returns the rank ID.
+     *
+     * @author Victor Hargrave
+     * @since 1.0.0
      */
     public int getRankId() {
         return rankId;
@@ -104,15 +127,22 @@ public final class CardData {
 
     /**
      * @return Returns whether the card has been played.
+     *
+     * @author Victor Hargrave
+     * @since 1.0.0
      */
-    public boolean getIsPlayed() {
+    public boolean isPlayed() {
         return isPlayed;
     }
 
     /**
-     * @param isPlayed Whether the card has been played.
+     * @param played Whether the card has been played.
+     *
+     * @author Victor Hargrave
+     * @since 1.0.0
      */
-    public void setIsPlayed(final boolean isPlayed) {
-        this.isPlayed = isPlayed;
+    public CardData setPlayed(final boolean played) {
+        isPlayed = played;
+        return this;
     }
 }

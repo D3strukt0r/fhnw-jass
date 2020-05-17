@@ -70,9 +70,9 @@ import java.util.ArrayList;
  * Backend utility class. Acts as an interface between the program and the
  * server.
  *
- * @author Manuele Vaccari
+ * @author Manuele Vaccari & Victor Hargrave & Thomas Weber
  * @version %I%, %G%
- * @since 0.0.1
+ * @since 1.0.0
  */
 public final class SocketUtil extends Thread implements Service, Closeable {
     /**
@@ -141,6 +141,10 @@ public final class SocketUtil extends Thread implements Service, Closeable {
      */
     private final ArrayList<BroadcastAPlayerQuitEventListener> broadcastAPlayerQuitListener = new ArrayList<>();
 
+    /**
+     * A list of objects listening to a player quit events that have to be
+     * removed.
+     */
     private final ArrayList<BroadcastAPlayerQuitEventListener> broadcastAPlayerQuitListenerToRemove = new ArrayList<>();
 
     /**
@@ -155,7 +159,8 @@ public final class SocketUtil extends Thread implements Service, Closeable {
      * @param port      An integer containing the port which the server uses.
      * @param secure    A boolean defining whether to use SSL or not.
      *
-     * @since 0.0.1
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     public SocketUtil(final String ipAddress, final int port, final boolean secure) throws IOException, KeyStoreException, CertificateException, NoSuchAlgorithmException, UnrecoverableKeyException, KeyManagementException {
         super();
@@ -206,6 +211,10 @@ public final class SocketUtil extends Thread implements Service, Closeable {
         this.start();
     }
 
+    /**
+     * @author Manuele Vaccari
+     * @since 1.0.0
+     */
     @Override
     public void run() {
         try (BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()))) {
@@ -257,7 +266,8 @@ public final class SocketUtil extends Thread implements Service, Closeable {
      *
      * @return Returns the result message.
      *
-     * @since 0.0.1
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     public Message waitForResultResponse(final int id) {
         while (true) {
@@ -280,6 +290,9 @@ public final class SocketUtil extends Thread implements Service, Closeable {
      * out.
      *
      * @param msg The message to send to the server.
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     public void send(final Message msg) {
         try {
@@ -303,7 +316,8 @@ public final class SocketUtil extends Thread implements Service, Closeable {
     /**
      * @return Returns true if logged in, otherwise false
      *
-     * @since 0.0.1
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     public boolean isLoggedIn() {
         return ServiceLocator.get(LoginEntity.class) != null;
@@ -313,7 +327,8 @@ public final class SocketUtil extends Thread implements Service, Closeable {
      * @return Returns a string containing the token if logged in, otherwise
      * null
      *
-     * @since 0.0.1
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     public String getToken() {
         LoginEntity login = ServiceLocator.get(LoginEntity.class);
@@ -327,7 +342,7 @@ public final class SocketUtil extends Thread implements Service, Closeable {
      * @param listener A DisconnectEventListener object
      *
      * @author Manuele Vaccari
-     * @since 0.0.1
+     * @since 1.0.0
      */
     public void addDisconnectListener(final DisconnectEventListener listener) {
         disconnectListener.add(listener);
@@ -337,6 +352,7 @@ public final class SocketUtil extends Thread implements Service, Closeable {
      * @param listener The listener to listen to game found.
      *
      * @author Thomas Weber
+     * @since 1.0.0
      */
     public void setGameFoundEventListener(final GameFoundEventListener listener) {
         gameFoundEventListener = listener;
@@ -346,75 +362,88 @@ public final class SocketUtil extends Thread implements Service, Closeable {
      * @param listener The listener to listen to broadcast deck.
      *
      * @author Victor Hargrave
+     * @since 1.0.0
      */
     public void setBroadcastDeckEventListener(final BroadcastDeckEventListener listener) {
         broadcastDeckEventListener = listener;
     }
 
     /**
-     * @param listener A ChooseGameModeEventListener object
+     * @param listener A ChooseGameModeEventListener object.
      *
      * @author Manuele Vaccari
-     * @since 0.0.1
+     * @since 1.0.0
      */
     public void addChooseGameModeEventListener(final ChooseGameModeEventListener listener) {
         chooseGameModeListener.add(listener);
     }
 
     /**
-     * @param listener A ChooseGameModeEventListener object
+     * @param listener A ChooseGameModeEventListener object.
      *
      * @author Manuele Vaccari
-     * @since 0.0.1
+     * @since 1.0.0
      */
     public void addBroadcastGameModeEventListener(final BroadcastGameModeEventListener listener) {
         broadcastGameModeListener.add(listener);
     }
 
     /**
+     * @param listener A PlayedCardEventListener object.
+     *
      * @author Victor Hargrave
+     * @since 1.0.0
      */
     public void addPlayedCardEventListener(final PlayedCardEventListener listener) {
         playedCardListener.add(listener);
     }
 
     /**
+     * @param listener A BroadcastTurnEventListener object.
+     *
      * @author Victor Hargrave
+     * @since 1.0.0
      */
     public void addBroadcastedTurnEventListener(final BroadcastTurnEventListener listener) {
         broadcastTurnListener.add(listener);
     }
 
     /**
-     * @param listener A BroadcastPointsEventListener object
+     * @param listener A BroadcastPointsEventListener object.
      *
      * @author Manuele Vaccari
-     * @since 0.0.1
+     * @since 1.0.0
      */
     public void addBroadcastPointsEventListener(final BroadcastPointsEventListener listener) {
         broadcastPointsListener.add(listener);
     }
 
     /**
-     * @param listener A BroadcastRoundOverEventListener object
+     * @param listener A BroadcastRoundOverEventListener object.
      *
      * @author Victor Hargrave
-     * @since 0.0.1
+     * @since 1.0.0
      */
     public void addRoundOverEventListener(final BroadcastRoundOverEventListener listener) {
         broadcastRoundOverListener.add(listener);
     }
 
     /**
-     * @param listener A BroadcastAPlayerQuitEventListener object
+     * @param listener A BroadcastAPlayerQuitEventListener object.
      *
      * @author Victor Hargrave
-     * @since 0.0.1
+     * @since 1.0.0
      */
     public void addAPlayerQuitEventListener(final BroadcastAPlayerQuitEventListener listener) {
         broadcastAPlayerQuitListener.add(listener);
     }
 
+    /**
+     * @param listener A BroadcastAPlayerQuitEventListener object.
+     *
+     * @author Victor Hargrave
+     * @since 1.0.0
+     */
     public void removeAPlayerQuitEventListener(final BroadcastAPlayerQuitEventListener listener) {
         broadcastAPlayerQuitListenerToRemove.add(listener);
     }
@@ -425,6 +454,7 @@ public final class SocketUtil extends Thread implements Service, Closeable {
      * @param msgData The message to send to the listeners.
      *
      * @author Thomas Weber, Manuele Vaccari, Victor Hargrave
+     * @since 1.0.0
      */
     public void handleEventListenerOnMessage(final String msgType, final MessageData msgData) {
         switch (msgType) {
@@ -493,7 +523,7 @@ public final class SocketUtil extends Thread implements Service, Closeable {
      * @return Returns true if valid, otherwise false.
      *
      * @author https://stackoverflow.com/questions/5667371/validate-ipv4-address-in-java
-     * @since 0.0.1
+     * @since 1.0.0
      */
     public static boolean isValidIpAddress(final String ipAddress) {
         return ipAddress.matches("^((0|1\\d?\\d?|2[0-4]?\\d?|25[0-5]?|[3-9]\\d?)\\.){3}(0|1\\d?\\d?|2[0-4]?\\d?|25[0-5]?|[3-9]\\d?)$");
@@ -506,7 +536,8 @@ public final class SocketUtil extends Thread implements Service, Closeable {
      *
      * @return Returns true if valid, otherwise false.
      *
-     * @since 0.0.1
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     public static boolean isValidPortNumber(final int port) {
         return port >= 1024 && port <= 65535;
@@ -515,7 +546,8 @@ public final class SocketUtil extends Thread implements Service, Closeable {
     /**
      * Closes the socket.
      *
-     * @since 0.0.1
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     @Override
     public void close() {

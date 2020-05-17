@@ -39,7 +39,7 @@ import java.util.ResourceBundle;
  *
  * @author Manuele Vaccari
  * @version %I%, %G%
- * @since 0.0.1
+ * @since 1.0.0
  */
 public final class AboutController extends Controller {
     /**
@@ -71,6 +71,10 @@ public final class AboutController extends Controller {
     @FXML
     private JFXButton ok;
 
+    /**
+     * @author Manuele Vaccari
+     * @since 1.0.0
+     */
     @Override
     public void initialize(final URL location, final ResourceBundle resources) {
         /*
@@ -88,6 +92,9 @@ public final class AboutController extends Controller {
 
     /**
      * Closes the window.
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     @FXML
     private void clickOnOk() {
@@ -96,6 +103,9 @@ public final class AboutController extends Controller {
 
     /**
      * @param view The view.
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     public void setView(final AboutView view) {
         this.view = view;

@@ -28,7 +28,7 @@ import jass.lib.database.Entity;
  *
  * @author Thomas Weber
  * @version %I%, %G%
- * @since 0.0.1
+ * @since 1.0.0
  */
 @DatabaseTable(tableName = "game")
 public final class GameEntity extends Entity {
@@ -59,12 +59,18 @@ public final class GameEntity extends Entity {
     /**
      * For ORMLite all persisted classes must define a no-arg constructor with
      * at least package visibility.
+     *
+     * @author Thomas Weber
+     * @since 1.0.0
      */
     public GameEntity() {
     }
 
     /**
      * @return Returns the ID.
+     *
+     * @author Thomas Weber
+     * @since 1.0.0
      */
     public int getId() {
         return id;
@@ -72,6 +78,9 @@ public final class GameEntity extends Entity {
 
     /**
      * @return Returns team one.
+     *
+     * @author Thomas Weber
+     * @since 1.0.0
      */
     public TeamEntity getTeamOne() {
         return teamOne;
@@ -81,6 +90,9 @@ public final class GameEntity extends Entity {
      * @param teamOne Team one.
      *
      * @return Returns the object for further processing.
+     *
+     * @author Thomas Weber
+     * @since 1.0.0
      */
     public GameEntity setTeamOne(final TeamEntity teamOne) {
         this.teamOne = teamOne;
@@ -89,6 +101,9 @@ public final class GameEntity extends Entity {
 
     /**
      * @return Returns team two.
+     *
+     * @author Thomas Weber
+     * @since 1.0.0
      */
     public TeamEntity getTeamTwo() {
         return teamTwo;
@@ -98,6 +113,9 @@ public final class GameEntity extends Entity {
      * @param teamTwo Team two.
      *
      * @return Returns the object for further processing.
+     *
+     * @author Thomas Weber
+     * @since 1.0.0
      */
     public GameEntity setTeamTwo(final TeamEntity teamTwo) {
         this.teamTwo = teamTwo;
@@ -106,6 +124,9 @@ public final class GameEntity extends Entity {
 
     /**
      * @return Returns whether the game is currently running.
+     *
+     * @author Thomas Weber
+     * @since 1.0.0
      */
     public boolean isActive() {
         return isActive;
@@ -115,6 +136,9 @@ public final class GameEntity extends Entity {
      * @param active Whether the game is currently running.
      *
      * @return Returns the object for further processing.
+     *
+     * @author Thomas Weber
+     * @since 1.0.0
      */
     public GameEntity setActive(final boolean active) {
         isActive = active;

@@ -49,8 +49,9 @@ import java.util.ArrayList;
  * is licensed under the terms of the BSD 3-clause license (see the file
  * license.txt).
  *
- * @author Brad Richards
- * @author Manuele Vaccari (to work with Json messaging)
+ * @author Brad Richards & Manuele Vaccari & Victor Hargrave & Thomas Weber
+ * @version %I%, %G%
+ * @since 1.0.0
  */
 public final class ClientUtil extends Thread {
     /**
@@ -94,14 +95,19 @@ public final class ClientUtil extends Thread {
      */
     private final ArrayList<StopPlayingEventListener> stopPlayingListener = new ArrayList<>();
 
+    /**
+     * A list of all objects listening to stop playing event to be removed.
+     */
     private final ArrayList<StopPlayingEventListener> stopPlayingListenerToRemove = new ArrayList<>();
-
 
     /**
      * Create a new client object, communicating over the given socket.
      * Immediately start a thread to receive messages from the client.
      *
      * @param socket The socket of the client.
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     public ClientUtil(final Socket socket) {
         super();
@@ -114,6 +120,10 @@ public final class ClientUtil extends Thread {
         logger.info("New client created: " + getUsername());
     }
 
+    /**
+     * @author Manuele Vaccari
+     * @since 1.0.0
+     */
     @Override
     public void run() {
         while (clientReachable) {
@@ -202,8 +212,12 @@ public final class ClientUtil extends Thread {
     }
 
     /**
+     * @param msgData The message data.
+     *
+     * @return Returns whether the user could successfully authenticate.
+     *
      * @author Victor Hargrave
-     * @since 0.0.1
+     * @since 1.0.0
      */
     private boolean authenticateRequest(final MessageData msgData) {
         UserEntity user = UserRepository.getSingleton(null).getByUsername(msgData.getUsername());
@@ -211,43 +225,61 @@ public final class ClientUtil extends Thread {
     }
 
     /**
-     * @param listener A DisconnectEventListener object
+     * @param listener A ChosenGameModeEventListener object.
      *
      * @author Manuele Vaccari
-     * @since 0.0.1
+     * @since 1.0.0
      */
     public void addChosenGameModeEventListener(final ChosenGameModeEventListener listener) {
         this.chosenGameModeListener.add(listener);
     }
 
+    /**
+     * @param listener A ChosenGameModeEventListener object.
+     *
+     * @author Victor Hargrave
+     * @since 1.0.0
+     */
     public void removeChosenGameModeEventListener(final ChosenGameModeEventListener listener) {
         this.chosenGameModeListener.remove(listener);
     }
 
     /**
-     * @param listener A PlayedCardEventListener object
+     * @param listener A PlayedCardEventListener object.
      *
      * @author Manuele Vaccari
-     * @since 0.0.1
+     * @since 1.0.0
      */
     public void addPlayedCardEventListener(final PlayedCardEventListener listener) {
         this.playedCardListener.add(listener);
     }
 
+    /**
+     * @param listener A PlayedCardEventListener object.
+     *
+     * @author Victor Hargrave
+     * @since 1.0.0
+     */
     public void removePlayedCardEventListener(final PlayedCardEventListener listener) {
         this.playedCardListener.remove(listener);
     }
 
     /**
-     * @param listener A StopPlayingEventListener object
+     * @param listener A StopPlayingEventListener object.
      *
      * @author Victor Hargrave
-     * @since 0.0.1
+     * @since 1.0.0
      */
     public void addStopPlayingEventListener(final StopPlayingEventListener listener) {
         this.stopPlayingListener.add(listener);
     }
 
+    /**
+     * @param listener A StopPlayingEventListener object.
+     *
+     * @author Victor Hargrave
+     * @since 1.0.0
+     */
     public void removeStopPlayingEventListener(final StopPlayingEventListener listener) {
         this.stopPlayingListenerToRemove.add(listener);
     }
@@ -257,6 +289,9 @@ public final class ClientUtil extends Thread {
      * out.
      *
      * @param msg The message to be sent.
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     public void send(final Message msg) {
         try {
@@ -273,6 +308,9 @@ public final class ClientUtil extends Thread {
 
     /**
      * Shuts down all connections.
+     *
+     * @author Thomas Weber
+     * @since 1.0.0
      */
     public void disconnect() {
         SearchGameUtil searchGameUtil = ServiceLocator.get(SearchGameUtil.class);
@@ -298,6 +336,9 @@ public final class ClientUtil extends Thread {
     /**
      * @return Returns the current user of the connection. Returns null if the
      * user is not logged in.
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     public UserEntity getUser() {
         return user;
@@ -306,6 +347,9 @@ public final class ClientUtil extends Thread {
     /**
      * @return Returns the user's username. Returns null if the user is not
      * logged in.
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     public String getUsername() {
         String name = "<undefined>";
@@ -319,6 +363,9 @@ public final class ClientUtil extends Thread {
      * Sets the user of the current connection.
      *
      * @param user The user.
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     public void setUser(final UserEntity user) {
         this.user = user;
@@ -326,6 +373,9 @@ public final class ClientUtil extends Thread {
 
     /**
      * @return Returns the token of the current session.
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     public String getToken() {
         return token;
@@ -333,6 +383,9 @@ public final class ClientUtil extends Thread {
 
     /**
      * @param token The token.
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     public void setToken(final String token) {
         this.token = token;

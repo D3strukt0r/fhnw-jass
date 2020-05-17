@@ -57,7 +57,7 @@ import java.util.ResourceBundle;
  *
  * @author Manuele Vaccari
  * @version %I%, %G%
- * @since 0.0.1
+ * @since 1.0.0
  */
 public final class DeleteAccountController extends Controller {
     /**
@@ -149,6 +149,10 @@ public final class DeleteAccountController extends Controller {
     @FXML
     private JFXButton cancel;
 
+    /**
+     * @author Manuele Vaccari
+     * @since 1.0.0
+     */
     @Override
     public void initialize(final URL location, final ResourceBundle resources) {
         /*
@@ -181,7 +185,8 @@ public final class DeleteAccountController extends Controller {
     /**
      * Disables all the form fields in the view.
      *
-     * @since 0.0.1
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     public void disableAll() {
         delete.setDisable(true);
@@ -191,7 +196,8 @@ public final class DeleteAccountController extends Controller {
     /**
      * Enables all the form fields in the view.
      *
-     * @since 0.0.1
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     public void enableAll() {
         delete.setDisable(false);
@@ -204,7 +210,8 @@ public final class DeleteAccountController extends Controller {
      *
      * @param translatorKey The key of the translation.
      *
-     * @since 0.0.1
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     public void setErrorMessage(final String translatorKey) {
         Platform.runLater(() -> {
@@ -222,6 +229,9 @@ public final class DeleteAccountController extends Controller {
 
     /**
      * Disconnect from the server and returns to the server connection window.
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     @FXML
     private void clickOnDisconnect() {
@@ -236,6 +246,9 @@ public final class DeleteAccountController extends Controller {
 
     /**
      * Shuts down the application.
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     @FXML
     private void clickOnExit() {
@@ -244,6 +257,9 @@ public final class DeleteAccountController extends Controller {
 
     /**
      * Opens the about window.
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     @FXML
     public void clickOnAbout() {
@@ -254,7 +270,8 @@ public final class DeleteAccountController extends Controller {
      * Handles the click on the delete button. This will send it to the server,
      * and logout if successful.
      *
-     * @since 0.0.1
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     @FXML
     public void clickOnDelete() {
@@ -289,6 +306,9 @@ public final class DeleteAccountController extends Controller {
 
     /**
      * After clicking on cancel, return to the lobby.
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     @FXML
     public void clickOnCancel() {
@@ -297,6 +317,9 @@ public final class DeleteAccountController extends Controller {
 
     /**
      * @param view The view.
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     public void setView(final DeleteAccountView view) {
         this.view = view;
@@ -304,6 +327,9 @@ public final class DeleteAccountController extends Controller {
 
     /**
      * @return Returns the delete button
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     public JFXButton getDelete() {
         return delete;

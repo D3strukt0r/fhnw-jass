@@ -30,7 +30,7 @@ import java.lang.reflect.InvocationTargetException;
  *
  * @author Manuele Vaccari
  * @version %I%, %G%
- * @since 0.0.1
+ * @since 1.0.0
  */
 public abstract class Message {
     /**
@@ -40,6 +40,9 @@ public abstract class Message {
 
     /**
      * @param rawData The data (still not casted)
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     public Message(final MessageData rawData) {
         this.rawData = rawData;
@@ -47,6 +50,9 @@ public abstract class Message {
 
     /**
      * @return Returns the data.
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     public MessageData getRawData() {
         return rawData;
@@ -57,6 +63,9 @@ public abstract class Message {
      * message.
      *
      * @param client The client object, to perform actions with the client.
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     public abstract void process(ClientUtil client);
 
@@ -74,6 +83,7 @@ public abstract class Message {
      * @return Returns a message object using the data.
      *
      * @author Bradley Richards
+     * @since 1.0.0
      */
     public static Message fromDataObject(final MessageData messageData) {
         String messageClassName = Message.class.getPackage().getName() + "." + messageData.getMessageType();
@@ -88,6 +98,9 @@ public abstract class Message {
 
     /**
      * @return Returns the serialized JSON string.
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     @Override
     public String toString() {

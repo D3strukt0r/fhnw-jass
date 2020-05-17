@@ -40,7 +40,7 @@ import java.util.concurrent.Callable;
  * https://www.sothawo.com/2016/09/how-to-implement-a-javafx-ui-where-the-language-can-be-changed-dynamically/
  *
  * @author P.J. Meisch (pj.meisch@sothawo.com).
- * @since 0.0.1
+ * @since 1.0.0
  */
 public final class I18nUtil {
     /**
@@ -66,7 +66,8 @@ public final class I18nUtil {
      *
      * @return List of Locale objects.
      *
-     * @since 0.0.1
+     * @author P.J. Meisch (pj.meisch@sothawo.com).
+     * @since 1.0.0
      */
     public static List<Locale> getSupportedLocales() {
         return new ArrayList<>(Arrays.asList(
@@ -83,7 +84,8 @@ public final class I18nUtil {
      *
      * @return A Locale constant, containing the current language.
      *
-     * @since 0.0.1
+     * @author P.J. Meisch (pj.meisch@sothawo.com).
+     * @since 1.0.0
      */
     public static Locale getDefaultLocale() {
         Locale sysDefault = Locale.getDefault();
@@ -92,6 +94,9 @@ public final class I18nUtil {
 
     /**
      * @return Returns the current locale.
+     *
+     * @author P.J. Meisch (pj.meisch@sothawo.com).
+     * @since 1.0.0
      */
     public static Locale getLocale() {
         return locale.get();
@@ -99,6 +104,9 @@ public final class I18nUtil {
 
     /**
      * @param locale The locale.
+     *
+     * @author P.J. Meisch (pj.meisch@sothawo.com).
+     * @since 1.0.0
      */
     public static void setLocale(final Locale locale) {
         localeProperty().set(locale);
@@ -107,6 +115,9 @@ public final class I18nUtil {
 
     /**
      * @return Returns the current locale property.
+     *
+     * @author P.J. Meisch (pj.meisch@sothawo.com).
+     * @since 1.0.0
      */
     public static ObjectProperty<Locale> localeProperty() {
         return locale;
@@ -122,7 +133,8 @@ public final class I18nUtil {
      *
      * @return localized formatted string
      *
-     * @since 0.0.1
+     * @author P.J. Meisch (pj.meisch@sothawo.com).
+     * @since 1.0.0
      */
     public static String get(final String key, final Object... args) {
         ResourceBundle bundle = ResourceBundle.getBundle("i18n/messages", getLocale());
@@ -137,7 +149,8 @@ public final class I18nUtil {
      *
      * @return StringBinding
      *
-     * @since 0.0.1
+     * @author P.J. Meisch (pj.meisch@sothawo.com).
+     * @since 1.0.0
      */
     public static StringBinding createStringBinding(final Callable<String> func) {
         return Bindings.createStringBinding(func, locale);
@@ -152,7 +165,8 @@ public final class I18nUtil {
      *
      * @return String binding
      *
-     * @since 0.0.1
+     * @author P.J. Meisch (pj.meisch@sothawo.com).
+     * @since 1.0.0
      */
     public static StringBinding createStringBinding(final String key, final Object... args) {
         return createStringBinding(() -> get(key, args));

@@ -41,7 +41,7 @@ import jass.lib.servicelocator.Service;
 /**
  * @author Victor Hargrave
  * @version %I%, %G%
- * @since 0.0.1
+ * @since 1.0.0
  */
 public final class CardUtil implements Service {
     /**
@@ -51,6 +51,9 @@ public final class CardUtil implements Service {
 
     /**
      * Empty constructor.
+     *
+     * @author Victor Hargrave
+     * @since 1.0.0
      */
     public CardUtil() {
     }
@@ -63,6 +66,9 @@ public final class CardUtil implements Service {
      * @param playerFour  User four.
      *
      * @return Returns the four decks created for each player.
+     *
+     * @author Victor Hargrave
+     * @since 1.0.0
      */
     public List<DeckEntity> addDecksForPlayers(final RoundEntity newRound, final UserEntity playerOne, final UserEntity playerTwo, final UserEntity playerThree, final UserEntity playerFour) {
         List<CardEntity> cards = CardRepository.getSingleton(null).getAll();
@@ -84,6 +90,9 @@ public final class CardUtil implements Service {
      * @param i        The ID inside the iterator.
      *
      * @return Returns a deck for a specific player.
+     *
+     * @author Victor Hargrave
+     * @since 1.0.0
      */
     private DeckEntity addNewDeck(final RoundEntity newRound, final UserEntity player, final List<CardEntity> cards, final int i) {
         DeckEntity deck = (new DeckEntity())
@@ -106,6 +115,9 @@ public final class CardUtil implements Service {
     /**
      * @param client     The client to send the deck to.
      * @param deckEntity The deck to send to the client.
+     *
+     * @author Victor Hargrave
+     * @since 1.0.0
      */
     public void broadcastDeck(final ClientUtil client, final DeckEntity deckEntity) {
         List<CardData> cards = deckEntity.getCards().stream().map(CardEntity::toCardData).collect(Collectors.toList());

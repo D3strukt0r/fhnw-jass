@@ -29,7 +29,7 @@ import jass.lib.servicelocator.Service;
  *
  * @author Manuele Vaccari
  * @version %I%, %G%
- * @since 0.0.1
+ * @since 1.0.0
  */
 @DatabaseTable(tableName = "server")
 public final class ServerEntity extends Entity implements Service {
@@ -66,12 +66,18 @@ public final class ServerEntity extends Entity implements Service {
     /**
      * For ORMLite all persisted classes must define a no-arg constructor with
      * at least package visibility.
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     public ServerEntity() {
     }
 
     /**
      * @return Returns the ID.
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     public int getId() {
         return id;
@@ -79,6 +85,9 @@ public final class ServerEntity extends Entity implements Service {
 
     /**
      * @return Returns the IP address.
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     public String getIp() {
         return ip;
@@ -88,6 +97,9 @@ public final class ServerEntity extends Entity implements Service {
      * @param ip The IP address.
      *
      * @return Returns the object for further processing.
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     public ServerEntity setIp(final String ip) {
         this.ip = ip;
@@ -96,6 +108,9 @@ public final class ServerEntity extends Entity implements Service {
 
     /**
      * @return Returns the port.
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     public int getPort() {
         return port;
@@ -105,6 +120,9 @@ public final class ServerEntity extends Entity implements Service {
      * @param port The port.
      *
      * @return Returns the object for further processing.
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     public ServerEntity setPort(final int port) {
         this.port = port;
@@ -113,6 +131,9 @@ public final class ServerEntity extends Entity implements Service {
 
     /**
      * @return Returns whether to use SSL or not.
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     public boolean isSecure() {
         return secure;
@@ -122,6 +143,9 @@ public final class ServerEntity extends Entity implements Service {
      * @param secure Whether to use SSL or not.
      *
      * @return Returns the object for further processing.
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     public ServerEntity setSecure(final boolean secure) {
         this.secure = secure;
@@ -130,6 +154,9 @@ public final class ServerEntity extends Entity implements Service {
 
     /**
      * @return Returns whether to connect automatically.
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     public boolean isConnectAutomatically() {
         return connectAutomatically;
@@ -139,6 +166,9 @@ public final class ServerEntity extends Entity implements Service {
      * @param connectAutomatically Whether to connect automatically.
      *
      * @return Returns the object for further processing.
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     public ServerEntity setConnectAutomatically(final boolean connectAutomatically) {
         this.connectAutomatically = connectAutomatically;

@@ -28,7 +28,7 @@ import jass.server.entity.TurnEntity;
  *
  * @author Thomas Weber
  * @version %I%, %G%
- * @since 0.0.1
+ * @since 1.0.0
  */
 public final class TurnRepository extends Repository<Dao<TurnEntity, Integer>, TurnEntity> {
     /**
@@ -42,6 +42,9 @@ public final class TurnRepository extends Repository<Dao<TurnEntity, Integer>, T
      * @param dao The DAO to edit inside the database.
      *
      * @return Returns the Repository.
+     *
+     * @author Thomas Weber
+     * @since 1.0.0
      */
     public static TurnRepository getSingleton(final Dao<TurnEntity, Integer> dao) {
         if (singleton == null) {
@@ -52,6 +55,9 @@ public final class TurnRepository extends Repository<Dao<TurnEntity, Integer>, T
 
     /**
      * @param dao The DAO to edit inside the database.
+     *
+     * @author Thomas Weber
+     * @since 1.0.0
      */
     public TurnRepository(final Dao<TurnEntity, Integer> dao) {
         super(dao);

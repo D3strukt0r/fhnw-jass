@@ -64,9 +64,9 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * @author Victor Hargrave, Manuele Vaccari
+ * @author Victor Hargrave & Manuele Vaccari
  * @version %I%, %G%
- * @since 0.0.1
+ * @since 1.0.0
  */
 public final class GameUtil implements Service, BroadcastDeckEventListener,
     ChooseGameModeEventListener, BroadcastGameModeEventListener, PlayedCardEventListener,
@@ -151,12 +151,21 @@ public final class GameUtil implements Service, BroadcastDeckEventListener,
      */
     private SimpleIntegerProperty pointsTotal = new SimpleIntegerProperty(-1);
 
+    /**
+     * Whether the player has left.
+     */
     private boolean aPlayerLeft;
 
+    /**
+     * Whether the user has decided to leave the game.
+     */
     private boolean decidedToLeaveGame;
 
     /**
      * Initialize GameUtil before a game starts.
+     *
+     * @author Manuele Vaccari & Victor Hargrave
+     * @since 1.0.0
      */
     public GameUtil() {
         SocketUtil socket = ServiceLocator.get(SocketUtil.class);
@@ -172,6 +181,10 @@ public final class GameUtil implements Service, BroadcastDeckEventListener,
         playedCards = FXCollections.observableArrayList(new ArrayList<>());
     }
 
+    /**
+     * @author Victor Hargrave
+     * @since 1.0.0
+     */
     @Override
     public void onBroadcastDeck(final BroadcastDeckData data) {
         logger.info("Successfully received cards!");
@@ -180,6 +193,10 @@ public final class GameUtil implements Service, BroadcastDeckEventListener,
         playerDeck.addAll(data.getCardsClient());
     }
 
+    /**
+     * @author Manuele Vaccari
+     * @since 1.0.0
+     */
     @Override
     public void onChooseGameMode(final ChooseGameModeData data) {
         Platform.runLater(() -> {
@@ -240,6 +257,10 @@ public final class GameUtil implements Service, BroadcastDeckEventListener,
         });
     }
 
+    /**
+     * @author Manuele Vaccari
+     * @since 1.0.0
+     */
     @Override
     public void onBroadcastGameMode(final BroadcastGameModeData data) {
         logger.info("Received Game mode!");
@@ -249,6 +270,10 @@ public final class GameUtil implements Service, BroadcastDeckEventListener,
         gameMode.setValue(data.getGameMode());
     }
 
+    /**
+     * @author Victor Hargrave
+     * @since 1.0.0
+     */
     @Override
     public void onPlayedCard(final PlayedCardData data) {
         if (!data.getPlayedCardValid()) {
@@ -265,6 +290,10 @@ public final class GameUtil implements Service, BroadcastDeckEventListener,
         }
     }
 
+    /**
+     * @author Victor Hargrave
+     * @since 1.0.0
+     */
     @Override
     public void onBroadcastTurn(final BroadcastTurnData data) {
         logger.info("Successfully received turn!");
@@ -278,6 +307,10 @@ public final class GameUtil implements Service, BroadcastDeckEventListener,
         playedCards.addAll(data.getPlayedCardsClient());
     }
 
+    /**
+     * @author Manuele Vaccari
+     * @since 1.0.0
+     */
     @Override
     public void onBroadcastPoints(final BroadcastPointsData data) {
         logger.info("Gained points in this round: " + data.getPoints());
@@ -287,6 +320,10 @@ public final class GameUtil implements Service, BroadcastDeckEventListener,
         logger.info("Total points game: " + pointsTotal.getValue());
     }
 
+    /**
+     * @author Victor Hargrave
+     * @since 1.0.0
+     */
     public void stopPlaying() {
         StopPlaying stopPlayingMessage = new StopPlaying(new StopPlayingData());
 
@@ -298,6 +335,9 @@ public final class GameUtil implements Service, BroadcastDeckEventListener,
 
     /**
      * @param cardId The card ID to be played and sent to the server.
+     *
+     * @author Victor Hargrave
+     * @since 1.0.0
      */
     public void playCard(final int cardId) {
         cardIdToRemove = cardId;
@@ -313,6 +353,9 @@ public final class GameUtil implements Service, BroadcastDeckEventListener,
      * @param numberOfPlayedCards How many cards have been played so far.
      *
      * @return Returns true if it's this player's turn, otherwise false.
+     *
+     * @author Victor Hargrave
+     * @since 1.0.0
      */
     private boolean isCurrentPlayersTurn(final int numberOfPlayedCards) {
         String player = "";
@@ -367,6 +410,9 @@ public final class GameUtil implements Service, BroadcastDeckEventListener,
 
     /**
      * @param msgData The game data.
+     *
+     * @author Victor Hargrave
+     * @since 1.0.0
      */
     public void setGame(final GameFoundData msgData) {
         this.game = msgData;
@@ -374,6 +420,9 @@ public final class GameUtil implements Service, BroadcastDeckEventListener,
 
     /**
      * @return Returns the game data.
+     *
+     * @author Victor Hargrave
+     * @since 1.0.0
      */
     public GameFoundData getGame() {
         return game;
@@ -381,6 +430,9 @@ public final class GameUtil implements Service, BroadcastDeckEventListener,
 
     /**
      * @return Returns the deck ID.
+     *
+     * @author Victor Hargrave
+     * @since 1.0.0
      */
     public int getDeckId() {
         return deckId;
@@ -388,6 +440,9 @@ public final class GameUtil implements Service, BroadcastDeckEventListener,
 
     /**
      * @param deckId The deck ID.
+     *
+     * @author Victor Hargrave
+     * @since 1.0.0
      */
     public void setDeckId(final int deckId) {
         this.deckId = deckId;
@@ -395,6 +450,9 @@ public final class GameUtil implements Service, BroadcastDeckEventListener,
 
     /**
      * @return Returns the player's deck.
+     *
+     * @author Victor Hargrave
+     * @since 1.0.0
      */
     public ObservableList<CardData> getPlayerDeck() {
         return playerDeck;
@@ -402,6 +460,9 @@ public final class GameUtil implements Service, BroadcastDeckEventListener,
 
     /**
      * @param playerDeck The player's deck.
+     *
+     * @author Victor Hargrave
+     * @since 1.0.0
      */
     public void setPlayerDeck(final ArrayList<CardData> playerDeck) {
         this.playerDeck = FXCollections.observableArrayList(playerDeck);
@@ -409,6 +470,9 @@ public final class GameUtil implements Service, BroadcastDeckEventListener,
 
     /**
      * @return Returns the property of the game mode variable.
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     public SimpleObjectProperty<GameMode> getGameModeProperty() {
         return gameMode;
@@ -416,6 +480,9 @@ public final class GameUtil implements Service, BroadcastDeckEventListener,
 
     /**
      * @return Returns the property of the trumpf variable.
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     public SimpleObjectProperty<Card.Suit> getTrumpfProperty() {
         return trumpf;
@@ -423,6 +490,9 @@ public final class GameUtil implements Service, BroadcastDeckEventListener,
 
     /**
      * @return Returns the turn ID.
+     *
+     * @author Victor Hargrave
+     * @since 1.0.0
      */
     public int getTurnId() {
         return turnId;
@@ -430,6 +500,9 @@ public final class GameUtil implements Service, BroadcastDeckEventListener,
 
     /**
      * @param turnId The turn ID.
+     *
+     * @author Victor Hargrave
+     * @since 1.0.0
      */
     public void setTurnId(final int turnId) {
         this.turnId = turnId;
@@ -437,6 +510,9 @@ public final class GameUtil implements Service, BroadcastDeckEventListener,
 
     /**
      * @return Returns the username of the player who starts playing.
+     *
+     * @author Victor Hargrave
+     * @since 1.0.0
      */
     public SimpleStringProperty getStartingPlayerUsername() {
         return startingPlayerUsername;
@@ -445,6 +521,9 @@ public final class GameUtil implements Service, BroadcastDeckEventListener,
     /**
      * @param startingPlayerUsername The username of the player who starts
      *                               playing.
+     *
+     * @author Victor Hargrave
+     * @since 1.0.0
      */
     public void setStartingPlayerUsername(final String startingPlayerUsername) {
         this.startingPlayerUsername.setValue(startingPlayerUsername);
@@ -452,6 +531,9 @@ public final class GameUtil implements Service, BroadcastDeckEventListener,
 
     /**
      * @return Returns the winning player's username.
+     *
+     * @author Victor Hargrave
+     * @since 1.0.0
      */
     public SimpleStringProperty getWinningPlayerUsername() {
         return winningPlayerUsername;
@@ -459,6 +541,9 @@ public final class GameUtil implements Service, BroadcastDeckEventListener,
 
     /**
      * @param disableButtons Whether to disable the user's cards or not.
+     *
+     * @author Victor Hargrave
+     * @since 1.0.0
      */
     public void setDisableButtons(final boolean disableButtons) {
         this.disableButtons.setValue(disableButtons);
@@ -466,6 +551,9 @@ public final class GameUtil implements Service, BroadcastDeckEventListener,
 
     /**
      * @return Returns the property of whether to disable the user's cards.
+     *
+     * @author Victor Hargrave
+     * @since 1.0.0
      */
     public SimpleBooleanProperty getDisableButtons() {
         return disableButtons;
@@ -473,6 +561,9 @@ public final class GameUtil implements Service, BroadcastDeckEventListener,
 
     /**
      * @param winningPlayerUsername The winnings player's username.
+     *
+     * @author Victor Hargrave
+     * @since 1.0.0
      */
     public void setWinningPlayerUsername(final String winningPlayerUsername) {
         this.winningPlayerUsername.setValue(winningPlayerUsername);
@@ -480,6 +571,9 @@ public final class GameUtil implements Service, BroadcastDeckEventListener,
 
     /**
      * @return Returns a list of the user's cards.
+     *
+     * @author Victor Hargrave
+     * @since 1.0.0
      */
     public ObservableList<CardData> getPlayedCards() {
         return playedCards;
@@ -487,6 +581,9 @@ public final class GameUtil implements Service, BroadcastDeckEventListener,
 
     /**
      * @return Returns card ID which is supposed to be removed.
+     *
+     * @author Victor Hargrave
+     * @since 1.0.0
      */
     public int getCardIdToRemove() {
         return cardIdToRemove;
@@ -494,6 +591,9 @@ public final class GameUtil implements Service, BroadcastDeckEventListener,
 
     /**
      * @return Returns the points of the round property.
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     public SimpleIntegerProperty getPointsRoundProperty() {
         return pointsRound;
@@ -501,27 +601,58 @@ public final class GameUtil implements Service, BroadcastDeckEventListener,
 
     /**
      * @return Returns the points of the game property.
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     public SimpleIntegerProperty getPointsTotalProperty() {
         return pointsTotal;
     }
 
+    /**
+     * @return Returns whether the user decided to leave
+     *
+     * @author Victor Hargrave
+     * @since 1.0.0
+     */
     public boolean getDecidedToLeaveGame() {
         return decidedToLeaveGame;
     }
 
+    /**
+     * @param decidedToLeaveGame Whether the user decided to leave
+     *
+     * @author Victor Hargrave
+     * @since 1.0.0
+     */
     public void setDecidedToLeaveGame(final boolean decidedToLeaveGame) {
         this.decidedToLeaveGame = decidedToLeaveGame;
     }
 
+    /**
+     * @return Returns player who is left.
+     *
+     * @author Victor Hargrave
+     * @since 1.0.0
+     */
     public boolean getAPlayerLeft() {
         return aPlayerLeft;
     }
 
+    /**
+     * @param aPlayerLeft The player who is left.
+     *
+     * @author Victor Hargrave
+     * @since 1.0.0
+     */
     public void setAPlayerLeft(final boolean aPlayerLeft) {
         this.aPlayerLeft = aPlayerLeft;
     }
 
+    /**
+     * @author Victor Hargrave
+     * @since 1.0.0
+     */
     public void cleanupGame() {
         game = null;
         deckId = 0;

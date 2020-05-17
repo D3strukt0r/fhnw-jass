@@ -61,7 +61,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
  *
  * @author Manuele Vaccari
  * @version %I%, %G%
- * @since 0.0.1
+ * @since 1.0.0
  */
 public final class RegisterController extends Controller implements DisconnectEventListener {
     /**
@@ -170,6 +170,10 @@ public final class RegisterController extends Controller implements DisconnectEv
     @FXML
     private JFXButton login;
 
+    /**
+     * @author Manuele Vaccari
+     * @since 1.0.0
+     */
     @Override
     public void initialize(final URL location, final ResourceBundle resources) {
         /*
@@ -250,7 +254,8 @@ public final class RegisterController extends Controller implements DisconnectEv
     /**
      * Disables all the input fields in the view.
      *
-     * @since 0.0.1
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     public void disableInputs() {
         username.setDisable(true);
@@ -261,7 +266,8 @@ public final class RegisterController extends Controller implements DisconnectEv
     /**
      * Disables all the form fields in the view.
      *
-     * @since 0.0.1
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     public void disableAll() {
         disableInputs();
@@ -272,7 +278,8 @@ public final class RegisterController extends Controller implements DisconnectEv
     /**
      * Enables all the input fields in the view.
      *
-     * @since 0.0.1
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     public void enableInputs() {
         username.setDisable(false);
@@ -283,7 +290,8 @@ public final class RegisterController extends Controller implements DisconnectEv
     /**
      * Enables all the form fields in the view.
      *
-     * @since 0.0.1
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     public void enableAll() {
         enableInputs();
@@ -297,7 +305,8 @@ public final class RegisterController extends Controller implements DisconnectEv
      *
      * @param translatorKey The key of the translation.
      *
-     * @since 0.0.1
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     public void setErrorMessage(final String translatorKey) {
         Platform.runLater(() -> {
@@ -316,6 +325,9 @@ public final class RegisterController extends Controller implements DisconnectEv
 
     /**
      * Disconnect from the server and returns to the server connection window.
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     @FXML
     private void clickOnDisconnect() {
@@ -329,6 +341,9 @@ public final class RegisterController extends Controller implements DisconnectEv
 
     /**
      * Shuts down the application.
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     @FXML
     private void clickOnExit() {
@@ -337,6 +352,9 @@ public final class RegisterController extends Controller implements DisconnectEv
 
     /**
      * Opens the about window.
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     @FXML
     public void clickOnAbout() {
@@ -348,7 +366,8 @@ public final class RegisterController extends Controller implements DisconnectEv
      * checked. This will send it to the server, and update local values if
      * successful.
      *
-     * @since 0.0.1
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     @FXML
     private void clickOnRegister() {
@@ -438,6 +457,9 @@ public final class RegisterController extends Controller implements DisconnectEv
 
     /**
      * @return Returns the register button
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     public JFXButton getRegister() {
         return register;
@@ -445,12 +467,19 @@ public final class RegisterController extends Controller implements DisconnectEv
 
     /**
      * After clicking on login, switch to the login window.
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     @FXML
     private void clickOnLogin() {
         WindowUtil.switchTo(view, LoginView.class);
     }
 
+    /**
+     * @author Manuele Vaccari
+     * @since 1.0.0
+     */
     @Override
     public void onDisconnectEvent() {
         SocketUtil socket = ServiceLocator.get(SocketUtil.class);
@@ -463,6 +492,9 @@ public final class RegisterController extends Controller implements DisconnectEv
 
     /**
      * @param view The view.
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     public void setView(final RegisterView view) {
         this.view = view;

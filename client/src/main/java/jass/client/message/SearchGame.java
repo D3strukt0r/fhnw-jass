@@ -29,7 +29,7 @@ import jass.lib.message.SearchGameData;
  *
  * @author Thomas Weber
  * @version %I%, %G%
- * @since 0.0.1
+ * @since 1.0.0
  */
 public final class SearchGame extends Message {
     /**
@@ -39,12 +39,19 @@ public final class SearchGame extends Message {
 
     /**
      * @param rawData The data (still not casted)
+     *
+     * @author Thomas Weber
+     * @since 1.0.0
      */
     public SearchGame(final MessageData rawData) {
         super(rawData);
         data = (SearchGameData) rawData;
     }
 
+    /**
+     * @author Thomas Weber
+     * @since 1.0.0
+     */
     @Override
     public boolean process(final SocketUtil socket) {
         socket.send(this);

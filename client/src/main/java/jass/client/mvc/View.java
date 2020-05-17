@@ -28,7 +28,7 @@ import javafx.stage.Stage;
  *
  * @author Manuele Vaccari
  * @version %I%, %G%
- * @since 0.0.1
+ * @since 1.0.0
  */
 public abstract class View {
     /**
@@ -45,6 +45,9 @@ public abstract class View {
      * Set any options for the stage in the subclass constructor.
      *
      * @param stage An object containing a Stage.
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     protected View(final Stage stage) {
         this.stage = stage;
@@ -59,11 +62,17 @@ public abstract class View {
 
     /**
      * @return Returns a scene with the contents.
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     protected abstract Scene createGUI();
 
     /**
      * Display the view.
+     *
+     * @author Manuele Vaccari & Victor Hargrave
+     * @since 1.0.0
      */
     public void start() {
         stage.setScene(scene);
@@ -72,6 +81,9 @@ public abstract class View {
 
     /**
      * Hide the view.
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     public void stop() {
         stage.hide();
@@ -79,6 +91,9 @@ public abstract class View {
 
     /**
      * @return Returns the scene.
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     public Scene getScene() {
         return scene;
@@ -88,6 +103,9 @@ public abstract class View {
      * Getter for the stage, so that the controller can access window events.
      *
      * @return Returns the stage.
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     public Stage getStage() {
         return stage;

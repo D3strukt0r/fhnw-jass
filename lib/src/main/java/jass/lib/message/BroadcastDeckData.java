@@ -29,6 +29,8 @@ import java.util.List;
  * The data model for the BroadcastDeckData message.
  *
  * @author Victor Hargrave
+ * @version %I%, %G%
+ * @since 1.0.0
  */
 public final class BroadcastDeckData extends MessageData {
     /**
@@ -49,6 +51,9 @@ public final class BroadcastDeckData extends MessageData {
     /**
      * @param deckId The deck ID.
      * @param cards  The cards.
+     *
+     * @author Victor Hargrave
+     * @since 1.0.0
      */
     public BroadcastDeckData(final int deckId, final List<CardData> cards) {
         super("BroadcastDeck");
@@ -58,6 +63,9 @@ public final class BroadcastDeckData extends MessageData {
 
     /**
      * @param data The message containing all the data.
+     *
+     * @author Victor Hargrave
+     * @since 1.0.0
      */
     public BroadcastDeckData(final JSONObject data) {
         super(data);
@@ -78,6 +86,9 @@ public final class BroadcastDeckData extends MessageData {
 
     /**
      * @return Returns the deck ID.
+     *
+     * @author Victor Hargrave
+     * @since 1.0.0
      */
     public int getDeckId() {
         return deckId;
@@ -85,6 +96,9 @@ public final class BroadcastDeckData extends MessageData {
 
     /**
      * @return Returns the cards.
+     *
+     * @author Victor Hargrave
+     * @since 1.0.0
      */
     public JSONArray getCards() {
         return cards;
@@ -92,6 +106,9 @@ public final class BroadcastDeckData extends MessageData {
 
     /**
      * @return Returns the cards.
+     *
+     * @author Victor Hargrave
+     * @since 1.0.0
      */
     public ArrayList<CardData> getCardsClient() {
         return cardsClient;

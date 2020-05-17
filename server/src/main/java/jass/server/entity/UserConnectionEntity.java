@@ -26,7 +26,7 @@ import jass.lib.database.Entity;
 /**
  * @author Manuele Vaccari
  * @version %I%, %G%
- * @since 0.0.1
+ * @since 1.0.0
  */
 @DatabaseTable(tableName = "user_connections")
 public final class UserConnectionEntity extends Entity {
@@ -63,12 +63,18 @@ public final class UserConnectionEntity extends Entity {
     /**
      * For ORMLite all persisted classes must define a no-arg constructor with
      * at least package visibility.
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     public UserConnectionEntity() {
     }
 
     /**
      * @return Returns the ID.
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     public int getId() {
         return id;
@@ -76,6 +82,9 @@ public final class UserConnectionEntity extends Entity {
 
     /**
      * @return Returns user one.
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     public UserEntity getUserOne() {
         return userOne;
@@ -85,6 +94,9 @@ public final class UserConnectionEntity extends Entity {
      * @param userOne User one.
      *
      * @return Returns the object for further processing.
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     public UserConnectionEntity setUserOne(final UserEntity userOne) {
         this.userOne = userOne;
@@ -93,6 +105,9 @@ public final class UserConnectionEntity extends Entity {
 
     /**
      * @return Returns user two.
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     public UserEntity getUserTwo() {
         return userTwo;
@@ -102,6 +117,9 @@ public final class UserConnectionEntity extends Entity {
      * @param userTwo User two.
      *
      * @return Returns the object for further processing.
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     public UserConnectionEntity setUserTwo(final UserEntity userTwo) {
         this.userTwo = userTwo;
@@ -110,6 +128,9 @@ public final class UserConnectionEntity extends Entity {
 
     /**
      * @return Returns whether user two is a friend of user one.
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     public boolean isFriend() {
         return isFriend;
@@ -119,6 +140,9 @@ public final class UserConnectionEntity extends Entity {
      * @param friend Whether user two is a friend of user one.
      *
      * @return Returns the object for further processing.
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     public UserConnectionEntity setFriend(final boolean friend) {
         isFriend = friend;
@@ -127,6 +151,9 @@ public final class UserConnectionEntity extends Entity {
 
     /**
      * @return Returns whether user one has blocked user two.
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     public boolean isBlocked() {
         return isBlocked;
@@ -136,6 +163,9 @@ public final class UserConnectionEntity extends Entity {
      * @param blocked Whether user one has blocked user two.
      *
      * @return Returns the object for further processing.
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     public UserConnectionEntity setBlocked(final boolean blocked) {
         isBlocked = blocked;

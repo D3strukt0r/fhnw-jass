@@ -55,6 +55,10 @@ public final class SplashController extends Controller {
     @FXML
     private JFXProgressBar loadingProgress;
 
+    /**
+     * @author Manuele Vaccari
+     * @since 1.0.0
+     */
     @Override
     public void initialize(final URL location, final ResourceBundle resources) {
         model = new SplashModel();
@@ -80,6 +84,9 @@ public final class SplashController extends Controller {
 
     /**
      * @param view The view.
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     public void setView(final SplashView view) {
         this.view = view;

@@ -24,7 +24,7 @@ package jass.client.mvc;
  *
  * @author Manuele Vaccari
  * @version %I%, %G%
- * @since 0.0.1
+ * @since 1.0.0
  */
 public abstract class Model {
     protected Model() {

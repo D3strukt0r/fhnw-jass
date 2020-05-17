@@ -28,7 +28,7 @@ import jass.server.entity.TeamEntity;
  *
  * @author Thomas Weber
  * @version %I%, %G%
- * @since 0.0.1
+ * @since 1.0.0
  */
 public final class TeamRepository extends Repository<Dao<TeamEntity, Integer>, TeamEntity> {
     /**
@@ -42,6 +42,9 @@ public final class TeamRepository extends Repository<Dao<TeamEntity, Integer>, T
      * @param dao The DAO to edit inside the database.
      *
      * @return Returns the Repository.
+     *
+     * @author Thomas Weber
+     * @since 1.0.0
      */
     public static TeamRepository getSingleton(final Dao<TeamEntity, Integer> dao) {
         if (singleton == null) {
@@ -52,6 +55,9 @@ public final class TeamRepository extends Repository<Dao<TeamEntity, Integer>, T
 
     /**
      * @param dao The DAO to edit inside the database.
+     *
+     * @author Thomas Weber
+     * @since 1.0.0
      */
     public TeamRepository(final Dao<TeamEntity, Integer> dao) {
         super(dao);

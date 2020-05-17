@@ -41,10 +41,9 @@ import java.util.ArrayList;
 /**
  * Creates a server socket (with or without SSL).
  *
- * @author Manuele Vaccari
- * @author https://stackoverflow.com/questions/53323855/sslserversocket-and-certificate-setup
+ * @author Manuele Vaccari & https://stackoverflow.com/questions/53323855/sslserversocket-and-certificate-setup
  * @version %I%, %G%
- * @since 0.0.1
+ * @since 1.0.0
  */
 public final class ServerSocketUtil extends Thread {
     /**
@@ -82,6 +81,8 @@ public final class ServerSocketUtil extends Thread {
      * @throws NoSuchAlgorithmException  An error with SSL.
      * @throws UnrecoverableKeyException An error with SSL.
      * @throws KeyManagementException    An error with SSL.
+     * @author Manuele Vaccari & https://stackoverflow.com/questions/53323855/sslserversocket-and-certificate-setup
+     * @since 1.0.0
      */
     public ServerSocketUtil(final int port, final boolean secure) throws IOException, KeyStoreException, CertificateException, NoSuchAlgorithmException, UnrecoverableKeyException, KeyManagementException {
         super();
@@ -124,6 +125,10 @@ public final class ServerSocketUtil extends Thread {
         }
     }
 
+    /**
+     * @author Manuele Vaccari
+     * @since 1.0.0
+     */
     @Override
     @SuppressWarnings("InfiniteLoopStatement")
     public void run() {
@@ -143,6 +148,9 @@ public final class ServerSocketUtil extends Thread {
      * @param username A string with the username of the user.
      *
      * @return Returns the client if it exists, otherwise null.
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     public static synchronized ClientUtil get(final String username) {
         for (ClientUtil c : clients) {
@@ -159,6 +167,9 @@ public final class ServerSocketUtil extends Thread {
      * @param username A string with the username of the user.
      *
      * @return Returns true if a client is connected, otherwise false.
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     public static synchronized boolean exists(final String username) {
         for (ClientUtil c : clients) {
@@ -173,6 +184,9 @@ public final class ServerSocketUtil extends Thread {
      * Remove the desired client from the list of connected clients.
      *
      * @param client The client object.
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     public static synchronized void remove(final ClientUtil client) {
         clients.remove(client);

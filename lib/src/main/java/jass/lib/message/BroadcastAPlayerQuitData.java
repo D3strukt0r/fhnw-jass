@@ -24,16 +24,22 @@ import org.json.JSONObject;
 /**
  * @author Victor Hargrave
  * @version %I%, %G%
- * @since 0.0.1
+ * @since 1.0.0
  */
 public final class BroadcastAPlayerQuitData extends MessageData {
-
+    /**
+     * @author Victor Hargrave
+     * @since 1.0.0
+     */
     public BroadcastAPlayerQuitData() {
         super("BroadcastAPlayerQuit");
     }
 
     /**
      * @param data The message containing all the data.
+     *
+     * @author Victor Hargrave
+     * @since 1.0.0
      */
     public BroadcastAPlayerQuitData(final JSONObject data) {
         super(data);

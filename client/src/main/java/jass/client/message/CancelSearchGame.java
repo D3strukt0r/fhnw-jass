@@ -24,6 +24,11 @@ import jass.lib.message.CancelSearchGameData;
 import jass.lib.message.MessageData;
 import jass.lib.message.ResultData;
 
+/**
+ * @author Thomas Weber
+ * @version %I%, %G%
+ * @since 1.0.0
+ */
 public final class CancelSearchGame extends Message {
     /**
      * The data of the message.
@@ -32,12 +37,19 @@ public final class CancelSearchGame extends Message {
 
     /**
      * @param rawData The data (still not casted)
+     *
+     * @author Thomas Weber
+     * @since 1.0.0
      */
     public CancelSearchGame(final MessageData rawData) {
         super(rawData);
         data = (CancelSearchGameData) rawData;
     }
 
+    /**
+     * @author Thomas Weber
+     * @since 1.0.0
+     */
     @Override
     public boolean process(final SocketUtil socket) {
         socket.send(this);

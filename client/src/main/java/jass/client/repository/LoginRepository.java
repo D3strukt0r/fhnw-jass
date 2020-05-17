@@ -28,7 +28,7 @@ import jass.lib.database.Repository;
  *
  * @author Manuele Vaccari
  * @version %I%, %G%
- * @since 0.0.1
+ * @since 1.0.0
  */
 public final class LoginRepository extends Repository<Dao<LoginEntity, Integer>, LoginEntity> {
     /**
@@ -42,6 +42,9 @@ public final class LoginRepository extends Repository<Dao<LoginEntity, Integer>,
      * @param dao The DAO to edit inside the database.
      *
      * @return Returns the Repository.
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     public static LoginRepository getSingleton(final Dao<LoginEntity, Integer> dao) {
         if (singleton == null) {
@@ -52,6 +55,9 @@ public final class LoginRepository extends Repository<Dao<LoginEntity, Integer>,
 
     /**
      * @param dao The DAO to edit inside the database.
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     public LoginRepository(final Dao<LoginEntity, Integer> dao) {
         super(dao);
@@ -64,6 +70,9 @@ public final class LoginRepository extends Repository<Dao<LoginEntity, Integer>,
      * @param login A LoginEntity object
      *
      * @return "true" if everything went alright, "false" if something failed.
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     public boolean setToConnectAutomatically(final LoginEntity login) {
         boolean result;
@@ -93,6 +102,9 @@ public final class LoginRepository extends Repository<Dao<LoginEntity, Integer>,
 
     /**
      * @return Returns the login which is set as connect automatically.
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     public LoginEntity findConnectAutomatically() {
         for (LoginEntity l : getDao()) {

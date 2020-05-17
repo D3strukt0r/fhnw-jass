@@ -29,7 +29,7 @@ import jass.lib.servicelocator.Service;
  *
  * @author Manuele Vaccari
  * @version %I%, %G%
- * @since 0.0.1
+ * @since 1.0.0
  */
 @DatabaseTable(tableName = "login")
 public final class LoginEntity extends Entity implements Service {
@@ -72,12 +72,18 @@ public final class LoginEntity extends Entity implements Service {
     /**
      * For ORMLite all persisted classes must define a no-arg constructor with
      * at least package visibility.
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     public LoginEntity() {
     }
 
     /**
      * @return Returns the ID.
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     public int getId() {
         return id;
@@ -85,6 +91,9 @@ public final class LoginEntity extends Entity implements Service {
 
     /**
      * @return Returns the username.
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     public String getUsername() {
         return username;
@@ -94,6 +103,9 @@ public final class LoginEntity extends Entity implements Service {
      * @param username The username.
      *
      * @return Returns the object for further processing.
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     public LoginEntity setUsername(final String username) {
         this.username = username;
@@ -102,6 +114,9 @@ public final class LoginEntity extends Entity implements Service {
 
     /**
      * @return Returns the password.
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     public String getPassword() {
         return password;
@@ -111,6 +126,9 @@ public final class LoginEntity extends Entity implements Service {
      * @param password The password.
      *
      * @return Returns the object for further processing.
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     public LoginEntity setPassword(final String password) {
         this.password = password;
@@ -119,6 +137,9 @@ public final class LoginEntity extends Entity implements Service {
 
     /**
      * @return Returns the token.
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     public String getToken() {
         return token;
@@ -128,6 +149,9 @@ public final class LoginEntity extends Entity implements Service {
      * @param token The token.
      *
      * @return Returns the object for further processing.
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     public LoginEntity setToken(final String token) {
         this.token = token;
@@ -136,6 +160,9 @@ public final class LoginEntity extends Entity implements Service {
 
     /**
      * @return Returns whether to connect automatically.
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     public boolean isConnectAutomatically() {
         return connectAutomatically;
@@ -145,6 +172,9 @@ public final class LoginEntity extends Entity implements Service {
      * @param connectAutomatically Whether to connect automatically.
      *
      * @return Returns the object for further processing.
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     public LoginEntity setConnectAutomatically(final boolean connectAutomatically) {
         this.connectAutomatically = connectAutomatically;
@@ -153,6 +183,9 @@ public final class LoginEntity extends Entity implements Service {
 
     /**
      * @return Returns the server this login belongs to.
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     public ServerEntity getServer() {
         return server;
@@ -162,6 +195,9 @@ public final class LoginEntity extends Entity implements Service {
      * @param server The server this login belongs to.
      *
      * @return Returns the object for further processing.
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     public LoginEntity setServer(final ServerEntity server) {
         this.server = server;

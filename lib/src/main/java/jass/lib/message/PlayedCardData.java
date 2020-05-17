@@ -22,9 +22,9 @@ package jass.lib.message;
 import org.json.JSONObject;
 
 /**
- * @author Victor Hargrave & Manuele Vaccari
+ * @author Victor Hargrave
  * @version %I%, %G%
- * @since 0.0.1
+ * @since 1.0.0
  */
 public final class PlayedCardData extends MessageData {
     /**
@@ -35,6 +35,9 @@ public final class PlayedCardData extends MessageData {
     /**
      * This is used by the server to notify the client to give an appropriate
      * answer back.
+     *
+     * @author Victor Hargrave
+     * @since 1.0.0
      */
     public PlayedCardData(final boolean playedCardValid) {
         super("PlayedCard");
@@ -43,6 +46,9 @@ public final class PlayedCardData extends MessageData {
 
     /**
      * @param data The message containing all the data.
+     *
+     * @author Victor Hargrave
+     * @since 1.0.0
      */
     public PlayedCardData(final JSONObject data) {
         super(data);
@@ -51,6 +57,9 @@ public final class PlayedCardData extends MessageData {
 
     /**
      * @return Returns whether the played card is a valid move or not.
+     *
+     * @author Victor Hargrave
+     * @since 1.0.0
      */
     public boolean getPlayedCardValid() {
         return playedCardValid;

@@ -25,25 +25,58 @@ import org.json.JSONObject;
  * The data model for the BroadcastPointsData message.
  *
  * @author Victor Hargrave
+ * @version %I%, %G%
+ * @since 1.0.0
  */
 public final class BroadcastRoundOverData extends MessageData {
+    /**
+     * The round.
+     */
     private final int roundId;
 
+    /**
+     * The points of team one.
+     */
     private final int team1Points;
 
+    /**
+     * The points of team two.
+     */
     private final int team2Points;
 
+    /**
+     * The username of player one of team one.
+     */
     private final String team1Player1;
 
+    /**
+     * The username of player two of team one.
+     */
     private final String team1Player2;
 
+    /**
+     * The username of player one of team two.
+     */
     private final String team2Player1;
 
+    /**
+     * The username of player two of team two.
+     */
     private final String team2Player2;
 
-    public BroadcastRoundOverData(final int roundId, final int team1Points, final int team2Points,
-                                  final String team1Player1, final String team1Player2,
-                                  final String team2Player1, final String team2Player2) {
+    /**
+     * @param roundId      The round.
+     * @param team1Points  The points of team one.
+     * @param team2Points  The points of team two.
+     * @param team1Player1 The username of player one of team one.
+     * @param team1Player2 The username of player two of team one.
+     * @param team2Player1 The username of player one of team two.
+     * @param team2Player2 The username of player two of team two.
+     *
+     * @author Victor Hargrave
+     * @since 1.0.0
+     */
+    public BroadcastRoundOverData(final int roundId, final int team1Points, final int team2Points, final String team1Player1, final String team1Player2, final String team2Player1, final String team2Player2) {
         super("BroadcastRoundOver");
         this.roundId = roundId;
         this.team1Points = team1Points;
@@ -56,6 +89,9 @@ public final class BroadcastRoundOverData extends MessageData {
 
     /**
      * @param data The message containing all the data.
+     *
+     * @author Victor Hargrave
+     * @since 1.0.0
      */
     public BroadcastRoundOverData(final JSONObject data) {
         super(data);
@@ -69,32 +105,71 @@ public final class BroadcastRoundOverData extends MessageData {
     }
 
     /**
-     * The deck.
+     * @return Returns the round id
+     *
+     * @author Victor Hargrave
+     * @since 1.0.0
      */
     public int getRoundId() {
         return roundId;
     }
 
+    /**
+     * @return Returns the points of team one.
+     *
+     * @author Victor Hargrave
+     * @since 1.0.0
+     */
     public int getTeam1Points() {
         return team1Points;
     }
 
+    /**
+     * @return Returns the points of team two.
+     *
+     * @author Victor Hargrave
+     * @since 1.0.0
+     */
     public int getTeam2Points() {
         return team2Points;
     }
 
+    /**
+     * @return Returns the username of player one of team one.
+     *
+     * @author Victor Hargrave
+     * @since 1.0.0
+     */
     public String getTeam1Player1() {
         return team1Player1;
     }
 
+    /**
+     * @return Returns the username of player two of team one.
+     *
+     * @author Victor Hargrave
+     * @since 1.0.0
+     */
     public String getTeam1Player2() {
         return team1Player2;
     }
 
+    /**
+     * @return Returns the username of player one of team two.
+     *
+     * @author Victor Hargrave
+     * @since 1.0.0
+     */
     public String getTeam2Player1() {
         return team2Player1;
     }
 
+    /**
+     * @return Returns the username of player two of team two.
+     *
+     * @author Victor Hargrave
+     * @since 1.0.0
+     */
     public String getTeam2Player2() {
         return team2Player2;
     }

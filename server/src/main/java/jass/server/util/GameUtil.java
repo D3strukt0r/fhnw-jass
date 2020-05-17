@@ -70,9 +70,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * @author Thomas Weber, Manuele Vaccari, Victor Hargrave
+ * @author Thomas Weber & Manuele Vaccari & Victor Hargrave & Sasa Trajkova
  * @version %I%, %G%
- * @since 0.0.1
+ * @since 1.0.0
  */
 public final class GameUtil implements ChosenGameModeEventListener, PlayedCardEventListener, StopPlayingEventListener {
     /**
@@ -140,6 +140,9 @@ public final class GameUtil implements ChosenGameModeEventListener, PlayedCardEv
      * @param clientPlayerTwo   Player two.
      * @param clientPlayerThree Player three.
      * @param clientPlayerFour  Player four.
+     *
+     * @author Thomas Weber & Victor Hargrave & Manuele Vaccari
+     * @since 1.0.0
      */
     public GameUtil(final ClientUtil clientPlayerOne, final ClientUtil clientPlayerTwo, final ClientUtil clientPlayerThree, final ClientUtil clientPlayerFour) {
         this.clientPlayerOne = clientPlayerOne;
@@ -152,7 +155,7 @@ public final class GameUtil implements ChosenGameModeEventListener, PlayedCardEv
         UserEntity playerFour = clientPlayerFour.getUser();
 
         // Add event listeners
-        AddEventListeners(clientPlayerOne, clientPlayerTwo, clientPlayerThree, clientPlayerFour);
+        addEventListeners(clientPlayerOne, clientPlayerTwo, clientPlayerThree, clientPlayerFour);
 
         // Assign and create Teams
         TeamEntity teamOne = (new TeamEntity()).setPlayerOne(playerOne).setPlayerTwo(playerThree);
@@ -196,7 +199,16 @@ public final class GameUtil implements ChosenGameModeEventListener, PlayedCardEv
         sendChooseGameMode();
     }
 
-    private void AddEventListeners(final ClientUtil clientPlayerOne, final ClientUtil clientPlayerTwo, final ClientUtil clientPlayerThree, final ClientUtil clientPlayerFour) {
+    /**
+     * @param clientPlayerOne   The client of player one.
+     * @param clientPlayerTwo   The client of player two.
+     * @param clientPlayerThree The client of player three.
+     * @param clientPlayerFour  The client of player four.
+     *
+     * @author Victor Hargrave
+     * @since 1.0.0
+     */
+    private void addEventListeners(final ClientUtil clientPlayerOne, final ClientUtil clientPlayerTwo, final ClientUtil clientPlayerThree, final ClientUtil clientPlayerFour) {
         clientPlayerOne.addChosenGameModeEventListener(this);
         clientPlayerTwo.addChosenGameModeEventListener(this);
         clientPlayerThree.addChosenGameModeEventListener(this);
@@ -213,7 +225,16 @@ public final class GameUtil implements ChosenGameModeEventListener, PlayedCardEv
         clientPlayerFour.addStopPlayingEventListener(this);
     }
 
-    private void RemoveEventListeners(final ClientUtil clientPlayerOne, final ClientUtil clientPlayerTwo, final ClientUtil clientPlayerThree, final ClientUtil clientPlayerFour) {
+    /**
+     * @param clientPlayerOne   The client of player one.
+     * @param clientPlayerTwo   The client of player two.
+     * @param clientPlayerThree The client of player three.
+     * @param clientPlayerFour  The client of player four.
+     *
+     * @author Victor Hargrave
+     * @since 1.0.0
+     */
+    private void removeEventListeners(final ClientUtil clientPlayerOne, final ClientUtil clientPlayerTwo, final ClientUtil clientPlayerThree, final ClientUtil clientPlayerFour) {
         clientPlayerOne.removeChosenGameModeEventListener(this);
         clientPlayerTwo.removeChosenGameModeEventListener(this);
         clientPlayerThree.removeChosenGameModeEventListener(this);
@@ -230,6 +251,10 @@ public final class GameUtil implements ChosenGameModeEventListener, PlayedCardEv
         clientPlayerFour.removeStopPlayingEventListener(this);
     }
 
+    /**
+     * @author Manuele Vaccari
+     * @since 1.0.0
+     */
     @Override
     public void onChosenGameMode(final ChosenGameModeData data) {
         // Get the right client to compare to.
@@ -273,6 +298,9 @@ public final class GameUtil implements ChosenGameModeEventListener, PlayedCardEv
 
     /**
      * @param message Message to broadcast to all players.
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     private void broadcast(final Message message) {
         clientPlayerOne.send(message);
@@ -287,6 +315,9 @@ public final class GameUtil implements ChosenGameModeEventListener, PlayedCardEv
      * @param teamTwo The second team.
      *
      * @return Returns the ID of the team the user belongs to.
+     *
+     * @author Thomas Weber
+     * @since 1.0.0
      */
     private int getTeamIdForPlayer(final UserEntity user, final TeamEntity teamOne, final TeamEntity teamTwo) {
         boolean userIsInTeamOne = teamOne.checkIfPlayerIsInTeam(user);
@@ -299,6 +330,9 @@ public final class GameUtil implements ChosenGameModeEventListener, PlayedCardEv
 
     /**
      * Sends a ChooseGameMode message to the user defined in the RoundEntity.
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     private void sendChooseGameMode() {
         ChooseGameMode chooseGameMode = new ChooseGameMode(new ChooseGameModeData());
@@ -316,6 +350,10 @@ public final class GameUtil implements ChosenGameModeEventListener, PlayedCardEv
         }
     }
 
+    /**
+     * @author Thomas Weber & Victor Hargrave & Manuele Vaccari
+     * @since 1.0.0
+     */
     @Override
     public void onPlayedCard(final PlayCardData data) throws InterruptedException {
         boolean isValid = validateMove(data);
@@ -394,6 +432,14 @@ public final class GameUtil implements ChosenGameModeEventListener, PlayedCardEv
         }
     }
 
+    /**
+     * @param turn        The current turn.
+     * @param winningUser The user who won.
+     * @param points      The total points.
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
+     */
     private void broadcastPointsToWinningTeam(final TurnEntity turn, final UserEntity winningUser, final int points) {
         BroadcastPoints pointsMsg = new BroadcastPoints(new BroadcastPointsData(turn.getId(), points));
         if (game.getTeamOne().checkIfPlayerIsInTeam(winningUser)) {
@@ -411,6 +457,16 @@ public final class GameUtil implements ChosenGameModeEventListener, PlayedCardEv
         }
     }
 
+    /**
+     * @param turnRepository The turn repo.
+     * @param winningUser    The user who won.
+     *
+     * @return Returns whether the round is already over.
+     *
+     * @throws SQLException If an SQL error occurs.
+     * @author Victor Hargrave
+     * @since 1.0.0
+     */
     private boolean isRoundOver(final TurnRepository turnRepository, final UserEntity winningUser) throws SQLException {
         boolean isRoundOver;
         int numberOfTurnsPlayed = turnRepository.getDao().queryForEq("round_id", currentRound.getId()).size();
@@ -418,6 +474,14 @@ public final class GameUtil implements ChosenGameModeEventListener, PlayedCardEv
         return isRoundOver;
     }
 
+    /**
+     * @param turn The current turn.
+     *
+     * @return Returns the total points.
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
+     */
     private int calculatePointsByGameMode(final TurnEntity turn) {
         int points = 0;
         if (currentRound.getGameMode() == GameMode.TRUMPF) {
@@ -443,6 +507,7 @@ public final class GameUtil implements ChosenGameModeEventListener, PlayedCardEv
      * @return Returns the points of all cards together.
      *
      * @author Manuele Vaccari
+     * @since 1.0.0
      */
     private static int calculateCardPointsTrumpf(final ArrayList<CardEntity> cards, final Card.Suit trumpf) {
         // Convert suit enum to database entity
@@ -472,6 +537,7 @@ public final class GameUtil implements ChosenGameModeEventListener, PlayedCardEv
      * @return Returns the points of all cards together.
      *
      * @author Manuele Vaccari
+     * @since 1.0.0
      */
     private static int calculateCardPointsObeAbe(final ArrayList<CardEntity> cards) {
         int points = 0;
@@ -487,6 +553,7 @@ public final class GameUtil implements ChosenGameModeEventListener, PlayedCardEv
      * @return Returns the points of all cards together.
      *
      * @author Manuele Vaccari
+     * @since 1.0.0
      */
     private static int calculateCardPointsOndeUfe(final ArrayList<CardEntity> cards) {
         int points = 0;
@@ -507,6 +574,7 @@ public final class GameUtil implements ChosenGameModeEventListener, PlayedCardEv
      * @return Returns the user who won the current turn.
      *
      * @author Manuele Vaccari
+     * @since 1.0.0
      */
     private static UserEntity calculateTurnWinner(final RoundEntity currentRound, final TurnEntity currentTurn) {
         CardEntity winningCard = null;
@@ -543,6 +611,7 @@ public final class GameUtil implements ChosenGameModeEventListener, PlayedCardEv
      * @return Returns the card which wins the current turn.
      *
      * @author Manuele Vaccari
+     * @since 1.0.0
      */
     private static CardEntity calculateTurnWinnerTrump(final Card.Suit trumpf, final TurnEntity currentTurn) {
         RankRepository rankRepo = RankRepository.getSingleton(null);
@@ -612,10 +681,10 @@ public final class GameUtil implements ChosenGameModeEventListener, PlayedCardEv
      * @return Returns the card which wins the current turn.
      *
      * @author Sasa Trajkova
+     * @since 1.0.0
      */
     private static CardEntity calculateTurnWinnerObeAbe(final TurnEntity currentTurn) {
         RankRepository rankRepo = RankRepository.getSingleton(null);
-        SuitRepository suitRepo = SuitRepository.getSingleton(null);
 
         // Get suit of first card played
         SuitEntity suitOfFirstCard = currentTurn.getCardOne().getSuit();
@@ -653,10 +722,10 @@ public final class GameUtil implements ChosenGameModeEventListener, PlayedCardEv
      * @return Returns the card which wins the current turn.
      *
      * @author Victor Hargrave
+     * @since 1.0.0
      */
     private static CardEntity calculateTurnWinnerOndeufe(final TurnEntity currentTurn) {
         RankRepository rankRepo = RankRepository.getSingleton(null);
-        SuitRepository suitRepo = SuitRepository.getSingleton(null);
 
         // Get suit of first card played
         SuitEntity suitOfFirstCard = currentTurn.getCardOne().getSuit();
@@ -690,7 +759,16 @@ public final class GameUtil implements ChosenGameModeEventListener, PlayedCardEv
 
     ////////////////////////////////////////////////////////////////////////////
 
-    private TurnEntity addNewTurn(final UserEntity startingPlayer, final RoundEntity round) {
+    /**
+     * @param startingPlayer The player to start.
+     * @param round          The round.
+     *
+     * @return Returns the new turn.
+     *
+     * @author Victor Hargrave
+     * @since 1.0.0
+     */
+    private static TurnEntity addNewTurn(final UserEntity startingPlayer, final RoundEntity round) {
         TurnEntity turn = (new TurnEntity())
             .setRound(round)
             .setStartingPlayer(startingPlayer);
@@ -703,21 +781,20 @@ public final class GameUtil implements ChosenGameModeEventListener, PlayedCardEv
      *
      * @return Returns true if valid, otherwise false.
      *
-     * @author Manuele Vaccari & ...
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     private boolean validateMove(final PlayCardData data) {
         boolean isValidMove = false;
         CardEntity playedCard = CardRepository.getSingleton(null).getById(data.getCardId());
         DeckEntity deckOfPlayer = getCurrentDeckByUsername(data.getUsername());
 
+        CardEntity cardOne = currentTurn.getCardOne();
         if (currentRound.getGameMode() == GameMode.TRUMPF) {
-            CardEntity cardOne = currentTurn.getCardOne() != null ? currentTurn.getCardOne() : null;
             isValidMove = validateMoveTrump(playedCard, deckOfPlayer, cardOne, String.valueOf(currentRound.getTrumpfSuit()));
         } else if (currentRound.getGameMode() == GameMode.OBE_ABE) {
-            CardEntity cardOne = currentTurn.getCardOne() != null ? currentTurn.getCardOne() : null;
             isValidMove = validateMoveObeAbe(playedCard, deckOfPlayer, cardOne);
         } else if (currentRound.getGameMode() == GameMode.ONDE_UFE) {
-            CardEntity cardOne = currentTurn.getCardOne() != null ? currentTurn.getCardOne() : null;
             isValidMove = validateMoveOndeUfe(playedCard, deckOfPlayer, cardOne);
         }
 
@@ -736,6 +813,7 @@ public final class GameUtil implements ChosenGameModeEventListener, PlayedCardEv
      * @return True if the move is valid, false if invalid
      *
      * @author Thomas Weber
+     * @since 1.0.0
      */
     public static boolean validateMoveTrump(final CardEntity playedCard, final DeckEntity deck, final CardEntity firstCardOfTurn, final String trumpSuit) {
         // In case the playedCard is first card of current turn the move is
@@ -763,7 +841,7 @@ public final class GameUtil implements ChosenGameModeEventListener, PlayedCardEv
 
             for (int i = 0; i < cardsInDeck.size(); i++) {
                 // Only unplayed cards should be checked
-                if (cardsHaveBeenPlayed.get(i) == null || cardsHaveBeenPlayed.get(i) == false) {
+                if (cardsHaveBeenPlayed.get(i) == null || !cardsHaveBeenPlayed.get(i)) {
                     // If a card has the same suite as the firstCardOfTurn, this
                     // card has to have been played and thus this move is
                     // invalid
@@ -799,6 +877,7 @@ public final class GameUtil implements ChosenGameModeEventListener, PlayedCardEv
      * @return Returns true if the move is valid otherwise false.
      *
      * @author Manuele Vaccari
+     * @since 1.0.0
      */
     public static boolean validateMoveObeAbe(final CardEntity playedCard, final DeckEntity deck, final CardEntity firstCardOfTurn) {
         // In case the playedCard is first card of current turn the move is
@@ -821,7 +900,7 @@ public final class GameUtil implements ChosenGameModeEventListener, PlayedCardEv
 
         for (int i = 0; i < cardsInDeck.size(); i++) {
             // Only unplayed cards should be checked
-            if (cardsHaveBeenPlayed.get(i) == null || cardsHaveBeenPlayed.get(i) == false) {
+            if (cardsHaveBeenPlayed.get(i) == null || !cardsHaveBeenPlayed.get(i)) {
                 // If a card has the same suite as the firstCardOfTurn, this
                 // card has to have been played and thus this move is invalid
                 if (cardsInDeck.get(i).getSuit().getKey().equals(firstCardOfTurn.getSuit().getKey())) {
@@ -842,6 +921,7 @@ public final class GameUtil implements ChosenGameModeEventListener, PlayedCardEv
      * @return Returns true if the move is valid otherwise false.
      *
      * @author Manuele Vaccari, Sasa Trajkova
+     * @since 1.0.0
      */
     public static boolean validateMoveOndeUfe(final CardEntity playedCard, final DeckEntity deck, final CardEntity firstCardOfTurn) {
         // In case the playedCard is first card of current turn the move is
@@ -864,7 +944,7 @@ public final class GameUtil implements ChosenGameModeEventListener, PlayedCardEv
 
         for (int i = 0; i < cardsInDeck.size(); i++) {
             // Only unplayed cards should be checked
-            if (cardsHaveBeenPlayed.get(i) == null || cardsHaveBeenPlayed.get(i) == false) {
+            if (cardsHaveBeenPlayed.get(i) == null || !cardsHaveBeenPlayed.get(i)) {
                 // If a card has the same suite as the firstCardOfTurn, this
                 // card has to have been played and thus this move is invalid
                 if (cardsInDeck.get(i).getSuit().getKey().equals(firstCardOfTurn.getSuit().getKey())) {
@@ -876,6 +956,14 @@ public final class GameUtil implements ChosenGameModeEventListener, PlayedCardEv
         return true;
     }
 
+    /**
+     * @param username The username.
+     *
+     * @return Returns the client util of the user.
+     *
+     * @author Victor Hargrave
+     * @since 1.0.0
+     */
     private ClientUtil getClientUtilByUsername(final String username) {
         if (username.equals(clientPlayerOne.getUsername())) {
             return clientPlayerOne;
@@ -889,6 +977,14 @@ public final class GameUtil implements ChosenGameModeEventListener, PlayedCardEv
         return null;
     }
 
+    /**
+     * @param username The username.
+     *
+     * @return Returns the deck of the user.
+     *
+     * @author Victor Hargrave
+     * @since 1.0.0
+     */
     private DeckEntity getCurrentDeckByUsername(final String username) {
         if (username.equals(clientPlayerOne.getUsername())) {
             return currentDeckPlayerOne;
@@ -902,15 +998,20 @@ public final class GameUtil implements ChosenGameModeEventListener, PlayedCardEv
         return null;
     }
 
+    /**
+     * @author Victor Hargrave
+     * @since 1.0.0
+     */
     @Override
     public void onStopPlaying(final StopPlayingData data) {
         ClientUtil client = getClientUtilByUsername(data.getUsername());
         if (client != null) {
-            SetGameToInactive();
+            setGameToInactive();
             BroadcastAPlayerQuit broadcastAPlayerQuit = new BroadcastAPlayerQuit(new BroadcastAPlayerQuitData());
             broadcast(broadcastAPlayerQuit);
-            RemoveEventListeners(clientPlayerOne, clientPlayerTwo, clientPlayerThree, clientPlayerFour);
+            removeEventListeners(clientPlayerOne, clientPlayerTwo, clientPlayerThree, clientPlayerFour);
             SearchGameUtil searchGameUtil = ServiceLocator.get(SearchGameUtil.class);
+            assert searchGameUtil != null;
             searchGameUtil.remove(clientPlayerOne);
             searchGameUtil.remove(clientPlayerTwo);
             searchGameUtil.remove(clientPlayerThree);
@@ -920,7 +1021,11 @@ public final class GameUtil implements ChosenGameModeEventListener, PlayedCardEv
         }
     }
 
-    private void SetGameToInactive() {
+    /**
+     * @author Victor Hargrave
+     * @since 1.0.0
+     */
+    private void setGameToInactive() {
         game.setActive(false);
         GameRepository.getSingleton(null).update(game);
     }

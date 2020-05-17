@@ -28,7 +28,7 @@ import javafx.scene.control.TextInputControl;
  *
  * @author Manuele Vaccari
  * @version %I%, %G%
- * @since 0.0.1
+ * @since 1.0.0
  */
 public final class IsSameValidator extends ValidatorBase {
     /**
@@ -38,6 +38,9 @@ public final class IsSameValidator extends ValidatorBase {
 
     /**
      * @param validateTo The object which is to be validated to.
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     public IsSameValidator(final TextInputControl validateTo) {
         this.setMessage("Values are not the same");
@@ -47,6 +50,9 @@ public final class IsSameValidator extends ValidatorBase {
     /**
      * @param validateTo The object which is to be validated to.
      * @param message    A custom message to display.
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     public IsSameValidator(final TextInputControl validateTo, final String message) {
         super(message);
@@ -55,6 +61,9 @@ public final class IsSameValidator extends ValidatorBase {
 
     /**
      * Validate the fields by comparing two fields.
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     protected void eval() {
         if (this.srcControl.get() instanceof TextInputControl) {

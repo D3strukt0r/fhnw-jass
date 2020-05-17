@@ -19,6 +19,11 @@
 
 package jass.client.util;
 
+/**
+ * @author ...
+ * @version %I%, %G%
+ * @since 1.0.0
+ */
 public final class StringUtil {
     /**
      * Utility classes, which are collections of static members, are not meant
@@ -32,6 +37,9 @@ public final class StringUtil {
      * @param str Any string.
      *
      * @return Returns true if the object is null or empty, otherwise false.
+     *
+     * @author ...
+     * @since 1.0.0
      */
     public static boolean isNullOrEmpty(final String str) {
         return str == null || str.isEmpty();

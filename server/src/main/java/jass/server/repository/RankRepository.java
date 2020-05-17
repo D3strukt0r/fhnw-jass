@@ -31,7 +31,7 @@ import java.util.List;
  *
  * @author Victor Hargrave
  * @version %I%, %G%
- * @since 0.0.1
+ * @since 1.0.0
  */
 public final class RankRepository extends Repository<Dao<RankEntity, Integer>, RankEntity> {
     /**
@@ -45,6 +45,9 @@ public final class RankRepository extends Repository<Dao<RankEntity, Integer>, R
      * @param dao The DAO to edit inside the database.
      *
      * @return Returns the Repository.
+     *
+     * @author Victor Hargrave
+     * @since 1.0.0
      */
     public static RankRepository getSingleton(final Dao<RankEntity, Integer> dao) {
         if (singleton == null) {
@@ -55,6 +58,9 @@ public final class RankRepository extends Repository<Dao<RankEntity, Integer>, R
 
     /**
      * @param dao The DAO to edit inside the database.
+     *
+     * @author Victor Hargrave
+     * @since 1.0.0
      */
     public RankRepository(final Dao<RankEntity, Integer> dao) {
         super(dao);
@@ -65,6 +71,9 @@ public final class RankRepository extends Repository<Dao<RankEntity, Integer>, R
      *
      * @return Returns the RankEntity of the rank, or null if not found or
      * something went wrong.
+     *
+     * @author Victor Hargrave
+     * @since 1.0.0
      */
     public RankEntity getByName(final String name) {
         try {

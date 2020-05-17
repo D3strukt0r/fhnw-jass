@@ -31,7 +31,7 @@ import jass.lib.servicelocator.ServiceLocator;
  *
  * @author Manuele Vaccari
  * @version %I%, %G%
- * @since 0.0.1
+ * @since 1.0.0
  */
 public final class Login extends Message {
     /**
@@ -51,12 +51,19 @@ public final class Login extends Message {
 
     /**
      * @param rawData The data (still not casted)
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     public Login(final MessageData rawData) {
         super(rawData);
         data = (LoginData) rawData;
     }
 
+    /**
+     * @author Manuele Vaccari
+     * @since 1.0.0
+     */
     @Override
     public boolean process(final SocketUtil socket) {
         socket.send(this);
@@ -79,6 +86,9 @@ public final class Login extends Message {
 
     /**
      * @return Returns the result.
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     public ResultData getResultData() {
         return resultData;
@@ -86,6 +96,9 @@ public final class Login extends Message {
 
     /**
      * @return Returns the token.
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     public String getToken() {
         return token;

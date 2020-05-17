@@ -23,8 +23,14 @@ package jass.server.database;
  * Fixes the integrated MySQL in ORMLite.
  *
  * @author Manuele Vaccari
+ * @version %I%, %G%
+ * @since 1.0.0
  */
 public final class MysqlDatabaseType extends com.j256.ormlite.db.MysqlDatabaseType {
+    /**
+     * @author Manuele Vaccari
+     * @since 1.0.0
+     */
     @Override
     protected String getDriverClassName() {
         return "com.mysql.cj.jdbc.Driver";

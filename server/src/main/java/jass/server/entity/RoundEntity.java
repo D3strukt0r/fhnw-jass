@@ -30,7 +30,7 @@ import jass.lib.database.Entity;
  *
  * @author Victor Hargrave, Manuele Vaccari
  * @version %I%, %G%
- * @since 0.0.1
+ * @since 1.0.0
  */
 @DatabaseTable(tableName = "round")
 public final class RoundEntity extends Entity {
@@ -79,12 +79,18 @@ public final class RoundEntity extends Entity {
     /**
      * For ORMLite all persisted classes must define a no-arg constructor with
      * at least package visibility.
+     *
+     * @author Victor Hargrave
+     * @since 1.0.0
      */
     public RoundEntity() {
     }
 
     /**
      * @return Returns the ID.
+     *
+     * @author Victor Hargrave
+     * @since 1.0.0
      */
     public int getId() {
         return id;
@@ -92,6 +98,9 @@ public final class RoundEntity extends Entity {
 
     /**
      * @return Returns the game mode chooser.
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     public UserEntity getGameModeChooser() {
         return gameModeChooser;
@@ -101,6 +110,9 @@ public final class RoundEntity extends Entity {
      * @param gameModeChooser The game mode chooser.
      *
      * @return Returns the object for further processing.
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     public RoundEntity setGameModeChooser(final UserEntity gameModeChooser) {
         this.gameModeChooser = gameModeChooser;
@@ -109,6 +121,9 @@ public final class RoundEntity extends Entity {
 
     /**
      * @return Returns the game mode.
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     public GameMode getGameMode() {
         return gameMode;
@@ -118,6 +133,9 @@ public final class RoundEntity extends Entity {
      * @param gameMode The game mode.
      *
      * @return Returns the object for further processing.
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     public RoundEntity setGameMode(final GameMode gameMode) {
         this.gameMode = gameMode;
@@ -126,6 +144,9 @@ public final class RoundEntity extends Entity {
 
     /**
      * @return Returns the suit of the trumpf.
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     public Card.Suit getTrumpfSuit() {
         return trumpfSuit;
@@ -135,6 +156,9 @@ public final class RoundEntity extends Entity {
      * @param trumpfSuit The trumpf suit.
      *
      * @return Returns the object for further processing.
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     public RoundEntity setTrumpfSuit(final Card.Suit trumpfSuit) {
         this.trumpfSuit = trumpfSuit;
@@ -143,6 +167,9 @@ public final class RoundEntity extends Entity {
 
     /**
      * @return Returns the game.
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     public GameEntity getGame() {
         return game;
@@ -152,6 +179,9 @@ public final class RoundEntity extends Entity {
      * @param game The game.
      *
      * @return Returns the object for further processing.
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     public RoundEntity setGame(final GameEntity game) {
         this.game = game;
@@ -160,6 +190,9 @@ public final class RoundEntity extends Entity {
 
     /**
      * @return Returns the total points for team one.
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     public int getPointsTeamOne() {
         return pointsTeamOne;
@@ -169,6 +202,9 @@ public final class RoundEntity extends Entity {
      * @param pointsTeamOne The total points for team one.
      *
      * @return Returns the object for further processing.
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     public RoundEntity setPointsTeamOne(final int pointsTeamOne) {
         this.pointsTeamOne = pointsTeamOne;
@@ -179,6 +215,9 @@ public final class RoundEntity extends Entity {
      * @param points The points to add for team one.
      *
      * @return Returns the object for further processing.
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     public RoundEntity addPointsTeamOne(final int points) {
         pointsTeamOne += points;
@@ -187,6 +226,9 @@ public final class RoundEntity extends Entity {
 
     /**
      * @return Returns the total points for team two.
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     public int getPointsTeamTwo() {
         return pointsTeamTwo;
@@ -196,6 +238,9 @@ public final class RoundEntity extends Entity {
      * @param pointsTeamTwo The total points for team two.
      *
      * @return Returns the object for further processing.
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     public RoundEntity setPointsTeamTwo(final int pointsTeamTwo) {
         this.pointsTeamTwo = pointsTeamTwo;
@@ -206,6 +251,9 @@ public final class RoundEntity extends Entity {
      * @param points The points to add for team one.
      *
      * @return Returns the object for further processing.
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     public RoundEntity addPointsTeamTwo(final int points) {
         pointsTeamTwo += points;

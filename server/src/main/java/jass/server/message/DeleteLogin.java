@@ -32,7 +32,7 @@ import jass.lib.message.ResultData;
  *
  * @author Manuele Vaccari
  * @version %I%, %G%
- * @since 0.0.1
+ * @since 1.0.0
  */
 public final class DeleteLogin extends Message {
     /**
@@ -46,13 +46,20 @@ public final class DeleteLogin extends Message {
     private final DeleteLoginData data;
 
     /**
-     * @param rawData The data (still not casted)
+     * @param rawData The data (still not casted).
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
      */
     public DeleteLogin(final MessageData rawData) {
         super(rawData);
         data = (DeleteLoginData) rawData;
     }
 
+    /**
+     * @author Manuele Vaccari
+     * @since 1.0.0
+     */
     @Override
     public void process(final ClientUtil client) {
         boolean result = false;

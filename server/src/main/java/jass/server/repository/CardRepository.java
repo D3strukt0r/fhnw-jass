@@ -32,7 +32,7 @@ import java.util.ArrayList;
  *
  * @author Victor Hargrave
  * @version %I%, %G%
- * @since 0.0.1
+ * @since 1.0.0
  */
 public final class CardRepository extends Repository<Dao<CardEntity, Integer>, CardEntity> {
     /**
@@ -46,6 +46,9 @@ public final class CardRepository extends Repository<Dao<CardEntity, Integer>, C
      * @param dao The DAO to edit inside the database.
      *
      * @return Returns the Repository.
+     *
+     * @author Victor Hargrave
+     * @since 1.0.0
      */
     public static CardRepository getSingleton(final Dao<CardEntity, Integer> dao) {
         if (singleton == null) {
@@ -56,6 +59,9 @@ public final class CardRepository extends Repository<Dao<CardEntity, Integer>, C
 
     /**
      * @param dao The DAO to edit inside the database.
+     *
+     * @author Victor Hargrave
+     * @since 1.0.0
      */
     public CardRepository(final Dao<CardEntity, Integer> dao) {
         super(dao);
@@ -69,6 +75,7 @@ public final class CardRepository extends Repository<Dao<CardEntity, Integer>, C
      * false.
      *
      * @author Manuele Vaccari
+     * @since 1.0.0
      */
     public static boolean isAnyCardOfSuit(final ArrayList<CardEntity> cards, final SuitEntity suit) {
         for (CardEntity card : cards) {
@@ -88,6 +95,7 @@ public final class CardRepository extends Repository<Dao<CardEntity, Integer>, C
      * otherwise false.
      *
      * @author Manuele Vaccari
+     * @since 1.0.0
      */
     public static boolean isAnyCardOfSuitAndRank(final ArrayList<CardEntity> cards, final SuitEntity suit, final RankEntity rank) {
         for (CardEntity card : cards) {
@@ -106,6 +114,7 @@ public final class CardRepository extends Repository<Dao<CardEntity, Integer>, C
      * @return Returns the card which has the same suit and rank.
      *
      * @author Manuele Vaccari
+     * @since 1.0.0
      */
     public static CardEntity getCardOfSuitAndRank(final ArrayList<CardEntity> cards, final SuitEntity suit, final RankEntity rank) {
         for (CardEntity card : cards) {
