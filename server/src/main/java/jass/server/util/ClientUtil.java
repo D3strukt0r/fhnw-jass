@@ -212,6 +212,10 @@ public final class ClientUtil extends Thread {
         this.chosenGameModeListener.add(listener);
     }
 
+    public void removeChosenGameModeEventListener(final ChosenGameModeEventListener listener) {
+        this.chosenGameModeListener.remove(listener);
+    }
+
     /**
      * @param listener A PlayedCardEventListener object
      *
@@ -222,6 +226,10 @@ public final class ClientUtil extends Thread {
         this.playedCardListener.add(listener);
     }
 
+    public void removePlayedCardEventListener(final PlayedCardEventListener listener) {
+        this.playedCardListener.remove(listener);
+    }
+
     /**
      * @param listener A StopPlayingEventListener object
      *
@@ -229,6 +237,10 @@ public final class ClientUtil extends Thread {
      * @since 0.0.1
      */
     public void addStopPlayingEventListener(final StopPlayingEventListener listener) {
+        this.stopPlayingListener.add(listener);
+    }
+
+    public void removeStopPlayingEventListener(final StopPlayingEventListener listener) {
         this.stopPlayingListener.add(listener);
     }
 

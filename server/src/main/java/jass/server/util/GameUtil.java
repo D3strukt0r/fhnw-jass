@@ -134,20 +134,7 @@ public final class GameUtil implements ChosenGameModeEventListener, PlayedCardEv
         UserEntity playerFour = clientPlayerFour.getUser();
 
         // Add event listeners
-        clientPlayerOne.addChosenGameModeEventListener(this);
-        clientPlayerTwo.addChosenGameModeEventListener(this);
-        clientPlayerThree.addChosenGameModeEventListener(this);
-        clientPlayerFour.addChosenGameModeEventListener(this);
-
-        clientPlayerOne.addPlayedCardEventListener(this);
-        clientPlayerTwo.addPlayedCardEventListener(this);
-        clientPlayerThree.addPlayedCardEventListener(this);
-        clientPlayerFour.addPlayedCardEventListener(this);
-
-        clientPlayerOne.addStopPlayingEventListener(this);
-        clientPlayerTwo.addStopPlayingEventListener(this);
-        clientPlayerThree.addStopPlayingEventListener(this);
-        clientPlayerFour.addStopPlayingEventListener(this);
+        AddEventListeners(clientPlayerOne, clientPlayerTwo, clientPlayerThree, clientPlayerFour);
 
         // Assign and create Teams
         TeamEntity teamOne = (new TeamEntity()).setPlayerOne(playerOne).setPlayerTwo(playerThree);
@@ -189,6 +176,40 @@ public final class GameUtil implements ChosenGameModeEventListener, PlayedCardEv
 
         // Send a message to player one to choose a game mode
         sendChooseGameMode();
+    }
+
+    private void AddEventListeners(ClientUtil clientPlayerOne, ClientUtil clientPlayerTwo, ClientUtil clientPlayerThree, ClientUtil clientPlayerFour) {
+        clientPlayerOne.addChosenGameModeEventListener(this);
+        clientPlayerTwo.addChosenGameModeEventListener(this);
+        clientPlayerThree.addChosenGameModeEventListener(this);
+        clientPlayerFour.addChosenGameModeEventListener(this);
+
+        clientPlayerOne.addPlayedCardEventListener(this);
+        clientPlayerTwo.addPlayedCardEventListener(this);
+        clientPlayerThree.addPlayedCardEventListener(this);
+        clientPlayerFour.addPlayedCardEventListener(this);
+
+        clientPlayerOne.addStopPlayingEventListener(this);
+        clientPlayerTwo.addStopPlayingEventListener(this);
+        clientPlayerThree.addStopPlayingEventListener(this);
+        clientPlayerFour.addStopPlayingEventListener(this);
+    }
+
+    private void RemoveEventListeners(ClientUtil clientPlayerOne, ClientUtil clientPlayerTwo, ClientUtil clientPlayerThree, ClientUtil clientPlayerFour) {
+        clientPlayerOne.removeChosenGameModeEventListener(this);
+        clientPlayerTwo.removeChosenGameModeEventListener(this);
+        clientPlayerThree.removeChosenGameModeEventListener(this);
+        clientPlayerFour.removeChosenGameModeEventListener(this);
+
+        clientPlayerOne.removePlayedCardEventListener(this);
+        clientPlayerTwo.removePlayedCardEventListener(this);
+        clientPlayerThree.removePlayedCardEventListener(this);
+        clientPlayerFour.removePlayedCardEventListener(this);
+
+        clientPlayerOne.removeStopPlayingEventListener(this);
+        clientPlayerTwo.removeStopPlayingEventListener(this);
+        clientPlayerThree.removeStopPlayingEventListener(this);
+        clientPlayerFour.removeStopPlayingEventListener(this);
     }
 
     @Override
@@ -870,7 +891,12 @@ public final class GameUtil implements ChosenGameModeEventListener, PlayedCardEv
             SetGameToInactive();
             BroadcastAPlayerQuit broadcastAPlayerQuit = new BroadcastAPlayerQuit(new BroadcastAPlayerQuitData());
             broadcast(broadcastAPlayerQuit);
-
+            RemoveEventListeners(clientPlayerOne, clientPlayerTwo, clientPlayerThree, clientPlayerFour);
+            SearchGameUtil searchGameUtil = ServiceLocator.get(SearchGameUtil.class);
+            searchGameUtil.remove(clientPlayerOne);
+            searchGameUtil.remove(clientPlayerTwo);
+            searchGameUtil.remove(clientPlayerThree);
+            searchGameUtil.remove(clientPlayerFour);
             // remove reference to this game to initiate garbage collection
             SearchGameUtil.runningGames.remove(this);
         }

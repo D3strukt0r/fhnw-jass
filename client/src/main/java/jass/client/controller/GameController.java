@@ -729,6 +729,9 @@ public final class GameController extends Controller implements DisconnectEventL
 
         LoginEntity login = ServiceLocator.get(LoginEntity.class);
         assert login != null;
+        if(gameUtil.getGame() == null) {
+            return;
+        }
         if (gameUtil.getGame().getPlayerOne().equals(gameUtil.getStartingPlayerUsername().getValue())) {
             setImage(getCardPath(card1), user1played);
             setImage(getCardPath(card2), user2played);
