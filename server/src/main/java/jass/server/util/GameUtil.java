@@ -316,16 +316,8 @@ public final class GameUtil implements ChosenGameModeEventListener, PlayedCardEv
                     }
 
                     // Update points for the winning team
-                    broadcastPointsToWinningTeam(isRoundOver, turn, winningUser, points);
+                    broadcastPointsToWinningTeam(turn, winningUser, points);
 
-                }
-                if(isRoundOver) {
-                    BroadcastRoundOver broadcastRoundOver = new BroadcastRoundOver(
-                        new BroadcastRoundOverData(currentRound.getId(), currentRound.getPointsTeamOne(), currentRound.getPointsTeamTwo(),
-                            game.getTeamOne().getPlayerOne().getUsername(), game.getTeamOne().getPlayerTwo().getUsername(),
-                            game.getTeamTwo().getPlayerOne().getUsername(), game.getTeamTwo().getPlayerTwo().getUsername()));
-                    broadcast(broadcastRoundOver);
-                    return;
                 }
                 String winningUsername = turn.getWinningUser() != null ? turn.getWinningUser().getUsername() : "";
                 BroadcastTurn broadcastTurn = new BroadcastTurn(new BroadcastTurnData(turn.getId(),
@@ -333,14 +325,20 @@ public final class GameUtil implements ChosenGameModeEventListener, PlayedCardEv
                     turn.getCards().stream().map(CardEntity::toCardData).collect(Collectors.toList())
                 ));
                 this.currentTurn = turn;
-                broadcast(broadcastTurn);
+                broadcast(broadcastTurn);if(isRoundOver) {
+                    BroadcastRoundOver broadcastRoundOver = new BroadcastRoundOver(
+                        new BroadcastRoundOverData(currentRound.getId(), currentRound.getPointsTeamOne(), currentRound.getPointsTeamTwo(),
+                            game.getTeamOne().getPlayerOne().getUsername(), game.getTeamOne().getPlayerTwo().getUsername(),
+                            game.getTeamTwo().getPlayerOne().getUsername(), game.getTeamTwo().getPlayerTwo().getUsername()));
+                    broadcast(broadcastRoundOver);
+                    return;
+                }
 
                 // start new turn after 4 seconds
                 if (turn.getWinningUser() != null) {
                     Thread.sleep(4000);
                     TurnEntity newTurn = addNewTurn(turn.getWinningUser(), currentRound);
 
-                    turnRepository.add(newTurn);
                     BroadcastTurn newBroadcastTurn = new BroadcastTurn(new BroadcastTurnData(newTurn.getId(),
                         newTurn.getStartingPlayer().getUsername(), "",
                         newTurn.getCards().stream().map(CardEntity::toCardData).collect(Collectors.toList())
@@ -356,22 +354,18 @@ public final class GameUtil implements ChosenGameModeEventListener, PlayedCardEv
         }
     }
 
-    private void broadcastPointsToWinningTeam(boolean isRoundOver, TurnEntity turn, UserEntity winningUser, int points) {
+    private void broadcastPointsToWinningTeam(TurnEntity turn, UserEntity winningUser, int points) {
         BroadcastPoints pointsMsg = new BroadcastPoints(new BroadcastPointsData(turn.getId(), points));
         if (game.getTeamOne().checkIfPlayerIsInTeam(winningUser)) {
             currentRound.addPointsTeamOne(points);
             RoundRepository.getSingleton(null).update(currentRound);
-            if(!isRoundOver) {
-                getClientUtilByUsername(game.getTeamOne().getPlayerOne().getUsername()).send(pointsMsg);
-                getClientUtilByUsername(game.getTeamOne().getPlayerTwo().getUsername()).send(pointsMsg);
-            }
+            getClientUtilByUsername(game.getTeamOne().getPlayerOne().getUsername()).send(pointsMsg);
+            getClientUtilByUsername(game.getTeamOne().getPlayerTwo().getUsername()).send(pointsMsg);
         } else if (game.getTeamTwo().checkIfPlayerIsInTeam(winningUser)) {
             currentRound.addPointsTeamTwo(points);
             RoundRepository.getSingleton(null).update(currentRound);
-            if(!isRoundOver) {
-                getClientUtilByUsername(game.getTeamTwo().getPlayerOne().getUsername()).send(pointsMsg);
-                getClientUtilByUsername(game.getTeamTwo().getPlayerTwo().getUsername()).send(pointsMsg);
-            }
+            getClientUtilByUsername(game.getTeamTwo().getPlayerOne().getUsername()).send(pointsMsg);
+            getClientUtilByUsername(game.getTeamTwo().getPlayerTwo().getUsername()).send(pointsMsg);
         } else {
             logger.fatal("User does not belong to any team.");
         }
@@ -380,8 +374,7 @@ public final class GameUtil implements ChosenGameModeEventListener, PlayedCardEv
     private boolean isRoundOver(TurnRepository turnRepository, UserEntity winningUser) throws SQLException {
         boolean isRoundOver;
         int numberOfTurnsPlayed = turnRepository.getDao().queryForEq("round_id", currentRound.getId()).size();
-        // TODO set back to 9
-        isRoundOver = numberOfTurnsPlayed == 1 && winningUser != null;
+        isRoundOver = numberOfTurnsPlayed == 9 && winningUser != null;
         return isRoundOver;
     }
 

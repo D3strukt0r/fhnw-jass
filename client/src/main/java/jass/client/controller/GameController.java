@@ -466,19 +466,15 @@ public final class GameController extends Controller implements DisconnectEventL
         socket.addRoundOverEventListener(this);
     }
 
-    private void removeListeners() {
-        /*SocketUtil socket = ServiceLocator.get(SocketUtil.class);
-        socket.removeDisconnectListener(this);
-        socket.removeAPlayerQuitEventListener(this);
-        socket.removeRoundOverEventListener(this);*/
-    }
-
-
     private void initializePlayerDeckListener() {
         gameUtil.getPlayerDeck().addListener((ListChangeListener<CardData>) c -> {
             logger.info("listener was activated. Now updating cards");
             if (gameUtil.getPlayerDeck().size() == 9) {
+                cardButtons = cardButtonsToArray();
+                addClickListenerToCardButtons();
+                logger.info("button click listeners created");
                 updateCardImages();
+                updateUserNames();
             }
         });
     }
@@ -514,12 +510,8 @@ public final class GameController extends Controller implements DisconnectEventL
         if (alert.getResult() == ButtonType.OK) {
             this.roundOverDialogClosed = true;
             if(this.gameUtil.getAPlayerLeft() == true) {
-                this.gameUtil.cleanupGame();
-                this.gameUtil.setShowNotificationOnLobby(true);
-                WindowUtil.switchTo(view, LobbyView.class);
-                // go to lobby
+                showNotificationThatPlayerLeft();
             } else {
-                this.gameUtil.setDecidedToLeaveGame(true);
                 // resetRound();
                 // TODO Thomas
             }
@@ -527,8 +519,7 @@ public final class GameController extends Controller implements DisconnectEventL
             this.roundOverDialogClosed = true;
             // if a player has already left, then just leave the game
             if(gameUtil.getAPlayerLeft() == true) {
-                this.gameUtil.cleanupGame();
-                WindowUtil.switchTo(view, LobbyView.class);
+                cleanupGameAndNavigateFromView();
             }
             this.gameUtil.setDecidedToLeaveGame(true);
             // send message to server
@@ -539,17 +530,36 @@ public final class GameController extends Controller implements DisconnectEventL
     @Override
     public void onAPlayerQuit(BroadcastAPlayerQuitData data) {
         if(gameUtil.getDecidedToLeaveGame() == true) {
-            this.gameUtil.cleanupGame();
-            WindowUtil.switchTo(view, LobbyView.class);
+            cleanupGameAndNavigateFromView();
         }
         else if(this.roundOverDialogClosed == true) {
-            this.gameUtil.cleanupGame();
-            this.gameUtil.setShowNotificationOnLobby(true);
-            WindowUtil.switchTo(view, LobbyView.class);
+            showNotificationThatPlayerLeft();
         }
         else {
             this.gameUtil.setAPlayerLeft(true);
         }
+    }
+
+    private void showNotificationThatPlayerLeft() {
+        Platform.runLater(() -> {
+            String anotherPlayerLeftMessage = I18nUtil.get("gui.lobby.aPlayerLeft");
+            Alert alert = new Alert(Alert.AlertType.ERROR, anotherPlayerLeftMessage, ButtonType.YES);
+            alert.showAndWait();
+
+            if (alert.getResult() == ButtonType.YES) {
+                alert.close();
+                cleanupGameAndNavigateFromView();
+            }
+
+        });
+    }
+
+    private void cleanupGameAndNavigateFromView() {
+        updateCardImages();
+        this.gameUtil.cleanupGame();
+        updateUserNames();
+        cardButtons.clear();
+        WindowUtil.switchTo(view, LobbyView.class);
     }
 
     private void initializePlayedCardsListener() {
@@ -858,25 +868,25 @@ public final class GameController extends Controller implements DisconnectEventL
      * @author Sasa Trajkova
      */
     public void updateUserNames() {
-        if (gameUtil.getGame().getPlayerOne() != null) {
+        if (gameUtil.getGame() != null && gameUtil.getGame().getPlayerOne() != null) {
             user1.setText(gameUtil.getGame().getPlayerOne());
         } else {
             user1.setText("--");
         }
 
-        if (gameUtil.getGame().getPlayerTwo() != null) {
+        if (gameUtil.getGame() != null && gameUtil.getGame().getPlayerTwo() != null) {
             user2.setText(gameUtil.getGame().getPlayerTwo());
         } else {
             user2.setText("--");
         }
 
-        if (gameUtil.getGame().getPlayerThree() != null) {
+        if (gameUtil.getGame() != null && gameUtil.getGame().getPlayerThree() != null) {
             user3.setText(gameUtil.getGame().getPlayerThree());
         } else {
             user3.setText("--");
         }
 
-        if (gameUtil.getGame().getPlayerFour() != null) {
+        if (gameUtil.getGame() != null && gameUtil.getGame().getPlayerFour() != null) {
             user4.setText(gameUtil.getGame().getPlayerFour());
         } else {
             user4.setText("--");
@@ -898,6 +908,7 @@ public final class GameController extends Controller implements DisconnectEventL
         ArrayList<Button> buttons = new ArrayList<>();
         LoginEntity login = ServiceLocator.get(LoginEntity.class);
         assert login != null;
+        buttons.clear();
         if (gameUtil.getGame().getPlayerOne().equals(login.getUsername())) {
             buttons.add(user1b1);
             buttons.add(user1b2);

@@ -453,6 +453,7 @@ public final class SocketUtil extends Thread implements Service, Closeable {
                     logger.info("Invoking onBroadcastPoints event on " + listener.getClass().getName());
                     listener.onBroadcastPoints((BroadcastPointsData) msgData);
                 }
+                break;
             case "BroadcastRoundOver":
                 for (BroadcastRoundOverEventListener listener : broadcastRoundOverListener) {
                     logger.info("Invoking onRoundOver event on " + listener.getClass().getName());

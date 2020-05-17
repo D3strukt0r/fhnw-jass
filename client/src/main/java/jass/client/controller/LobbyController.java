@@ -166,19 +166,6 @@ public final class LobbyController extends Controller implements GameFoundEventL
         findMatch.textProperty().bind(I18nUtil.createStringBinding(findMatch.getText()));
         cancelMatch.textProperty().bind(I18nUtil.createStringBinding(cancelMatch.getText()));
         searching.textProperty().bind(I18nUtil.createStringBinding(searching.getText()));
-        showPlayerLeftNotification();
-    }
-
-    public void showPlayerLeftNotification() {
-        if (gameUtil.getShowNotificationOnLobby()) {
-            Platform.runLater(() -> {
-                String anotherPlayerLeftMessage = I18nUtil.get("gui.lobby.aPlayerLeft");
-                Alert alert = new Alert(Alert.AlertType.ERROR, anotherPlayerLeftMessage, ButtonType.YES);
-                alert.showAndWait();
-
-                alert.close();
-            });
-        }
     }
 
     /**
@@ -251,15 +238,15 @@ public final class LobbyController extends Controller implements GameFoundEventL
     public void onGameFound(final GameFoundData msgData) {
         logger.info("Successfully found game!");
 
+        searching.setVisible(false);
+        cancelMatch.setVisible(false);
+        findMatch.setVisible(true);
+
         GameUtil gameUtil = ServiceLocator.get(GameUtil.class);
         assert gameUtil != null;
         gameUtil.setGame(msgData);
 
         WindowUtil.switchTo(view, GameView.class);
-
-        
-
-        // call initialise in controller right here.
     }
 
     /**

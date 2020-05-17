@@ -99,6 +99,11 @@ public final class GameUtil implements Service, BroadcastDeckEventListener,
     private SimpleBooleanProperty disableButtons = new SimpleBooleanProperty();
 
     /**
+     * Whether to reinitialise the game
+     */
+    private SimpleBooleanProperty gameFound = new SimpleBooleanProperty();
+
+    /**
      * The played cards so far.
      */
     private ObservableList<CardData> playedCards;
@@ -136,8 +141,6 @@ public final class GameUtil implements Service, BroadcastDeckEventListener,
     private boolean aPlayerLeft;
 
     private boolean decidedToLeaveGame;
-
-    private boolean showNotificationOnLobby;
 
     /**
      * Initialize GameUtil before a game starts.
@@ -506,30 +509,20 @@ public final class GameUtil implements Service, BroadcastDeckEventListener,
         this.aPlayerLeft = aPlayerLeft;
     }
 
-    public boolean getShowNotificationOnLobby() {
-        return showNotificationOnLobby;
-    }
-
-    public void setShowNotificationOnLobby(boolean showNotificationOnLobby) {
-        this.showNotificationOnLobby = showNotificationOnLobby;
-    }
-
     public void cleanupGame() {
         game = null;
         deckId = 0;
         turnId = 0;
-        startingPlayerUsername = new SimpleStringProperty();
-        winningPlayerUsername = new SimpleStringProperty();
-        disableButtons = new SimpleBooleanProperty();
-        gameMode = new SimpleObjectProperty<>();
-        trumpf = new SimpleObjectProperty<>();
+        startingPlayerUsername.setValue("");
+        winningPlayerUsername.setValue("");
+        disableButtons.set(false);;
         moveInvalidErrorMessage = "";
         cardIdToRemove = 0;
-        pointsRound = new SimpleIntegerProperty(-1);
-        pointsTotal = new SimpleIntegerProperty(-1);
+        pointsRound.set(0);
+        pointsTotal.set(0);
         aPlayerLeft = false;
         decidedToLeaveGame = false;
-        playerDeck = FXCollections.observableArrayList(new ArrayList<>());
-        playedCards = FXCollections.observableArrayList(new ArrayList<>());
+        playerDeck.clear();
+        playedCards.clear();
     }
 }
