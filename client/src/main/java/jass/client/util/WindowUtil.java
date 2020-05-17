@@ -38,6 +38,7 @@ import java.util.Map;
  */
 public final class WindowUtil {
     static Map<Class, View> instantiatedViews = new HashMap<>();
+
     /**
      * Utility classes, which are collections of static members, are not meant
      * to be instantiated.
@@ -59,7 +60,7 @@ public final class WindowUtil {
                 Stage existingStage = oldView.getStage();
                 // get instance of already existing view
                 View view = instantiatedViews.get(viewClass);
-                if(view == null) {
+                if (view == null) {
                     view = (View) constructor.newInstance(existingStage);
                     instantiatedViews.put(viewClass, view);
                 }

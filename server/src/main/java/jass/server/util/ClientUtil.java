@@ -19,7 +19,11 @@
 
 package jass.server.util;
 
-import jass.lib.message.*;
+import jass.lib.message.ChosenGameModeData;
+import jass.lib.message.MessageData;
+import jass.lib.message.MessageErrorData;
+import jass.lib.message.PlayCardData;
+import jass.lib.message.StopPlayingData;
 import jass.lib.servicelocator.ServiceLocator;
 import jass.server.entity.UserEntity;
 import jass.server.eventlistener.ChosenGameModeEventListener;
@@ -39,7 +43,6 @@ import java.io.OutputStreamWriter;
 import java.net.Socket;
 import java.net.SocketException;
 import java.util.ArrayList;
-import java.util.Iterator;
 
 /**
  * Copyright 2015, FHNW, Prof. Dr. Brad Richards. All rights reserved. This code

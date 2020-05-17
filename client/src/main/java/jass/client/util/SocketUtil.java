@@ -19,9 +19,27 @@
 
 package jass.client.util;
 
-import jass.client.eventlistener.*;
+import jass.client.eventlistener.BroadcastAPlayerQuitEventListener;
+import jass.client.eventlistener.BroadcastDeckEventListener;
+import jass.client.eventlistener.BroadcastGameModeEventListener;
+import jass.client.eventlistener.BroadcastPointsEventListener;
+import jass.client.eventlistener.BroadcastRoundOverEventListener;
+import jass.client.eventlistener.BroadcastTurnEventListener;
+import jass.client.eventlistener.ChooseGameModeEventListener;
+import jass.client.eventlistener.DisconnectEventListener;
+import jass.client.eventlistener.GameFoundEventListener;
+import jass.client.eventlistener.PlayedCardEventListener;
 import jass.client.message.Message;
-import jass.lib.message.*;
+import jass.lib.message.BroadcastAPlayerQuitData;
+import jass.lib.message.BroadcastDeckData;
+import jass.lib.message.BroadcastGameModeData;
+import jass.lib.message.BroadcastPointsData;
+import jass.lib.message.BroadcastRoundOverData;
+import jass.lib.message.BroadcastTurnData;
+import jass.lib.message.ChooseGameModeData;
+import jass.lib.message.GameFoundData;
+import jass.lib.message.MessageData;
+import jass.lib.message.PlayedCardData;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import jass.client.entity.LoginEntity;
@@ -47,7 +65,6 @@ import java.security.SecureRandom;
 import java.security.UnrecoverableKeyException;
 import java.security.cert.CertificateException;
 import java.util.ArrayList;
-import java.util.Iterator;
 
 /**
  * Backend utility class. Acts as an interface between the program and the
@@ -315,6 +332,7 @@ public final class SocketUtil extends Thread implements Service, Closeable {
     public void addDisconnectListener(final DisconnectEventListener listener) {
         disconnectListener.add(listener);
     }
+
     /**
      * @param listener The listener to listen to game found.
      *

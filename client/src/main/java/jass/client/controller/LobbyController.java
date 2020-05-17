@@ -39,7 +39,6 @@ import jass.lib.message.LogoutData;
 import jass.lib.message.SearchGameData;
 import jass.lib.servicelocator.ServiceLocator;
 import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonType;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import jass.client.view.LobbyView;
@@ -144,7 +143,7 @@ public final class LobbyController extends Controller implements GameFoundEventL
         }
 
         gameUtil = ServiceLocator.get(GameUtil.class);
-        if(gameUtil == null) {
+        if (gameUtil == null) {
             gameUtil = new GameUtil();
             ServiceLocator.add(gameUtil);
         }

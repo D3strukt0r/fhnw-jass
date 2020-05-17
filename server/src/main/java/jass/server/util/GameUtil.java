@@ -21,7 +21,17 @@ package jass.server.util;
 
 import jass.lib.Card;
 import jass.lib.GameMode;
-import jass.lib.message.*;
+import jass.lib.message.BroadcastAPlayerQuitData;
+import jass.lib.message.BroadcastGameModeData;
+import jass.lib.message.BroadcastPointsData;
+import jass.lib.message.BroadcastRoundOverData;
+import jass.lib.message.BroadcastTurnData;
+import jass.lib.message.ChooseGameModeData;
+import jass.lib.message.ChosenGameModeData;
+import jass.lib.message.GameFoundData;
+import jass.lib.message.PlayCardData;
+import jass.lib.message.PlayedCardData;
+import jass.lib.message.StopPlayingData;
 import jass.lib.servicelocator.ServiceLocator;
 import jass.server.entity.CardEntity;
 import jass.server.entity.DeckEntity;
@@ -34,7 +44,15 @@ import jass.server.entity.UserEntity;
 import jass.server.eventlistener.ChosenGameModeEventListener;
 import jass.server.eventlistener.PlayedCardEventListener;
 import jass.server.eventlistener.StopPlayingEventListener;
-import jass.server.message.*;
+import jass.server.message.BroadcastAPlayerQuit;
+import jass.server.message.BroadcastGameMode;
+import jass.server.message.BroadcastPoints;
+import jass.server.message.BroadcastRoundOver;
+import jass.server.message.BroadcastTurn;
+import jass.server.message.ChooseGameMode;
+import jass.server.message.GameFound;
+import jass.server.message.Message;
+import jass.server.message.PlayedCard;
 import jass.server.repository.CardRepository;
 import jass.server.repository.DeckRepository;
 import jass.server.repository.GameRepository;
@@ -305,7 +323,7 @@ public final class GameUtil implements ChosenGameModeEventListener, PlayedCardEv
         ClientUtil clientUtil = this.getClientUtilByUsername(data.getUsername());
         DeckEntity currentDeck = this.getCurrentDeckByUsername(data.getUsername());
 
-        if(clientUtil == null || currentDeck == null) {
+        if (clientUtil == null || currentDeck == null) {
             return;
         }
 
@@ -347,7 +365,7 @@ public final class GameUtil implements ChosenGameModeEventListener, PlayedCardEv
                 ));
                 this.currentTurn = turn;
                 broadcast(broadcastTurn);
-                if(isRoundOver) {
+                if (isRoundOver) {
                     BroadcastRoundOver broadcastRoundOver = new BroadcastRoundOver(
                         new BroadcastRoundOverData(currentRound.getId(), currentRound.getPointsTeamOne(), currentRound.getPointsTeamTwo(),
                             game.getTeamOne().getPlayerOne().getUsername(), game.getTeamOne().getPlayerTwo().getUsername(),
@@ -356,7 +374,7 @@ public final class GameUtil implements ChosenGameModeEventListener, PlayedCardEv
                     return;
                 }
 
-                // start new turn after 4 seconds
+                // start new turn after 3.5 seconds
                 if (turn.getWinningUser() != null) {
                     Thread.sleep(3500);
                     TurnEntity newTurn = addNewTurn(turn.getWinningUser(), currentRound);
@@ -887,7 +905,7 @@ public final class GameUtil implements ChosenGameModeEventListener, PlayedCardEv
     @Override
     public void onStopPlaying(StopPlayingData data) {
         ClientUtil client = getClientUtilByUsername(data.getUsername());
-        if(client != null) {
+        if (client != null) {
             SetGameToInactive();
             BroadcastAPlayerQuit broadcastAPlayerQuit = new BroadcastAPlayerQuit(new BroadcastAPlayerQuitData());
             broadcast(broadcastAPlayerQuit);

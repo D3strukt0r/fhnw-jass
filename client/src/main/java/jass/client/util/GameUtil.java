@@ -20,14 +20,28 @@
 package jass.client.util;
 
 import jass.client.entity.LoginEntity;
-import jass.client.eventlistener.*;
+import jass.client.eventlistener.BroadcastDeckEventListener;
+import jass.client.eventlistener.BroadcastGameModeEventListener;
+import jass.client.eventlistener.BroadcastPointsEventListener;
+import jass.client.eventlistener.BroadcastTurnEventListener;
+import jass.client.eventlistener.ChooseGameModeEventListener;
+import jass.client.eventlistener.PlayedCardEventListener;
 import jass.client.message.ChosenGameMode;
 import jass.client.message.PlayCard;
 import jass.client.message.StopPlaying;
-import jass.client.view.LobbyView;
 import jass.lib.Card;
 import jass.lib.GameMode;
-import jass.lib.message.*;
+import jass.lib.message.BroadcastDeckData;
+import jass.lib.message.BroadcastGameModeData;
+import jass.lib.message.BroadcastPointsData;
+import jass.lib.message.BroadcastTurnData;
+import jass.lib.message.CardData;
+import jass.lib.message.ChooseGameModeData;
+import jass.lib.message.ChosenGameModeData;
+import jass.lib.message.GameFoundData;
+import jass.lib.message.PlayCardData;
+import jass.lib.message.PlayedCardData;
+import jass.lib.message.StopPlayingData;
 import jass.lib.servicelocator.ServiceLocator;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -48,7 +62,6 @@ import jass.lib.servicelocator.Service;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 
 /**
  * @author Victor Hargrave, Manuele Vaccari
