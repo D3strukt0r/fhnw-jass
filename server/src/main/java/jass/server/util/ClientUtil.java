@@ -39,6 +39,7 @@ import java.io.OutputStreamWriter;
 import java.net.Socket;
 import java.net.SocketException;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 /**
  * Copyright 2015, FHNW, Prof. Dr. Brad Richards. All rights reserved. This code
@@ -89,6 +90,8 @@ public final class ClientUtil extends Thread {
      * A list of all objects listening to stop playing event.
      */
     private final ArrayList<StopPlayingEventListener> stopPlayingListener = new ArrayList<>();
+
+    private final ArrayList<StopPlayingEventListener> stopPlayingListenerToRemove = new ArrayList<>();
 
 
     /**
@@ -186,6 +189,8 @@ public final class ClientUtil extends Thread {
                 }
             }
         } else if (msgType.equals("StopPlaying")) {
+            stopPlayingListener.removeAll(stopPlayingListenerToRemove);
+            stopPlayingListenerToRemove.clear();
             for (StopPlayingEventListener listener : stopPlayingListener) {
                 logger.info("Invoking stopPlaying event on " + listener.getClass().getName());
                 listener.onStopPlaying((StopPlayingData) msgData);
@@ -241,7 +246,7 @@ public final class ClientUtil extends Thread {
     }
 
     public void removeStopPlayingEventListener(final StopPlayingEventListener listener) {
-        this.stopPlayingListener.add(listener);
+        this.stopPlayingListenerToRemove.add(listener);
     }
 
     /**

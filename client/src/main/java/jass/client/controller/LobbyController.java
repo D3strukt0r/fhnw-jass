@@ -186,11 +186,12 @@ public final class LobbyController extends Controller implements GameFoundEventL
         SocketUtil backend = ServiceLocator.get(SocketUtil.class);
         assert backend != null;
 
+        searching.setVisible(true);
+        cancelMatch.setVisible(true);
+        findMatch.setVisible(false);
         // Send SearchGame Message to Server
         if (searchGameMsg.process(backend)) {
-            searching.setVisible(true);
-            cancelMatch.setVisible(true);
-            findMatch.setVisible(false);
+
         } else {
             logger.error("Error starting search for game");
             Platform.runLater(() -> {
@@ -216,11 +217,12 @@ public final class LobbyController extends Controller implements GameFoundEventL
         SocketUtil backend = ServiceLocator.get(SocketUtil.class);
         assert backend != null;
 
+        searching.setVisible(false);
+        findMatch.setVisible(true);
+        cancelMatch.setVisible(false);
         // Send SearchGame Message to Server
         if (cancelSearchGameMsg.process(backend)) {
-            searching.setVisible(false);
-            findMatch.setVisible(true);
-            cancelMatch.setVisible(false);
+
         } else {
             logger.error("Error cancelling search for game");
             Platform.runLater(() -> {
@@ -238,9 +240,11 @@ public final class LobbyController extends Controller implements GameFoundEventL
     public void onGameFound(final GameFoundData msgData) {
         logger.info("Successfully found game!");
 
-        searching.setVisible(false);
-        cancelMatch.setVisible(false);
-        findMatch.setVisible(true);
+        Platform.runLater(() -> {
+            searching.setVisible(false);
+            findMatch.setVisible(true);
+            cancelMatch.setVisible(false);
+        });
 
         GameUtil gameUtil = ServiceLocator.get(GameUtil.class);
         assert gameUtil != null;

@@ -346,7 +346,8 @@ public final class GameUtil implements ChosenGameModeEventListener, PlayedCardEv
                     turn.getCards().stream().map(CardEntity::toCardData).collect(Collectors.toList())
                 ));
                 this.currentTurn = turn;
-                broadcast(broadcastTurn);if(isRoundOver) {
+                broadcast(broadcastTurn);
+                if(isRoundOver) {
                     BroadcastRoundOver broadcastRoundOver = new BroadcastRoundOver(
                         new BroadcastRoundOverData(currentRound.getId(), currentRound.getPointsTeamOne(), currentRound.getPointsTeamTwo(),
                             game.getTeamOne().getPlayerOne().getUsername(), game.getTeamOne().getPlayerTwo().getUsername(),

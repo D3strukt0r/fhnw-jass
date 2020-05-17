@@ -47,6 +47,7 @@ import java.security.SecureRandom;
 import java.security.UnrecoverableKeyException;
 import java.security.cert.CertificateException;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 /**
  * Backend utility class. Acts as an interface between the program and the
@@ -122,6 +123,8 @@ public final class SocketUtil extends Thread implements Service, Closeable {
      * A list of objects listening to a player quit events.
      */
     private final ArrayList<BroadcastAPlayerQuitEventListener> broadcastAPlayerQuitListener = new ArrayList<>();
+
+    private final ArrayList<BroadcastAPlayerQuitEventListener> broadcastAPlayerQuitListenerToRemove = new ArrayList<>();
 
     /**
      * A list of all messages coming from the server.
@@ -312,11 +315,6 @@ public final class SocketUtil extends Thread implements Service, Closeable {
     public void addDisconnectListener(final DisconnectEventListener listener) {
         disconnectListener.add(listener);
     }
-
-    public void removeDisconnectListener(final DisconnectEventListener listener) {
-        disconnectListener.remove(listener);
-    }
-
     /**
      * @param listener The listener to listen to game found.
      *
@@ -389,10 +387,6 @@ public final class SocketUtil extends Thread implements Service, Closeable {
         broadcastRoundOverListener.add(listener);
     }
 
-    public void removeRoundOverEventListener(final BroadcastRoundOverEventListener listener) {
-        broadcastRoundOverListener.remove(listener);
-    }
-
     /**
      * @param listener A BroadcastAPlayerQuitEventListener object
      *
@@ -404,7 +398,7 @@ public final class SocketUtil extends Thread implements Service, Closeable {
     }
 
     public void removeAPlayerQuitEventListener(final BroadcastAPlayerQuitEventListener listener) {
-        broadcastAPlayerQuitListener.remove(listener);
+        broadcastAPlayerQuitListenerToRemove.add(listener);
     }
 
     /**
@@ -461,6 +455,8 @@ public final class SocketUtil extends Thread implements Service, Closeable {
                 }
                 break;
             case "BroadcastAPlayerQuit":
+                broadcastAPlayerQuitListener.removeAll(broadcastAPlayerQuitListenerToRemove);
+                broadcastAPlayerQuitListenerToRemove.clear();
                 for (BroadcastAPlayerQuitEventListener listener : broadcastAPlayerQuitListener) {
                     logger.info("Invoking onAPlayerQuit event on " + listener.getClass().getName());
                     listener.onAPlayerQuit((BroadcastAPlayerQuitData) msgData);

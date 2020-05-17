@@ -49,8 +49,6 @@ import javafx.scene.layout.BackgroundImage;
 import javafx.scene.layout.BackgroundPosition;
 import javafx.scene.layout.BackgroundRepeat;
 import javafx.scene.layout.BackgroundSize;
-import javafx.scene.paint.Color;
-import javafx.scene.text.Text;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -412,6 +410,8 @@ public final class GameController extends Controller implements DisconnectEventL
     private GameUtil gameUtil;
 
     private boolean roundOverDialogClosed;
+    private SocketUtil socket;
+    private boolean aPlayerQuitEventListenerAdded;
 
     @Override
     public void initialize(final URL location, final ResourceBundle resources) {
@@ -441,7 +441,7 @@ public final class GameController extends Controller implements DisconnectEventL
             logger.info("updated card images");
         }
 
-        SocketUtil socket = ServiceLocator.get(SocketUtil.class);
+        socket = ServiceLocator.get(SocketUtil.class);
         assert socket != null;
         addSocketListeners(socket);
 
@@ -464,17 +464,21 @@ public final class GameController extends Controller implements DisconnectEventL
         socket.addDisconnectListener(this);
         socket.addAPlayerQuitEventListener(this);
         socket.addRoundOverEventListener(this);
+        aPlayerQuitEventListenerAdded = true;
     }
 
     private void initializePlayerDeckListener() {
         gameUtil.getPlayerDeck().addListener((ListChangeListener<CardData>) c -> {
-            logger.info("listener was activated. Now updating cards");
             if (gameUtil.getPlayerDeck().size() == 9) {
+                logger.info("listener was activated. Now updating cards");
                 cardButtons = cardButtonsToArray();
                 addClickListenerToCardButtons();
                 logger.info("button click listeners created");
                 updateCardImages();
                 updateUserNames();
+                if(aPlayerQuitEventListenerAdded == false) {
+                    socket.addAPlayerQuitEventListener(this);
+                }
             }
         });
     }
@@ -559,6 +563,12 @@ public final class GameController extends Controller implements DisconnectEventL
         this.gameUtil.cleanupGame();
         updateUserNames();
         cardButtons.clear();
+        try {
+            socket.removeAPlayerQuitEventListener(this);
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+        aPlayerQuitEventListenerAdded = false;
         WindowUtil.switchTo(view, LobbyView.class);
     }
 
@@ -871,29 +881,31 @@ public final class GameController extends Controller implements DisconnectEventL
      * @author Sasa Trajkova
      */
     public void updateUserNames() {
-        if (gameUtil.getGame() != null && gameUtil.getGame().getPlayerOne() != null) {
-            user1.setText(gameUtil.getGame().getPlayerOne());
-        } else {
-            user1.setText("--");
-        }
+        Platform.runLater(() -> {
+            if (gameUtil.getGame() != null && gameUtil.getGame().getPlayerOne() != null) {
+                user1.setText(gameUtil.getGame().getPlayerOne());
+            } else {
+                user1.setText("--");
+            }
 
-        if (gameUtil.getGame() != null && gameUtil.getGame().getPlayerTwo() != null) {
-            user2.setText(gameUtil.getGame().getPlayerTwo());
-        } else {
-            user2.setText("--");
-        }
+            if (gameUtil.getGame() != null && gameUtil.getGame().getPlayerTwo() != null) {
+                user2.setText(gameUtil.getGame().getPlayerTwo());
+            } else {
+                user2.setText("--");
+            }
 
-        if (gameUtil.getGame() != null && gameUtil.getGame().getPlayerThree() != null) {
-            user3.setText(gameUtil.getGame().getPlayerThree());
-        } else {
-            user3.setText("--");
-        }
+            if (gameUtil.getGame() != null && gameUtil.getGame().getPlayerThree() != null) {
+                user3.setText(gameUtil.getGame().getPlayerThree());
+            } else {
+                user3.setText("--");
+            }
 
-        if (gameUtil.getGame() != null && gameUtil.getGame().getPlayerFour() != null) {
-            user4.setText(gameUtil.getGame().getPlayerFour());
-        } else {
-            user4.setText("--");
-        }
+            if (gameUtil.getGame() != null && gameUtil.getGame().getPlayerFour() != null) {
+                user4.setText(gameUtil.getGame().getPlayerFour());
+            } else {
+                user4.setText("--");
+            }
+        });
     }
 
     @Override
