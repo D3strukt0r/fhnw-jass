@@ -40,512 +40,85 @@ import org.junit.Test;
  * The card id's with the corresponding suit and rank values are copied at the
  * bottom of this document as an assistance.
  *
- * @author Thomas Weber
+ * @author Thomas Weber, Manuele Vaccari, Sasa Trajkova
  * @version %I%, %G%
  * @since 0.0.1
  */
 public final class GameUtilTest {
+    /*
+     * Card Id: 0  | Rank: 6     | Suit: hearts
+     * Card Id: 1  | Rank: 6     | Suit: hearts
+     * Card Id: 2  | Rank: 7     | Suit: hearts
+     * Card Id: 3  | Rank: 8     | Suit: hearts
+     * Card Id: 4  | Rank: 9     | Suit: hearts
+     * Card Id: 5  | Rank: 10    | Suit: hearts
+     * Card Id: 6  | Rank: jack  | Suit: hearts
+     * Card Id: 7  | Rank: queen | Suit: hearts
+     * Card Id: 8  | Rank: king  | Suit: hearts
+     * Card Id: 9  | Rank: ace   | Suit: hearts
+     * Card Id: 10 | Rank: 6     | Suit: diamonds
+     * Card Id: 11 | Rank: 6     | Suit: diamonds
+     * Card Id: 12 | Rank: 7     | Suit: diamonds
+     * Card Id: 13 | Rank: 8     | Suit: diamonds
+     * Card Id: 14 | Rank: 9     | Suit: diamonds
+     * Card Id: 15 | Rank: 10    | Suit: diamonds
+     * Card Id: 16 | Rank: jack  | Suit: diamonds
+     * Card Id: 17 | Rank: queen | Suit: diamonds
+     * Card Id: 18 | Rank: king  | Suit: diamonds
+     * Card Id: 19 | Rank: ace   | Suit: diamonds
+     * Card Id: 20 | Rank: 6     | Suit: spades
+     * Card Id: 21 | Rank: 6     | Suit: spades
+     * Card Id: 22 | Rank: 7     | Suit: spades
+     * Card Id: 23 | Rank: 8     | Suit: spades
+     * Card Id: 24 | Rank: 9     | Suit: spades
+     * Card Id: 25 | Rank: 10    | Suit: spades
+     * Card Id: 26 | Rank: jack  | Suit: spades
+     * Card Id: 27 | Rank: queen | Suit: spades
+     * Card Id: 28 | Rank: king  | Suit: spades
+     * Card Id: 29 | Rank: ace   | Suit: spades
+     * Card Id: 30 | Rank: 6     | Suit: clubs
+     * Card Id: 31 | Rank: 6     | Suit: clubs
+     * Card Id: 32 | Rank: 7     | Suit: clubs
+     * Card Id: 33 | Rank: 8     | Suit: clubs
+     * Card Id: 34 | Rank: 9     | Suit: clubs
+     * Card Id: 35 | Rank: 10    | Suit: clubs
+     * Card Id: 36 | Rank: jack  | Suit: clubs
+     * Card Id: 37 | Rank: queen | Suit: clubs
+     * Card Id: 38 | Rank: king  | Suit: clubs
+     * Card Id: 39 | Rank: ace   | Suit: clubs
+     */
+
+    /**
+     * All ranks.
+     */
     private static ArrayList<RankEntity> ranks = new ArrayList<>();
+
+    /**
+     * All suits.
+     */
     private static ArrayList<SuitEntity> suits = new ArrayList<>();
+
+    /**
+     * All cards.
+     */
     private static ArrayList<CardEntity> cards = new ArrayList<>();
 
     /**
-     * Test one properties.
-     * Test for validateMoveTrump() function.
+     * Generates all cards before testing.
+     *
+     * @author Thomas Weber
      */
-    private static DeckEntity deckT1 = new DeckEntity();
-    private static RoundEntity roundT1 = new RoundEntity();
-    private static CardEntity firstCardOfTurnT1 = new CardEntity();
-    private static CardEntity playedCardT1 = new CardEntity();
-
-    /**
-     * Test two properties.
-     * Test for validateMoveTrump() function.
-     */
-    private static DeckEntity deckT2 = new DeckEntity();
-    private static RoundEntity roundT2 = new RoundEntity();
-    private static CardEntity firstCardOfTurnT2 = new CardEntity();
-    private static CardEntity playedCardT2 = new CardEntity();
-
-    /**
-     * Test three properties.
-     * Test for validateMoveTrump() function.
-     */
-    private static DeckEntity deckT3 = new DeckEntity();
-    private static RoundEntity roundT3 = new RoundEntity();
-    private static CardEntity firstCardOfTurnT3 = new CardEntity();
-    private static CardEntity playedCardT3 = new CardEntity();
-
-    /**
-     * Test four properties.
-     * Test for validateMoveTrump() function.
-     */
-    private static DeckEntity deckT4 = new DeckEntity();
-    private static RoundEntity roundT4 = new RoundEntity();
-    private static CardEntity firstCardOfTurnT4 = new CardEntity();
-    private static CardEntity playedCardT4 = new CardEntity();
-
-    /**
-     * Test one properties.
-     * Test for validateMoveObeAbe() function.
-     */
-    private static DeckEntity obeabeDeckT1 = new DeckEntity();
-    private static RoundEntity obeabeRoundT1 = new RoundEntity();
-    private static CardEntity obeabeFirstCardOfTurnT1 = new CardEntity();
-    private static CardEntity obeabePlayedCardT1 = new CardEntity();
-
-    /**
-     * Test two properties.
-     * Test for validateMoveObeAbe() function.
-     */
-    private static DeckEntity obeabeDeckT2 = new DeckEntity();
-    private static RoundEntity obeabeRoundT2 = new RoundEntity();
-    private static CardEntity obeabeFirstCardOfTurnT2 = new CardEntity();
-    private static CardEntity obeabePlayedCardT2 = new CardEntity();
-
-    /**
-     * Test three properties.
-     * Test for validateMoveObeAbe() function.
-     */
-    private static DeckEntity obeabeDeckT3 = new DeckEntity();
-    private static RoundEntity obeabeRoundT3 = new RoundEntity();
-    private static CardEntity obeabeFirstCardOfTurnT3 = new CardEntity();
-    private static CardEntity obeabePlayedCardT3 = new CardEntity();
-
-    /**
-     * Test four properties.
-     * Test for validateMoveObeAbe() function.
-     */
-    private static DeckEntity obeabeDeckT4 = new DeckEntity();
-    private static RoundEntity obeabeRoundT4 = new RoundEntity();
-    private static CardEntity obeabeFirstCardOfTurnT4 = new CardEntity();
-    private static CardEntity obeabePlayedCardT4 = new CardEntity();
-
-    /**
-     * Test one properties.
-     * Test for validateMoveOndeUfe() function.
-     */
-    private static DeckEntity ondeufeDeckT1 = new DeckEntity();
-    private static RoundEntity ondeufeRoundT1 = new RoundEntity();
-    private static CardEntity ondeufeFirstCardOfTurnT1 = new CardEntity();
-    private static CardEntity ondeufePlayedCardT1 = new CardEntity();
-
-    /**
-     * Test two properties.
-     * Test for validateMoveOndeUfe() function.
-     */
-    private static DeckEntity ondeufeDeckT2 = new DeckEntity();
-    private static RoundEntity ondeufeRoundT2 = new RoundEntity();
-    private static CardEntity ondeufeFirstCardOfTurnT2 = new CardEntity();
-    private static CardEntity ondeufePlayedCardT2 = new CardEntity();
-
-    /**
-     * Test three properties.
-     * Test for validateMoveOndeUfe() function.
-     */
-    private static DeckEntity ondeufeDeckT3 = new DeckEntity();
-    private static RoundEntity ondeufeRoundT3 = new RoundEntity();
-    private static CardEntity ondeufeFirstCardOfTurnT3 = new CardEntity();
-    private static CardEntity ondeufePlayedCardT3 = new CardEntity();
-
-    /**
-     * Test four properties.
-     * Test for validateMoveObeAbe() function.
-     */
-    private static DeckEntity ondeufeDeckT4 = new DeckEntity();
-    private static RoundEntity ondeufeRoundT4 = new RoundEntity();
-    private static CardEntity ondeufeFirstCardOfTurnT4 = new CardEntity();
-    private static CardEntity ondeufePlayedCardT4 = new CardEntity();
-
     @Before
     public void createTestData() {
         ranks = insertRankSeedData();
         suits = insertSuitSeedData();
         cards = insertCardSeedData();
-
-        insertTestOneData();
-        insertTestTwoData();
-        insertTestThreeData();
-        insertTestFourData();
-    }
-
-    /**
-     * Test one data:
-     * - Game Mode Trump
-     * - Trump Suite Hearts
-     * - First turn of round is Heart 6
-     * - The player only has one card with suit heart which is the jack.
-     * - The player plays an Ace of spades.
-     * - Assertion is that this move is true/valid, as you are never forced to
-     *   play the jack.
-     */
-    private void insertTestOneData() {
-        roundT1.setGameMode(GameMode.TRUMPF);
-        roundT1.setTrumpfSuit(Card.Suit.Hearts);
-        deckT1.setRound(roundT1);
-
-        deckT1.setCardOne(cards.get(10));
-        deckT1.setCardOneHasBeenPlayed(false);
-        deckT1.setCardTwo(cards.get(11));
-        deckT1.setCardTwoHasBeenPlayed(false);
-        deckT1.setCardThree(cards.get(25));
-        deckT1.setCardThreeHasBeenPlayed(false);
-        deckT1.setCardFour(cards.get(26));
-        deckT1.setCardFourHasBeenPlayed(true);
-        deckT1.setCardFive(cards.get(27));
-        deckT1.setCardFiveHasBeenPlayed(true);
-        deckT1.setCardSix(cards.get(28));
-        deckT1.setCardSixHasBeenPlayed(false);
-        deckT1.setCardSeven(cards.get(26));
-        deckT1.setCardSevenHasBeenPlayed(false);
-        deckT1.setCardEight(cards.get(30));
-        deckT1.setCardEightHasBeenPlayed(true);
-        deckT1.setCardNine(cards.get(5));
-        deckT1.setCardNineHasBeenPlayed(false);
-
-        firstCardOfTurnT1 = cards.get(0);
-        playedCardT1 = deckT1.getCardSeven();
-    }
-
-    /**
-     * Test two data:
-     * - Game Mode Trump
-     * - Trump Suite Clubs
-     * - First turn of round is queen of Spades
-     * - The player had two cards with suit spade in his hand but has already
-     *   played both before this turn
-     * - The player plays an Ace of hearts.
-     * - Assertion is that this move is true/valid, as he has already played out
-     *   his spades.
-     */
-    private void insertTestTwoData() {
-        roundT2.setGameMode(GameMode.TRUMPF);
-        roundT2.setTrumpfSuit(Card.Suit.Clubs);
-        deckT2.setRound(roundT2);
-
-        deckT2.setCardOne(cards.get(20));
-        deckT2.setCardOneHasBeenPlayed(true);
-        deckT2.setCardTwo(cards.get(23));
-        deckT2.setCardTwoHasBeenPlayed(true);
-        deckT2.setCardThree(cards.get(9));
-        deckT2.setCardThreeHasBeenPlayed(false);
-        deckT2.setCardFour(cards.get(30));
-        deckT2.setCardFourHasBeenPlayed(false);
-        deckT2.setCardFive(cards.get(31));
-        deckT2.setCardFiveHasBeenPlayed(false);
-        deckT2.setCardSix(cards.get(32));
-        deckT2.setCardSixHasBeenPlayed(false);
-        deckT2.setCardSeven(cards.get(33));
-        deckT2.setCardSevenHasBeenPlayed(false);
-        deckT2.setCardEight(cards.get(34));
-        deckT2.setCardEightHasBeenPlayed(false);
-        deckT2.setCardNine(cards.get(35));
-        deckT2.setCardNineHasBeenPlayed(false);
-
-        firstCardOfTurnT2 = cards.get(24);
-        playedCardT2 = deckT2.getCardThree();
-    }
-
-    /**
-     * Test three data:
-     * - Game Mode Trump
-     * - Trump Suite Clubs
-     * - First turn of round is queen of Spades
-     * - The player has two cards with suit spade in his hand, one already
-     *   played & one still in his hands
-     * - The player plays an Ace of hearts.
-     * - Assertion is that this move is false/invalid, as he must have played
-     *   the remaining spade.
-     */
-    private void insertTestThreeData() {
-        roundT3.setGameMode(GameMode.TRUMPF);
-        roundT3.setTrumpfSuit(Card.Suit.Clubs);
-        deckT3.setRound(roundT3);
-
-        deckT3.setCardOne(cards.get(20));
-        deckT3.setCardOneHasBeenPlayed(true);
-        deckT3.setCardTwo(cards.get(23));
-        deckT3.setCardTwoHasBeenPlayed(false);
-        deckT3.setCardThree(cards.get(8));
-        deckT3.setCardThreeHasBeenPlayed(false);
-        deckT3.setCardFour(cards.get(30));
-        deckT3.setCardFourHasBeenPlayed(false);
-        deckT3.setCardFive(cards.get(31));
-        deckT3.setCardFiveHasBeenPlayed(true);
-        deckT3.setCardSix(cards.get(32));
-        deckT3.setCardSixHasBeenPlayed(false);
-        deckT3.setCardSeven(cards.get(33));
-        deckT3.setCardSevenHasBeenPlayed(false);
-        deckT3.setCardEight(cards.get(34));
-        deckT3.setCardEightHasBeenPlayed(false);
-        deckT3.setCardNine(cards.get(35));
-        deckT3.setCardNineHasBeenPlayed(false);
-
-        firstCardOfTurnT3 = cards.get(24);
-        playedCardT3 = deckT3.getCardThree();
-    }
-
-    /**
-     * Test four data:
-     * - Game Mode Trump
-     * - Trump Suite Clubs
-     * - First turn of round is queen of Spades
-     * - The player had two cards with suit spade in his hand but has already
-     *   played both before this turn
-     * - The player plays an Ace of clubs.
-     * - Assertion is that this move is true/valid, as clubs are trump.
-     */
-    private void insertTestFourData() {
-        roundT4.setGameMode(GameMode.TRUMPF);
-        roundT4.setTrumpfSuit(Card.Suit.Clubs);
-        deckT4.setRound(roundT4);
-
-        deckT4.setCardOne(cards.get(20));
-        deckT4.setCardOneHasBeenPlayed(true);
-        deckT4.setCardTwo(cards.get(23));
-        deckT4.setCardTwoHasBeenPlayed(true);
-        deckT4.setCardThree(cards.get(9));
-        deckT4.setCardThreeHasBeenPlayed(false);
-        deckT4.setCardFour(cards.get(30));
-        deckT4.setCardFourHasBeenPlayed(false);
-        deckT4.setCardFive(cards.get(31));
-        deckT4.setCardFiveHasBeenPlayed(true);
-        deckT4.setCardSix(cards.get(32));
-        deckT4.setCardSixHasBeenPlayed(false);
-        deckT4.setCardSeven(cards.get(33));
-        deckT4.setCardSevenHasBeenPlayed(false);
-        deckT4.setCardEight(cards.get(34));
-        deckT4.setCardEightHasBeenPlayed(false);
-        deckT4.setCardNine(cards.get(35));
-        deckT4.setCardNineHasBeenPlayed(false);
-
-        firstCardOfTurnT4 = cards.get(24);
-        playedCardT4 = deckT4.getCardNine();
-    }
-
-    @Test
-    public void testValidateMoveTrump() {
-        assertTrue(GameUtil.validateMoveTrump(playedCardT1, deckT1, firstCardOfTurnT1, String.valueOf(roundT1.getTrumpfSuit())));
-        assertTrue(GameUtil.validateMoveTrump(playedCardT2, deckT2, firstCardOfTurnT2, String.valueOf(roundT2.getTrumpfSuit())));
-        assertFalse(GameUtil.validateMoveTrump(playedCardT3, deckT3, firstCardOfTurnT3, String.valueOf(roundT3.getTrumpfSuit())));
-        assertTrue(GameUtil.validateMoveTrump(playedCardT4, deckT4, firstCardOfTurnT4, String.valueOf(roundT4.getTrumpfSuit())));
-    }
-
-    private void insertTestDataObeAbe() {
-
-        /*
-         * - First turn of round is queen of Spades
-         * - The player had two cards with suit spade in his hand but has
-         *   already played both before this turn
-         * - The player plays an Ace of hearts.
-         * - Assertion is that this move is true/valid, as he has already played
-         *   out his spades.
-         */
-        obeabeRoundT2.setGameMode(GameMode.OBE_ABE);
-        obeabeDeckT2.setRound(obeabeRoundT2);
-        obeabeDeckT2.setCardOne(cards.get(20));
-        obeabeDeckT2.setCardOneHasBeenPlayed(true);
-        obeabeDeckT2.setCardTwo(cards.get(23));
-        obeabeDeckT2.setCardTwoHasBeenPlayed(true);
-        obeabeDeckT2.setCardThree(cards.get(9));
-        obeabeDeckT2.setCardThreeHasBeenPlayed(false);
-        obeabeDeckT2.setCardFour(cards.get(30));
-        obeabeDeckT2.setCardFourHasBeenPlayed(false);
-        obeabeDeckT2.setCardFive(cards.get(31));
-        obeabeDeckT2.setCardFiveHasBeenPlayed(false);
-        obeabeDeckT2.setCardSix(cards.get(32));
-        obeabeDeckT2.setCardSixHasBeenPlayed(false);
-        obeabeDeckT2.setCardSeven(cards.get(33));
-        obeabeDeckT2.setCardSevenHasBeenPlayed(false);
-        obeabeDeckT2.setCardEight(cards.get(34));
-        obeabeDeckT2.setCardEightHasBeenPlayed(false);
-        obeabeDeckT2.setCardNine(cards.get(35));
-        obeabeDeckT2.setCardNineHasBeenPlayed(false);
-        obeabeFirstCardOfTurnT2 = cards.get(24);
-        obeabePlayedCardT2 = obeabeDeckT2.getCardThree();
-
-        /*
-         * - First turn of round is queen of Spades
-         * - The player has two cards with suit spade in his hand, one already
-         *   played & one still in his hands
-         * - The player plays an Ace of hearts.
-         * - Assertion is that this move is false/invalid, as he must have
-         *   played the remaining spade.
-         */
-        obeabeRoundT3.setGameMode(GameMode.OBE_ABE);
-        obeabeDeckT3.setRound(obeabeRoundT3);
-        obeabeDeckT3.setCardOne(cards.get(20));
-        obeabeDeckT3.setCardOneHasBeenPlayed(true);
-        obeabeDeckT3.setCardTwo(cards.get(23));
-        obeabeDeckT3.setCardTwoHasBeenPlayed(false);
-        obeabeDeckT3.setCardThree(cards.get(8));
-        obeabeDeckT3.setCardThreeHasBeenPlayed(false);
-        obeabeDeckT3.setCardFour(cards.get(30));
-        obeabeDeckT3.setCardFourHasBeenPlayed(false);
-        obeabeDeckT3.setCardFive(cards.get(31));
-        obeabeDeckT3.setCardFiveHasBeenPlayed(true);
-        obeabeDeckT3.setCardSix(cards.get(32));
-        obeabeDeckT3.setCardSixHasBeenPlayed(false);
-        obeabeDeckT3.setCardSeven(cards.get(33));
-        obeabeDeckT3.setCardSevenHasBeenPlayed(false);
-        obeabeDeckT3.setCardEight(cards.get(34));
-        obeabeDeckT3.setCardEightHasBeenPlayed(false);
-        obeabeDeckT3.setCardNine(cards.get(35));
-        obeabeDeckT3.setCardNineHasBeenPlayed(false);
-        obeabeFirstCardOfTurnT3 = cards.get(24);
-        obeabePlayedCardT3 = obeabeDeckT3.getCardThree();
-
-        /*
-         * - First turn of round is queen of Spades
-         * - The player had two cards with suit spade in his hand but has
-         *   already played both before this turn
-         * - The player plays an Ace of clubs.
-         * - Assertion is that this move is true/valid, as clubs are trump.
-         */
-        obeabeRoundT4.setGameMode(GameMode.OBE_ABE);
-        obeabeDeckT4.setRound(obeabeRoundT4);
-        obeabeDeckT4.setCardOne(cards.get(20));
-        obeabeDeckT4.setCardOneHasBeenPlayed(true);
-        obeabeDeckT4.setCardTwo(cards.get(23));
-        obeabeDeckT4.setCardTwoHasBeenPlayed(true);
-        obeabeDeckT4.setCardThree(cards.get(9));
-        obeabeDeckT4.setCardThreeHasBeenPlayed(false);
-        obeabeDeckT4.setCardFour(cards.get(30));
-        obeabeDeckT4.setCardFourHasBeenPlayed(false);
-        obeabeDeckT4.setCardFive(cards.get(31));
-        obeabeDeckT4.setCardFiveHasBeenPlayed(true);
-        obeabeDeckT4.setCardSix(cards.get(32));
-        obeabeDeckT4.setCardSixHasBeenPlayed(false);
-        obeabeDeckT4.setCardSeven(cards.get(33));
-        obeabeDeckT4.setCardSevenHasBeenPlayed(false);
-        obeabeDeckT4.setCardEight(cards.get(34));
-        obeabeDeckT4.setCardEightHasBeenPlayed(false);
-        obeabeDeckT4.setCardNine(cards.get(35));
-        obeabeDeckT4.setCardNineHasBeenPlayed(false);
-        obeabeFirstCardOfTurnT4 = cards.get(24);
-        obeabePlayedCardT4 = obeabeDeckT4.getCardNine();
-    }
-
-    /**
-     * Test some cases during game mode obe abe.
-     */
-    @Test
-    public void testValidateMoveObeAbe() {
-        insertTestDataObeAbe();
-
-        assertTrue(GameUtil.validateMoveObeAbe(obeabePlayedCardT2, obeabeDeckT2, obeabeFirstCardOfTurnT2));
-        assertFalse(GameUtil.validateMoveObeAbe(obeabePlayedCardT3, obeabeDeckT3, obeabeFirstCardOfTurnT3));
-        assertTrue(GameUtil.validateMoveObeAbe(obeabePlayedCardT4, obeabeDeckT4, obeabeFirstCardOfTurnT4));
-    }
-
-    private void insertTestDataOndeUfe() {
-
-        /*
-         * - First turn of round is queen of Spades
-         * - The player had two cards with suit spade in his hand but has
-         *   already played both before this turn
-         * - The player plays an Ace of hearts.
-         * - Assertion is that this move is true/valid, as he has already played
-         *   out his spades.
-         */
-        ondeufeRoundT2.setGameMode(GameMode.ONDE_UFE);
-        ondeufeDeckT2.setRound(ondeufeRoundT2);
-        ondeufeDeckT2.setCardOne(cards.get(20));
-        ondeufeDeckT2.setCardOneHasBeenPlayed(true);
-        ondeufeDeckT2.setCardTwo(cards.get(23));
-        ondeufeDeckT2.setCardTwoHasBeenPlayed(true);
-        ondeufeDeckT2.setCardThree(cards.get(9));
-        ondeufeDeckT2.setCardThreeHasBeenPlayed(false);
-        ondeufeDeckT2.setCardFour(cards.get(30));
-        ondeufeDeckT2.setCardFive(cards.get(31));
-        ondeufeDeckT2.setCardFiveHasBeenPlayed(false);
-        ondeufeDeckT2.setCardSix(cards.get(32));
-        ondeufeDeckT2.setCardSixHasBeenPlayed(false);
-        ondeufeDeckT2.setCardSeven(cards.get(33));
-        ondeufeDeckT2.setCardSevenHasBeenPlayed(false);
-        ondeufeDeckT2.setCardEight(cards.get(34));
-        ondeufeDeckT2.setCardEightHasBeenPlayed(false);
-        ondeufeDeckT2.setCardNine(cards.get(35));
-        ondeufeDeckT2.setCardNineHasBeenPlayed(false);
-        ondeufeFirstCardOfTurnT2 = cards.get(24);
-        ondeufePlayedCardT2 = ondeufeDeckT2.getCardThree();
-
-        /*
-         * - First turn of round is queen of Spades
-         * - The player has two cards with suit spade in his hand, one already
-         *   played & one still in his hands
-         * - The player plays an Ace of hearts.
-         * - Assertion is that this move is false/invalid, as he must have
-         *   played the remaining spade.
-         */
-        ondeufeRoundT3.setGameMode(GameMode.ONDE_UFE);
-        ondeufeDeckT3.setRound(ondeufeRoundT3);
-        ondeufeDeckT3.setCardOne(cards.get(20));
-        ondeufeDeckT3.setCardOneHasBeenPlayed(true);
-        ondeufeDeckT3.setCardTwo(cards.get(23));
-        ondeufeDeckT3.setCardTwoHasBeenPlayed(false);
-        ondeufeDeckT3.setCardThree(cards.get(8));
-        ondeufeDeckT3.setCardThreeHasBeenPlayed(false);
-        ondeufeDeckT3.setCardFour(cards.get(30));
-        ondeufeDeckT3.setCardFourHasBeenPlayed(false);
-        ondeufeDeckT3.setCardFive(cards.get(31));
-        ondeufeDeckT3.setCardFiveHasBeenPlayed(true);
-        ondeufeDeckT3.setCardSix(cards.get(32));
-        ondeufeDeckT3.setCardSixHasBeenPlayed(false);
-        ondeufeDeckT3.setCardSeven(cards.get(33));
-        ondeufeDeckT3.setCardSevenHasBeenPlayed(false);
-        ondeufeDeckT3.setCardEight(cards.get(34));
-        ondeufeDeckT3.setCardEightHasBeenPlayed(false);
-        ondeufeDeckT3.setCardNine(cards.get(35));
-        ondeufeDeckT3.setCardNineHasBeenPlayed(false);
-        ondeufeFirstCardOfTurnT3 = cards.get(24);
-        ondeufePlayedCardT3 = ondeufeDeckT3.getCardThree();
-
-        /*
-         * - First turn of round is queen of Spades
-         * - The player had two cards with suit spade in his hand but has
-         *   already played both before this turn
-         * - The player plays an Ace of clubs.
-         * - Assertion is that this move is true/valid, as clubs are trump.
-         */
-        ondeufeRoundT4.setGameMode(GameMode.ONDE_UFE);
-        ondeufeDeckT4.setRound(ondeufeRoundT4);
-        ondeufeDeckT4.setCardOne(cards.get(20));
-        ondeufeDeckT4.setCardOneHasBeenPlayed(true);
-        ondeufeDeckT4.setCardTwo(cards.get(23));
-        ondeufeDeckT4.setCardTwoHasBeenPlayed(true);
-        ondeufeDeckT4.setCardThree(cards.get(9));
-        ondeufeDeckT4.setCardThreeHasBeenPlayed(false);
-        ondeufeDeckT4.setCardFour(cards.get(30));
-        ondeufeDeckT4.setCardFourHasBeenPlayed(false);
-        ondeufeDeckT4.setCardFive(cards.get(31));
-        ondeufeDeckT4.setCardFiveHasBeenPlayed(true);
-        ondeufeDeckT4.setCardSix(cards.get(32));
-        ondeufeDeckT4.setCardSixHasBeenPlayed(false);
-        ondeufeDeckT4.setCardSeven(cards.get(33));
-        ondeufeDeckT4.setCardSevenHasBeenPlayed(false);
-        ondeufeDeckT4.setCardEight(cards.get(34));
-        ondeufeDeckT4.setCardEightHasBeenPlayed(false);
-        ondeufeDeckT4.setCardNine(cards.get(35));
-        ondeufeDeckT4.setCardNineHasBeenPlayed(false);
-        ondeufeFirstCardOfTurnT4 = cards.get(24);
-        ondeufePlayedCardT4 = ondeufeDeckT4.getCardNine();
-    }
-
-    /**
-     * Test some cases during game mode obe abe.
-     */
-    @Test
-    public void testValidateMoveOndeUfe() {
-        insertTestDataOndeUfe();
-
-        assertTrue(GameUtil.validateMoveOndeUfe(ondeufePlayedCardT2, ondeufeDeckT2, ondeufeFirstCardOfTurnT2));
-        assertFalse(GameUtil.validateMoveOndeUfe(ondeufePlayedCardT3, ondeufeDeckT3, ondeufeFirstCardOfTurnT3));
-        assertTrue(GameUtil.validateMoveOndeUfe(ondeufePlayedCardT4, ondeufeDeckT4, ondeufeFirstCardOfTurnT4));
     }
 
     /**
      * Generate Rank Data.
+     *
+     * @author Thomas Weber
      */
     private ArrayList<RankEntity> insertRankSeedData() {
         ArrayList<RankEntity> createdRanks = new ArrayList<>();
@@ -563,6 +136,8 @@ public final class GameUtilTest {
 
     /**
      * Generate Suit Data.
+     *
+     * @author Thomas Weber
      */
     private ArrayList<SuitEntity> insertSuitSeedData() {
         ArrayList<SuitEntity> createdSuits = new ArrayList<>();
@@ -575,6 +150,8 @@ public final class GameUtilTest {
 
     /**
      * Generate Card Data.
+     *
+     * @author Thomas Weber
      */
     private ArrayList<CardEntity> insertCardSeedData() {
         ArrayList<CardEntity> createdCards = new ArrayList<>();
@@ -586,58 +163,455 @@ public final class GameUtilTest {
                     .setRank(ranks.get(j))
                     .setSuit(suits.get(i))
                 );
-                // Comment out following 4 lines to remove print of cards into console.
-                int id = j + addend;
-                System.out.printf("Card Id: " + id + "\t\t");
-                System.out.printf(" Rank: " + ranks.get(j).getKey() + "\t\t");
-                System.out.println(" Suit: " + suits.get(i).getKey());
+                // Comment out following 4 lines to remove print of cards into
+                // console.
+                //int id = j + addend;
+                //System.out.printf("Card Id: " + id + "\t\t");
+                //System.out.printf(" Rank: " + ranks.get(j).getKey() + "\t\t");
+                //System.out.println(" Suit: " + suits.get(i).getKey());
 
             }
             addend += 9;
         }
         return createdCards;
     }
-}
 
-/*
- * Card Id: 0  | Rank: 6     | Suit: hearts
- * Card Id: 1  | Rank: 6     | Suit: hearts
- * Card Id: 2  | Rank: 7     | Suit: hearts
- * Card Id: 3  | Rank: 8     | Suit: hearts
- * Card Id: 4  | Rank: 9     | Suit: hearts
- * Card Id: 5  | Rank: 10    | Suit: hearts
- * Card Id: 6  | Rank: jack  | Suit: hearts
- * Card Id: 7  | Rank: queen | Suit: hearts
- * Card Id: 8  | Rank: king  | Suit: hearts
- * Card Id: 9  | Rank: ace   | Suit: hearts
- * Card Id: 10 | Rank: 6     | Suit: diamonds
- * Card Id: 11 | Rank: 6     | Suit: diamonds
- * Card Id: 12 | Rank: 7     | Suit: diamonds
- * Card Id: 13 | Rank: 8     | Suit: diamonds
- * Card Id: 14 | Rank: 9     | Suit: diamonds
- * Card Id: 15 | Rank: 10    | Suit: diamonds
- * Card Id: 16 | Rank: jack  | Suit: diamonds
- * Card Id: 17 | Rank: queen | Suit: diamonds
- * Card Id: 18 | Rank: king  | Suit: diamonds
- * Card Id: 19 | Rank: ace   | Suit: diamonds
- * Card Id: 20 | Rank: 6     | Suit: spades
- * Card Id: 21 | Rank: 6     | Suit: spades
- * Card Id: 22 | Rank: 7     | Suit: spades
- * Card Id: 23 | Rank: 8     | Suit: spades
- * Card Id: 24 | Rank: 9     | Suit: spades
- * Card Id: 25 | Rank: 10    | Suit: spades
- * Card Id: 26 | Rank: jack  | Suit: spades
- * Card Id: 27 | Rank: queen | Suit: spades
- * Card Id: 28 | Rank: king  | Suit: spades
- * Card Id: 29 | Rank: ace   | Suit: spades
- * Card Id: 30 | Rank: 6     | Suit: clubs
- * Card Id: 31 | Rank: 6     | Suit: clubs
- * Card Id: 32 | Rank: 7     | Suit: clubs
- * Card Id: 33 | Rank: 8     | Suit: clubs
- * Card Id: 34 | Rank: 9     | Suit: clubs
- * Card Id: 35 | Rank: 10    | Suit: clubs
- * Card Id: 36 | Rank: jack  | Suit: clubs
- * Card Id: 37 | Rank: queen | Suit: clubs
- * Card Id: 38 | Rank: king  | Suit: clubs
- * Card Id: 39 | Rank: ace   | Suit: clubs
- */
+    /*
+     * - Game Mode Trump
+     * - Trump Suite Hearts
+     * - First turn of round is Heart 6
+     * - The player only has one card with suit heart which is the jack.
+     * - The player plays an Ace of spades.
+     * - Assertion is that this move is true/valid, as you are never forced to
+     *   play the jack.
+     */
+
+    /**
+     * @author Thomas Weber
+     */
+    @Test
+    public void testValidateMoveTrump1() {
+        RoundEntity round = (new RoundEntity())
+            .setGameMode(GameMode.TRUMPF)
+            .setTrumpfSuit(Card.Suit.Hearts);
+        DeckEntity deck = (new DeckEntity()).setRound(round);
+
+        deck.setCardOne(cards.get(10));
+        deck.setCardOneHasBeenPlayed(false);
+        deck.setCardTwo(cards.get(11));
+        deck.setCardTwoHasBeenPlayed(false);
+        deck.setCardThree(cards.get(25));
+        deck.setCardThreeHasBeenPlayed(false);
+        deck.setCardFour(cards.get(26));
+        deck.setCardFourHasBeenPlayed(true);
+        deck.setCardFive(cards.get(27));
+        deck.setCardFiveHasBeenPlayed(true);
+        deck.setCardSix(cards.get(28));
+        deck.setCardSixHasBeenPlayed(false);
+        deck.setCardSeven(cards.get(26));
+        deck.setCardSevenHasBeenPlayed(false);
+        deck.setCardEight(cards.get(30));
+        deck.setCardEightHasBeenPlayed(true);
+        deck.setCardNine(cards.get(5));
+        deck.setCardNineHasBeenPlayed(false);
+
+        CardEntity firstCardOfTurn = cards.get(0);
+        CardEntity playedCard = deck.getCardSeven();
+
+        assertTrue(GameUtil.validateMoveTrump(playedCard, deck, firstCardOfTurn, String.valueOf(round.getTrumpfSuit())));
+    }
+
+    /*
+     * Test two:
+     * - Game Mode Trump
+     * - Trump Suite Clubs
+     * - First turn of round is queen of Spades
+     * - The player had two cards with suit spade in his hand but has already
+     *   played both before this turn
+     * - The player plays an Ace of hearts.
+     * - Assertion is that this move is true/valid, as he has already played out
+     *   his spades.
+     */
+
+    /**
+     * @author Thomas Weber
+     */
+    @Test
+    public void testValidateMoveTrump2() {
+        RoundEntity round = (new RoundEntity())
+            .setGameMode(GameMode.TRUMPF)
+            .setTrumpfSuit(Card.Suit.Clubs);
+        DeckEntity deck = (new DeckEntity()).setRound(round);
+
+        deck.setCardOne(cards.get(20));
+        deck.setCardOneHasBeenPlayed(true);
+        deck.setCardTwo(cards.get(23));
+        deck.setCardTwoHasBeenPlayed(true);
+        deck.setCardThree(cards.get(9));
+        deck.setCardThreeHasBeenPlayed(false);
+        deck.setCardFour(cards.get(30));
+        deck.setCardFourHasBeenPlayed(false);
+        deck.setCardFive(cards.get(31));
+        deck.setCardFiveHasBeenPlayed(false);
+        deck.setCardSix(cards.get(32));
+        deck.setCardSixHasBeenPlayed(false);
+        deck.setCardSeven(cards.get(33));
+        deck.setCardSevenHasBeenPlayed(false);
+        deck.setCardEight(cards.get(34));
+        deck.setCardEightHasBeenPlayed(false);
+        deck.setCardNine(cards.get(35));
+        deck.setCardNineHasBeenPlayed(false);
+
+        CardEntity firstCardOfTurn = cards.get(24);
+        CardEntity playedCard = deck.getCardThree();
+
+        assertTrue(GameUtil.validateMoveTrump(playedCard, deck, firstCardOfTurn, String.valueOf(round.getTrumpfSuit())));
+    }
+
+    /*
+     * - Game Mode Trump
+     * - Trump Suite Clubs
+     * - First turn of round is queen of Spades
+     * - The player has two cards with suit spade in his hand, one already
+     *   played & one still in his hands
+     * - The player plays an Ace of hearts.
+     * - Assertion is that this move is false/invalid, as he must have played
+     *   the remaining spade.
+     */
+
+    /**
+     * @author Thomas Weber
+     */
+    @Test
+    public void testValidateMoveTrump3() {
+        RoundEntity round = (new RoundEntity())
+            .setGameMode(GameMode.TRUMPF)
+            .setTrumpfSuit(Card.Suit.Clubs);
+        DeckEntity deck = (new DeckEntity()).setRound(round);
+
+        deck.setCardOne(cards.get(20));
+        deck.setCardOneHasBeenPlayed(true);
+        deck.setCardTwo(cards.get(23));
+        deck.setCardTwoHasBeenPlayed(false);
+        deck.setCardThree(cards.get(8));
+        deck.setCardThreeHasBeenPlayed(false);
+        deck.setCardFour(cards.get(30));
+        deck.setCardFourHasBeenPlayed(false);
+        deck.setCardFive(cards.get(31));
+        deck.setCardFiveHasBeenPlayed(true);
+        deck.setCardSix(cards.get(32));
+        deck.setCardSixHasBeenPlayed(false);
+        deck.setCardSeven(cards.get(33));
+        deck.setCardSevenHasBeenPlayed(false);
+        deck.setCardEight(cards.get(34));
+        deck.setCardEightHasBeenPlayed(false);
+        deck.setCardNine(cards.get(35));
+        deck.setCardNineHasBeenPlayed(false);
+
+        CardEntity firstCardOfTurn = cards.get(24);
+        CardEntity playedCard = deck.getCardThree();
+
+        assertFalse(GameUtil.validateMoveTrump(playedCard, deck, firstCardOfTurn, String.valueOf(round.getTrumpfSuit())));
+    }
+
+    /*
+     * Test four data:
+     * - Game Mode Trump
+     * - Trump Suite Clubs
+     * - First turn of round is queen of Spades
+     * - The player had two cards with suit spade in his hand but has already
+     *   played both before this turn
+     * - The player plays an Ace of clubs.
+     * - Assertion is that this move is true/valid, as clubs are trump.
+     */
+
+    /**
+     * @author Thomas Weber
+     */
+    @Test
+    public void testValidateMoveTrump4() {
+        RoundEntity round = (new RoundEntity())
+            .setGameMode(GameMode.TRUMPF)
+            .setTrumpfSuit(Card.Suit.Clubs);
+        DeckEntity deck = (new DeckEntity()).setRound(round);
+
+        deck.setCardOne(cards.get(20));
+        deck.setCardOneHasBeenPlayed(true);
+        deck.setCardTwo(cards.get(23));
+        deck.setCardTwoHasBeenPlayed(true);
+        deck.setCardThree(cards.get(9));
+        deck.setCardThreeHasBeenPlayed(false);
+        deck.setCardFour(cards.get(30));
+        deck.setCardFourHasBeenPlayed(false);
+        deck.setCardFive(cards.get(31));
+        deck.setCardFiveHasBeenPlayed(true);
+        deck.setCardSix(cards.get(32));
+        deck.setCardSixHasBeenPlayed(false);
+        deck.setCardSeven(cards.get(33));
+        deck.setCardSevenHasBeenPlayed(false);
+        deck.setCardEight(cards.get(34));
+        deck.setCardEightHasBeenPlayed(false);
+        deck.setCardNine(cards.get(35));
+        deck.setCardNineHasBeenPlayed(false);
+
+        CardEntity firstCardOfTurn = cards.get(24);
+        CardEntity playedCard = deck.getCardNine();
+
+        assertTrue(GameUtil.validateMoveTrump(playedCard, deck, firstCardOfTurn, String.valueOf(round.getTrumpfSuit())));
+    }
+
+    /*
+     * - First turn of round is queen of Spades
+     * - The player had two cards with suit spade in his hand but has
+     *   already played both before this turn
+     * - The player plays an Ace of hearts.
+     * - Assertion is that this move is true/valid, as he has already played
+     *   out his spades.
+     */
+
+    /**
+     * @author Manuele Vaccari
+     */
+    @Test
+    public void testValidateMoveObeAbe1() {
+        RoundEntity round = (new RoundEntity())
+            .setGameMode(GameMode.OBE_ABE);
+        DeckEntity deck = (new DeckEntity()).setRound(round);
+
+        deck.setCardOne(cards.get(20));
+        deck.setCardOneHasBeenPlayed(true);
+        deck.setCardTwo(cards.get(23));
+        deck.setCardTwoHasBeenPlayed(true);
+        deck.setCardThree(cards.get(9));
+        deck.setCardThreeHasBeenPlayed(false);
+        deck.setCardFour(cards.get(30));
+        deck.setCardFourHasBeenPlayed(false);
+        deck.setCardFive(cards.get(31));
+        deck.setCardFiveHasBeenPlayed(false);
+        deck.setCardSix(cards.get(32));
+        deck.setCardSixHasBeenPlayed(false);
+        deck.setCardSeven(cards.get(33));
+        deck.setCardSevenHasBeenPlayed(false);
+        deck.setCardEight(cards.get(34));
+        deck.setCardEightHasBeenPlayed(false);
+        deck.setCardNine(cards.get(35));
+        deck.setCardNineHasBeenPlayed(false);
+
+        CardEntity firstCardOfTurn = cards.get(24);
+        CardEntity playedCard = deck.getCardThree();
+
+        assertTrue(GameUtil.validateMoveObeAbe(playedCard, deck, firstCardOfTurn));
+    }
+
+    /*
+     * - First turn of round is queen of Spades
+     * - The player has two cards with suit spade in his hand, one already
+     *   played & one still in his hands
+     * - The player plays an Ace of hearts.
+     * - Assertion is that this move is false/invalid, as he must have
+     *   played the remaining spade.
+     */
+
+    /**
+     * @author Manuele Vaccari
+     */
+    @Test
+    public void testValidateMoveObeAbe2() {
+        RoundEntity round = (new RoundEntity())
+            .setGameMode(GameMode.OBE_ABE);
+        DeckEntity deck = (new DeckEntity()).setRound(round);
+
+        deck.setCardOne(cards.get(20));
+        deck.setCardOneHasBeenPlayed(true);
+        deck.setCardTwo(cards.get(23));
+        deck.setCardTwoHasBeenPlayed(false);
+        deck.setCardThree(cards.get(8));
+        deck.setCardThreeHasBeenPlayed(false);
+        deck.setCardFour(cards.get(30));
+        deck.setCardFourHasBeenPlayed(false);
+        deck.setCardFive(cards.get(31));
+        deck.setCardFiveHasBeenPlayed(true);
+        deck.setCardSix(cards.get(32));
+        deck.setCardSixHasBeenPlayed(false);
+        deck.setCardSeven(cards.get(33));
+        deck.setCardSevenHasBeenPlayed(false);
+        deck.setCardEight(cards.get(34));
+        deck.setCardEightHasBeenPlayed(false);
+        deck.setCardNine(cards.get(35));
+        deck.setCardNineHasBeenPlayed(false);
+
+        CardEntity firstCardOfTurn = cards.get(24);
+        CardEntity playedCard = deck.getCardThree();
+
+        assertFalse(GameUtil.validateMoveObeAbe(playedCard, deck, firstCardOfTurn));
+    }
+
+    /*
+     * - First turn of round is queen of Spades
+     * - The player had two cards with suit spade in his hand but has
+     *   already played both before this turn
+     * - The player plays an Ace of clubs.
+     * - Assertion is that this move is true/valid, as clubs are trump.
+     */
+
+    /**
+     * @author Manuele Vaccari
+     */
+    @Test
+    public void testValidateMoveObeAbe3() {
+        RoundEntity round = (new RoundEntity())
+            .setGameMode(GameMode.OBE_ABE);
+        DeckEntity deck = (new DeckEntity()).setRound(round);
+
+        deck.setCardOne(cards.get(20));
+        deck.setCardOneHasBeenPlayed(true);
+        deck.setCardTwo(cards.get(23));
+        deck.setCardTwoHasBeenPlayed(true);
+        deck.setCardThree(cards.get(9));
+        deck.setCardThreeHasBeenPlayed(false);
+        deck.setCardFour(cards.get(30));
+        deck.setCardFourHasBeenPlayed(false);
+        deck.setCardFive(cards.get(31));
+        deck.setCardFiveHasBeenPlayed(true);
+        deck.setCardSix(cards.get(32));
+        deck.setCardSixHasBeenPlayed(false);
+        deck.setCardSeven(cards.get(33));
+        deck.setCardSevenHasBeenPlayed(false);
+        deck.setCardEight(cards.get(34));
+        deck.setCardEightHasBeenPlayed(false);
+        deck.setCardNine(cards.get(35));
+        deck.setCardNineHasBeenPlayed(false);
+
+        CardEntity firstCardOfTurn = cards.get(24);
+        CardEntity playedCard = deck.getCardNine();
+
+        assertTrue(GameUtil.validateMoveObeAbe(playedCard, deck, firstCardOfTurn));
+    }
+
+    /*
+     * - First turn of round is queen of Spades
+     * - The player had two cards with suit spade in his hand but has
+     *   already played both before this turn
+     * - The player plays an Ace of hearts.
+     * - Assertion is that this move is true/valid, as he has already played
+     *   out his spades.
+     */
+
+    /**
+     * @author Sasa Trajkova
+     */
+    @Test
+    public void testValidateMoveOndeUfe1() {
+        RoundEntity round = (new RoundEntity())
+            .setGameMode(GameMode.ONDE_UFE);
+        DeckEntity deck = (new DeckEntity()).setRound(round);
+
+        deck.setCardOne(cards.get(20));
+        deck.setCardOneHasBeenPlayed(true);
+        deck.setCardTwo(cards.get(23));
+        deck.setCardTwoHasBeenPlayed(true);
+        deck.setCardThree(cards.get(9));
+        deck.setCardThreeHasBeenPlayed(false);
+        deck.setCardFour(cards.get(30));
+        deck.setCardFive(cards.get(31));
+        deck.setCardFiveHasBeenPlayed(false);
+        deck.setCardSix(cards.get(32));
+        deck.setCardSixHasBeenPlayed(false);
+        deck.setCardSeven(cards.get(33));
+        deck.setCardSevenHasBeenPlayed(false);
+        deck.setCardEight(cards.get(34));
+        deck.setCardEightHasBeenPlayed(false);
+        deck.setCardNine(cards.get(35));
+        deck.setCardNineHasBeenPlayed(false);
+
+        CardEntity firstCardOfTurn = cards.get(24);
+        CardEntity playedCard = deck.getCardThree();
+
+        assertTrue(GameUtil.validateMoveOndeUfe(playedCard, deck, firstCardOfTurn));
+    }
+
+    /*
+     * - First turn of round is queen of Spades
+     * - The player has two cards with suit spade in his hand, one already
+     *   played & one still in his hands
+     * - The player plays an Ace of hearts.
+     * - Assertion is that this move is false/invalid, as he must have
+     *   played the remaining spade.
+     */
+
+    /**
+     * @author Sasa Trajkova
+     */
+    @Test
+    public void testValidateMoveOndeUfe2() {
+        RoundEntity round = (new RoundEntity())
+            .setGameMode(GameMode.ONDE_UFE);
+        DeckEntity deck = (new DeckEntity()).setRound(round);
+
+        deck.setCardOne(cards.get(20));
+        deck.setCardOneHasBeenPlayed(true);
+        deck.setCardTwo(cards.get(23));
+        deck.setCardTwoHasBeenPlayed(false);
+        deck.setCardThree(cards.get(8));
+        deck.setCardThreeHasBeenPlayed(false);
+        deck.setCardFour(cards.get(30));
+        deck.setCardFourHasBeenPlayed(false);
+        deck.setCardFive(cards.get(31));
+        deck.setCardFiveHasBeenPlayed(true);
+        deck.setCardSix(cards.get(32));
+        deck.setCardSixHasBeenPlayed(false);
+        deck.setCardSeven(cards.get(33));
+        deck.setCardSevenHasBeenPlayed(false);
+        deck.setCardEight(cards.get(34));
+        deck.setCardEightHasBeenPlayed(false);
+        deck.setCardNine(cards.get(35));
+        deck.setCardNineHasBeenPlayed(false);
+
+        CardEntity firstCardOfTurn = cards.get(24);
+        CardEntity playedCard = deck.getCardThree();
+
+        assertFalse(GameUtil.validateMoveOndeUfe(playedCard, deck, firstCardOfTurn));
+    }
+
+    /*
+     * - First turn of round is queen of Spades
+     * - The player had two cards with suit spade in his hand but has
+     *   already played both before this turn
+     * - The player plays an Ace of clubs.
+     * - Assertion is that this move is true/valid, as clubs are trump.
+     */
+
+    /**
+     * @author Sasa Trajkova
+     */
+    @Test
+    public void testValidateMoveOndeUfe3() {
+        RoundEntity round = (new RoundEntity())
+            .setGameMode(GameMode.ONDE_UFE);
+        DeckEntity deck = (new DeckEntity()).setRound(round);
+
+        deck.setCardOne(cards.get(20));
+        deck.setCardOneHasBeenPlayed(true);
+        deck.setCardTwo(cards.get(23));
+        deck.setCardTwoHasBeenPlayed(true);
+        deck.setCardThree(cards.get(9));
+        deck.setCardThreeHasBeenPlayed(false);
+        deck.setCardFour(cards.get(30));
+        deck.setCardFourHasBeenPlayed(false);
+        deck.setCardFive(cards.get(31));
+        deck.setCardFiveHasBeenPlayed(true);
+        deck.setCardSix(cards.get(32));
+        deck.setCardSixHasBeenPlayed(false);
+        deck.setCardSeven(cards.get(33));
+        deck.setCardSevenHasBeenPlayed(false);
+        deck.setCardEight(cards.get(34));
+        deck.setCardEightHasBeenPlayed(false);
+        deck.setCardNine(cards.get(35));
+        deck.setCardNineHasBeenPlayed(false);
+
+        CardEntity firstCardOfTurn = cards.get(24);
+        CardEntity playedCard = deck.getCardNine();
+
+        assertTrue(GameUtil.validateMoveOndeUfe(playedCard, deck, firstCardOfTurn));
+    }
+}
