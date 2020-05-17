@@ -336,7 +336,8 @@ public final class GameUtil implements ChosenGameModeEventListener, PlayedCardEv
 
                 // start new turn after 4 seconds
                 if (turn.getWinningUser() != null) {
-                    Thread.sleep(4000);
+                    // TODO set back to 4000
+                    Thread.sleep(1000);
                     TurnEntity newTurn = addNewTurn(turn.getWinningUser(), currentRound);
 
                     BroadcastTurn newBroadcastTurn = new BroadcastTurn(new BroadcastTurnData(newTurn.getId(),

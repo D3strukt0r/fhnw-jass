@@ -515,7 +515,7 @@ public final class GameUtil implements Service, BroadcastDeckEventListener,
         turnId = 0;
         startingPlayerUsername.setValue("");
         winningPlayerUsername.setValue("");
-        disableButtons.set(false);;
+        disableButtons.set(true);
         moveInvalidErrorMessage = "";
         cardIdToRemove = 0;
         pointsRound.set(0);
