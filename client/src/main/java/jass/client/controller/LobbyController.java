@@ -256,6 +256,10 @@ public final class LobbyController extends Controller implements GameFoundEventL
         gameUtil.setGame(msgData);
 
         WindowUtil.switchTo(view, GameView.class);
+
+        
+
+        // call initialise in controller right here.
     }
 
     /**

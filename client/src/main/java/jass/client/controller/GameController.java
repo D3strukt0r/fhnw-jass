@@ -516,7 +516,6 @@ public final class GameController extends Controller implements DisconnectEventL
             if(this.gameUtil.getAPlayerLeft() == true) {
                 this.gameUtil.cleanupGame();
                 this.gameUtil.setShowNotificationOnLobby(true);
-                initialize(null, null);
                 WindowUtil.switchTo(view, LobbyView.class);
                 // go to lobby
             } else {
@@ -529,7 +528,6 @@ public final class GameController extends Controller implements DisconnectEventL
             // if a player has already left, then just leave the game
             if(gameUtil.getAPlayerLeft() == true) {
                 this.gameUtil.cleanupGame();
-                initialize(null, null);
                 WindowUtil.switchTo(view, LobbyView.class);
             }
             this.gameUtil.setDecidedToLeaveGame(true);
@@ -542,12 +540,10 @@ public final class GameController extends Controller implements DisconnectEventL
     public void onAPlayerQuit(BroadcastAPlayerQuitData data) {
         if(gameUtil.getDecidedToLeaveGame() == true) {
             this.gameUtil.cleanupGame();
-            initialize(null, null);
             WindowUtil.switchTo(view, LobbyView.class);
         }
         else if(this.roundOverDialogClosed == true) {
             this.gameUtil.cleanupGame();
-            initialize(null, null);
             this.gameUtil.setShowNotificationOnLobby(true);
             WindowUtil.switchTo(view, LobbyView.class);
         }
@@ -802,6 +798,7 @@ public final class GameController extends Controller implements DisconnectEventL
 
         LoginEntity login = ServiceLocator.get(LoginEntity.class);
         assert login != null;
+        assert gameUtil.getGame() != null;
         if (gameUtil.getGame().getPlayerOne().equals(login.getUsername())) {
             user1b1.setDisable(card1 != null && card1.isPlayed ? card1.isPlayed : disable);
             user1b2.setDisable(card2 != null && card2.isPlayed ? card2.isPlayed : disable);
