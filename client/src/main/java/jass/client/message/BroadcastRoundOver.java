@@ -21,7 +21,6 @@ package jass.client.message;
 
 import jass.client.util.SocketUtil;
 import jass.lib.message.BroadcastRoundOverData;
-import jass.lib.message.BroadcastTurnData;
 import jass.lib.message.MessageData;
 
 /**

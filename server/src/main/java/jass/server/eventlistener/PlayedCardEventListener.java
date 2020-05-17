@@ -20,10 +20,6 @@
 package jass.server.eventlistener;
 
 import jass.lib.message.PlayCardData;
-import jass.lib.message.PlayedCardData;
-import jass.server.util.ClientUtil;
-
-import java.sql.SQLException;
 
 /**
  * @author Manuele Vaccari & Victor Hargrave

@@ -41,9 +41,9 @@ public final class BroadcastRoundOverData extends MessageData {
 
     private final String team2Player2;
 
-    public BroadcastRoundOverData(int roundId, int team1Points, int team2Points,
-                               String team1Player1, String team1Player2,
-                               String team2Player1, String team2Player2) {
+    public BroadcastRoundOverData(final int roundId, final int team1Points, final int team2Points,
+                                  final String team1Player1, final String team1Player2,
+                                  final String team2Player1, final String team2Player2) {
         super("BroadcastRoundOver");
         this.roundId = roundId;
         this.team1Points = team1Points;
@@ -59,7 +59,7 @@ public final class BroadcastRoundOverData extends MessageData {
      */
     public BroadcastRoundOverData(final JSONObject data) {
         super(data);
-        this.roundId = data.getInt("roundId");;
+        this.roundId = data.getInt("roundId");
         this.team1Points = data.getInt("team1Points");
         this.team2Points = data.getInt("team2Points");
         this.team1Player1 = data.getString("team1Player1");

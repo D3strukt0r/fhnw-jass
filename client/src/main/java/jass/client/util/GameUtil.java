@@ -112,7 +112,7 @@ public final class GameUtil implements Service, BroadcastDeckEventListener,
     private SimpleBooleanProperty disableButtons = new SimpleBooleanProperty();
 
     /**
-     * Whether to reinitialise the game
+     * Whether to reinitialise the game.
      */
     private SimpleBooleanProperty gameFound = new SimpleBooleanProperty();
 
@@ -510,7 +510,7 @@ public final class GameUtil implements Service, BroadcastDeckEventListener,
         return decidedToLeaveGame;
     }
 
-    public void setDecidedToLeaveGame(boolean decidedToLeaveGame) {
+    public void setDecidedToLeaveGame(final boolean decidedToLeaveGame) {
         this.decidedToLeaveGame = decidedToLeaveGame;
     }
 
@@ -518,7 +518,7 @@ public final class GameUtil implements Service, BroadcastDeckEventListener,
         return aPlayerLeft;
     }
 
-    public void setAPlayerLeft(boolean aPlayerLeft) {
+    public void setAPlayerLeft(final boolean aPlayerLeft) {
         this.aPlayerLeft = aPlayerLeft;
     }
 

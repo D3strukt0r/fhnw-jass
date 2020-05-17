@@ -22,10 +22,6 @@ package jass.server.entity;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 import jass.lib.database.Entity;
-import jass.server.repository.TeamRepository;
-import jass.server.repository.UserRepository;
-
-import java.sql.SQLException;
 
 /**
  * A model with all known (and cached) teams.

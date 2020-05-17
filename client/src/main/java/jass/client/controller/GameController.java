@@ -469,7 +469,7 @@ public final class GameController extends Controller implements DisconnectEventL
         mHelpAbout.textProperty().bind(I18nUtil.createStringBinding(mHelpAbout.getText()));
     }
 
-    private void addSocketListeners(SocketUtil socket) {
+    private void addSocketListeners(final SocketUtil socket) {
         socket.addDisconnectListener(this);
         socket.addAPlayerQuitEventListener(this);
         socket.addRoundOverEventListener(this);
@@ -485,7 +485,7 @@ public final class GameController extends Controller implements DisconnectEventL
                 logger.info("button click listeners created");
                 updateCardImages();
                 updateUserNames();
-                if (aPlayerQuitEventListenerAdded == false) {
+                if (!aPlayerQuitEventListenerAdded) {
                     socket.addAPlayerQuitEventListener(this);
                 }
             }
@@ -522,7 +522,7 @@ public final class GameController extends Controller implements DisconnectEventL
 
         if (alert.getResult() == ButtonType.OK) {
             this.roundOverDialogClosed = true;
-            if (this.gameUtil.getAPlayerLeft() == true) {
+            if (this.gameUtil.getAPlayerLeft()) {
                 showNotificationThatPlayerLeft();
             } else {
                 // resetRound();
@@ -531,7 +531,7 @@ public final class GameController extends Controller implements DisconnectEventL
         } else if (alert.getResult() == ButtonType.CANCEL) {
             this.roundOverDialogClosed = true;
             // if a player has already left, then just leave the game
-            if (gameUtil.getAPlayerLeft() == true) {
+            if (gameUtil.getAPlayerLeft()) {
                 cleanupGameAndNavigateFromView();
             }
             this.gameUtil.setDecidedToLeaveGame(true);
@@ -541,10 +541,10 @@ public final class GameController extends Controller implements DisconnectEventL
     }
 
     @Override
-    public void onAPlayerQuit(BroadcastAPlayerQuitData data) {
-        if (gameUtil.getDecidedToLeaveGame() == true) {
+    public void onAPlayerQuit(final BroadcastAPlayerQuitData data) {
+        if (gameUtil.getDecidedToLeaveGame()) {
             cleanupGameAndNavigateFromView();
-        } else if (this.roundOverDialogClosed == true) {
+        } else if (this.roundOverDialogClosed) {
             showNotificationThatPlayerLeft();
         } else {
             this.gameUtil.setAPlayerLeft(true);

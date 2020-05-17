@@ -196,7 +196,7 @@ public final class GameUtil implements ChosenGameModeEventListener, PlayedCardEv
         sendChooseGameMode();
     }
 
-    private void AddEventListeners(ClientUtil clientPlayerOne, ClientUtil clientPlayerTwo, ClientUtil clientPlayerThree, ClientUtil clientPlayerFour) {
+    private void AddEventListeners(final ClientUtil clientPlayerOne, final ClientUtil clientPlayerTwo, final ClientUtil clientPlayerThree, final ClientUtil clientPlayerFour) {
         clientPlayerOne.addChosenGameModeEventListener(this);
         clientPlayerTwo.addChosenGameModeEventListener(this);
         clientPlayerThree.addChosenGameModeEventListener(this);
@@ -213,7 +213,7 @@ public final class GameUtil implements ChosenGameModeEventListener, PlayedCardEv
         clientPlayerFour.addStopPlayingEventListener(this);
     }
 
-    private void RemoveEventListeners(ClientUtil clientPlayerOne, ClientUtil clientPlayerTwo, ClientUtil clientPlayerThree, ClientUtil clientPlayerFour) {
+    private void RemoveEventListeners(final ClientUtil clientPlayerOne, final ClientUtil clientPlayerTwo, final ClientUtil clientPlayerThree, final ClientUtil clientPlayerFour) {
         clientPlayerOne.removeChosenGameModeEventListener(this);
         clientPlayerTwo.removeChosenGameModeEventListener(this);
         clientPlayerThree.removeChosenGameModeEventListener(this);
@@ -394,7 +394,7 @@ public final class GameUtil implements ChosenGameModeEventListener, PlayedCardEv
         }
     }
 
-    private void broadcastPointsToWinningTeam(TurnEntity turn, UserEntity winningUser, int points) {
+    private void broadcastPointsToWinningTeam(final TurnEntity turn, final UserEntity winningUser, final int points) {
         BroadcastPoints pointsMsg = new BroadcastPoints(new BroadcastPointsData(turn.getId(), points));
         if (game.getTeamOne().checkIfPlayerIsInTeam(winningUser)) {
             currentRound.addPointsTeamOne(points);
@@ -411,14 +411,14 @@ public final class GameUtil implements ChosenGameModeEventListener, PlayedCardEv
         }
     }
 
-    private boolean isRoundOver(TurnRepository turnRepository, UserEntity winningUser) throws SQLException {
+    private boolean isRoundOver(final TurnRepository turnRepository, final UserEntity winningUser) throws SQLException {
         boolean isRoundOver;
         int numberOfTurnsPlayed = turnRepository.getDao().queryForEq("round_id", currentRound.getId()).size();
         isRoundOver = numberOfTurnsPlayed == 9 && winningUser != null;
         return isRoundOver;
     }
 
-    private int calculatePointsByGameMode(TurnEntity turn) {
+    private int calculatePointsByGameMode(final TurnEntity turn) {
         int points = 0;
         if (currentRound.getGameMode() == GameMode.TRUMPF) {
             points = calculateCardPointsTrumpf(turn.getCards(), currentRound.getTrumpfSuit());
@@ -903,7 +903,7 @@ public final class GameUtil implements ChosenGameModeEventListener, PlayedCardEv
     }
 
     @Override
-    public void onStopPlaying(StopPlayingData data) {
+    public void onStopPlaying(final StopPlayingData data) {
         ClientUtil client = getClientUtilByUsername(data.getUsername());
         if (client != null) {
             SetGameToInactive();

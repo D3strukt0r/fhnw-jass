@@ -189,9 +189,7 @@ public final class LobbyController extends Controller implements GameFoundEventL
         cancelMatch.setVisible(true);
         findMatch.setVisible(false);
         // Send SearchGame Message to Server
-        if (searchGameMsg.process(backend)) {
-
-        } else {
+        if (!searchGameMsg.process(backend)) {
             logger.error("Error starting search for game");
             Platform.runLater(() -> {
                 Alert alert = new Alert(Alert.AlertType.ERROR, "Error searching for a game. Please try again!");
@@ -220,9 +218,7 @@ public final class LobbyController extends Controller implements GameFoundEventL
         findMatch.setVisible(true);
         cancelMatch.setVisible(false);
         // Send SearchGame Message to Server
-        if (cancelSearchGameMsg.process(backend)) {
-
-        } else {
+        if (!cancelSearchGameMsg.process(backend)) {
             logger.error("Error cancelling search for game");
             Platform.runLater(() -> {
                 Alert alert = new Alert(Alert.AlertType.ERROR, "Error cancelling search for a game. Please try again!");
