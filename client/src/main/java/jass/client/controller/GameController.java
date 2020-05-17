@@ -20,6 +20,8 @@
 package jass.client.controller;
 
 import jass.client.entity.LoginEntity;
+import jass.client.eventlistener.BroadcastAPlayerQuitEventListener;
+import jass.client.eventlistener.BroadcastRoundOverEventListener;
 import jass.client.eventlistener.DisconnectEventListener;
 import jass.client.util.StringUtil;
 import jass.client.message.Logout;
@@ -31,16 +33,21 @@ import jass.client.util.ViewUtil;
 import jass.client.util.WindowUtil;
 import jass.client.view.AboutView;
 import jass.client.view.GameView;
+import jass.client.view.LobbyView;
 import jass.client.view.LoginView;
 import jass.client.view.ServerConnectionView;
 import jass.lib.GameMode;
+import jass.lib.message.BroadcastAPlayerQuitData;
+import jass.lib.message.BroadcastRoundOverData;
 import jass.lib.message.CardData;
 import jass.lib.message.LogoutData;
 import jass.lib.servicelocator.ServiceLocator;
 import javafx.application.Platform;
 import javafx.collections.ListChangeListener;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
@@ -66,7 +73,7 @@ import java.util.ResourceBundle;
  * @version %I%, %G%
  * @since 0.0.1
  */
-public final class GameController extends Controller implements DisconnectEventListener {
+public final class GameController extends Controller implements DisconnectEventListener, BroadcastAPlayerQuitEventListener, BroadcastRoundOverEventListener {
     /**
      * The logger to print to console and save in a .log file.
      */
@@ -411,6 +418,10 @@ public final class GameController extends Controller implements DisconnectEventL
      */
     private GameUtil gameUtil;
 
+    private boolean roundOverDialogClosed;
+    private SocketUtil socket;
+    private boolean aPlayerQuitEventListenerAdded;
+
     @Override
     public void initialize(final URL location, final ResourceBundle resources) {
         gameUtil = ServiceLocator.get(GameUtil.class);
@@ -439,9 +450,9 @@ public final class GameController extends Controller implements DisconnectEventL
             logger.info("updated card images");
         }
 
-        SocketUtil socket = ServiceLocator.get(SocketUtil.class);
+        socket = ServiceLocator.get(SocketUtil.class);
         assert socket != null;
-        socket.addDisconnectListener(this);
+        addSocketListeners(socket);
 
         /*
          * Bind all texts
@@ -458,13 +469,114 @@ public final class GameController extends Controller implements DisconnectEventL
         mHelpAbout.textProperty().bind(I18nUtil.createStringBinding(mHelpAbout.getText()));
     }
 
+    private void addSocketListeners(final SocketUtil socket) {
+        socket.addDisconnectListener(this);
+        socket.addAPlayerQuitEventListener(this);
+        socket.addRoundOverEventListener(this);
+        aPlayerQuitEventListenerAdded = true;
+    }
+
     private void initializePlayerDeckListener() {
         gameUtil.getPlayerDeck().addListener((ListChangeListener<CardData>) c -> {
-            logger.info("listener was activated. Now updating cards");
             if (gameUtil.getPlayerDeck().size() == 9) {
+                logger.info("listener was activated. Now updating cards");
+                cardButtons = cardButtonsToArray();
+                addClickListenerToCardButtons();
+                logger.info("button click listeners created");
                 updateCardImages();
+                updateUserNames();
+                if (!aPlayerQuitEventListenerAdded) {
+                    socket.addAPlayerQuitEventListener(this);
+                }
             }
         });
+    }
+
+    @Override
+    public void onRoundOver(final BroadcastRoundOverData data) {
+        // run on separate thread so events can still come in nicely.
+        Platform.runLater(() -> {
+            showRoundOverMessage(data);
+        });
+    }
+
+    private void showRoundOverMessage(final BroadcastRoundOverData data) {
+        String roundOverMessage = "";
+        if (data.getTeam1Points() > data.getTeam2Points()) {
+            roundOverMessage = I18nUtil.get("gui.game.roundOverWin", data.getTeam1Player1(), data.getTeam1Player2(), data.getTeam1Points());
+        } else if (data.getTeam2Points() > data.getTeam1Points()) {
+            roundOverMessage = I18nUtil.get("gui.game.roundOverWin", data.getTeam1Player1(), data.getTeam2Player1(), data.getTeam2Points());
+        } else if (data.getTeam1Points() == data.getTeam2Points()) {
+            roundOverMessage = I18nUtil.get("gui.game.roundOverDraw", data.getTeam1Points());
+        }
+
+        Alert alert = new Alert(Alert.AlertType.INFORMATION,
+            roundOverMessage,
+            ButtonType.OK,
+            ButtonType.CANCEL);
+
+        alert.setTitle(I18nUtil.get("gui.game.roundOver"));
+        alert.showAndWait();
+        this.roundOverDialogClosed = false;
+
+
+        if (alert.getResult() == ButtonType.OK) {
+            this.roundOverDialogClosed = true;
+            if (this.gameUtil.getAPlayerLeft()) {
+                showNotificationThatPlayerLeft();
+            } else {
+                // resetRound();
+                // TODO Thomas
+            }
+        } else if (alert.getResult() == ButtonType.CANCEL) {
+            this.roundOverDialogClosed = true;
+            // if a player has already left, then just leave the game
+            if (gameUtil.getAPlayerLeft()) {
+                cleanupGameAndNavigateFromView();
+            }
+            this.gameUtil.setDecidedToLeaveGame(true);
+            // send message to server
+            this.gameUtil.stopPlaying();
+        }
+    }
+
+    @Override
+    public void onAPlayerQuit(final BroadcastAPlayerQuitData data) {
+        if (gameUtil.getDecidedToLeaveGame()) {
+            cleanupGameAndNavigateFromView();
+        } else if (this.roundOverDialogClosed) {
+            showNotificationThatPlayerLeft();
+        } else {
+            this.gameUtil.setAPlayerLeft(true);
+        }
+    }
+
+    private void showNotificationThatPlayerLeft() {
+        Platform.runLater(() -> {
+            String anotherPlayerLeftMessage = I18nUtil.get("gui.lobby.aPlayerLeft");
+            Alert alert = new Alert(Alert.AlertType.ERROR, anotherPlayerLeftMessage, ButtonType.YES);
+            alert.showAndWait();
+
+            if (alert.getResult() == ButtonType.YES) {
+                alert.close();
+                cleanupGameAndNavigateFromView();
+            }
+
+        });
+    }
+
+    private void cleanupGameAndNavigateFromView() {
+        updateCardImages();
+        this.gameUtil.cleanupGame();
+        updateUserNames();
+        cardButtons.clear();
+        try {
+            socket.removeAPlayerQuitEventListener(this);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        aPlayerQuitEventListenerAdded = false;
+        WindowUtil.switchTo(view, LobbyView.class);
     }
 
     private void initializePlayedCardsListener() {
@@ -634,6 +746,9 @@ public final class GameController extends Controller implements DisconnectEventL
 
         LoginEntity login = ServiceLocator.get(LoginEntity.class);
         assert login != null;
+        if (gameUtil.getGame() == null) {
+            return;
+        }
         if (gameUtil.getGame().getPlayerOne().equals(gameUtil.getStartingPlayerUsername().getValue())) {
             setImage(getCardPath(card1), user1played);
             setImage(getCardPath(card2), user2played);
@@ -713,6 +828,7 @@ public final class GameController extends Controller implements DisconnectEventL
 
         LoginEntity login = ServiceLocator.get(LoginEntity.class);
         assert login != null;
+        assert gameUtil.getGame() != null;
         if (gameUtil.getGame().getPlayerOne().equals(login.getUsername())) {
             user1b1.setDisable(card1 != null && card1.isPlayed ? card1.isPlayed : disable);
             user1b2.setDisable(card2 != null && card2.isPlayed ? card2.isPlayed : disable);
@@ -772,29 +888,31 @@ public final class GameController extends Controller implements DisconnectEventL
      * @author Sasa Trajkova
      */
     public void updateUserNames() {
-        if (gameUtil.getGame().getPlayerOne() != null) {
-            user1.setText(gameUtil.getGame().getPlayerOne());
-        } else {
-            user1.setText("--");
-        }
+        Platform.runLater(() -> {
+            if (gameUtil.getGame() != null && gameUtil.getGame().getPlayerOne() != null) {
+                user1.setText(gameUtil.getGame().getPlayerOne());
+            } else {
+                user1.setText("--");
+            }
 
-        if (gameUtil.getGame().getPlayerTwo() != null) {
-            user2.setText(gameUtil.getGame().getPlayerTwo());
-        } else {
-            user2.setText("--");
-        }
+            if (gameUtil.getGame() != null && gameUtil.getGame().getPlayerTwo() != null) {
+                user2.setText(gameUtil.getGame().getPlayerTwo());
+            } else {
+                user2.setText("--");
+            }
 
-        if (gameUtil.getGame().getPlayerThree() != null) {
-            user3.setText(gameUtil.getGame().getPlayerThree());
-        } else {
-            user3.setText("--");
-        }
+            if (gameUtil.getGame() != null && gameUtil.getGame().getPlayerThree() != null) {
+                user3.setText(gameUtil.getGame().getPlayerThree());
+            } else {
+                user3.setText("--");
+            }
 
-        if (gameUtil.getGame().getPlayerFour() != null) {
-            user4.setText(gameUtil.getGame().getPlayerFour());
-        } else {
-            user4.setText("--");
-        }
+            if (gameUtil.getGame() != null && gameUtil.getGame().getPlayerFour() != null) {
+                user4.setText(gameUtil.getGame().getPlayerFour());
+            } else {
+                user4.setText("--");
+            }
+        });
     }
 
     @Override
@@ -812,6 +930,7 @@ public final class GameController extends Controller implements DisconnectEventL
         ArrayList<Button> buttons = new ArrayList<>();
         LoginEntity login = ServiceLocator.get(LoginEntity.class);
         assert login != null;
+        buttons.clear();
         if (gameUtil.getGame().getPlayerOne().equals(login.getUsername())) {
             buttons.add(user1b1);
             buttons.add(user1b2);

@@ -17,20 +17,25 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package jass.server.eventlistener;
+package jass.lib.message;
 
-import jass.lib.message.PlayCardData;
+import org.json.JSONObject;
 
 /**
- * @author Manuele Vaccari & Victor Hargrave
+ * @author Victor Hargrave
  * @version %I%, %G%
  * @since 0.0.1
  */
-public interface PlayedCardEventListener {
+public final class BroadcastAPlayerQuitData extends MessageData {
+
+    public BroadcastAPlayerQuitData() {
+        super("BroadcastAPlayerQuit");
+    }
+
     /**
-     * Executes when a user played a card.
-     *
-     * @param data The data (basically the ID).
+     * @param data The message containing all the data.
      */
-    void onPlayedCard(PlayCardData data) throws InterruptedException;
+    public BroadcastAPlayerQuitData(final JSONObject data) {
+        super(data);
+    }
 }

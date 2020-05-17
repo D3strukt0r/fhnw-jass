@@ -23,10 +23,12 @@ import jass.lib.message.ChosenGameModeData;
 import jass.lib.message.MessageData;
 import jass.lib.message.MessageErrorData;
 import jass.lib.message.PlayCardData;
+import jass.lib.message.StopPlayingData;
 import jass.lib.servicelocator.ServiceLocator;
 import jass.server.entity.UserEntity;
 import jass.server.eventlistener.ChosenGameModeEventListener;
 import jass.server.eventlistener.PlayedCardEventListener;
+import jass.server.eventlistener.StopPlayingEventListener;
 import jass.server.message.Message;
 import jass.server.repository.UserRepository;
 import org.apache.logging.log4j.LogManager;
@@ -86,6 +88,14 @@ public final class ClientUtil extends Thread {
      * A list of all objects listening to a played card event.
      */
     private final ArrayList<PlayedCardEventListener> playedCardListener = new ArrayList<>();
+
+    /**
+     * A list of all objects listening to stop playing event.
+     */
+    private final ArrayList<StopPlayingEventListener> stopPlayingListener = new ArrayList<>();
+
+    private final ArrayList<StopPlayingEventListener> stopPlayingListenerToRemove = new ArrayList<>();
+
 
     /**
      * Create a new client object, communicating over the given socket.
@@ -181,6 +191,13 @@ public final class ClientUtil extends Thread {
                     e.printStackTrace();
                 }
             }
+        } else if (msgType.equals("StopPlaying")) {
+            stopPlayingListener.removeAll(stopPlayingListenerToRemove);
+            stopPlayingListenerToRemove.clear();
+            for (StopPlayingEventListener listener : stopPlayingListener) {
+                logger.info("Invoking stopPlaying event on " + listener.getClass().getName());
+                listener.onStopPlaying((StopPlayingData) msgData);
+            }
         }
     }
 
@@ -203,6 +220,10 @@ public final class ClientUtil extends Thread {
         this.chosenGameModeListener.add(listener);
     }
 
+    public void removeChosenGameModeEventListener(final ChosenGameModeEventListener listener) {
+        this.chosenGameModeListener.remove(listener);
+    }
+
     /**
      * @param listener A PlayedCardEventListener object
      *
@@ -211,6 +232,24 @@ public final class ClientUtil extends Thread {
      */
     public void addPlayedCardEventListener(final PlayedCardEventListener listener) {
         this.playedCardListener.add(listener);
+    }
+
+    public void removePlayedCardEventListener(final PlayedCardEventListener listener) {
+        this.playedCardListener.remove(listener);
+    }
+
+    /**
+     * @param listener A StopPlayingEventListener object
+     *
+     * @author Victor Hargrave
+     * @since 0.0.1
+     */
+    public void addStopPlayingEventListener(final StopPlayingEventListener listener) {
+        this.stopPlayingListener.add(listener);
+    }
+
+    public void removeStopPlayingEventListener(final StopPlayingEventListener listener) {
+        this.stopPlayingListenerToRemove.add(listener);
     }
 
     /**

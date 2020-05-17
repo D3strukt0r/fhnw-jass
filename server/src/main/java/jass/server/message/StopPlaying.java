@@ -17,20 +17,26 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package jass.server.eventlistener;
+package jass.server.message;
 
-import jass.lib.message.PlayCardData;
+import jass.lib.message.MessageData;
+import jass.server.util.ClientUtil;
 
 /**
- * @author Manuele Vaccari & Victor Hargrave
+ * @author Victor Hargrave
  * @version %I%, %G%
  * @since 0.0.1
  */
-public interface PlayedCardEventListener {
+public final class StopPlaying extends Message {
     /**
-     * Executes when a user played a card.
-     *
-     * @param data The data (basically the ID).
+     * @param rawData The data (still not casted)
      */
-    void onPlayedCard(PlayCardData data) throws InterruptedException;
+    public StopPlaying(final MessageData rawData) {
+        super(rawData);
+    }
+
+    @Override
+    public void process(final ClientUtil client) {
+        // No processing required. Is handled in event handlers.
+    }
 }

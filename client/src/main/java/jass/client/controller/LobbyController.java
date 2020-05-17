@@ -133,6 +133,7 @@ public final class LobbyController extends Controller implements GameFoundEventL
     @FXML
     private Text searching;
 
+    GameUtil gameUtil;
 
     @Override
     public void initialize(final URL location, final ResourceBundle resources) {
@@ -141,8 +142,11 @@ public final class LobbyController extends Controller implements GameFoundEventL
             socket.setGameFoundEventListener(this);
         }
 
-        GameUtil gameUtil = new GameUtil();
-        ServiceLocator.add(gameUtil);
+        gameUtil = ServiceLocator.get(GameUtil.class);
+        if (gameUtil == null) {
+            gameUtil = new GameUtil();
+            ServiceLocator.add(gameUtil);
+        }
 
         /*
          * Bind all texts
@@ -161,7 +165,6 @@ public final class LobbyController extends Controller implements GameFoundEventL
         findMatch.textProperty().bind(I18nUtil.createStringBinding(findMatch.getText()));
         cancelMatch.textProperty().bind(I18nUtil.createStringBinding(cancelMatch.getText()));
         searching.textProperty().bind(I18nUtil.createStringBinding(searching.getText()));
-
     }
 
     /**
@@ -182,12 +185,11 @@ public final class LobbyController extends Controller implements GameFoundEventL
         SocketUtil backend = ServiceLocator.get(SocketUtil.class);
         assert backend != null;
 
+        searching.setVisible(true);
+        cancelMatch.setVisible(true);
+        findMatch.setVisible(false);
         // Send SearchGame Message to Server
-        if (searchGameMsg.process(backend)) {
-            searching.setVisible(true);
-            cancelMatch.setVisible(true);
-            findMatch.setVisible(false);
-        } else {
+        if (!searchGameMsg.process(backend)) {
             logger.error("Error starting search for game");
             Platform.runLater(() -> {
                 Alert alert = new Alert(Alert.AlertType.ERROR, "Error searching for a game. Please try again!");
@@ -212,12 +214,11 @@ public final class LobbyController extends Controller implements GameFoundEventL
         SocketUtil backend = ServiceLocator.get(SocketUtil.class);
         assert backend != null;
 
+        searching.setVisible(false);
+        findMatch.setVisible(true);
+        cancelMatch.setVisible(false);
         // Send SearchGame Message to Server
-        if (cancelSearchGameMsg.process(backend)) {
-            searching.setVisible(false);
-            findMatch.setVisible(true);
-            cancelMatch.setVisible(false);
-        } else {
+        if (!cancelSearchGameMsg.process(backend)) {
             logger.error("Error cancelling search for game");
             Platform.runLater(() -> {
                 Alert alert = new Alert(Alert.AlertType.ERROR, "Error cancelling search for a game. Please try again!");
@@ -234,11 +235,17 @@ public final class LobbyController extends Controller implements GameFoundEventL
     public void onGameFound(final GameFoundData msgData) {
         logger.info("Successfully found game!");
 
+        Platform.runLater(() -> {
+            searching.setVisible(false);
+            findMatch.setVisible(true);
+            cancelMatch.setVisible(false);
+        });
+
         GameUtil gameUtil = ServiceLocator.get(GameUtil.class);
         assert gameUtil != null;
         gameUtil.setGame(msgData);
 
-        WindowUtil.switchToNewWindow(view, GameView.class);
+        WindowUtil.switchTo(view, GameView.class);
     }
 
     /**

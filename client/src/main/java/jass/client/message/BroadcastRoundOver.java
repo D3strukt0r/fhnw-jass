@@ -17,20 +17,34 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package jass.server.eventlistener;
+package jass.client.message;
 
-import jass.lib.message.PlayCardData;
+import jass.client.util.SocketUtil;
+import jass.lib.message.BroadcastRoundOverData;
+import jass.lib.message.MessageData;
 
 /**
- * @author Manuele Vaccari & Victor Hargrave
+ * @author Victor Hargrave
  * @version %I%, %G%
  * @since 0.0.1
  */
-public interface PlayedCardEventListener {
+public final class BroadcastRoundOver extends Message {
     /**
-     * Executes when a user played a card.
-     *
-     * @param data The data (basically the ID).
+     * The data of the message.
      */
-    void onPlayedCard(PlayCardData data) throws InterruptedException;
+    private final BroadcastRoundOverData data;
+
+    /**
+     * @param rawData The data (still not casted)
+     */
+    public BroadcastRoundOver(final MessageData rawData) {
+        super(rawData);
+        data = (BroadcastRoundOverData) rawData;
+    }
+
+    @Override
+    public boolean process(final SocketUtil socket) {
+        // No processing required. Is handled in event handlers.
+        return true;
+    }
 }
