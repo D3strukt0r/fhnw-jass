@@ -427,6 +427,10 @@ public final class GameUtil implements ChosenGameModeEventListener, PlayedCardEv
 
                     try {
                         isRoundOver = isRoundOver(turnRepository, winningUser);
+                        // The last "Stich" gives 5 extra points to winning team
+                        if (isRoundOver) {
+                            points = (points + 5)
+                        }
                     } catch (SQLException e) {
                         e.printStackTrace();
                     }
