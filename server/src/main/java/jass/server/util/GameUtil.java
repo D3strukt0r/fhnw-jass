@@ -200,11 +200,11 @@ public final class GameUtil implements ChosenGameModeEventListener, PlayedCardEv
      * @since 1.0.0
      */
     private void startNewRound() {
-        UserEntity gameModeChooser = this.setGameModeChooser();
+        UserEntity gameModeChooser = this.getGameModeChooser();
         // Create a round
         CardUtil cardUtil = ServiceLocator.get(CardUtil.class);
         assert cardUtil != null;
-        currentRound = (new RoundEntity()).setGameModeChooser(clientPlayerTwo.getUser()).setGame(game);
+        currentRound = (new RoundEntity()).setGameModeChooser(gameModeChooser).setGame(game);
         RoundRepository.getSingleton(null).add(currentRound);
 
         // Send a deck to each user
@@ -444,9 +444,6 @@ public final class GameUtil implements ChosenGameModeEventListener, PlayedCardEv
                             game.getTeamTwo().getPlayerOne().getUsername(), game.getTeamTwo().getPlayerTwo().getUsername()));
                     broadcast(broadcastRoundOver);
                     return;
-
-
-                    //this.startNewRound();
                 }
 
                 // start new turn after 3.5 seconds
@@ -1078,7 +1075,8 @@ public final class GameUtil implements ChosenGameModeEventListener, PlayedCardEv
         if (continuePlayClicks == 4) {
             // Set back the counter
             continuePlayClicks = 0;
-
+            // Initialize new round
+            this.startNewRound();
         }
     }
 
@@ -1087,7 +1085,17 @@ public final class GameUtil implements ChosenGameModeEventListener, PlayedCardEv
      * @since 1.0.0
      */
     private UserEntity getGameModeChooser() {
-        
+        UserEntity lastRoundGameModeChooser = currentRound.getGameModeChooser();
+        if (lastRoundGameModeChooser.getId() == clientPlayerOne.getId()) {
+            return clientPlayerTwo.getUser();
+        } else if (lastRoundGameModeChooser.getId() == clientPlayerTwo.getId()) {
+            return clientPlayerThree.getUser();
+        } else if (lastRoundGameModeChooser.getId() == clientPlayerThree.getId()) {
+            return clientPlayerFour.getUser();
+        } else {
+            return clientPlayerOne.getUser();
+        }
+
     }
 
 }
