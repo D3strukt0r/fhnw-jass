@@ -1086,11 +1086,11 @@ public final class GameUtil implements ChosenGameModeEventListener, PlayedCardEv
      */
     private UserEntity getGameModeChooser() {
         UserEntity lastRoundGameModeChooser = currentRound.getGameModeChooser();
-        if (lastRoundGameModeChooser.getId() == clientPlayerOne.getId()) {
+        if (lastRoundGameModeChooser.getUsername().equals(clientPlayerOne.getUsername())) {
             return clientPlayerTwo.getUser();
-        } else if (lastRoundGameModeChooser.getId() == clientPlayerTwo.getId()) {
+        } else if (lastRoundGameModeChooser.getUsername().equals(clientPlayerTwo.getUsername())) {
             return clientPlayerThree.getUser();
-        } else if (lastRoundGameModeChooser.getId() == clientPlayerThree.getId()) {
+        } else if (lastRoundGameModeChooser.getUsername().equals(clientPlayerThree.getUsername())) {
             return clientPlayerFour.getUser();
         } else {
             return clientPlayerOne.getUser();
