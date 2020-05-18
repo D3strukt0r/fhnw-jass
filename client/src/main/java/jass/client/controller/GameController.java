@@ -560,6 +560,7 @@ public final class GameController extends Controller implements DisconnectEventL
             if (this.gameUtil.getAPlayerLeft()) {
                 showNotificationThatPlayerLeft();
             } else {
+                this.gameUtil.prepareForNewRound();
                 this.resetRound();
             }
         } else if (alert.getResult() == ButtonType.CANCEL) {

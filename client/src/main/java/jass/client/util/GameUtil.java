@@ -673,4 +673,12 @@ public final class GameUtil implements Service, BroadcastDeckEventListener,
         playerDeck.clear();
         playedCards.clear();
     }
+
+    /**
+     * @author Thomas Weber
+     * @since 1.0.0
+     */
+    public void prepareForNewRound() {
+        playedCards.clear();
+    }
 }
