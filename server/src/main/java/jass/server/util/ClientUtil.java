@@ -19,14 +19,11 @@
 
 package jass.server.util;
 
-import jass.lib.message.ChosenGameModeData;
-import jass.lib.message.MessageData;
-import jass.lib.message.MessageErrorData;
-import jass.lib.message.PlayCardData;
-import jass.lib.message.StopPlayingData;
+import jass.lib.message.*;
 import jass.lib.servicelocator.ServiceLocator;
 import jass.server.entity.UserEntity;
 import jass.server.eventlistener.ChosenGameModeEventListener;
+import jass.server.eventlistener.ContinuePlayingEventListener;
 import jass.server.eventlistener.PlayedCardEventListener;
 import jass.server.eventlistener.StopPlayingEventListener;
 import jass.server.message.Message;
@@ -99,6 +96,16 @@ public final class ClientUtil extends Thread {
      * A list of all objects listening to stop playing event to be removed.
      */
     private final ArrayList<StopPlayingEventListener> stopPlayingListenerToRemove = new ArrayList<>();
+
+    /**
+     * A list of all objects listening to continue playing event.
+     */
+    private final ArrayList<ContinuePlayingEventListener> continuePlayingListener = new ArrayList<>();
+
+    /**
+     * A list of all objects listening to continue playing event to be removed.
+     */
+    private final ArrayList<ContinuePlayingEventListener> continuePlayingListenerToRemove = new ArrayList<>();
 
     /**
      * Create a new client object, communicating over the given socket.
@@ -208,6 +215,13 @@ public final class ClientUtil extends Thread {
                 logger.info("Invoking stopPlaying event on " + listener.getClass().getName());
                 listener.onStopPlaying((StopPlayingData) msgData);
             }
+        } else if (msgType.equals("ContinuePlaying")) {
+            continuePlayingListener.removeAll(continuePlayingListenerToRemove);
+            continuePlayingListenerToRemove.clear();
+            for (ContinuePlayingEventListener listener : continuePlayingListener) {
+                logger.info("Invoking continuePlaying event on " + listener.getClass().getName());
+                listener.onContinuePlaying((ContinuePlayingData) msgData);
+            }
         }
     }
 
@@ -282,6 +296,26 @@ public final class ClientUtil extends Thread {
      */
     public void removeStopPlayingEventListener(final StopPlayingEventListener listener) {
         this.stopPlayingListenerToRemove.add(listener);
+    }
+
+    /**
+     * @param listener A ContinuePlayingEventListener object.
+     *
+     * @author Thomas Weber
+     * @since 1.0.0
+     */
+    public void addContinuePlayingEventListener(final ContinuePlayingEventListener listener) {
+        this.continuePlayingListener.add(listener);
+    }
+
+    /**
+     * @param listener A StopPlayingEventListener object.
+     *
+     * @author Thomas Weber
+     * @since 1.0.0
+     */
+    public void removeContinuePlayingEventListener(final ContinuePlayingEventListener listener) {
+        this.continuePlayingListenerToRemove.add(listener);
     }
 
     /**

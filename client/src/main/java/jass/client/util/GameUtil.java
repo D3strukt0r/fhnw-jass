@@ -27,21 +27,12 @@ import jass.client.eventlistener.BroadcastTurnEventListener;
 import jass.client.eventlistener.ChooseGameModeEventListener;
 import jass.client.eventlistener.PlayedCardEventListener;
 import jass.client.message.ChosenGameMode;
+import jass.client.message.ContinuePlaying;
 import jass.client.message.PlayCard;
 import jass.client.message.StopPlaying;
 import jass.lib.Card;
 import jass.lib.GameMode;
-import jass.lib.message.BroadcastDeckData;
-import jass.lib.message.BroadcastGameModeData;
-import jass.lib.message.BroadcastPointsData;
-import jass.lib.message.BroadcastTurnData;
-import jass.lib.message.CardData;
-import jass.lib.message.ChooseGameModeData;
-import jass.lib.message.ChosenGameModeData;
-import jass.lib.message.GameFoundData;
-import jass.lib.message.PlayCardData;
-import jass.lib.message.PlayedCardData;
-import jass.lib.message.StopPlayingData;
+import jass.lib.message.*;
 import jass.lib.servicelocator.ServiceLocator;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -331,6 +322,19 @@ public final class GameUtil implements Service, BroadcastDeckEventListener,
         assert socket != null;
         socket.send(stopPlayingMessage);
         logger.info("Sent stop playing message!");
+    }
+
+    /**
+     * @author Thomas Weber
+     * @since 1.0.0
+     */
+    public void continuePlaying() {
+        ContinuePlaying continuePlayingMessage = new ContinuePlaying(new ContinuePlayingData());
+
+        SocketUtil socket = ServiceLocator.get(SocketUtil.class);
+        assert socket != null;
+        socket.send(continuePlayingMessage);
+        logger.info("Sent continue playing message!");
     }
 
     /**
