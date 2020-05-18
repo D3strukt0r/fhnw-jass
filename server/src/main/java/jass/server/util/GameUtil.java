@@ -207,6 +207,12 @@ public final class GameUtil implements ChosenGameModeEventListener, PlayedCardEv
         currentRound = (new RoundEntity()).setGameModeChooser(gameModeChooser).setGame(game);
         RoundRepository.getSingleton(null).add(currentRound);
 
+        // Make sure decks are set to null
+        currentDeckPlayerOne = null;
+        currentDeckPlayerTwo = null;
+        currentDeckPlayerThree = null;
+        currentDeckPlayerFour = null;
+
         // Send a deck to each user
         List<DeckEntity> decks = cardUtil.addDecksForPlayers(currentRound, clientPlayerOne.getUser(), clientPlayerTwo.getUser(), clientPlayerThree.getUser(), clientPlayerFour.getUser());
         cardUtil.broadcastDeck(clientPlayerOne, decks.get(0));

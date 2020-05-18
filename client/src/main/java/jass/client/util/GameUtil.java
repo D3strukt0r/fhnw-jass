@@ -680,5 +680,12 @@ public final class GameUtil implements Service, BroadcastDeckEventListener,
      */
     public void prepareForNewRound() {
         playedCards.clear();
+        playerDeck.clear();
+        deckId = 0;
+        startingPlayerUsername.setValue("");
+        winningPlayerUsername.setValue("");
+        disableButtons.set(true);
+        cardIdToRemove = 0;
+        pointsRound.set(0);
     }
 }
