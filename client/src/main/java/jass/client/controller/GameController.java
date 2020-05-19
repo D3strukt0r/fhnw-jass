@@ -540,7 +540,7 @@ public final class GameController extends Controller implements DisconnectEventL
         if (data.getTeam1Points() > data.getTeam2Points()) {
             roundOverMessage = I18nUtil.get("gui.game.roundOverWin", data.getTeam1Player1(), data.getTeam1Player2(), data.getTeam1Points());
         } else if (data.getTeam2Points() > data.getTeam1Points()) {
-            roundOverMessage = I18nUtil.get("gui.game.roundOverWin", data.getTeam2Player1(), data.getTeam2Player1(), data.getTeam2Points());
+            roundOverMessage = I18nUtil.get("gui.game.roundOverWin", data.getTeam2Player1(), data.getTeam2Player2(), data.getTeam2Points());
         } else if (data.getTeam1Points() == data.getTeam2Points()) {
             roundOverMessage = I18nUtil.get("gui.game.roundOverDraw", data.getTeam1Points());
         }
