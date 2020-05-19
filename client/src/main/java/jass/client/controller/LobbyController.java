@@ -243,7 +243,7 @@ public final class LobbyController extends Controller implements GameFoundEventL
      *
      * @param msgData The game found data.
      *
-     * @author ...
+     * @author Thomas Weber
      * @since 1.0.0
      */
     public void onGameFound(final GameFoundData msgData) {

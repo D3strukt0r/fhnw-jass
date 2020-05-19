@@ -27,6 +27,7 @@ import jass.client.eventlistener.BroadcastTurnEventListener;
 import jass.client.eventlistener.ChooseGameModeEventListener;
 import jass.client.eventlistener.PlayedCardEventListener;
 import jass.client.message.ChosenGameMode;
+import jass.client.message.ContinuePlaying;
 import jass.client.message.PlayCard;
 import jass.client.message.StopPlaying;
 import jass.lib.Card;
@@ -38,6 +39,7 @@ import jass.lib.message.BroadcastTurnData;
 import jass.lib.message.CardData;
 import jass.lib.message.ChooseGameModeData;
 import jass.lib.message.ChosenGameModeData;
+import jass.lib.message.ContinuePlayingData;
 import jass.lib.message.GameFoundData;
 import jass.lib.message.PlayCardData;
 import jass.lib.message.PlayedCardData;
@@ -331,6 +333,19 @@ public final class GameUtil implements Service, BroadcastDeckEventListener,
         assert socket != null;
         socket.send(stopPlayingMessage);
         logger.info("Sent stop playing message!");
+    }
+
+    /**
+     * @author Thomas Weber
+     * @since 1.0.0
+     */
+    public void continuePlaying() {
+        ContinuePlaying continuePlayingMessage = new ContinuePlaying(new ContinuePlayingData());
+
+        SocketUtil socket = ServiceLocator.get(SocketUtil.class);
+        assert socket != null;
+        socket.send(continuePlayingMessage);
+        logger.info("Sent continue playing message!");
     }
 
     /**
@@ -668,5 +683,20 @@ public final class GameUtil implements Service, BroadcastDeckEventListener,
         decidedToLeaveGame = false;
         playerDeck.clear();
         playedCards.clear();
+    }
+
+    /**
+     * @author Thomas Weber
+     * @since 1.0.0
+     */
+    public void prepareForNewRound() {
+        playedCards.clear();
+        playerDeck.clear();
+        deckId = 0;
+        startingPlayerUsername.setValue("");
+        winningPlayerUsername.setValue("");
+        disableButtons.set(true);
+        cardIdToRemove = 0;
+        pointsRound.set(0);
     }
 }

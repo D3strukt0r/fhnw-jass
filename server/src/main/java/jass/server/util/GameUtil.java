@@ -28,6 +28,7 @@ import jass.lib.message.BroadcastRoundOverData;
 import jass.lib.message.BroadcastTurnData;
 import jass.lib.message.ChooseGameModeData;
 import jass.lib.message.ChosenGameModeData;
+import jass.lib.message.ContinuePlayingData;
 import jass.lib.message.GameFoundData;
 import jass.lib.message.PlayCardData;
 import jass.lib.message.PlayedCardData;
@@ -42,6 +43,7 @@ import jass.server.entity.TeamEntity;
 import jass.server.entity.TurnEntity;
 import jass.server.entity.UserEntity;
 import jass.server.eventlistener.ChosenGameModeEventListener;
+import jass.server.eventlistener.ContinuePlayingEventListener;
 import jass.server.eventlistener.PlayedCardEventListener;
 import jass.server.eventlistener.StopPlayingEventListener;
 import jass.server.message.BroadcastAPlayerQuit;
@@ -74,7 +76,7 @@ import java.util.stream.Collectors;
  * @version %I%, %G%
  * @since 1.0.0
  */
-public final class GameUtil implements ChosenGameModeEventListener, PlayedCardEventListener, StopPlayingEventListener {
+public final class GameUtil implements ChosenGameModeEventListener, PlayedCardEventListener, StopPlayingEventListener, ContinuePlayingEventListener {
     /**
      * The logger to print to console and save in a .log file.
      */
@@ -134,6 +136,11 @@ public final class GameUtil implements ChosenGameModeEventListener, PlayedCardEv
      * The current deck of player four in the game.
      */
     private DeckEntity currentDeckPlayerFour;
+
+    /**
+     * Players wanting to continue playing another round
+     */
+    private int continuePlayClicks = 0;
 
     /**
      * @param clientPlayerOne   Player one.
@@ -200,6 +207,39 @@ public final class GameUtil implements ChosenGameModeEventListener, PlayedCardEv
     }
 
     /**
+     * @author Thomas Weber
+     * @since 1.0.0
+     */
+    private void startNewRound() {
+        UserEntity gameModeChooser = this.getGameModeChooser();
+        // Create a round
+        CardUtil cardUtil = ServiceLocator.get(CardUtil.class);
+        assert cardUtil != null;
+        currentRound = (new RoundEntity()).setGameModeChooser(gameModeChooser).setGame(game);
+        RoundRepository.getSingleton(null).add(currentRound);
+
+        // Make sure decks are set to null
+        currentDeckPlayerOne = null;
+        currentDeckPlayerTwo = null;
+        currentDeckPlayerThree = null;
+        currentDeckPlayerFour = null;
+
+        // Send a deck to each user
+        List<DeckEntity> decks = cardUtil.addDecksForPlayers(currentRound, clientPlayerOne.getUser(), clientPlayerTwo.getUser(), clientPlayerThree.getUser(), clientPlayerFour.getUser());
+        cardUtil.broadcastDeck(clientPlayerOne, decks.get(0));
+        currentDeckPlayerOne = decks.get(0);
+        cardUtil.broadcastDeck(clientPlayerTwo, decks.get(1));
+        currentDeckPlayerTwo = decks.get(1);
+        cardUtil.broadcastDeck(clientPlayerThree, decks.get(2));
+        currentDeckPlayerThree = decks.get(2);
+        cardUtil.broadcastDeck(clientPlayerFour, decks.get(3));
+        currentDeckPlayerFour = decks.get(3);
+
+        // Send a message to player one to choose a game mode
+        sendChooseGameMode();
+    }
+
+    /**
      * @param clientPlayerOne   The client of player one.
      * @param clientPlayerTwo   The client of player two.
      * @param clientPlayerThree The client of player three.
@@ -223,6 +263,11 @@ public final class GameUtil implements ChosenGameModeEventListener, PlayedCardEv
         clientPlayerTwo.addStopPlayingEventListener(this);
         clientPlayerThree.addStopPlayingEventListener(this);
         clientPlayerFour.addStopPlayingEventListener(this);
+
+        clientPlayerOne.addContinuePlayingEventListener(this);
+        clientPlayerTwo.addContinuePlayingEventListener(this);
+        clientPlayerThree.addContinuePlayingEventListener(this);
+        clientPlayerFour.addContinuePlayingEventListener(this);
     }
 
     /**
@@ -249,6 +294,11 @@ public final class GameUtil implements ChosenGameModeEventListener, PlayedCardEv
         clientPlayerTwo.removeStopPlayingEventListener(this);
         clientPlayerThree.removeStopPlayingEventListener(this);
         clientPlayerFour.removeStopPlayingEventListener(this);
+
+        clientPlayerOne.removeContinuePlayingEventListener(this);
+        clientPlayerTwo.removeContinuePlayingEventListener(this);
+        clientPlayerThree.removeContinuePlayingEventListener(this);
+        clientPlayerFour.removeContinuePlayingEventListener(this);
     }
 
     /**
@@ -388,6 +438,10 @@ public final class GameUtil implements ChosenGameModeEventListener, PlayedCardEv
 
                     try {
                         isRoundOver = isRoundOver(turnRepository, winningUser);
+                        // The last "Stich" gives 5 extra points to winning team
+                        if (isRoundOver) {
+                            points = (points + 5);
+                        }
                     } catch (SQLException e) {
                         e.printStackTrace();
                     }
@@ -404,6 +458,7 @@ public final class GameUtil implements ChosenGameModeEventListener, PlayedCardEv
                 this.currentTurn = turn;
                 broadcast(broadcastTurn);
                 if (isRoundOver) {
+
                     BroadcastRoundOver broadcastRoundOver = new BroadcastRoundOver(
                         new BroadcastRoundOverData(currentRound.getId(), currentRound.getPointsTeamOne(), currentRound.getPointsTeamTwo(),
                             game.getTeamOne().getPlayerOne().getUsername(), game.getTeamOne().getPlayerTwo().getUsername(),
@@ -1029,4 +1084,39 @@ public final class GameUtil implements ChosenGameModeEventListener, PlayedCardEv
         game.setActive(false);
         GameRepository.getSingleton(null).update(game);
     }
+
+    /**
+     * @author Thomas Weber
+     * @since 1.0.0
+     */
+    @Override
+    public void onContinuePlaying(final ContinuePlayingData data) {
+        continuePlayClicks ++;
+        // If all four players decide to play another round, initialize new round
+        if (continuePlayClicks == 4) {
+            // Set back the counter
+            continuePlayClicks = 0;
+            // Initialize new round
+            this.startNewRound();
+        }
+    }
+
+    /**
+     * @author Thomas Weber
+     * @since 1.0.0
+     */
+    private UserEntity getGameModeChooser() {
+        UserEntity lastRoundGameModeChooser = currentRound.getGameModeChooser();
+        if (lastRoundGameModeChooser.getUsername().equals(clientPlayerOne.getUsername())) {
+            return clientPlayerTwo.getUser();
+        } else if (lastRoundGameModeChooser.getUsername().equals(clientPlayerTwo.getUsername())) {
+            return clientPlayerThree.getUser();
+        } else if (lastRoundGameModeChooser.getUsername().equals(clientPlayerThree.getUsername())) {
+            return clientPlayerFour.getUser();
+        } else {
+            return clientPlayerOne.getUser();
+        }
+
+    }
+
 }

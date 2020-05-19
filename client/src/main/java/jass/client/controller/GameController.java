@@ -540,7 +540,7 @@ public final class GameController extends Controller implements DisconnectEventL
         if (data.getTeam1Points() > data.getTeam2Points()) {
             roundOverMessage = I18nUtil.get("gui.game.roundOverWin", data.getTeam1Player1(), data.getTeam1Player2(), data.getTeam1Points());
         } else if (data.getTeam2Points() > data.getTeam1Points()) {
-            roundOverMessage = I18nUtil.get("gui.game.roundOverWin", data.getTeam1Player1(), data.getTeam2Player1(), data.getTeam2Points());
+            roundOverMessage = I18nUtil.get("gui.game.roundOverWin", data.getTeam2Player1(), data.getTeam2Player1(), data.getTeam2Points());
         } else if (data.getTeam1Points() == data.getTeam2Points()) {
             roundOverMessage = I18nUtil.get("gui.game.roundOverDraw", data.getTeam1Points());
         }
@@ -560,8 +560,8 @@ public final class GameController extends Controller implements DisconnectEventL
             if (this.gameUtil.getAPlayerLeft()) {
                 showNotificationThatPlayerLeft();
             } else {
-                // resetRound();
-                // TODO Thomas
+                this.gameUtil.prepareForNewRound();
+                this.resetRound();
             }
         } else if (alert.getResult() == ButtonType.CANCEL) {
             this.roundOverDialogClosed = true;
@@ -573,6 +573,14 @@ public final class GameController extends Controller implements DisconnectEventL
             // send message to server
             this.gameUtil.stopPlaying();
         }
+    }
+
+    /**
+     * @author Thomas Weber
+     * @since 1.0.0
+     */
+    public void resetRound() {
+        this.gameUtil.continuePlaying();
     }
 
     /**
