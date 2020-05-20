@@ -52,7 +52,7 @@ import java.util.ArrayList;
  * Backend utility class. Acts as an interface between the program and the
  * server.
  *
- * @author Manuele Vaccari & Victor Hargrave & Thomas Weber
+ * @author Manuele Vaccari
  * @version %I%, %G%
  * @since 1.0.0
  */
@@ -85,7 +85,7 @@ public final class SocketUtil extends Thread implements Service, Closeable {
      * @param port      An integer containing the port which the server uses.
      * @param secure    A boolean defining whether to use SSL or not.
      *
-     * @author Manuele Vaccari
+     * @author Manuele Vaccari & https://stackoverflow.com/questions/53323855/sslserversocket-and-certificate-setup
      * @since 1.0.0
      */
     public SocketUtil(final String ipAddress, final int port, final boolean secure) throws IOException, KeyStoreException, CertificateException, NoSuchAlgorithmException, UnrecoverableKeyException, KeyManagementException {
@@ -96,9 +96,6 @@ public final class SocketUtil extends Thread implements Service, Closeable {
         if (secure) {
             logger.info("Connecting to server at: " + ipAddress + ":" + port + " (with SSL)");
 
-            /*
-             * @author https://stackoverflow.com/questions/53323855/sslserversocket-and-certificate-setup
-             */
             // Create and initialize the SSLContext with key material
             char[] trustStorePassword = "JassGame".toCharArray();
             char[] keyStorePassword = "JassGame".toCharArray();
@@ -125,8 +122,9 @@ public final class SocketUtil extends Thread implements Service, Closeable {
             socket = factory.createSocket(ipAddress, port);
 
             // The next line is entirely optional!
-            // The SSL handshake would happen automatically, the first time we send data.
-            // Or we can immediately force the handshaking with this method:
+            // The SSL handshake would happen automatically, the first time we
+            // send data. Or we can immediately force the handshaking with this
+            // method:
             ((SSLSocket) socket).startHandshake();
         } else {
             logger.info("Connecting to server at: " + ipAddress + ":" + port);
@@ -171,7 +169,9 @@ public final class SocketUtil extends Thread implements Service, Closeable {
                         logger.info("Received message of type " + msgData.getMessageType());
                         lastMessages.add(msg);
 
-                        EventUtil.handleEventListenerOnMessage(msgData);
+                        if (EventUtil.handleEventListenerOnMessage(msgData)) {
+                            lastMessages.remove(msg);
+                        }
                     }
                 }
             }
@@ -196,7 +196,7 @@ public final class SocketUtil extends Thread implements Service, Closeable {
      * @author Manuele Vaccari
      * @since 1.0.0
      */
-    public Message waitForResultResponse(final int id) {
+    public Message waitForResult(final int id) {
         while (true) {
             if (lastMessages.size() != 0) {
                 for (Message m : lastMessages) {

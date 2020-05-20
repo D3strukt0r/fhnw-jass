@@ -47,7 +47,7 @@ public final class Logout extends Message {
     public boolean process(final SocketUtil socket) {
         socket.send(this);
 
-        Message result = socket.waitForResultResponse(getRawData().getId());
+        Message result = socket.waitForResult(getRawData().getId());
         ResultData resultData = (ResultData) result.getRawData();
 
         return resultData.getResult();

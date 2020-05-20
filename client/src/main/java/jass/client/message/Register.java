@@ -61,7 +61,7 @@ public final class Register extends Message {
     public boolean process(final SocketUtil socket) {
         socket.send(this);
 
-        Message result = socket.waitForResultResponse(data.getId());
+        Message result = socket.waitForResult(data.getId());
         resultData = (ResultData) result.getRawData();
 
         return resultData.getResult();

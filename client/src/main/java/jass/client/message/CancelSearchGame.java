@@ -54,7 +54,7 @@ public final class CancelSearchGame extends Message {
     public boolean process(final SocketUtil socket) {
         socket.send(this);
 
-        Message result = socket.waitForResultResponse(data.getId());
+        Message result = socket.waitForResult(data.getId());
         ResultData resultData = (ResultData) result.getRawData();
 
         return resultData.getResult();

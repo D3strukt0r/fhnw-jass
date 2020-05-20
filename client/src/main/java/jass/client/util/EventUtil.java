@@ -108,67 +108,70 @@ public final class EventUtil {
     /**
      * @param msgData The message to send to the listeners.
      *
+     * @return Returns true if an event was caught, otherwise false (something
+     * else must handle the message)
+     *
      * @author Thomas Weber, Manuele Vaccari, Victor Hargrave
      * @since 1.0.0
      */
-    public static void handleEventListenerOnMessage(final MessageData msgData) {
+    public static boolean handleEventListenerOnMessage(final MessageData msgData) {
         switch (msgData.getMessageType()) {
             case "GameFound":
                 for (GameFoundEventListener listener : new ArrayList<>(gameFoundListeners)) {
                     logger.info("Invoking onGameFound event on " + listener.getClass().getName());
                     listener.onGameFound((GameFoundData) msgData);
                 }
-                break;
+                return true;
             case "BroadcastDeck":
                 for (BroadcastDeckEventListener listener : new ArrayList<>(broadcastDeckListeners)) {
                     logger.info("Invoking onBroadcastDeck event on " + listener.getClass().getName());
                     listener.onBroadcastDeck((BroadcastDeckData) msgData);
                 }
-                break;
+                return true;
             case "ChooseGameMode":
                 for (ChooseGameModeEventListener listener : new ArrayList<>(chooseGameModeListeners)) {
                     logger.info("Invoking onChooseGameMode event on " + listener.getClass().getName());
                     listener.onChooseGameMode((ChooseGameModeData) msgData);
                 }
-                break;
+                return true;
             case "BroadcastGameMode":
                 for (BroadcastGameModeEventListener listener : new ArrayList<>(broadcastGameModeListeners)) {
                     logger.info("Invoking onBroadcastGameMode event on " + listener.getClass().getName());
                     listener.onBroadcastGameMode((BroadcastGameModeData) msgData);
                 }
-                break;
+                return true;
             case "PlayedCard":
                 for (PlayedCardEventListener listener : new ArrayList<>(playedCardListeners)) {
                     logger.info("Invoking onPlayedCard event on " + listener.getClass().getName());
                     listener.onPlayedCard((PlayedCardData) msgData);
                 }
-                break;
+                return true;
             case "BroadcastTurn":
                 for (BroadcastTurnEventListener listener : new ArrayList<>(broadcastTurnListeners)) {
                     logger.info("Invoking onBroadcastTurn event on " + listener.getClass().getName());
                     listener.onBroadcastTurn((BroadcastTurnData) msgData);
                 }
-                break;
+                return true;
             case "BroadcastPoints":
                 for (BroadcastPointsEventListener listener : new ArrayList<>(broadcastPointsListeners)) {
                     logger.info("Invoking onBroadcastPoints event on " + listener.getClass().getName());
                     listener.onBroadcastPoints((BroadcastPointsData) msgData);
                 }
-                break;
+                return true;
             case "BroadcastRoundOver":
                 for (BroadcastRoundOverEventListener listener : new ArrayList<>(broadcastRoundOverListeners)) {
                     logger.info("Invoking onRoundOver event on " + listener.getClass().getName());
                     listener.onRoundOver((BroadcastRoundOverData) msgData);
                 }
-                break;
+                return true;
             case "BroadcastAPlayerQuit":
                 for (BroadcastAPlayerQuitEventListener listener : new ArrayList<>(broadcastAPlayerQuitListeners)) {
                     logger.info("Invoking onAPlayerQuit event on " + listener.getClass().getName());
                     listener.onAPlayerQuit((BroadcastAPlayerQuitData) msgData);
                 }
-                break;
+                return true;
             default:
-                break;
+                return false;
         }
     }
 
