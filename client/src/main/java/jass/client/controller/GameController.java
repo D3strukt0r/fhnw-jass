@@ -25,6 +25,7 @@ import jass.client.eventlistener.BroadcastRoundOverEventListener;
 import jass.client.eventlistener.DisconnectEventListener;
 import jass.client.message.Logout;
 import jass.client.mvc.Controller;
+import jass.client.util.EventUtil;
 import jass.client.util.GameUtil;
 import jass.client.util.I18nUtil;
 import jass.client.util.SocketUtil;
@@ -450,11 +451,9 @@ public final class GameController extends Controller implements Closeable, Disco
             logger.info("updated card images");
         }
 
-        SocketUtil socket = ServiceLocator.get(SocketUtil.class);
-        assert socket != null;
-        socket.addDisconnectListener(this);
-        socket.addAPlayerQuitEventListener(this);
-        socket.addRoundOverEventListener(this);
+        EventUtil.addDisconnectListener(this);
+        EventUtil.addAPlayerQuitEventListener(this);
+        EventUtil.addRoundOverEventListener(this);
 
         /*
          * Bind all texts
@@ -597,9 +596,7 @@ public final class GameController extends Controller implements Closeable, Disco
         updateUserNames();
         cardButtons.clear();
         try {
-            SocketUtil socket = ServiceLocator.get(SocketUtil.class);
-            assert socket != null;
-            socket.removeAPlayerQuitEventListener(this);
+            EventUtil.removeAPlayerQuitEventListener(this);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -725,15 +722,9 @@ public final class GameController extends Controller implements Closeable, Disco
     @Override
     public void close() {
         gameUtil.close();
-
-        SocketUtil socket = ServiceLocator.get(SocketUtil.class);
-        // If is required, because close() could also be called after losing
-        // connection
-        if (socket != null) {
-            socket.removeDisconnectListener(this);
-            socket.removeAPlayerQuitEventListener(this);
-            socket.removeRoundOverEventListener(this);
-        }
+        EventUtil.removeDisconnectListener(this);
+        EventUtil.removeAPlayerQuitEventListener(this);
+        EventUtil.removeRoundOverEventListener(this);
     }
 
     /**

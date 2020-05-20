@@ -171,15 +171,12 @@ public final class GameUtil implements Service, Closeable, BroadcastDeckEventLis
      * @since 1.0.0
      */
     public GameUtil() {
-        SocketUtil socket = ServiceLocator.get(SocketUtil.class);
-        assert socket != null;
-
-        socket.addBroadcastDeckEventListener(this);
-        socket.addChooseGameModeEventListener(this);
-        socket.addBroadcastGameModeEventListener(this);
-        socket.addPlayedCardEventListener(this);
-        socket.addBroadcastedTurnEventListener(this);
-        socket.addBroadcastPointsEventListener(this);
+        EventUtil.addBroadcastDeckEventListener(this);
+        EventUtil.addChooseGameModeEventListener(this);
+        EventUtil.addBroadcastGameModeEventListener(this);
+        EventUtil.addPlayedCardEventListener(this);
+        EventUtil.addBroadcastedTurnEventListener(this);
+        EventUtil.addBroadcastPointsEventListener(this);
         playerDeck = FXCollections.observableArrayList(new ArrayList<>());
         playedCards = FXCollections.observableArrayList(new ArrayList<>());
     }
@@ -703,16 +700,11 @@ public final class GameUtil implements Service, Closeable, BroadcastDeckEventLis
 
     @Override
     public void close() {
-        SocketUtil socket = ServiceLocator.get(SocketUtil.class);
-        // If is required, because close() could also be called after losing
-        // connection
-        if (socket != null) {
-            socket.removeBroadcastDeckEventListener(this);
-            socket.removeChooseGameModeEventListener(this);
-            socket.removeBroadcastGameModeEventListener(this);
-            socket.removePlayedCardEventListener(this);
-            socket.removeBroadcastedTurnEventListener(this);
-            socket.removeBroadcastPointsEventListener(this);
-        }
+        EventUtil.removeBroadcastDeckEventListener(this);
+        EventUtil.removeChooseGameModeEventListener(this);
+        EventUtil.removeBroadcastGameModeEventListener(this);
+        EventUtil.removePlayedCardEventListener(this);
+        EventUtil.removeBroadcastedTurnEventListener(this);
+        EventUtil.removeBroadcastPointsEventListener(this);
     }
 }

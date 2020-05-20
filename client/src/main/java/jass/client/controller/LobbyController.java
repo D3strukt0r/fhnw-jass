@@ -27,6 +27,7 @@ import jass.client.message.CancelSearchGame;
 import jass.client.message.Logout;
 import jass.client.message.SearchGame;
 import jass.client.mvc.Controller;
+import jass.client.util.EventUtil;
 import jass.client.util.GameUtil;
 import jass.client.util.I18nUtil;
 import jass.client.util.SocketUtil;
@@ -154,10 +155,8 @@ public final class LobbyController extends Controller implements Closeable, Disc
      */
     @Override
     public void initialize(final URL location, final ResourceBundle resources) {
-        SocketUtil socket = ServiceLocator.get(SocketUtil.class);
-        assert socket != null;
-        socket.addDisconnectListener(this);
-        socket.addGameFoundEventListener(this);
+        EventUtil.addDisconnectListener(this);
+        EventUtil.addGameFoundEventListener(this);
 
         /*
          * Already initialize GameUtil, so that the event listeners are ready
@@ -335,13 +334,8 @@ public final class LobbyController extends Controller implements Closeable, Disc
      */
     @Override
     public void close() {
-        SocketUtil socket = ServiceLocator.get(SocketUtil.class);
-        // If is required, because close() could also be called after losing
-        // connection
-        if (socket != null) {
-            socket.removeDisconnectListener(this);
-            socket.removeGameFoundEventListener(this);
-        }
+        EventUtil.removeDisconnectListener(this);
+        EventUtil.removeGameFoundEventListener(this);
     }
 
     /**

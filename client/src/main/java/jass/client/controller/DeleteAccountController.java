@@ -25,6 +25,7 @@ import jass.client.eventlistener.DisconnectEventListener;
 import jass.client.message.DeleteLogin;
 import jass.client.message.Logout;
 import jass.client.mvc.Controller;
+import jass.client.util.EventUtil;
 import jass.client.util.I18nUtil;
 import jass.client.util.SocketUtil;
 import jass.client.util.ViewUtil;
@@ -316,12 +317,7 @@ public final class DeleteAccountController extends Controller implements Closeab
      */
     @Override
     public void close() {
-        SocketUtil socket = ServiceLocator.get(SocketUtil.class);
-        // If is required, because close() could also be called after losing
-        // connection
-        if (socket != null) {
-            socket.removeDisconnectListener(this);
-        }
+        EventUtil.removeDisconnectListener(this);
     }
 
     /**

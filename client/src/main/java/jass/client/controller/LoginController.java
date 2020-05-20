@@ -29,6 +29,7 @@ import jass.client.eventlistener.DisconnectEventListener;
 import jass.client.message.Login;
 import jass.client.mvc.Controller;
 import jass.client.repository.LoginRepository;
+import jass.client.util.EventUtil;
 import jass.client.util.I18nUtil;
 import jass.client.util.SocketUtil;
 import jass.client.util.ViewUtil;
@@ -167,9 +168,7 @@ public final class LoginController extends Controller implements Closeable, Disc
         /*
          * Register oneself for disconnect events
          */
-        SocketUtil socket = ServiceLocator.get(SocketUtil.class);
-        assert socket != null;
-        socket.addDisconnectListener(this);
+        EventUtil.addDisconnectListener(this);
 
         /*
          * Bind all texts
@@ -423,12 +422,7 @@ public final class LoginController extends Controller implements Closeable, Disc
      */
     @Override
     public void close() {
-        SocketUtil socket = ServiceLocator.get(SocketUtil.class);
-        // If is required, because close() could also be called after losing
-        // connection
-        if (socket != null) {
-            socket.removeDisconnectListener(this);
-        }
+        EventUtil.removeDisconnectListener(this);
     }
 
     /**

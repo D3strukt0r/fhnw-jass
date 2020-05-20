@@ -20,27 +20,9 @@
 package jass.client.util;
 
 import jass.client.entity.LoginEntity;
-import jass.client.eventlistener.BroadcastAPlayerQuitEventListener;
-import jass.client.eventlistener.BroadcastDeckEventListener;
-import jass.client.eventlistener.BroadcastGameModeEventListener;
-import jass.client.eventlistener.BroadcastPointsEventListener;
-import jass.client.eventlistener.BroadcastRoundOverEventListener;
-import jass.client.eventlistener.BroadcastTurnEventListener;
-import jass.client.eventlistener.ChooseGameModeEventListener;
 import jass.client.eventlistener.DisconnectEventListener;
-import jass.client.eventlistener.GameFoundEventListener;
-import jass.client.eventlistener.PlayedCardEventListener;
 import jass.client.message.Message;
-import jass.lib.message.BroadcastAPlayerQuitData;
-import jass.lib.message.BroadcastDeckData;
-import jass.lib.message.BroadcastGameModeData;
-import jass.lib.message.BroadcastPointsData;
-import jass.lib.message.BroadcastRoundOverData;
-import jass.lib.message.BroadcastTurnData;
-import jass.lib.message.ChooseGameModeData;
-import jass.lib.message.GameFoundData;
 import jass.lib.message.MessageData;
-import jass.lib.message.PlayedCardData;
 import jass.lib.servicelocator.Service;
 import jass.lib.servicelocator.ServiceLocator;
 import org.apache.logging.log4j.LogManager;
@@ -90,62 +72,6 @@ public final class SocketUtil extends Thread implements Service, Closeable {
      * false.
      */
     private volatile boolean serverReachable = true;
-
-    /**
-     * A list of all objects listening to a disconnect event.
-     */
-    private final ArrayList<DisconnectEventListener> disconnectListener = new ArrayList<>();
-
-    /**
-     * Object listening to game found event.
-     */
-    private final ArrayList<GameFoundEventListener> gameFoundEventListener = new ArrayList<>();
-
-    /**
-     * Object listening to broadcast deck event.
-     */
-    private final ArrayList<BroadcastDeckEventListener> broadcastDeckEventListener = new ArrayList<>();
-
-    /**
-     * A list of all objects listening to a choose game mode event.
-     */
-    private final ArrayList<ChooseGameModeEventListener> chooseGameModeListener = new ArrayList<>();
-
-    /**
-     * A list of objects listening to broadcast game mode event.
-     */
-    private final ArrayList<BroadcastGameModeEventListener> broadcastGameModeListener = new ArrayList<>();
-
-    /**
-     * A list of all objects listening to a play card event.
-     */
-    private final ArrayList<PlayedCardEventListener> playedCardListener = new ArrayList<>();
-
-    /**
-     * A list of objects listening to broadcast played card event.
-     */
-    private final ArrayList<BroadcastTurnEventListener> broadcastTurnListener = new ArrayList<>();
-
-    /**
-     * A list of objects listening to broadcast points event.
-     */
-    private final ArrayList<BroadcastPointsEventListener> broadcastPointsListener = new ArrayList<>();
-
-    /**
-     * A list of objects listening to round over events.
-     */
-    private final ArrayList<BroadcastRoundOverEventListener> broadcastRoundOverListener = new ArrayList<>();
-
-    /**
-     * A list of objects listening to a player quit events.
-     */
-    private final ArrayList<BroadcastAPlayerQuitEventListener> broadcastAPlayerQuitListener = new ArrayList<>();
-
-    /**
-     * A list of objects listening to a player quit events that have to be
-     * removed.
-     */
-    private final ArrayList<BroadcastAPlayerQuitEventListener> broadcastAPlayerQuitListenerToRemove = new ArrayList<>();
 
     /**
      * A list of all messages coming from the server.
@@ -245,7 +171,7 @@ public final class SocketUtil extends Thread implements Service, Closeable {
                         logger.info("Received message of type " + msgData.getMessageType());
                         lastMessages.add(msg);
 
-                        handleEventListenerOnMessage(msgData.getMessageType(), msgData);
+                        EventUtil.handleEventListenerOnMessage(msgData);
                     }
                 }
             }
@@ -254,7 +180,7 @@ public final class SocketUtil extends Thread implements Service, Closeable {
         }
 
         close();
-        for (DisconnectEventListener listener : disconnectListener) {
+        for (DisconnectEventListener listener : EventUtil.getDisconnectListeners()) {
             listener.onDisconnectEvent();
         }
     }
@@ -336,275 +262,6 @@ public final class SocketUtil extends Thread implements Service, Closeable {
             return login.getToken();
         }
         return null;
-    }
-
-    /**
-     * @param listener A DisconnectEventListener object
-     *
-     * @author Manuele Vaccari
-     * @since 1.0.0
-     */
-    public void addDisconnectListener(final DisconnectEventListener listener) {
-        disconnectListener.add(listener);
-    }
-
-    /**
-     * @param listener A DisconnectEventListener object
-     *
-     * @author Manuele Vaccari
-     * @since 1.0.0
-     */
-    public void removeDisconnectListener(final DisconnectEventListener listener) {
-        disconnectListener.remove(listener);
-    }
-
-    /**
-     * @param listener The listener to listen to game found.
-     *
-     * @author Thomas Weber
-     * @since 1.0.0
-     */
-    public void addGameFoundEventListener(final GameFoundEventListener listener) {
-        gameFoundEventListener.add(listener);
-    }
-
-    /**
-     * @param listener A GameFoundEventListener object
-     *
-     * @author Manuele Vaccari
-     * @since 1.0.0
-     */
-    public void removeGameFoundEventListener(final GameFoundEventListener listener) {
-        gameFoundEventListener.remove(listener);
-    }
-
-    /**
-     * @param listener The listener to listen to broadcast deck.
-     *
-     * @author Victor Hargrave
-     * @since 1.0.0
-     */
-    public void addBroadcastDeckEventListener(final BroadcastDeckEventListener listener) {
-        broadcastDeckEventListener.add(listener);
-    }
-
-    /**
-     * @param listener A BroadcastDeckEventListener object.
-     *
-     * @author Manuele Vaccari
-     * @since 1.0.0
-     */
-    public void removeBroadcastDeckEventListener(final BroadcastDeckEventListener listener) {
-        broadcastDeckEventListener.remove(listener);
-    }
-
-    /**
-     * @param listener A ChooseGameModeEventListener object.
-     *
-     * @author Manuele Vaccari
-     * @since 1.0.0
-     */
-    public void addChooseGameModeEventListener(final ChooseGameModeEventListener listener) {
-        chooseGameModeListener.add(listener);
-    }
-
-    /**
-     * @param listener A ChooseGameModeEventListener object.
-     *
-     * @author Manuele Vaccari
-     * @since 1.0.0
-     */
-    public void removeChooseGameModeEventListener(final ChooseGameModeEventListener listener) {
-        chooseGameModeListener.remove(listener);
-    }
-
-    /**
-     * @param listener A ChooseGameModeEventListener object.
-     *
-     * @author Manuele Vaccari
-     * @since 1.0.0
-     */
-    public void addBroadcastGameModeEventListener(final BroadcastGameModeEventListener listener) {
-        broadcastGameModeListener.add(listener);
-    }
-
-    /**
-     * @param listener A ChooseGameModeEventListener object.
-     *
-     * @author Manuele Vaccari
-     * @since 1.0.0
-     */
-    public void removeBroadcastGameModeEventListener(final BroadcastGameModeEventListener listener) {
-        broadcastGameModeListener.remove(listener);
-    }
-
-    /**
-     * @param listener A PlayedCardEventListener object.
-     *
-     * @author Victor Hargrave
-     * @since 1.0.0
-     */
-    public void addPlayedCardEventListener(final PlayedCardEventListener listener) {
-        playedCardListener.add(listener);
-    }
-
-    /**
-     * @param listener A PlayedCardEventListener object.
-     *
-     * @author Manuele Vaccari
-     * @since 1.0.0
-     */
-    public void removePlayedCardEventListener(final PlayedCardEventListener listener) {
-        playedCardListener.remove(listener);
-    }
-
-    /**
-     * @param listener A BroadcastTurnEventListener object.
-     *
-     * @author Victor Hargrave
-     * @since 1.0.0
-     */
-    public void addBroadcastedTurnEventListener(final BroadcastTurnEventListener listener) {
-        broadcastTurnListener.add(listener);
-    }
-
-    /**
-     * @param listener A BroadcastTurnEventListener object.
-     *
-     * @author Manuele Vaccari
-     * @since 1.0.0
-     */
-    public void removeBroadcastedTurnEventListener(final BroadcastTurnEventListener listener) {
-        broadcastTurnListener.remove(listener);
-    }
-
-    /**
-     * @param listener A BroadcastPointsEventListener object.
-     *
-     * @author Manuele Vaccari
-     * @since 1.0.0
-     */
-    public void addBroadcastPointsEventListener(final BroadcastPointsEventListener listener) {
-        broadcastPointsListener.add(listener);
-    }
-
-    /**
-     * @param listener A BroadcastPointsEventListener object.
-     *
-     * @author Manuele Vaccari
-     * @since 1.0.0
-     */
-    public void removeBroadcastPointsEventListener(final BroadcastPointsEventListener listener) {
-        broadcastPointsListener.remove(listener);
-    }
-
-    /**
-     * @param listener A BroadcastRoundOverEventListener object.
-     *
-     * @author Victor Hargrave
-     * @since 1.0.0
-     */
-    public void addRoundOverEventListener(final BroadcastRoundOverEventListener listener) {
-        broadcastRoundOverListener.add(listener);
-    }
-
-    /**
-     * @param listener A BroadcastRoundOverEventListener object.
-     *
-     * @author Manuele Vaccari
-     * @since 1.0.0
-     */
-    public void removeRoundOverEventListener(final BroadcastRoundOverEventListener listener) {
-        broadcastRoundOverListener.remove(listener);
-    }
-
-    /**
-     * @param listener A BroadcastAPlayerQuitEventListener object.
-     *
-     * @author Victor Hargrave
-     * @since 1.0.0
-     */
-    public void addAPlayerQuitEventListener(final BroadcastAPlayerQuitEventListener listener) {
-        broadcastAPlayerQuitListener.add(listener);
-    }
-
-    /**
-     * @param listener A BroadcastAPlayerQuitEventListener object.
-     *
-     * @author Victor Hargrave
-     * @since 1.0.0
-     */
-    public void removeAPlayerQuitEventListener(final BroadcastAPlayerQuitEventListener listener) {
-        broadcastAPlayerQuitListener.remove(listener);
-    }
-
-    /**
-     * @param msgType Message to send to listener listening to "game-found"
-     *                event.
-     * @param msgData The message to send to the listeners.
-     *
-     * @author Thomas Weber, Manuele Vaccari, Victor Hargrave
-     * @since 1.0.0
-     */
-    public void handleEventListenerOnMessage(final String msgType, final MessageData msgData) {
-        switch (msgType) {
-            case "GameFound":
-                for (GameFoundEventListener listener : new ArrayList<>(gameFoundEventListener)) {
-                    logger.info("Invoking onGameFound event on " + listener.getClass().getName());
-                    listener.onGameFound((GameFoundData) msgData);
-                }
-                break;
-            case "BroadcastDeck":
-                for (BroadcastDeckEventListener listener : new ArrayList<>(broadcastDeckEventListener)) {
-                    logger.info("Invoking onBroadcastDeck event on " + listener.getClass().getName());
-                    listener.onBroadcastDeck((BroadcastDeckData) msgData);
-                }
-                break;
-            case "ChooseGameMode":
-                for (ChooseGameModeEventListener listener : new ArrayList<>(chooseGameModeListener)) {
-                    logger.info("Invoking onChooseGameMode event on " + listener.getClass().getName());
-                    listener.onChooseGameMode((ChooseGameModeData) msgData);
-                }
-                break;
-            case "BroadcastGameMode":
-                for (BroadcastGameModeEventListener listener : new ArrayList<>(broadcastGameModeListener)) {
-                    logger.info("Invoking onBroadcastGameMode event on " + listener.getClass().getName());
-                    listener.onBroadcastGameMode((BroadcastGameModeData) msgData);
-                }
-                break;
-            case "PlayedCard":
-                for (PlayedCardEventListener listener : new ArrayList<>(playedCardListener)) {
-                    logger.info("Invoking onPlayedCard event on " + listener.getClass().getName());
-                    listener.onPlayedCard((PlayedCardData) msgData);
-                }
-                break;
-            case "BroadcastTurn":
-                for (BroadcastTurnEventListener listener : new ArrayList<>(broadcastTurnListener)) {
-                    logger.info("Invoking onBroadcastTurn event on " + listener.getClass().getName());
-                    listener.onBroadcastTurn((BroadcastTurnData) msgData);
-                }
-                break;
-            case "BroadcastPoints":
-                for (BroadcastPointsEventListener listener : new ArrayList<>(broadcastPointsListener)) {
-                    logger.info("Invoking onBroadcastPoints event on " + listener.getClass().getName());
-                    listener.onBroadcastPoints((BroadcastPointsData) msgData);
-                }
-                break;
-            case "BroadcastRoundOver":
-                for (BroadcastRoundOverEventListener listener : new ArrayList<>(broadcastRoundOverListener)) {
-                    logger.info("Invoking onRoundOver event on " + listener.getClass().getName());
-                    listener.onRoundOver((BroadcastRoundOverData) msgData);
-                }
-                break;
-            case "BroadcastAPlayerQuit":
-                for (BroadcastAPlayerQuitEventListener listener : new ArrayList<>(broadcastAPlayerQuitListener)) {
-                    logger.info("Invoking onAPlayerQuit event on " + listener.getClass().getName());
-                    listener.onAPlayerQuit((BroadcastAPlayerQuitData) msgData);
-                }
-                break;
-            default:
-                break;
-        }
     }
 
     /**
