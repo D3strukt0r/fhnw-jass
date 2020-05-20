@@ -40,7 +40,7 @@ run {
 
 jar {
     // So that Docker can easily find the file
-    //archiveName("jass-server.jar")
+    archiveName("jass-server.jar")
 
     // Every .jar needs a manifest file
     manifest {

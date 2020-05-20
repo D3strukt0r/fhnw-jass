@@ -1,7 +1,6 @@
 # -------
 # Builder
 # -------
-
 FROM gradle:jdk8 AS build
 
 COPY --chown=gradle:gradle . /home/gradle/src
@@ -12,13 +11,11 @@ RUN gradle server:build --no-daemon
 # ---------------
 # Final Container
 # ---------------
-
 FROM openjdk:8-jre-slim
 
 RUN mkdir -p /app/data
-COPY --from=build /home/gradle/src/server/build/libs/server-0.0.1.jar /app/jass-server.jar
+COPY --from=build /home/gradle/src/server/build/libs/jass-server.jar /app/jass-server.jar
 
-WORKDIR /app
-VOLUME ["/app/data"]
-EXPOSE 2000
-ENTRYPOINT ["java", "-jar", "jass-server.jar"]
+WORKDIR /data
+VOLUME ["/data"]
+ENTRYPOINT ["java", "-jar", "/app/jass-server.jar"]
