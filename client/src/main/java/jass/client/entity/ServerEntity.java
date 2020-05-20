@@ -58,9 +58,14 @@ public final class ServerEntity extends Entity implements Service {
     private boolean secure = false;
 
     /**
+     * The field name for connectAutomatically.
+     */
+    public static final String CONNECT_AUTOMATICALLY_FIELD_NAME = "connect_automatically";
+
+    /**
      * Whether to connect automatically at startup or not.
      */
-    @DatabaseField(defaultValue = "false")
+    @DatabaseField(columnName = CONNECT_AUTOMATICALLY_FIELD_NAME, defaultValue = "false")
     private boolean connectAutomatically = false;
 
     /**

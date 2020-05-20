@@ -20,10 +20,12 @@
 package jass.client.repository;
 
 import com.j256.ormlite.dao.Dao;
+import com.j256.ormlite.stmt.QueryBuilder;
 import jass.client.entity.ServerEntity;
 import jass.lib.database.Repository;
 
 import java.sql.SQLException;
+import java.util.List;
 
 /**
  * Helper functions concerning the ServerEntity class.
@@ -125,11 +127,14 @@ public final class ServerRepository extends Repository<Dao<ServerEntity, Integer
      * @author Manuele Vaccari
      * @since 1.0.0
      */
-    public ServerEntity findConnectAutomatically() {
-        for (ServerEntity s : getDao()) {
-            if (s.isConnectAutomatically()) {
-                return s;
-            }
+    public ServerEntity findConnectAutomatically() throws SQLException {
+        QueryBuilder<ServerEntity, Integer> findConnectAutomaticallyStmt = getDao().queryBuilder();
+        findConnectAutomaticallyStmt.where()
+            .like(ServerEntity.CONNECT_AUTOMATICALLY_FIELD_NAME, true);
+        List<ServerEntity> findConnectAutomaticallyResult = getDao().query(findConnectAutomaticallyStmt.prepare());
+
+        if (findConnectAutomaticallyResult.size() > 0) {
+            return findConnectAutomaticallyResult.get(0);
         }
         return null;
     }
