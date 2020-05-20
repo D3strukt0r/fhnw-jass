@@ -3,7 +3,7 @@
     <Appenders>
         <File name="File" fileName="jass.log" ignoreExceptions="false">
             <PatternLayout>
-                <Pattern>%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n</Pattern>
+                <Pattern>%-5level %d{HH:mm:ss.SSS} [%t] %logger{36} - %msg%n</Pattern>
             </PatternLayout>
         </File>
         <Console name="Console" target="SYSTEM_OUT" ignoreExceptions="false">
