@@ -55,7 +55,7 @@
         <JFXPasswordField fx:id="repeatPassword" labelFloat="true" promptText="gui.register.repeatPassword" />
         <Region prefHeight="35.0" VBox.vgrow="ALWAYS" />
 
-        <JFXCheckBox fx:id="connectAutomatically" text="gui.login.connectAutomatically" />
+        <JFXCheckBox fx:id="rememberMe" text="gui.login.connectAutomatically" />
         <Region prefHeight="15.0" VBox.vgrow="ALWAYS" />
 
         <HBox fx:id="buttonGroup" spacing="10">
@@ -65,7 +65,7 @@
                        text="gui.register.register"
                        onAction="#clickOnRegister"
                        defaultButton="true" />
-            <JFXButton fx:id="login" styleClass="secondary" text="gui.register.login" onAction="#clickOnLogin" />
+            <JFXButton fx:id="loginBtn" styleClass="secondary" text="gui.register.login" onAction="#clickOnLogin" />
         </HBox>
     </VBox>
 </VBox>

@@ -407,6 +407,7 @@ public final class LoginController extends Controller implements Closeable, Disc
                             break;
                     }
                 }
+
                 // Enable all inputs again
                 username.setDisable(false);
                 password.setDisable(false);

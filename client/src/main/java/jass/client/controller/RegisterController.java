@@ -19,16 +19,19 @@
 
 package jass.client.controller;
 
+import com.j256.ormlite.stmt.QueryBuilder;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXCheckBox;
 import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
 import jass.client.entity.LoginEntity;
+import jass.client.entity.ServerEntity;
 import jass.client.eventlistener.DisconnectEventListener;
 import jass.client.message.Login;
 import jass.client.message.Register;
 import jass.client.mvc.Controller;
 import jass.client.repository.LoginRepository;
+import jass.client.util.DatabaseUtil;
 import jass.client.util.EventUtil;
 import jass.client.util.I18nUtil;
 import jass.client.util.SocketUtil;
@@ -58,6 +61,8 @@ import org.apache.logging.log4j.Logger;
 
 import java.io.Closeable;
 import java.net.URL;
+import java.sql.SQLException;
+import java.util.List;
 import java.util.ResourceBundle;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -162,7 +167,7 @@ public final class RegisterController extends Controller implements Closeable, D
      * The "remember me" checkbox.
      */
     @FXML
-    private JFXCheckBox connectAutomatically;
+    private JFXCheckBox rememberMe;
 
     /**
      * The container for the buttons.
@@ -180,7 +185,7 @@ public final class RegisterController extends Controller implements Closeable, D
      * The login button.
      */
     @FXML
-    private JFXButton login;
+    private JFXButton loginBtn;
 
     /**
      * @author Manuele Vaccari
@@ -215,13 +220,13 @@ public final class RegisterController extends Controller implements Closeable, D
         password.promptTextProperty().bind(I18nUtil.createStringBinding(password.getPromptText()));
         repeatPassword.promptTextProperty().bind(I18nUtil.createStringBinding(repeatPassword.getPromptText()));
 
-        connectAutomatically.textProperty().bind(I18nUtil.createStringBinding(connectAutomatically.getText()));
+        rememberMe.textProperty().bind(I18nUtil.createStringBinding(rememberMe.getText()));
 
         buttonGroup.prefWidthProperty().bind(Bindings.subtract(root.widthProperty(), new SimpleDoubleProperty(40.0)));
         register.textProperty().bind(I18nUtil.createStringBinding(register.getText()));
         register.prefWidthProperty().bind(Bindings.divide(root.widthProperty(), buttonGroup.getChildren().size()));
-        login.textProperty().bind(I18nUtil.createStringBinding(login.getText()));
-        login.prefWidthProperty().bind(Bindings.divide(root.widthProperty(), buttonGroup.getChildren().size()));
+        loginBtn.textProperty().bind(I18nUtil.createStringBinding(loginBtn.getText()));
+        loginBtn.prefWidthProperty().bind(Bindings.divide(root.widthProperty(), buttonGroup.getChildren().size()));
 
         /*
          * Disable/Enable the Connect button depending on if the inputs are
@@ -263,54 +268,6 @@ public final class RegisterController extends Controller implements Closeable, D
             ViewUtil.useRequiredValidator("gui.register.repeatPassword.empty"),
             ViewUtil.useIsSameValidator(password, "gui.register.repeatPassword.notSame")
         );
-    }
-
-    /**
-     * Disables all the input fields in the view.
-     *
-     * @author Manuele Vaccari
-     * @since 1.0.0
-     */
-    public void disableInputs() {
-        username.setDisable(true);
-        password.setDisable(true);
-        connectAutomatically.setDisable(true);
-    }
-
-    /**
-     * Disables all the form fields in the view.
-     *
-     * @author Manuele Vaccari
-     * @since 1.0.0
-     */
-    public void disableAll() {
-        disableInputs();
-        login.setDisable(true);
-        register.setDisable(true);
-    }
-
-    /**
-     * Enables all the input fields in the view.
-     *
-     * @author Manuele Vaccari
-     * @since 1.0.0
-     */
-    public void enableInputs() {
-        username.setDisable(false);
-        password.setDisable(false);
-        connectAutomatically.setDisable(false);
-    }
-
-    /**
-     * Enables all the form fields in the view.
-     *
-     * @author Manuele Vaccari
-     * @since 1.0.0
-     */
-    public void enableAll() {
-        enableInputs();
-        login.setDisable(false);
-        register.setDisable(false);
     }
 
     /**
@@ -382,20 +339,50 @@ public final class RegisterController extends Controller implements Closeable, D
     @FXML
     private void clickOnRegister() {
         // Disable everything to prevent something while working on the data
-        disableAll();
+        username.setDisable(true);
+        password.setDisable(true);
+        rememberMe.setDisable(true);
+        loginBtn.setDisable(true);
+        register.setDisable(true);
 
         // Connection would freeze window (and the animations) so do it in a
         // different thread.
         new Thread(() -> {
-            LoginEntity login = (new LoginEntity())
-                .setUsername(username.getText())
-                .setPassword(password.getText())
-                .setRememberMe(connectAutomatically.isSelected());
             SocketUtil backend = ServiceLocator.get(SocketUtil.class);
             assert backend != null;
-            Register registerMsg = new Register(new RegisterData(login.getUsername(), login.getPassword()));
+            ServerEntity server = ServiceLocator.get(ServerEntity.class);
+            assert server != null;
+
+            LoginEntity login = (new LoginEntity())
+                .setServer(server)
+                .setUsername(username.getText())
+                .setPassword(password.getText())
+                .setRememberMe(rememberMe.isSelected());
+
+            // Try to find existing login (required if we logged in and then the
+            // user was deleted on the server)
+            DatabaseUtil db = ServiceLocator.get(DatabaseUtil.class);
+            if (db != null) {
+                try {
+                    QueryBuilder<LoginEntity, Integer> findSameLoginStmt = LoginRepository.getSingleton(null).getDao().queryBuilder();
+                    findSameLoginStmt.where()
+                        .like(LoginEntity.SERVER_FIELD_NAME, server)
+                        .and().like(LoginEntity.USERNAME_FIELD_NAME, username.getText())
+                        .and().like(LoginEntity.PASSWORD_FIELD_NAME, password.getText());
+                    List<LoginEntity> findSameLoginResult = LoginRepository.getSingleton(null).getDao().query(findSameLoginStmt.prepare());
+
+                    if (findSameLoginResult.size() != 0) {
+                        // Otherwise check if we need to overwrite
+                        LoginEntity loginToDelete = findSameLoginResult.get(0);
+                        LoginRepository.getSingleton(null).remove(loginToDelete);
+                    }
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
 
             // Try sending the register command.
+            Register registerMsg = new Register(new RegisterData(login.getUsername(), login.getPassword()));
             if (registerMsg.process(backend)) {
                 Login loginMsg = new Login(new LoginData(login.getUsername(), login.getPassword()));
 
@@ -404,20 +391,20 @@ public final class RegisterController extends Controller implements Closeable, D
                     login.setToken(loginMsg.getToken());
 
                     // Save the login in the db
-                    // TODO This keeps adding the same entity, check before
-                    //  adding
-                    if (!LoginRepository.getSingleton(null).add(login)) {
-                        logger.error("Couldn't save login data to local database.");
+                    if (db != null) {
+                        if (!LoginRepository.getSingleton(null).add(login)) {
+                            logger.error("Couldn't save login data to local database.");
+                        }
+                        if (login.isRememberMe()) {
+                            LoginRepository.getSingleton(null).setToRememberMe(login);
+                        }
                     }
 
-                    if (login.isRememberMe()) {
-                        // Make sure it's the only entry
-                        LoginRepository.getSingleton(null).setToRememberMe(login);
-                    }
-
+                    // Go to lobby
                     close();
                     WindowUtil.switchTo(getView(), LobbyView.class);
                 } else {
+                    // Show an appropriate error message
                     LoginData.Result reason = loginMsg.getResultData().getResultData().optEnum(LoginData.Result.class, "reason");
                     if (reason == null) {
                         setErrorMessage("gui.login.login.failed");
@@ -437,9 +424,9 @@ public final class RegisterController extends Controller implements Closeable, D
                                 break;
                         }
                     }
-                    enableAll();
                 }
             } else {
+                // Show an appropriate error message
                 RegisterData.Result reason = registerMsg.getResultData().getResultData().optEnum(RegisterData.Result.class, "reason");
                 if (reason == null) {
                     setErrorMessage("gui.register.register.failed");
@@ -462,8 +449,14 @@ public final class RegisterController extends Controller implements Closeable, D
                             break;
                     }
                 }
-                enableAll();
             }
+
+            // Enable inputs again, as seems to have failed
+            username.setDisable(false);
+            password.setDisable(false);
+            rememberMe.setDisable(false);
+            loginBtn.setDisable(false);
+            register.setDisable(false);
         }).start();
     }
 
