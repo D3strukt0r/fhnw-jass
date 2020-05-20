@@ -448,8 +448,10 @@ public final class GameController extends Controller implements Closeable, Disco
                 if (newGameMode == GameMode.TRUMPF) {
                     String rawTrumpf = gameUtil.getTrumpfProperty().getValue().toString();
                     String trumpf = rawTrumpf.substring(0, 1).toUpperCase() + rawTrumpf.substring(1);
+                    // TODO: Translate
                     mode.setText("Mode: " + newGameMode.toString() + " | Card: " + trumpf);
                 } else {
+                    // TODO: Translate
                     mode.setText("Mode: " + newGameMode.toString());
                 }
             });
@@ -473,8 +475,10 @@ public final class GameController extends Controller implements Closeable, Disco
             // when there is a new winning player
             disableButtons(newDisableButtons);
         });
+        // TODO: Translate
         gameUtil.getPointsRoundProperty().addListener(((observable, oldValue, newValue) -> Platform.runLater(() -> scoreR.setText("Points (Round): " + newValue))));
         gameUtil.getPointsRoundProperty().setValue(0);
+        // TODO: Translate
         gameUtil.getPointsTotalProperty().addListener(((observable, oldValue, newValue) -> Platform.runLater(() -> scoreT.setText("Points (Total): " + newValue))));
         gameUtil.getPointsTotalProperty().setValue(0);
         logger.info("observable listeners created");

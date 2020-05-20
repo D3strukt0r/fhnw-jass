@@ -201,10 +201,6 @@ public final class LobbyController extends Controller implements Closeable, Disc
      */
     @FXML
     public void clickOnFindMatch() {
-        findMatch.setVisible(false);
-        searching.setVisible(true);
-        cancelMatch.setVisible(true);
-
         // Get token and initialize SearchGame Message
         SocketUtil backend = ServiceLocator.get(SocketUtil.class);
         assert backend != null;
@@ -213,10 +209,14 @@ public final class LobbyController extends Controller implements Closeable, Disc
         SearchGame searchGameMsg = new SearchGame(new SearchGameData(login.getToken(), login.getUsername()));
 
         // Send SearchGame Message to Server
-        if (!searchGameMsg.process(backend)) {
+        if (searchGameMsg.process(backend)) {
+            findMatch.setVisible(false);
+            searching.setVisible(true);
+            cancelMatch.setVisible(true);
+        } else {
             logger.error("Error starting search for game");
             Platform.runLater(() -> {
-                Alert alert = new Alert(Alert.AlertType.ERROR, "Error searching for a game. Please try again!");
+                Alert alert = new Alert(Alert.AlertType.ERROR, I18nUtil.get("gui.lobby.findMatch.failed"));
                 alert.showAndWait();
             });
         }
@@ -231,10 +231,6 @@ public final class LobbyController extends Controller implements Closeable, Disc
      */
     @FXML
     public void clickOnCancelMatch() {
-        searching.setVisible(false);
-        findMatch.setVisible(true);
-        cancelMatch.setVisible(false);
-
         // Get token and initialize SearchGame Message
         SocketUtil backend = ServiceLocator.get(SocketUtil.class);
         assert backend != null;
@@ -243,10 +239,14 @@ public final class LobbyController extends Controller implements Closeable, Disc
         CancelSearchGame cancelSearchGameMsg = new CancelSearchGame(new CancelSearchGameData(login.getToken(), login.getUsername()));
 
         // Send SearchGame Message to Server
-        if (!cancelSearchGameMsg.process(backend)) {
+        if (cancelSearchGameMsg.process(backend)) {
+            searching.setVisible(false);
+            findMatch.setVisible(true);
+            cancelMatch.setVisible(false);
+        } else {
             logger.error("Error cancelling search for game");
             Platform.runLater(() -> {
-                Alert alert = new Alert(Alert.AlertType.ERROR, "Error cancelling search for a game. Please try again!");
+                Alert alert = new Alert(Alert.AlertType.ERROR, I18nUtil.get("gui.lobby.cancelMatch.failed"));
                 alert.showAndWait();
             });
         }

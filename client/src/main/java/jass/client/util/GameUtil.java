@@ -219,9 +219,9 @@ public final class GameUtil implements Service, Closeable, BroadcastDeckEventLis
 
             // Preparing the dialog...
             ChoiceDialog<String> dialog = new ChoiceDialog<>("", choices);
-            dialog.setTitle("Choose Game Mode");
+            dialog.setTitle(I18nUtil.get("gui.game.dialog.chooseGameMode.title"));
             dialog.setHeaderText(null);
-            dialog.setContentText("Choose the game mode to play:");
+            dialog.setContentText(I18nUtil.get("gui.game.dialog.chooseGameMode.content"));
             Stage stage = (Stage) dialog.getDialogPane().getScene().getWindow();
             stage.getIcons().add(new Image(getClass().getResource("/images/icon.png").toString()));
 
@@ -244,9 +244,9 @@ public final class GameUtil implements Service, Closeable, BroadcastDeckEventLis
 
                 // Preparing the dialog...
                 ChoiceDialog<String> dialog2 = new ChoiceDialog<>("", choices2);
-                dialog2.setTitle("Choose suit");
+                dialog2.setTitle(I18nUtil.get("gui.game.dialog.chooseTrumpf.title"));
                 dialog2.setHeaderText(null);
-                dialog2.setContentText("Choose suit for trumpf:");
+                dialog2.setContentText(I18nUtil.get("gui.game.dialog.chooseTrumpf.content"));
                 Stage stage2 = (Stage) dialog2.getDialogPane().getScene().getWindow();
                 stage2.getIcons().add(new Image(getClass().getResource("/images/icon.png").toString()));
 
