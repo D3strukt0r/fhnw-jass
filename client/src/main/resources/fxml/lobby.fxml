@@ -22,6 +22,10 @@
             <SeparatorMenuItem />
             <MenuItem fx:id="mFileExit" text="gui.menu.file.exit" onAction="#clickOnExit" />
         </Menu>
+        <Menu fx:id="mEdit" text="gui.menu.edit">
+            <MenuItem fx:id="mEditChangePassword" text="gui.menu.edit.changepassword" onAction="#clickOnChangePassword" />
+            <MenuItem fx:id="mEditDeleteAccount" text="gui.menu.edit.deleteaccount" onAction="#clickOnDeleteAccount" />
+        </Menu>
         <Menu fx:id="mHelp" text="gui.menu.help">
             <MenuItem fx:id="mHelpAbout" text="gui.menu.help.about" onAction="#clickOnAbout" />
         </Menu>

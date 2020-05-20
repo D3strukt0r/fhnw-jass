@@ -104,6 +104,24 @@ public final class LobbyController extends Controller implements GameFoundEventL
     private MenuItem mFileExit;
 
     /**
+     * The "Edit" element.
+     */
+    @FXML
+    private Menu mEdit;
+
+    /**
+     * The "File -> Change password" element.
+     */
+    @FXML
+    private MenuItem mEditChangePassword;
+
+    /**
+     * The "File -> Delete account" element.
+     */
+    @FXML
+    private MenuItem mEditDeleteAccount;
+
+    /**
      * The "Help" element.
      */
     @FXML
@@ -165,6 +183,10 @@ public final class LobbyController extends Controller implements GameFoundEventL
         mFileLogout.textProperty().bind(I18nUtil.createStringBinding(mFileLogout.getText()));
         mFileExit.textProperty().bind(I18nUtil.createStringBinding(mFileExit.getText()));
         mFileExit.setAccelerator(KeyCombination.keyCombination("Alt+F4"));
+
+        mEdit.textProperty().bind(I18nUtil.createStringBinding(mEdit.getText()));
+        mEditChangePassword.textProperty().bind(I18nUtil.createStringBinding(mEditChangePassword.getText()));
+        mEditDeleteAccount.textProperty().bind(I18nUtil.createStringBinding(mEditDeleteAccount.getText()));
 
         mHelp.textProperty().bind(I18nUtil.createStringBinding(mHelp.getText()));
         mHelpAbout.textProperty().bind(I18nUtil.createStringBinding(mHelpAbout.getText()));
@@ -305,6 +327,30 @@ public final class LobbyController extends Controller implements GameFoundEventL
     @FXML
     private void clickOnExit() {
         Platform.exit();
+    }
+
+    /**
+     * Shuts down the application.
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
+     */
+    @FXML
+    private void clickOnChangePassword() {
+        close();
+        WindowUtil.switchTo(getView(), ChangePasswordView.class);
+    }
+
+    /**
+     * Shuts down the application.
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
+     */
+    @FXML
+    private void clickOnDeleteAccount() {
+        close();
+        WindowUtil.switchTo(getView(), DeleteAccountView.class);
     }
 
     /**
