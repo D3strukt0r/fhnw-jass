@@ -50,6 +50,7 @@ import javafx.scene.text.Text;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.io.Closeable;
 import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -61,7 +62,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * @version %I%, %G%
  * @since 1.0.0
  */
-public final class LoginController extends Controller implements DisconnectEventListener {
+public final class LoginController extends Controller implements Closeable, DisconnectEventListener {
     /**
      * The logger to print to console and save in a .log file.
      */
@@ -309,12 +310,7 @@ public final class LoginController extends Controller implements DisconnectEvent
      */
     @FXML
     private void clickOnDisconnect() {
-        SocketUtil socket = ServiceLocator.get(SocketUtil.class);
-        if (socket != null) { // Not necessary but keeps IDE happy
-            socket.close();
-        }
-        ServiceLocator.remove(SocketUtil.class);
-        WindowUtil.switchTo(view, ServerConnectionView.class);
+        onDisconnectEvent();
     }
 
     /**
@@ -382,7 +378,8 @@ public final class LoginController extends Controller implements DisconnectEvent
                     LoginRepository.getSingleton(null).setToConnectAutomatically(login);
                 }
 
-                WindowUtil.switchTo(view, LobbyView.class);
+                close();
+                WindowUtil.switchTo(getView(), LobbyView.class);
             } else {
                 LoginData.Result reason = loginMsg.getResultData().getResultData().optEnum(LoginData.Result.class, "reason");
                 if (reason == null) {
@@ -409,16 +406,6 @@ public final class LoginController extends Controller implements DisconnectEvent
     }
 
     /**
-     * @return Returns the login button
-     *
-     * @author Manuele Vaccari
-     * @since 1.0.0
-     */
-    public JFXButton getLogin() {
-        return login;
-    }
-
-    /**
      * After clicking on register, switch to the register window.
      *
      * @author Manuele Vaccari
@@ -426,7 +413,22 @@ public final class LoginController extends Controller implements DisconnectEvent
      */
     @FXML
     private void clickOnRegister() {
-        WindowUtil.switchTo(view, RegisterView.class);
+        close();
+        WindowUtil.switchTo(getView(), RegisterView.class);
+    }
+
+    /**
+     * @author Manuele Vaccari
+     * @since 1.0.0
+     */
+    @Override
+    public void close() {
+        SocketUtil socket = ServiceLocator.get(SocketUtil.class);
+        // If is required, because close() could also be called after losing
+        // connection
+        if (socket != null) {
+            socket.removeDisconnectListener(this);
+        }
     }
 
     /**
@@ -435,11 +437,7 @@ public final class LoginController extends Controller implements DisconnectEvent
      */
     @Override
     public void onDisconnectEvent() {
-        SocketUtil socket = ServiceLocator.get(SocketUtil.class);
-        if (socket != null) { // Not necessary but keeps IDE happy
-            socket.close();
-        }
-        ServiceLocator.remove(SocketUtil.class);
-        WindowUtil.switchTo(view, ServerConnectionView.class);
+        close();
+        WindowUtil.switchTo(getView(), ServerConnectionView.class);
     }
 }

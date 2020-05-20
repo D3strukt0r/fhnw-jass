@@ -21,16 +21,16 @@ package jass.client.controller;
 
 import com.jfoenix.controls.JFXButton;
 import jass.client.entity.LoginEntity;
-import jass.client.mvc.Controller;
+import jass.client.eventlistener.DisconnectEventListener;
 import jass.client.message.DeleteLogin;
 import jass.client.message.Logout;
+import jass.client.mvc.Controller;
 import jass.client.util.I18nUtil;
 import jass.client.util.SocketUtil;
 import jass.client.util.ViewUtil;
 import jass.client.util.WindowUtil;
 import jass.client.view.AboutView;
 import jass.client.view.LobbyView;
-import jass.client.view.GameView;
 import jass.client.view.LoginView;
 import jass.client.view.ServerConnectionView;
 import jass.lib.message.DeleteLoginData;
@@ -49,6 +49,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 
+import java.io.Closeable;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -59,7 +60,7 @@ import java.util.ResourceBundle;
  * @version %I%, %G%
  * @since 1.0.0
  */
-public final class DeleteAccountController extends Controller {
+public final class DeleteAccountController extends Controller implements Closeable, DisconnectEventListener {
     /**
      * The root element of the view.
      */
@@ -213,7 +214,10 @@ public final class DeleteAccountController extends Controller {
             if (errorMessage.getChildren().size() == 0) {
                 // Make window larger, so it doesn't become crammed, only if we
                 // haven't done so yet
-                view.getStage().setHeight(view.getStage().getHeight() + 30);
+                // TODO: This keeps the window size even after switching to e.g.
+                //  login
+                //view.getStage().setHeight(view.getStage().getHeight() + 30);
+                errorMessage.setPrefHeight(50);
             }
             Text text = ViewUtil.useText(translatorKey);
             text.setFill(Color.RED);
@@ -230,13 +234,7 @@ public final class DeleteAccountController extends Controller {
      */
     @FXML
     private void clickOnDisconnect() {
-        ServiceLocator.remove(LoginEntity.class);
-        SocketUtil socket = ServiceLocator.get(SocketUtil.class);
-        if (socket != null) { // Not necessary but keeps IDE happy
-            socket.close();
-        }
-        ServiceLocator.remove(SocketUtil.class);
-        WindowUtil.switchTo(view, ServerConnectionView.class);
+        onDisconnectEvent();
     }
 
     /**
@@ -287,7 +285,8 @@ public final class DeleteAccountController extends Controller {
                 // If deleted, try logging out now.
                 if (logoutMsg.process(backend)) {
                     ServiceLocator.remove(LoginEntity.class);
-                    WindowUtil.switchTo(view, LoginView.class);
+                    close();
+                    WindowUtil.switchTo(getView(), LoginView.class);
                 } else {
                     enableAll();
                     setErrorMessage("gui.deleteAccount.logoutFailed");
@@ -307,8 +306,32 @@ public final class DeleteAccountController extends Controller {
      */
     @FXML
     public void clickOnCancel() {
-        WindowUtil.switchTo(view, GameView.class);
+        close();
+        WindowUtil.switchTo(getView(), LobbyView.class);
     }
 
+    /**
+     * @author Manuele Vaccari
+     * @since 1.0.0
+     */
+    @Override
+    public void close() {
+        SocketUtil socket = ServiceLocator.get(SocketUtil.class);
+        // If is required, because close() could also be called after losing
+        // connection
+        if (socket != null) {
+            socket.removeDisconnectListener(this);
+        }
+    }
 
+    /**
+     * @author Manuele Vaccari
+     * @since 1.0.0
+     */
+    @Override
+    public void onDisconnectEvent() {
+        ServiceLocator.remove(LoginEntity.class);
+        close();
+        WindowUtil.switchTo(getView(), ServerConnectionView.class);
+    }
 }

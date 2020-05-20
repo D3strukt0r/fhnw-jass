@@ -61,6 +61,7 @@ import javafx.stage.Stage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.io.Closeable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -70,7 +71,7 @@ import java.util.List;
  * @version %I%, %G%
  * @since 1.0.0
  */
-public final class GameUtil implements Service, BroadcastDeckEventListener,
+public final class GameUtil implements Service, Closeable, BroadcastDeckEventListener,
     ChooseGameModeEventListener, BroadcastGameModeEventListener, PlayedCardEventListener,
     BroadcastTurnEventListener, BroadcastPointsEventListener {
     /**
@@ -173,7 +174,7 @@ public final class GameUtil implements Service, BroadcastDeckEventListener,
         SocketUtil socket = ServiceLocator.get(SocketUtil.class);
         assert socket != null;
 
-        socket.setBroadcastDeckEventListener(this);
+        socket.addBroadcastDeckEventListener(this);
         socket.addChooseGameModeEventListener(this);
         socket.addBroadcastGameModeEventListener(this);
         socket.addPlayedCardEventListener(this);
@@ -698,5 +699,20 @@ public final class GameUtil implements Service, BroadcastDeckEventListener,
         disableButtons.set(true);
         cardIdToRemove = 0;
         pointsRound.set(0);
+    }
+
+    @Override
+    public void close() {
+        SocketUtil socket = ServiceLocator.get(SocketUtil.class);
+        // If is required, because close() could also be called after losing
+        // connection
+        if (socket != null) {
+            socket.removeBroadcastDeckEventListener(this);
+            socket.removeChooseGameModeEventListener(this);
+            socket.removeBroadcastGameModeEventListener(this);
+            socket.removePlayedCardEventListener(this);
+            socket.removeBroadcastedTurnEventListener(this);
+            socket.removeBroadcastPointsEventListener(this);
+        }
     }
 }

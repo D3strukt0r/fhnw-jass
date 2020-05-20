@@ -60,6 +60,7 @@ import javafx.scene.layout.BackgroundSize;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.io.Closeable;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Optional;
@@ -72,7 +73,7 @@ import java.util.ResourceBundle;
  * @version %I%, %G%
  * @since 1.0.0
  */
-public final class GameController extends Controller implements DisconnectEventListener, BroadcastAPlayerQuitEventListener, BroadcastRoundOverEventListener {
+public final class GameController extends Controller implements Closeable, DisconnectEventListener, BroadcastAPlayerQuitEventListener, BroadcastRoundOverEventListener {
     /**
      * The logger to print to console and save in a .log file.
      */
@@ -418,16 +419,6 @@ public final class GameController extends Controller implements DisconnectEventL
     private boolean roundOverDialogClosed;
 
     /**
-     * The socket to the server (quick access).
-     */
-    private SocketUtil socket;
-
-    /**
-     * Whether the quit listener was added.
-     */
-    private boolean aPlayerQuitEventListenerAdded;
-
-    /**
      * @author Sasa Trajkova & Victor Hargrave
      * @since 1.0.0
      */
@@ -446,7 +437,7 @@ public final class GameController extends Controller implements DisconnectEventL
         gameUtil.getPointsTotalProperty().addListener(((observable, oldValue, newValue) -> Platform.runLater(() -> scoreT.setText("Points (Total): " + newValue))));
         gameUtil.getPointsTotalProperty().setValue(0);
         logger.info("observable listeners created");
-        this.gameUtil.setDisableButtons(true);
+        gameUtil.setDisableButtons(true);
         logger.info("buttons disabled");
         cardButtons = cardButtonsToArray();
         addClickListenerToCardButtons();
@@ -459,9 +450,11 @@ public final class GameController extends Controller implements DisconnectEventL
             logger.info("updated card images");
         }
 
-        socket = ServiceLocator.get(SocketUtil.class);
+        SocketUtil socket = ServiceLocator.get(SocketUtil.class);
         assert socket != null;
-        addSocketListeners(socket);
+        socket.addDisconnectListener(this);
+        socket.addAPlayerQuitEventListener(this);
+        socket.addRoundOverEventListener(this);
 
         /*
          * Bind all texts
@@ -479,19 +472,6 @@ public final class GameController extends Controller implements DisconnectEventL
     }
 
     /**
-     * @param socket The socket.
-     *
-     * @author Victor Hargrave
-     * @since 1.0.0
-     */
-    private void addSocketListeners(final SocketUtil socket) {
-        socket.addDisconnectListener(this);
-        socket.addAPlayerQuitEventListener(this);
-        socket.addRoundOverEventListener(this);
-        aPlayerQuitEventListenerAdded = true;
-    }
-
-    /**
      * @author Victor Hargrave
      * @since 1.0.0
      */
@@ -504,9 +484,6 @@ public final class GameController extends Controller implements DisconnectEventL
                 logger.info("button click listeners created");
                 updateCardImages();
                 updateUserNames();
-                if (!aPlayerQuitEventListenerAdded) {
-                    socket.addAPlayerQuitEventListener(this);
-                }
             }
         });
     }
@@ -546,26 +523,26 @@ public final class GameController extends Controller implements DisconnectEventL
 
         alert.setTitle(I18nUtil.get("gui.game.roundOver"));
         alert.showAndWait();
-        this.roundOverDialogClosed = false;
+        roundOverDialogClosed = false;
 
 
         if (alert.getResult() == ButtonType.OK) {
-            this.roundOverDialogClosed = true;
-            if (this.gameUtil.getAPlayerLeft()) {
+            roundOverDialogClosed = true;
+            if (gameUtil.getAPlayerLeft()) {
                 showNotificationThatPlayerLeft();
             } else {
-                this.gameUtil.prepareForNewRound();
-                this.resetRound();
+                gameUtil.prepareForNewRound();
+                resetRound();
             }
         } else if (alert.getResult() == ButtonType.CANCEL) {
-            this.roundOverDialogClosed = true;
+            roundOverDialogClosed = true;
             // if a player has already left, then just leave the game
             if (gameUtil.getAPlayerLeft()) {
                 cleanupGameAndNavigateFromView();
             }
-            this.gameUtil.setDecidedToLeaveGame(true);
+            gameUtil.setDecidedToLeaveGame(true);
             // send message to server
-            this.gameUtil.stopPlaying();
+            gameUtil.stopPlaying();
         }
     }
 
@@ -574,7 +551,7 @@ public final class GameController extends Controller implements DisconnectEventL
      * @since 1.0.0
      */
     public void resetRound() {
-        this.gameUtil.continuePlaying();
+        gameUtil.continuePlaying();
     }
 
     /**
@@ -585,10 +562,10 @@ public final class GameController extends Controller implements DisconnectEventL
     public void onAPlayerQuit(final BroadcastAPlayerQuitData data) {
         if (gameUtil.getDecidedToLeaveGame()) {
             cleanupGameAndNavigateFromView();
-        } else if (this.roundOverDialogClosed) {
+        } else if (roundOverDialogClosed) {
             showNotificationThatPlayerLeft();
         } else {
-            this.gameUtil.setAPlayerLeft(true);
+            gameUtil.setAPlayerLeft(true);
         }
     }
 
@@ -616,16 +593,18 @@ public final class GameController extends Controller implements DisconnectEventL
      */
     private void cleanupGameAndNavigateFromView() {
         updateCardImages();
-        this.gameUtil.cleanupGame();
+        gameUtil.cleanupGame();
         updateUserNames();
         cardButtons.clear();
         try {
+            SocketUtil socket = ServiceLocator.get(SocketUtil.class);
+            assert socket != null;
             socket.removeAPlayerQuitEventListener(this);
         } catch (Exception e) {
             e.printStackTrace();
         }
-        aPlayerQuitEventListenerAdded = false;
-        WindowUtil.switchTo(view, LobbyView.class);
+        close();
+        WindowUtil.switchTo(getView(), LobbyView.class);
     }
 
     /**
@@ -669,9 +648,8 @@ public final class GameController extends Controller implements DisconnectEventL
     private void initializeWinningPlayerListener() {
         gameUtil.getWinningPlayerUsername().addListener((obs, oldWinningPlayer, newWinningPlayer) -> {
             // when there is a new winning player
-            if (oldWinningPlayer != newWinningPlayer && !StringUtil.isNullOrEmpty(newWinningPlayer)) {
+            if (!newWinningPlayer.equals(oldWinningPlayer) && !StringUtil.isNullOrEmpty(newWinningPlayer)) {
                 // TODO show dialog
-                //
                 gameUtil.setWinningPlayerUsername("");
             }
         });
@@ -696,13 +674,7 @@ public final class GameController extends Controller implements DisconnectEventL
      */
     @FXML
     private void clickOnDisconnect() {
-        ServiceLocator.remove(LoginEntity.class);
-        SocketUtil socket = ServiceLocator.get(SocketUtil.class);
-        if (socket != null) { // Not necessary but keeps IDE happy
-            socket.close();
-        }
-        ServiceLocator.remove(SocketUtil.class);
-        WindowUtil.switchToNewWindow(view, ServerConnectionView.class);
+        onDisconnectEvent();
     }
 
     /**
@@ -719,7 +691,9 @@ public final class GameController extends Controller implements DisconnectEventL
         Logout logoutMsg = new Logout(new LogoutData());
         socket.send(logoutMsg);
         ServiceLocator.remove(LoginEntity.class);
-        WindowUtil.switchToNewWindow(view, LoginView.class);
+
+        close();
+        WindowUtil.switchTo(getView(), LoginView.class);
     }
 
     /**
@@ -745,6 +719,22 @@ public final class GameController extends Controller implements DisconnectEventL
     }
 
     /**
+     * @author Manuele Vaccari
+     * @since 1.0.0
+     */
+    @Override
+    public void close() {
+        gameUtil.close();
+
+        SocketUtil socket = ServiceLocator.get(SocketUtil.class);
+        // If is required, because close() could also be called after losing
+        // connection
+        if (socket != null) {
+            socket.removeDisconnectListener(this);
+            socket.removeAPlayerQuitEventListener(this);
+            socket.removeRoundOverEventListener(this);
+        }
+    }
 
     /**
      * Display card images in the right player pane.
@@ -1010,12 +1000,8 @@ public final class GameController extends Controller implements DisconnectEventL
     @Override
     public void onDisconnectEvent() {
         ServiceLocator.remove(LoginEntity.class);
-        SocketUtil socket = ServiceLocator.get(SocketUtil.class);
-        if (socket != null) { // Not necessary but keeps IDE happy
-            socket.close();
-        }
-        ServiceLocator.remove(SocketUtil.class);
-        WindowUtil.switchToNewWindow(view, ServerConnectionView.class);
+        close();
+        WindowUtil.switchTo(getView(), ServerConnectionView.class);
     }
 
     /**

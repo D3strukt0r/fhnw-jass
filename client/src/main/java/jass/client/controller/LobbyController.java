@@ -21,6 +21,7 @@ package jass.client.controller;
 
 import com.jfoenix.controls.JFXButton;
 import jass.client.entity.LoginEntity;
+import jass.client.eventlistener.DisconnectEventListener;
 import jass.client.eventlistener.GameFoundEventListener;
 import jass.client.message.CancelSearchGame;
 import jass.client.message.Logout;
@@ -32,8 +33,11 @@ import jass.client.util.SocketUtil;
 import jass.client.util.ViewUtil;
 import jass.client.util.WindowUtil;
 import jass.client.view.AboutView;
+import jass.client.view.ChangePasswordView;
+import jass.client.view.DeleteAccountView;
 import jass.client.view.GameView;
 import jass.client.view.LoginView;
+import jass.client.view.ServerConnectionView;
 import jass.lib.message.CancelSearchGameData;
 import jass.lib.message.GameFoundData;
 import jass.lib.message.LogoutData;
@@ -49,6 +53,7 @@ import javafx.scene.text.Text;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.io.Closeable;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -59,7 +64,7 @@ import java.util.ResourceBundle;
  * @version %I%, %G%
  * @since 1.0.0
  */
-public final class LobbyController extends Controller implements GameFoundEventListener {
+public final class LobbyController extends Controller implements Closeable, DisconnectEventListener, GameFoundEventListener {
     /**
      * The logger to print to console and save in a .log file.
      */
@@ -144,26 +149,25 @@ public final class LobbyController extends Controller implements GameFoundEventL
     private Text searching;
 
     /**
-     * A quick access variable for the current game.
-     */
-    private GameUtil gameUtil;
-
-    /**
      * @author Manuele Vaccari & Thomas Weber & Sasa Trajkova & Victor Hargrave
      * @since 1.0.0
      */
     @Override
     public void initialize(final URL location, final ResourceBundle resources) {
         SocketUtil socket = ServiceLocator.get(SocketUtil.class);
-        if (socket != null) { // Not necessary but keeps IDE happy
-            socket.setGameFoundEventListener(this);
-        }
+        assert socket != null;
+        socket.addDisconnectListener(this);
+        socket.addGameFoundEventListener(this);
 
-        gameUtil = ServiceLocator.get(GameUtil.class);
-        if (gameUtil == null) {
-            gameUtil = new GameUtil();
-            ServiceLocator.add(gameUtil);
+        /*
+         * Already initialize GameUtil, so that the event listeners are ready
+         */
+        GameUtil gameUtil = ServiceLocator.get(GameUtil.class);
+        if (gameUtil != null) {
+            ServiceLocator.remove(GameUtil.class);
         }
+        gameUtil = new GameUtil();
+        ServiceLocator.add(gameUtil);
 
         /*
          * Bind all texts
@@ -198,18 +202,17 @@ public final class LobbyController extends Controller implements GameFoundEventL
      */
     @FXML
     public void clickOnFindMatch() {
-        // Get token and initialize SearchGame Message
-        LoginEntity login = ServiceLocator.get(LoginEntity.class);
-        assert login != null;
-        String token = login.getToken();
-        String userName = login.getUsername();
-        SearchGame searchGameMsg = new SearchGame(new SearchGameData(token, userName));
-        SocketUtil backend = ServiceLocator.get(SocketUtil.class);
-        assert backend != null;
-
+        findMatch.setVisible(false);
         searching.setVisible(true);
         cancelMatch.setVisible(true);
-        findMatch.setVisible(false);
+
+        // Get token and initialize SearchGame Message
+        SocketUtil backend = ServiceLocator.get(SocketUtil.class);
+        assert backend != null;
+        LoginEntity login = ServiceLocator.get(LoginEntity.class);
+        assert login != null;
+        SearchGame searchGameMsg = new SearchGame(new SearchGameData(login.getToken(), login.getUsername()));
+
         // Send SearchGame Message to Server
         if (!searchGameMsg.process(backend)) {
             logger.error("Error starting search for game");
@@ -218,7 +221,6 @@ public final class LobbyController extends Controller implements GameFoundEventL
                 alert.showAndWait();
             });
         }
-
     }
 
     /**
@@ -230,18 +232,17 @@ public final class LobbyController extends Controller implements GameFoundEventL
      */
     @FXML
     public void clickOnCancelMatch() {
-        // Get token and initialize SearchGame Message
-        LoginEntity login = ServiceLocator.get(LoginEntity.class);
-        assert login != null;
-        String token = login.getToken();
-        String userName = login.getUsername();
-        CancelSearchGame cancelSearchGameMsg = new CancelSearchGame(new CancelSearchGameData(token, userName));
-        SocketUtil backend = ServiceLocator.get(SocketUtil.class);
-        assert backend != null;
-
         searching.setVisible(false);
         findMatch.setVisible(true);
         cancelMatch.setVisible(false);
+
+        // Get token and initialize SearchGame Message
+        SocketUtil backend = ServiceLocator.get(SocketUtil.class);
+        assert backend != null;
+        LoginEntity login = ServiceLocator.get(LoginEntity.class);
+        assert login != null;
+        CancelSearchGame cancelSearchGameMsg = new CancelSearchGame(new CancelSearchGameData(login.getToken(), login.getUsername()));
+
         // Send SearchGame Message to Server
         if (!cancelSearchGameMsg.process(backend)) {
             logger.error("Error cancelling search for game");
@@ -253,30 +254,6 @@ public final class LobbyController extends Controller implements GameFoundEventL
     }
 
     /**
-     * Work to do after a game was found.
-     *
-     * @param msgData The game found data.
-     *
-     * @author Thomas Weber
-     * @since 1.0.0
-     */
-    public void onGameFound(final GameFoundData msgData) {
-        logger.info("Successfully found game!");
-
-        Platform.runLater(() -> {
-            searching.setVisible(false);
-            findMatch.setVisible(true);
-            cancelMatch.setVisible(false);
-        });
-
-        GameUtil gameUtil = ServiceLocator.get(GameUtil.class);
-        assert gameUtil != null;
-        gameUtil.setGame(msgData);
-
-        WindowUtil.switchTo(view, GameView.class);
-    }
-
-    /**
      * Disconnect from the server and returns to the server connection window.
      *
      * @author Manuele Vaccari
@@ -284,13 +261,7 @@ public final class LobbyController extends Controller implements GameFoundEventL
      */
     @FXML
     private void clickOnDisconnect() {
-        ServiceLocator.remove(LoginEntity.class);
-        SocketUtil socket = ServiceLocator.get(SocketUtil.class);
-        if (socket != null) { // Not necessary but keeps IDE happy
-            socket.close();
-        }
-        ServiceLocator.remove(SocketUtil.class);
-        WindowUtil.switchTo(view, LoginView.class);
+        onDisconnectEvent();
     }
 
     /**
@@ -307,7 +278,9 @@ public final class LobbyController extends Controller implements GameFoundEventL
         Logout logoutMsg = new Logout(new LogoutData());
         socket.send(logoutMsg);
         ServiceLocator.remove(LoginEntity.class);
-        WindowUtil.switchTo(view, LoginView.class);
+
+        close();
+        WindowUtil.switchTo(getView(), LoginView.class);
     }
 
     /**
@@ -356,5 +329,55 @@ public final class LobbyController extends Controller implements GameFoundEventL
         WindowUtil.openInNewWindow(AboutView.class);
     }
 
+    /**
+     * @author Manuele Vaccari
+     * @since 1.0.0
+     */
+    @Override
+    public void close() {
+        SocketUtil socket = ServiceLocator.get(SocketUtil.class);
+        // If is required, because close() could also be called after losing
+        // connection
+        if (socket != null) {
+            socket.removeDisconnectListener(this);
+            socket.removeGameFoundEventListener(this);
+        }
+    }
 
+    /**
+     * @author Manuele Vaccari
+     * @since 1.0.0
+     */
+    @Override
+    public void onDisconnectEvent() {
+        ServiceLocator.remove(LoginEntity.class);
+        close();
+        WindowUtil.switchTo(getView(), ServerConnectionView.class);
+    }
+
+    /**
+     * Work to do after a game was found.
+     *
+     * @param msgData The game found data.
+     *
+     * @author Thomas Weber
+     * @since 1.0.0
+     */
+    @Override
+    public void onGameFound(final GameFoundData msgData) {
+        logger.info("Successfully found game!");
+
+        Platform.runLater(() -> {
+            searching.setVisible(false);
+            findMatch.setVisible(true);
+            cancelMatch.setVisible(false);
+        });
+
+        GameUtil gameUtil = ServiceLocator.get(GameUtil.class);
+        assert gameUtil != null;
+        gameUtil.setGame(msgData);
+
+        close();
+        WindowUtil.switchTo(getView(), GameView.class);
+    }
 }

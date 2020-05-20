@@ -22,8 +22,9 @@ package jass.client.controller;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXPasswordField;
 import jass.client.entity.LoginEntity;
-import jass.client.mvc.Controller;
+import jass.client.eventlistener.DisconnectEventListener;
 import jass.client.message.ChangePassword;
+import jass.client.mvc.Controller;
 import jass.client.util.I18nUtil;
 import jass.client.util.SocketUtil;
 import jass.client.util.ViewUtil;
@@ -42,6 +43,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 
+import java.io.Closeable;
 import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -53,7 +55,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * @version %I%, %G%
  * @since 1.0.0
  */
-public final class ChangePasswordController extends Controller {
+public final class ChangePasswordController extends Controller implements Closeable, DisconnectEventListener {
     /**
      * The "File" element.
      */
@@ -296,13 +298,7 @@ public final class ChangePasswordController extends Controller {
      */
     @FXML
     private void clickOnDisconnect() {
-        ServiceLocator.remove(LoginEntity.class);
-        SocketUtil socket = ServiceLocator.get(SocketUtil.class);
-        if (socket != null) { // Not necessary but keeps IDE happy
-            socket.close();
-        }
-        ServiceLocator.remove(SocketUtil.class);
-        WindowUtil.switchTo(view, ServerConnectionView.class);
+        onDisconnectEvent();
     }
 
     /**
@@ -358,7 +354,8 @@ public final class ChangePasswordController extends Controller {
             if (changePasswordMsg.process(backend)) {
                 ServiceLocator.remove(LoginEntity.class);
                 ServiceLocator.add(newLogin);
-                WindowUtil.switchTo(view, LobbyView.class);
+                close();
+                WindowUtil.switchTo(getView(), LobbyView.class);
             } else {
                 enableAll();
                 setErrorMessage("gui.changePassword.changeFailed");
@@ -374,8 +371,32 @@ public final class ChangePasswordController extends Controller {
      */
     @FXML
     public void clickOnCancel() {
-        WindowUtil.switchTo(view, LobbyView.class);
+        close();
+        WindowUtil.switchTo(getView(), LobbyView.class);
     }
 
+    /**
+     * @author Manuele Vaccari
+     * @since 1.0.0
+     */
+    @Override
+    public void close() {
+        SocketUtil socket = ServiceLocator.get(SocketUtil.class);
+        // If is required, because close() could also be called after losing
+        // connection
+        if (socket != null) {
+            socket.removeDisconnectListener(this);
+        }
+    }
 
+    /**
+     * @author Manuele Vaccari
+     * @since 1.0.0
+     */
+    @Override
+    public void onDisconnectEvent() {
+        ServiceLocator.remove(LoginEntity.class);
+        close();
+        WindowUtil.switchTo(getView(), ServerConnectionView.class);
+    }
 }
