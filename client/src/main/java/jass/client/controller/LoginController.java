@@ -19,6 +19,7 @@
 
 package jass.client.controller;
 
+import com.j256.ormlite.stmt.QueryBuilder;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXCheckBox;
 import com.jfoenix.controls.JFXPasswordField;
@@ -29,6 +30,7 @@ import jass.client.eventlistener.DisconnectEventListener;
 import jass.client.message.Login;
 import jass.client.mvc.Controller;
 import jass.client.repository.LoginRepository;
+import jass.client.util.DatabaseUtil;
 import jass.client.util.EventUtil;
 import jass.client.util.I18nUtil;
 import jass.client.util.SocketUtil;
@@ -57,6 +59,8 @@ import org.apache.logging.log4j.Logger;
 
 import java.io.Closeable;
 import java.net.URL;
+import java.sql.SQLException;
+import java.util.List;
 import java.util.ResourceBundle;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -155,7 +159,7 @@ public final class LoginController extends Controller implements Closeable, Disc
      * The "remember me" checkbox.
      */
     @FXML
-    private JFXCheckBox connectAutomatically;
+    private JFXCheckBox rememberMe;
 
     /**
      * The container for the buttons.
@@ -167,7 +171,7 @@ public final class LoginController extends Controller implements Closeable, Disc
      * The login button.
      */
     @FXML
-    private JFXButton login;
+    private JFXButton loginBtn;
 
     /**
      * The register button.
@@ -207,11 +211,11 @@ public final class LoginController extends Controller implements Closeable, Disc
         username.promptTextProperty().bind(I18nUtil.createStringBinding(username.getPromptText()));
         password.promptTextProperty().bind(I18nUtil.createStringBinding(password.getPromptText()));
 
-        connectAutomatically.textProperty().bind(I18nUtil.createStringBinding(connectAutomatically.getText()));
+        rememberMe.textProperty().bind(I18nUtil.createStringBinding(rememberMe.getText()));
 
         buttonGroup.prefWidthProperty().bind(Bindings.subtract(root.widthProperty(), new SimpleDoubleProperty(40.0)));
-        login.textProperty().bind(I18nUtil.createStringBinding(login.getText()));
-        login.prefWidthProperty().bind(Bindings.divide(root.widthProperty(), buttonGroup.getChildren().size()));
+        loginBtn.textProperty().bind(I18nUtil.createStringBinding(loginBtn.getText()));
+        loginBtn.prefWidthProperty().bind(Bindings.divide(root.widthProperty(), buttonGroup.getChildren().size()));
         register.textProperty().bind(I18nUtil.createStringBinding(register.getText()));
         register.prefWidthProperty().bind(Bindings.divide(root.widthProperty(), buttonGroup.getChildren().size()));
 
@@ -221,7 +225,7 @@ public final class LoginController extends Controller implements Closeable, Disc
          */
         AtomicBoolean usernameValid = new AtomicBoolean(false);
         AtomicBoolean passwordValid = new AtomicBoolean(false);
-        Runnable updateButtonClickable = () -> login.setDisable(!usernameValid.get() || !passwordValid.get());
+        Runnable updateButtonClickable = () -> loginBtn.setDisable(!usernameValid.get() || !passwordValid.get());
         username.textProperty().addListener((o, oldVal, newVal) -> {
             if (!oldVal.equals(newVal)) {
                 usernameValid.set(username.validate());
@@ -255,7 +259,7 @@ public final class LoginController extends Controller implements Closeable, Disc
     public void disableInputs() {
         username.setDisable(true);
         password.setDisable(true);
-        connectAutomatically.setDisable(true);
+        rememberMe.setDisable(true);
     }
 
     /**
@@ -266,7 +270,7 @@ public final class LoginController extends Controller implements Closeable, Disc
      */
     public void disableAll() {
         disableInputs();
-        login.setDisable(true);
+        loginBtn.setDisable(true);
         register.setDisable(true);
     }
 
@@ -279,7 +283,7 @@ public final class LoginController extends Controller implements Closeable, Disc
     public void enableInputs() {
         username.setDisable(false);
         password.setDisable(false);
-        connectAutomatically.setDisable(false);
+        rememberMe.setDisable(false);
     }
 
     /**
@@ -290,7 +294,7 @@ public final class LoginController extends Controller implements Closeable, Disc
      */
     public void enableAll() {
         enableInputs();
-        login.setDisable(false);
+        loginBtn.setDisable(false);
         register.setDisable(false);
     }
 
@@ -372,32 +376,62 @@ public final class LoginController extends Controller implements Closeable, Disc
             ServerEntity server = ServiceLocator.get(ServerEntity.class);
             assert server != null;
 
+            boolean newLogin = true;
             LoginEntity login = (new LoginEntity())
                 .setServer(server)
                 .setUsername(username.getText())
                 .setPassword(password.getText())
-                .setConnectAutomatically(connectAutomatically.isSelected());
-            Login loginMsg = new Login(new LoginData(login.getUsername(), login.getPassword()));
+                .setRememberMe(rememberMe.isSelected());
 
-            // Send the login request to the server. Update locally if
-            // successful.
+            // Try to find existing login
+            DatabaseUtil db = ServiceLocator.get(DatabaseUtil.class);
+            if (db != null) {
+                try {
+                    QueryBuilder<LoginEntity, Integer> findSameLoginStmt = LoginRepository.getSingleton(null).getDao().queryBuilder();
+                    findSameLoginStmt.where()
+                        .like(LoginEntity.SERVER_FIELD_NAME, server)
+                        .and().like(LoginEntity.USERNAME_FIELD_NAME, username.getText())
+                        .and().like(LoginEntity.PASSWORD_FIELD_NAME, password.getText());
+                    List<LoginEntity> findSameLoginResult = LoginRepository.getSingleton(null).getDao().query(findSameLoginStmt.prepare());
+
+                    if (findSameLoginResult.size() != 0) {
+                        // Otherwise check if we need to overwrite
+                        newLogin = false;
+                        login = findSameLoginResult.get(0);
+
+                        if (rememberMe.isSelected() && !login.isRememberMe()) {
+                            if (!LoginRepository.getSingleton(null).setToRememberMe(login)) {
+                                logger.error("Couldn't set user remember me.");
+                            }
+                        } else if (!rememberMe.isSelected() && login.isRememberMe()) {
+                            login.setRememberMe(false);
+                            LoginRepository.getSingleton(null).update(login);
+                        }
+                    }
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            // Send the login request to the server
+            Login loginMsg = new Login(new LoginData(login.getUsername(), login.getPassword()));
             if (loginMsg.process(backend)) {
                 login.setToken(loginMsg.getToken());
 
                 // Save the login in the db
-                // TODO This keeps adding the same entity, check before adding
-                if (!LoginRepository.getSingleton(null).add(login)) {
-                    logger.error("Couldn't save login data to local database.");
+                if (db != null) {
+                    if (newLogin) {
+                        if (!LoginRepository.getSingleton(null).add(login)) {
+                            logger.error("Couldn't save login data to local database.");
+                        }
+                    }
                 }
 
-                if (login.isConnectAutomatically()) {
-                    // Make sure it's the only entry
-                    LoginRepository.getSingleton(null).setToConnectAutomatically(login);
-                }
-
+                // Go to lobby
                 close();
                 WindowUtil.switchTo(getView(), LobbyView.class);
             } else {
+                // Show an appropriate error message
                 LoginData.Result reason = loginMsg.getResultData().getResultData().optEnum(LoginData.Result.class, "reason");
                 if (reason == null) {
                     setErrorMessage("gui.login.login.failed");

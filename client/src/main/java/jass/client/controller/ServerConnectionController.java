@@ -260,7 +260,7 @@ public final class ServerConnectionController extends Controller {
         // Find all saved element
         DatabaseUtil db = ServiceLocator.get(DatabaseUtil.class);
         if (db != null) {
-            for (ServerEntity server : db.getServerDao()) {
+            for (ServerEntity server : ServerRepository.getSingleton(null).getDao()) {
                 chooseServer.getItems().add(server);
             }
         }

@@ -20,8 +20,12 @@
 package jass.client.repository;
 
 import com.j256.ormlite.dao.Dao;
+import com.j256.ormlite.stmt.QueryBuilder;
 import jass.client.entity.LoginEntity;
 import jass.lib.database.Repository;
+
+import java.sql.SQLException;
+import java.util.List;
 
 /**
  * Helper functions concerning the LoginEntity class.
@@ -74,12 +78,12 @@ public final class LoginRepository extends Repository<Dao<LoginEntity, Integer>,
      * @author Manuele Vaccari
      * @since 1.0.0
      */
-    public boolean setToConnectAutomatically(final LoginEntity login) {
+    public boolean setToRememberMe(final LoginEntity login) {
         boolean result;
         for (LoginEntity l : getDao()) {
             // Disable the other entry (should be only one)
-            if (l.isConnectAutomatically()) {
-                l.setConnectAutomatically(false);
+            if (l.isRememberMe()) {
+                l.setRememberMe(false);
                 result = update(l);
 
                 if (!result) {
@@ -89,7 +93,7 @@ public final class LoginRepository extends Repository<Dao<LoginEntity, Integer>,
             // Set the new entry to connect automatically (if it is already in
             // the db)
             if (l.getId() == login.getId()) {
-                login.setConnectAutomatically(true);
+                login.setRememberMe(true);
                 result = update(login);
 
                 if (!result) {
@@ -106,11 +110,14 @@ public final class LoginRepository extends Repository<Dao<LoginEntity, Integer>,
      * @author Manuele Vaccari
      * @since 1.0.0
      */
-    public LoginEntity findConnectAutomatically() {
-        for (LoginEntity l : getDao()) {
-            if (l.isConnectAutomatically()) {
-                return l;
-            }
+    public LoginEntity findRememberMe() throws SQLException {
+        QueryBuilder<LoginEntity, Integer> findRememberMeLoginStmt = getDao().queryBuilder();
+        findRememberMeLoginStmt.where()
+            .like(LoginEntity.REMEMBER_ME_FIELD_NAME, true);
+        List<LoginEntity> findRememberMeLoginResult = getDao().query(findRememberMeLoginStmt.prepare());
+
+        if (findRememberMeLoginResult.size() > 0) {
+            return findRememberMeLoginResult.get(0);
         }
         return null;
     }

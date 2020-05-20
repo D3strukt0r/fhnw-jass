@@ -40,34 +40,53 @@ public final class LoginEntity extends Entity implements Service {
     private int id;
 
     /**
+     * The field name for username.
+     */
+    public static final String USERNAME_FIELD_NAME = "username";
+
+    /**
      * The username.
      */
-    @DatabaseField
+    @DatabaseField(columnName = USERNAME_FIELD_NAME, uniqueCombo = true, canBeNull = false)
     private String username;
+
+    /**
+     * The field name for password.
+     */
+    public static final String PASSWORD_FIELD_NAME = "password";
 
     /**
      * The password.
      */
-    @DatabaseField
+    @DatabaseField(columnName = PASSWORD_FIELD_NAME, uniqueCombo = true, canBeNull = false)
     private String password;
 
     /**
-     * The token.
+     * The field name for remember me.
      */
-    @DatabaseField
-    private String token;
+    public static final String REMEMBER_ME_FIELD_NAME = "remember_me";
 
     /**
      * Whether to connect automatically at startup or not.
      */
-    @DatabaseField(defaultValue = "false")
-    private boolean connectAutomatically = false;
+    @DatabaseField(columnName = REMEMBER_ME_FIELD_NAME, defaultValue = "false")
+    private boolean rememberMe = false;
+
+    /**
+     * The field name for server.
+     */
+    public static final String SERVER_FIELD_NAME = "server";
 
     /**
      * The server that this login is used for.
      */
-    @DatabaseField(foreign = true)
+    @DatabaseField(foreign = true, columnName = SERVER_FIELD_NAME, uniqueCombo = true, canBeNull = false)
     private ServerEntity server;
+
+    /**
+     * The token.
+     */
+    private String token;
 
     /**
      * For ORMLite all persisted classes must define a no-arg constructor with
@@ -164,20 +183,20 @@ public final class LoginEntity extends Entity implements Service {
      * @author Manuele Vaccari
      * @since 1.0.0
      */
-    public boolean isConnectAutomatically() {
-        return connectAutomatically;
+    public boolean isRememberMe() {
+        return rememberMe;
     }
 
     /**
-     * @param connectAutomatically Whether to connect automatically.
+     * @param rememberMe Whether to connect automatically.
      *
      * @return Returns the object for further processing.
      *
      * @author Manuele Vaccari
      * @since 1.0.0
      */
-    public LoginEntity setConnectAutomatically(final boolean connectAutomatically) {
-        this.connectAutomatically = connectAutomatically;
+    public LoginEntity setRememberMe(final boolean rememberMe) {
+        this.rememberMe = rememberMe;
         return this;
     }
 

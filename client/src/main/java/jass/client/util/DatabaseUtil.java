@@ -60,16 +60,6 @@ public final class DatabaseUtil implements Service, Closeable {
     private final ConnectionSource connectionSource;
 
     /**
-     * The DAO for the logins.
-     */
-    private Dao<LoginEntity, Integer> loginDao;
-
-    /**
-     * The DAO for the servers.
-     */
-    private Dao<ServerEntity, Integer> serverDao;
-
-    /**
      * Create a database connection.
      *
      * @param type             The type of database to use.
@@ -103,9 +93,9 @@ public final class DatabaseUtil implements Service, Closeable {
         /*
          * Create our DAOs. One for each class and associated table.
          */
-        loginDao = DaoManager.createDao(connectionSource, LoginEntity.class);
+        Dao<LoginEntity, Integer> loginDao = DaoManager.createDao(connectionSource, LoginEntity.class);
         LoginRepository.getSingleton(loginDao);
-        serverDao = DaoManager.createDao(connectionSource, ServerEntity.class);
+        Dao<ServerEntity, Integer> serverDao = DaoManager.createDao(connectionSource, ServerEntity.class);
         ServerRepository.getSingleton(serverDao);
 
         /*
@@ -131,25 +121,5 @@ public final class DatabaseUtil implements Service, Closeable {
                 // we don't care
             }
         }
-    }
-
-    /**
-     * @return DAO object for the saved logins
-     *
-     * @author Manuele Vaccari
-     * @since 1.0.0
-     */
-    public Dao<LoginEntity, Integer> getLoginDao() {
-        return loginDao;
-    }
-
-    /**
-     * @return DAO object for the saved servers
-     *
-     * @author Manuele Vaccari
-     * @since 1.0.0
-     */
-    public Dao<ServerEntity, Integer> getServerDao() {
-        return serverDao;
     }
 }

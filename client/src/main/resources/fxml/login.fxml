@@ -53,11 +53,11 @@
         <JFXPasswordField fx:id="password" labelFloat="true" promptText="gui.login.password" />
         <Region prefHeight="35.0" VBox.vgrow="ALWAYS" />
 
-        <JFXCheckBox fx:id="connectAutomatically" text="gui.login.connectAutomatically" />
+        <JFXCheckBox fx:id="rememberMe" text="gui.login.connectAutomatically" />
         <Region prefHeight="15.0" VBox.vgrow="ALWAYS" />
 
         <HBox fx:id="buttonGroup" spacing="10">
-            <JFXButton fx:id="login"
+            <JFXButton fx:id="loginBtn"
                        disable="true"
                        styleClass="primary"
                        text="gui.login.login"

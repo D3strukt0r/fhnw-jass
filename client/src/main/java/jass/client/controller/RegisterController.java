@@ -390,7 +390,7 @@ public final class RegisterController extends Controller implements Closeable, D
             LoginEntity login = (new LoginEntity())
                 .setUsername(username.getText())
                 .setPassword(password.getText())
-                .setConnectAutomatically(connectAutomatically.isSelected());
+                .setRememberMe(connectAutomatically.isSelected());
             SocketUtil backend = ServiceLocator.get(SocketUtil.class);
             assert backend != null;
             Register registerMsg = new Register(new RegisterData(login.getUsername(), login.getPassword()));
@@ -410,9 +410,9 @@ public final class RegisterController extends Controller implements Closeable, D
                         logger.error("Couldn't save login data to local database.");
                     }
 
-                    if (login.isConnectAutomatically()) {
+                    if (login.isRememberMe()) {
                         // Make sure it's the only entry
-                        LoginRepository.getSingleton(null).setToConnectAutomatically(login);
+                        LoginRepository.getSingleton(null).setToRememberMe(login);
                     }
 
                     close();
