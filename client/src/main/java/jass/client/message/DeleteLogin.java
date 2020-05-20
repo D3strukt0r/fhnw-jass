@@ -22,7 +22,7 @@ package jass.client.message;
 import jass.client.entity.LoginEntity;
 import jass.client.repository.LoginRepository;
 import jass.client.util.SocketUtil;
-import jass.lib.message.LoginData;
+import jass.lib.message.DeleteLoginData;
 import jass.lib.message.MessageData;
 import jass.lib.message.ResultData;
 import jass.lib.servicelocator.ServiceLocator;
@@ -46,7 +46,7 @@ public final class DeleteLogin extends Message {
     /**
      * The data of the message.
      */
-    private final LoginData data;
+    private final DeleteLoginData data;
 
     /**
      * @param rawData The data (still not casted)
@@ -56,7 +56,7 @@ public final class DeleteLogin extends Message {
      */
     public DeleteLogin(final MessageData rawData) {
         super(rawData);
-        data = (LoginData) rawData;
+        data = (DeleteLoginData) rawData;
     }
 
     /**
