@@ -23,6 +23,9 @@ import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXCheckBox;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXTextField;
+import jass.client.entity.ServerEntity;
+import jass.client.mvc.Controller;
+import jass.client.repository.ServerRepository;
 import jass.client.util.DatabaseUtil;
 import jass.client.util.I18nUtil;
 import jass.client.util.SocketUtil;
@@ -30,6 +33,7 @@ import jass.client.util.ViewUtil;
 import jass.client.util.WindowUtil;
 import jass.client.view.AboutView;
 import jass.client.view.LoginView;
+import jass.lib.servicelocator.ServiceLocator;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.NumberBinding;
@@ -45,11 +49,6 @@ import javafx.scene.text.Text;
 import javafx.util.StringConverter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import jass.client.entity.ServerEntity;
-import jass.client.repository.ServerRepository;
-import jass.client.mvc.Controller;
-import jass.client.view.ServerConnectionView;
-import jass.lib.servicelocator.ServiceLocator;
 
 import java.io.IOException;
 import java.net.ConnectException;
@@ -74,11 +73,6 @@ public final class ServerConnectionController extends Controller {
      * The logger to print to console and save in a .log file.
      */
     private static final Logger logger = LogManager.getLogger(ServerConnectionController.class);
-
-    /**
-     * The view.
-     */
-    private ServerConnectionView view;
 
     /**
      * The "File" element.
@@ -480,28 +474,8 @@ public final class ServerConnectionController extends Controller {
                         ServerRepository.getSingleton(null).setToConnectAutomatically(server);
                     }
                 }
-                WindowUtil.switchTo(view, LoginView.class);
+                WindowUtil.switchTo(getView(), LoginView.class);
             }
         }).start();
-    }
-
-    /**
-     * @return Returns the connect button
-     *
-     * @author Manuele Vaccari
-     * @since 1.0.0
-     */
-    public JFXButton getConnect() {
-        return connect;
-    }
-
-    /**
-     * @param view The view.
-     *
-     * @author Manuele Vaccari
-     * @since 1.0.0
-     */
-    public void setView(final ServerConnectionView view) {
-        this.view = view;
     }
 }

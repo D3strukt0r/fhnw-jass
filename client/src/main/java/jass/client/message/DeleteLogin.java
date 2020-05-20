@@ -19,15 +19,15 @@
 
 package jass.client.message;
 
-import jass.client.repository.LoginRepository;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import jass.client.entity.LoginEntity;
+import jass.client.repository.LoginRepository;
 import jass.client.util.SocketUtil;
 import jass.lib.message.LoginData;
 import jass.lib.message.MessageData;
 import jass.lib.message.ResultData;
 import jass.lib.servicelocator.ServiceLocator;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * Delete the currently logged in user from the server. After successful

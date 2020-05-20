@@ -23,16 +23,15 @@ import jass.client.entity.LoginEntity;
 import jass.client.eventlistener.BroadcastAPlayerQuitEventListener;
 import jass.client.eventlistener.BroadcastRoundOverEventListener;
 import jass.client.eventlistener.DisconnectEventListener;
-import jass.client.util.StringUtil;
 import jass.client.message.Logout;
 import jass.client.mvc.Controller;
 import jass.client.util.GameUtil;
 import jass.client.util.I18nUtil;
 import jass.client.util.SocketUtil;
+import jass.client.util.StringUtil;
 import jass.client.util.ViewUtil;
 import jass.client.util.WindowUtil;
 import jass.client.view.AboutView;
-import jass.client.view.GameView;
 import jass.client.view.LobbyView;
 import jass.client.view.LoginView;
 import jass.client.view.ServerConnectionView;
@@ -78,11 +77,6 @@ public final class GameController extends Controller implements DisconnectEventL
      * The logger to print to console and save in a .log file.
      */
     private static final Logger logger = LogManager.getLogger(GameController.class);
-
-    /**
-     * The view.
-     */
-    private GameView view;
 
     /**
      * The "File" element.
@@ -751,14 +745,6 @@ public final class GameController extends Controller implements DisconnectEventL
     }
 
     /**
-     * @param view The view.
-     *
-     * @author Sasa Trajkova
-     * @since 1.0.0
-     */
-    public void setView(final GameView view) {
-        this.view = view;
-    }
 
     /**
      * Display card images in the right player pane.

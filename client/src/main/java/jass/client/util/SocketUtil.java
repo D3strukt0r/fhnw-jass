@@ -19,6 +19,7 @@
 
 package jass.client.util;
 
+import jass.client.entity.LoginEntity;
 import jass.client.eventlistener.BroadcastAPlayerQuitEventListener;
 import jass.client.eventlistener.BroadcastDeckEventListener;
 import jass.client.eventlistener.BroadcastGameModeEventListener;
@@ -40,11 +41,10 @@ import jass.lib.message.ChooseGameModeData;
 import jass.lib.message.GameFoundData;
 import jass.lib.message.MessageData;
 import jass.lib.message.PlayedCardData;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import jass.client.entity.LoginEntity;
 import jass.lib.servicelocator.Service;
 import jass.lib.servicelocator.ServiceLocator;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.net.SocketFactory;
 import javax.net.ssl.KeyManagerFactory;

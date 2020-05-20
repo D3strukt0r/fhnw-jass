@@ -44,6 +44,7 @@ import jass.lib.message.GameFoundData;
 import jass.lib.message.PlayCardData;
 import jass.lib.message.PlayedCardData;
 import jass.lib.message.StopPlayingData;
+import jass.lib.servicelocator.Service;
 import jass.lib.servicelocator.ServiceLocator;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -59,7 +60,6 @@ import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import jass.lib.servicelocator.Service;
 
 import java.util.ArrayList;
 import java.util.Arrays;

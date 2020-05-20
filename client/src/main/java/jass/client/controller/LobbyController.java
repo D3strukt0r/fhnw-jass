@@ -33,22 +33,21 @@ import jass.client.util.ViewUtil;
 import jass.client.util.WindowUtil;
 import jass.client.view.AboutView;
 import jass.client.view.GameView;
+import jass.client.view.LoginView;
 import jass.lib.message.CancelSearchGameData;
 import jass.lib.message.GameFoundData;
 import jass.lib.message.LogoutData;
 import jass.lib.message.SearchGameData;
 import jass.lib.servicelocator.ServiceLocator;
-import javafx.scene.control.Alert;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import jass.client.view.LobbyView;
-import jass.client.view.LoginView;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.text.Text;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -65,13 +64,6 @@ public final class LobbyController extends Controller implements GameFoundEventL
      * The logger to print to console and save in a .log file.
      */
     private static final Logger logger = LogManager.getLogger(LobbyController.class);
-
-    // GameService gameService
-
-    /**
-     * The view.
-     */
-    private LobbyView view;
 
     /**
      * The "File" element.
@@ -364,13 +356,5 @@ public final class LobbyController extends Controller implements GameFoundEventL
         WindowUtil.openInNewWindow(AboutView.class);
     }
 
-    /**
-     * @param view The view.
-     *
-     * @author Manuele Vaccari
-     * @since 1.0.0
-     */
-    public void setView(final LobbyView view) {
-        this.view = view;
-    }
+
 }

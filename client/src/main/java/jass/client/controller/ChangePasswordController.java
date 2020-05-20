@@ -26,10 +26,13 @@ import jass.client.mvc.Controller;
 import jass.client.message.ChangePassword;
 import jass.client.util.I18nUtil;
 import jass.client.util.SocketUtil;
+import jass.client.util.ViewUtil;
+import jass.client.util.WindowUtil;
 import jass.client.view.AboutView;
-import jass.client.view.ChangePasswordView;
 import jass.client.view.LobbyView;
 import jass.client.view.ServerConnectionView;
+import jass.lib.message.ChangePasswordData;
+import jass.lib.servicelocator.ServiceLocator;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Menu;
@@ -38,10 +41,6 @@ import javafx.scene.input.KeyCombination;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
-import jass.client.util.WindowUtil;
-import jass.client.util.ViewUtil;
-import jass.lib.message.ChangePasswordData;
-import jass.lib.servicelocator.ServiceLocator;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -55,11 +54,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * @since 1.0.0
  */
 public final class ChangePasswordController extends Controller {
-    /**
-     * The view.
-     */
-    private ChangePasswordView view;
-
     /**
      * The "File" element.
      */
@@ -383,23 +377,5 @@ public final class ChangePasswordController extends Controller {
         WindowUtil.switchTo(view, LobbyView.class);
     }
 
-    /**
-     * @param view The view.
-     *
-     * @author Manuele Vaccari
-     * @since 1.0.0
-     */
-    public void setView(final ChangePasswordView view) {
-        this.view = view;
-    }
 
-    /**
-     * @return Returns the change button
-     *
-     * @author Manuele Vaccari
-     * @since 1.0.0
-     */
-    public JFXButton getChange() {
-        return change;
-    }
 }

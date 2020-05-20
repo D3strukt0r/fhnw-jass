@@ -23,12 +23,23 @@ import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXCheckBox;
 import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
+import jass.client.entity.LoginEntity;
+import jass.client.eventlistener.DisconnectEventListener;
+import jass.client.message.Login;
+import jass.client.message.Register;
+import jass.client.mvc.Controller;
 import jass.client.repository.LoginRepository;
+import jass.client.util.I18nUtil;
+import jass.client.util.SocketUtil;
+import jass.client.util.ViewUtil;
+import jass.client.util.WindowUtil;
 import jass.client.view.AboutView;
 import jass.client.view.LobbyView;
 import jass.client.view.LoginView;
-import jass.client.view.RegisterView;
 import jass.client.view.ServerConnectionView;
+import jass.lib.message.LoginData;
+import jass.lib.message.RegisterData;
+import jass.lib.servicelocator.ServiceLocator;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Menu;
@@ -37,18 +48,6 @@ import javafx.scene.input.KeyCombination;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
-import jass.client.entity.LoginEntity;
-import jass.client.eventlistener.DisconnectEventListener;
-import jass.client.mvc.Controller;
-import jass.client.message.Register;
-import jass.client.message.Login;
-import jass.client.util.I18nUtil;
-import jass.client.util.SocketUtil;
-import jass.client.util.WindowUtil;
-import jass.client.util.ViewUtil;
-import jass.lib.message.RegisterData;
-import jass.lib.message.LoginData;
-import jass.lib.servicelocator.ServiceLocator;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -68,11 +67,6 @@ public final class RegisterController extends Controller implements DisconnectEv
      * The logger to print to console and save in a .log file.
      */
     private static final Logger logger = LogManager.getLogger(RegisterController.class);
-
-    /**
-     * The view.
-     */
-    private RegisterView view;
 
     /**
      * The "File" element.
@@ -211,7 +205,8 @@ public final class RegisterController extends Controller implements DisconnectEv
         login.textProperty().bind(I18nUtil.createStringBinding(login.getText()));
 
         /*
-         * Disable/Enable the Connect button depending on if the inputs are valid
+         * Disable/Enable the Connect button depending on if the inputs are
+         * valid
          */
         AtomicBoolean usernameValid = new AtomicBoolean(false);
         AtomicBoolean passwordValid = new AtomicBoolean(false);
@@ -311,8 +306,10 @@ public final class RegisterController extends Controller implements DisconnectEv
     public void setErrorMessage(final String translatorKey) {
         Platform.runLater(() -> {
             if (errorMessage.getChildren().size() == 0) {
-                // Make window larger, so it doesn't become crammed, only if we haven't done so yet
-                // TODO: This keeps the window size even after switching to e.g. login
+                // Make window larger, so it doesn't become crammed, only if we
+                // haven't done so yet
+                // TODO: This keeps the window size even after switching to e.g.
+                //  login
                 //view.getStage().setHeight(view.getStage().getHeight() + 30);
                 errorMessage.setPrefHeight(40);
             }
@@ -394,7 +391,8 @@ public final class RegisterController extends Controller implements DisconnectEv
                     login.setToken(loginMsg.getToken());
 
                     // Save the login in the db
-                    // TODO This keeps adding the same entity, check before adding
+                    // TODO This keeps adding the same entity, check before
+                    //  adding
                     if (!LoginRepository.getSingleton(null).add(login)) {
                         logger.error("Couldn't save login data to local database.");
                     }
@@ -488,15 +486,5 @@ public final class RegisterController extends Controller implements DisconnectEv
         }
         ServiceLocator.remove(SocketUtil.class);
         WindowUtil.switchTo(view, ServerConnectionView.class);
-    }
-
-    /**
-     * @param view The view.
-     *
-     * @author Manuele Vaccari
-     * @since 1.0.0
-     */
-    public void setView(final RegisterView view) {
-        this.view = view;
     }
 }

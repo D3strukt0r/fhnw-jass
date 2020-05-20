@@ -28,7 +28,6 @@ import javafx.fxml.FXML;
 import jass.client.mvc.Controller;
 import jass.client.model.SplashModel;
 import jass.client.util.WindowUtil;
-import jass.client.view.SplashView;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -43,11 +42,6 @@ public final class SplashController extends Controller {
      * The model.
      */
     private SplashModel model;
-
-    /**
-     * The view.
-     */
-    private SplashView view;
 
     /**
      * The loading bar.
@@ -69,26 +63,16 @@ public final class SplashController extends Controller {
                 // If already logged in go to the game directly, if at least
                 // connected, go to login screen, otherwise to server connection
                 if (model.isLoggedIn()) {
-                    WindowUtil.switchToNewWindow(view, LobbyView.class);
+                    WindowUtil.switchToNewWindow(getView(), LobbyView.class);
                 } else if (model.isConnected()) {
-                    WindowUtil.switchToNewWindow(view, LoginView.class);
+                    WindowUtil.switchToNewWindow(getView(), LoginView.class);
                 } else {
-                    WindowUtil.switchToNewWindow(view, ServerConnectionView.class);
+                    WindowUtil.switchToNewWindow(getView(), ServerConnectionView.class);
                 }
-                view.getStage().hide();
+                getView().getStage().hide();
             }
         });
 
         model.initialize();
-    }
-
-    /**
-     * @param view The view.
-     *
-     * @author Manuele Vaccari
-     * @since 1.0.0
-     */
-    public void setView(final SplashView view) {
-        this.view = view;
     }
 }

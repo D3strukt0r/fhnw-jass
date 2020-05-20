@@ -22,7 +22,6 @@ package jass.client.controller;
 import com.jfoenix.controls.JFXButton;
 import jass.client.mvc.Controller;
 import jass.client.util.I18nUtil;
-import jass.client.view.AboutView;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.NumberBinding;
 import javafx.beans.property.DoubleProperty;
@@ -42,11 +41,6 @@ import java.util.ResourceBundle;
  * @since 1.0.0
  */
 public final class AboutController extends Controller {
-    /**
-     * The view.
-     */
-    private AboutView view;
-
     /**
      * The root element of the view.
      */
@@ -98,16 +92,6 @@ public final class AboutController extends Controller {
      */
     @FXML
     private void clickOnOk() {
-        view.stop();
-    }
-
-    /**
-     * @param view The view.
-     *
-     * @author Manuele Vaccari
-     * @since 1.0.0
-     */
-    public void setView(final AboutView view) {
-        this.view = view;
+        getView().stop();
     }
 }

@@ -23,12 +23,22 @@ import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXCheckBox;
 import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
+import jass.client.entity.LoginEntity;
 import jass.client.entity.ServerEntity;
+import jass.client.eventlistener.DisconnectEventListener;
+import jass.client.message.Login;
+import jass.client.mvc.Controller;
+import jass.client.repository.LoginRepository;
+import jass.client.util.I18nUtil;
+import jass.client.util.SocketUtil;
+import jass.client.util.ViewUtil;
+import jass.client.util.WindowUtil;
 import jass.client.view.AboutView;
 import jass.client.view.LobbyView;
-import jass.client.view.LoginView;
 import jass.client.view.RegisterView;
 import jass.client.view.ServerConnectionView;
+import jass.lib.message.LoginData;
+import jass.lib.servicelocator.ServiceLocator;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Menu;
@@ -39,17 +49,6 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import jass.client.entity.LoginEntity;
-import jass.client.repository.LoginRepository;
-import jass.client.eventlistener.DisconnectEventListener;
-import jass.client.mvc.Controller;
-import jass.client.message.Login;
-import jass.client.util.I18nUtil;
-import jass.client.util.SocketUtil;
-import jass.client.util.WindowUtil;
-import jass.client.util.ViewUtil;
-import jass.lib.message.LoginData;
-import jass.lib.servicelocator.ServiceLocator;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -67,11 +66,6 @@ public final class LoginController extends Controller implements DisconnectEvent
      * The logger to print to console and save in a .log file.
      */
     private static final Logger logger = LogManager.getLogger(LoginController.class);
-
-    /**
-     * The view.
-     */
-    private LoginView view;
 
     /**
      * The "File" element.
@@ -203,7 +197,8 @@ public final class LoginController extends Controller implements DisconnectEvent
         register.textProperty().bind(I18nUtil.createStringBinding(register.getText()));
 
         /*
-         * Disable/Enable the "Connect"-button depending on if the inputs are valid
+         * Disable/Enable the "Connect"-button depending on if the inputs are
+         * valid
          */
         AtomicBoolean usernameValid = new AtomicBoolean(false);
         AtomicBoolean passwordValid = new AtomicBoolean(false);
@@ -446,15 +441,5 @@ public final class LoginController extends Controller implements DisconnectEvent
         }
         ServiceLocator.remove(SocketUtil.class);
         WindowUtil.switchTo(view, ServerConnectionView.class);
-    }
-
-    /**
-     * @param view The view.
-     *
-     * @author Manuele Vaccari
-     * @since 1.0.0
-     */
-    public void setView(final LoginView view) {
-        this.view = view;
     }
 }

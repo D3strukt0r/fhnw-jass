@@ -29,4 +29,28 @@ import javafx.fxml.Initializable;
  * @since 1.0.0
  */
 public abstract class Controller implements Initializable {
+    /**
+     * The view.
+     */
+    private View view;
+
+    /**
+     * @param view The view.
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
+     */
+    public void setView(final View view) {
+        this.view = view;
+    }
+
+    /**
+     * @return Returns the view.
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
+     */
+    public View getView() {
+        return view;
+    }
 }
