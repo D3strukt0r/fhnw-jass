@@ -71,9 +71,7 @@ import java.util.List;
  * @version %I%, %G%
  * @since 1.0.0
  */
-public final class GameUtil implements Service, Closeable, BroadcastDeckEventListener,
-    ChooseGameModeEventListener, BroadcastGameModeEventListener, PlayedCardEventListener,
-    BroadcastTurnEventListener, BroadcastPointsEventListener {
+public final class GameUtil implements Service, Closeable, BroadcastDeckEventListener, ChooseGameModeEventListener, BroadcastGameModeEventListener, PlayedCardEventListener, BroadcastTurnEventListener, BroadcastPointsEventListener {
     /**
      * The logger to print to console and save in a .log file.
      */
@@ -85,14 +83,9 @@ public final class GameUtil implements Service, Closeable, BroadcastDeckEventLis
     private GameFoundData game;
 
     /**
-     * The deck ID.
-     */
-    private int deckId;
-
-    /**
      * The deck of the player.
      */
-    private ObservableList<CardData> playerDeck;
+    private final ObservableList<CardData> playerDeck = FXCollections.observableArrayList(new ArrayList<>());
 
     /**
      * The current turn ID.
@@ -102,37 +95,32 @@ public final class GameUtil implements Service, Closeable, BroadcastDeckEventLis
     /**
      * The username of the user who starts to play.
      */
-    private SimpleStringProperty startingPlayerUsername = new SimpleStringProperty();
+    private final SimpleStringProperty startingPlayerUsername = new SimpleStringProperty();
 
     /**
      * The username of the user who won.
      */
-    private SimpleStringProperty winningPlayerUsername = new SimpleStringProperty();
+    private final SimpleStringProperty winningPlayerUsername = new SimpleStringProperty();
 
     /**
      * Whether to disable the buttons at the moment.
      */
-    private SimpleBooleanProperty disableButtons = new SimpleBooleanProperty();
-
-    /**
-     * Whether to reinitialise the game.
-     */
-    private SimpleBooleanProperty gameFound = new SimpleBooleanProperty();
+    private final SimpleBooleanProperty disableButtons = new SimpleBooleanProperty();
 
     /**
      * The played cards so far.
      */
-    private ObservableList<CardData> playedCards;
+    private final ObservableList<CardData> playedCards = FXCollections.observableArrayList(new ArrayList<>());
 
     /**
      * The game mode data.
      */
-    private SimpleObjectProperty<GameMode> gameMode = new SimpleObjectProperty<>();
+    private final SimpleObjectProperty<GameMode> gameMode = new SimpleObjectProperty<>();
 
     /**
      * The trumpf.
      */
-    private SimpleObjectProperty<Card.Suit> trumpf = new SimpleObjectProperty<>();
+    private final SimpleObjectProperty<Card.Suit> trumpf = new SimpleObjectProperty<>();
 
     /**
      * The error message when a move is invalid.
@@ -147,12 +135,12 @@ public final class GameUtil implements Service, Closeable, BroadcastDeckEventLis
     /**
      * The current points of the round.
      */
-    private SimpleIntegerProperty pointsRound = new SimpleIntegerProperty(-1);
+    private final SimpleIntegerProperty pointsRound = new SimpleIntegerProperty(-1);
 
     /**
      * The current points of the game.
      */
-    private SimpleIntegerProperty pointsTotal = new SimpleIntegerProperty(-1);
+    private final SimpleIntegerProperty pointsTotal = new SimpleIntegerProperty(-1);
 
     /**
      * Whether the player has left.
@@ -177,8 +165,34 @@ public final class GameUtil implements Service, Closeable, BroadcastDeckEventLis
         EventUtil.addPlayedCardEventListener(this);
         EventUtil.addBroadcastedTurnEventListener(this);
         EventUtil.addBroadcastPointsEventListener(this);
-        playerDeck = FXCollections.observableArrayList(new ArrayList<>());
-        playedCards = FXCollections.observableArrayList(new ArrayList<>());
+    }
+
+    /**
+     * @author Victor Hargrave & Manuele Vaccari
+     * @since 1.0.0
+     */
+    @Override
+    public void close() {
+        game = null;
+        playerDeck.clear();
+        turnId = 0;
+        startingPlayerUsername.setValue("");
+        winningPlayerUsername.setValue("");
+        disableButtons.set(true);
+        playedCards.clear();
+        moveInvalidErrorMessage = "";
+        cardIdToRemove = 0;
+        pointsRound.set(0);
+        pointsTotal.set(0);
+        aPlayerLeft = false;
+        decidedToLeaveGame = false;
+
+        EventUtil.removeBroadcastDeckEventListener(this);
+        EventUtil.removeChooseGameModeEventListener(this);
+        EventUtil.removeBroadcastGameModeEventListener(this);
+        EventUtil.removePlayedCardEventListener(this);
+        EventUtil.removeBroadcastedTurnEventListener(this);
+        EventUtil.removeBroadcastPointsEventListener(this);
     }
 
     /**
@@ -188,7 +202,6 @@ public final class GameUtil implements Service, Closeable, BroadcastDeckEventLis
     @Override
     public void onBroadcastDeck(final BroadcastDeckData data) {
         logger.info("Successfully received cards!");
-        deckId = data.getDeckId();
         playerDeck.clear();
         playerDeck.addAll(data.getCardsClient());
     }
@@ -422,6 +435,20 @@ public final class GameUtil implements Service, Closeable, BroadcastDeckEventLis
     }
 
     /**
+     * @author Thomas Weber
+     * @since 1.0.0
+     */
+    public void prepareForNewRound() {
+        playedCards.clear();
+        playerDeck.clear();
+        startingPlayerUsername.setValue("");
+        winningPlayerUsername.setValue("");
+        disableButtons.set(true);
+        cardIdToRemove = 0;
+        pointsRound.set(0);
+    }
+
+    /**
      * @param msgData The game data.
      *
      * @author Victor Hargrave
@@ -442,26 +469,6 @@ public final class GameUtil implements Service, Closeable, BroadcastDeckEventLis
     }
 
     /**
-     * @return Returns the deck ID.
-     *
-     * @author Victor Hargrave
-     * @since 1.0.0
-     */
-    public int getDeckId() {
-        return deckId;
-    }
-
-    /**
-     * @param deckId The deck ID.
-     *
-     * @author Victor Hargrave
-     * @since 1.0.0
-     */
-    public void setDeckId(final int deckId) {
-        this.deckId = deckId;
-    }
-
-    /**
      * @return Returns the player's deck.
      *
      * @author Victor Hargrave
@@ -472,53 +479,14 @@ public final class GameUtil implements Service, Closeable, BroadcastDeckEventLis
     }
 
     /**
-     * @param playerDeck The player's deck.
+     * @param startingPlayerUsername The username of the player who starts
+     *                               playing.
      *
      * @author Victor Hargrave
      * @since 1.0.0
      */
-    public void setPlayerDeck(final ArrayList<CardData> playerDeck) {
-        this.playerDeck = FXCollections.observableArrayList(playerDeck);
-    }
-
-    /**
-     * @return Returns the property of the game mode variable.
-     *
-     * @author Manuele Vaccari
-     * @since 1.0.0
-     */
-    public SimpleObjectProperty<GameMode> getGameModeProperty() {
-        return gameMode;
-    }
-
-    /**
-     * @return Returns the property of the trumpf variable.
-     *
-     * @author Manuele Vaccari
-     * @since 1.0.0
-     */
-    public SimpleObjectProperty<Card.Suit> getTrumpfProperty() {
-        return trumpf;
-    }
-
-    /**
-     * @return Returns the turn ID.
-     *
-     * @author Victor Hargrave
-     * @since 1.0.0
-     */
-    public int getTurnId() {
-        return turnId;
-    }
-
-    /**
-     * @param turnId The turn ID.
-     *
-     * @author Victor Hargrave
-     * @since 1.0.0
-     */
-    public void setTurnId(final int turnId) {
-        this.turnId = turnId;
+    public void setStartingPlayerUsername(final String startingPlayerUsername) {
+        this.startingPlayerUsername.setValue(startingPlayerUsername);
     }
 
     /**
@@ -532,14 +500,13 @@ public final class GameUtil implements Service, Closeable, BroadcastDeckEventLis
     }
 
     /**
-     * @param startingPlayerUsername The username of the player who starts
-     *                               playing.
+     * @param winningPlayerUsername The winnings player's username.
      *
      * @author Victor Hargrave
      * @since 1.0.0
      */
-    public void setStartingPlayerUsername(final String startingPlayerUsername) {
-        this.startingPlayerUsername.setValue(startingPlayerUsername);
+    public void setWinningPlayerUsername(final String winningPlayerUsername) {
+        this.winningPlayerUsername.setValue(winningPlayerUsername);
     }
 
     /**
@@ -568,18 +535,8 @@ public final class GameUtil implements Service, Closeable, BroadcastDeckEventLis
      * @author Victor Hargrave
      * @since 1.0.0
      */
-    public SimpleBooleanProperty getDisableButtons() {
+    public SimpleBooleanProperty getDisableButtonsProperty() {
         return disableButtons;
-    }
-
-    /**
-     * @param winningPlayerUsername The winnings player's username.
-     *
-     * @author Victor Hargrave
-     * @since 1.0.0
-     */
-    public void setWinningPlayerUsername(final String winningPlayerUsername) {
-        this.winningPlayerUsername.setValue(winningPlayerUsername);
     }
 
     /**
@@ -590,6 +547,26 @@ public final class GameUtil implements Service, Closeable, BroadcastDeckEventLis
      */
     public ObservableList<CardData> getPlayedCards() {
         return playedCards;
+    }
+
+    /**
+     * @return Returns the property of the game mode variable.
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
+     */
+    public SimpleObjectProperty<GameMode> getGameModeProperty() {
+        return gameMode;
+    }
+
+    /**
+     * @return Returns the property of the trumpf variable.
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
+     */
+    public SimpleObjectProperty<Card.Suit> getTrumpfProperty() {
+        return trumpf;
     }
 
     /**
@@ -623,23 +600,13 @@ public final class GameUtil implements Service, Closeable, BroadcastDeckEventLis
     }
 
     /**
-     * @return Returns whether the user decided to leave
+     * @param aPlayerLeft The player who is left.
      *
      * @author Victor Hargrave
      * @since 1.0.0
      */
-    public boolean getDecidedToLeaveGame() {
-        return decidedToLeaveGame;
-    }
-
-    /**
-     * @param decidedToLeaveGame Whether the user decided to leave
-     *
-     * @author Victor Hargrave
-     * @since 1.0.0
-     */
-    public void setDecidedToLeaveGame(final boolean decidedToLeaveGame) {
-        this.decidedToLeaveGame = decidedToLeaveGame;
+    public void setAPlayerLeft(final boolean aPlayerLeft) {
+        this.aPlayerLeft = aPlayerLeft;
     }
 
     /**
@@ -653,58 +620,22 @@ public final class GameUtil implements Service, Closeable, BroadcastDeckEventLis
     }
 
     /**
-     * @param aPlayerLeft The player who is left.
+     * @param decidedToLeaveGame Whether the user decided to leave
      *
      * @author Victor Hargrave
      * @since 1.0.0
      */
-    public void setAPlayerLeft(final boolean aPlayerLeft) {
-        this.aPlayerLeft = aPlayerLeft;
+    public void setDecidedToLeaveGame(final boolean decidedToLeaveGame) {
+        this.decidedToLeaveGame = decidedToLeaveGame;
     }
 
     /**
+     * @return Returns whether the user decided to leave
+     *
      * @author Victor Hargrave
      * @since 1.0.0
      */
-    public void cleanupGame() {
-        game = null;
-        deckId = 0;
-        turnId = 0;
-        startingPlayerUsername.setValue("");
-        winningPlayerUsername.setValue("");
-        disableButtons.set(true);
-        moveInvalidErrorMessage = "";
-        cardIdToRemove = 0;
-        pointsRound.set(0);
-        pointsTotal.set(0);
-        aPlayerLeft = false;
-        decidedToLeaveGame = false;
-        playerDeck.clear();
-        playedCards.clear();
-    }
-
-    /**
-     * @author Thomas Weber
-     * @since 1.0.0
-     */
-    public void prepareForNewRound() {
-        playedCards.clear();
-        playerDeck.clear();
-        deckId = 0;
-        startingPlayerUsername.setValue("");
-        winningPlayerUsername.setValue("");
-        disableButtons.set(true);
-        cardIdToRemove = 0;
-        pointsRound.set(0);
-    }
-
-    @Override
-    public void close() {
-        EventUtil.removeBroadcastDeckEventListener(this);
-        EventUtil.removeChooseGameModeEventListener(this);
-        EventUtil.removeBroadcastGameModeEventListener(this);
-        EventUtil.removePlayedCardEventListener(this);
-        EventUtil.removeBroadcastedTurnEventListener(this);
-        EventUtil.removeBroadcastPointsEventListener(this);
+    public boolean getDecidedToLeaveGame() {
+        return decidedToLeaveGame;
     }
 }

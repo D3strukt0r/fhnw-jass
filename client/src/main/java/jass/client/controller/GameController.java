@@ -420,29 +420,72 @@ public final class GameController extends Controller implements Closeable, Disco
     private boolean roundOverDialogClosed;
 
     /**
-     * @author Sasa Trajkova & Victor Hargrave
+     * @author Sasa Trajkova & Victor Hargrave & Manuele Vaccari
      * @since 1.0.0
      */
     @Override
     public void initialize(final URL location, final ResourceBundle resources) {
+        EventUtil.addDisconnectListener(this);
+        EventUtil.addAPlayerQuitEventListener(this);
+        EventUtil.addRoundOverEventListener(this);
+
         gameUtil = ServiceLocator.get(GameUtil.class);
 
         logger.info("initialising");
-        initializePlayerDeckListener();
-        initializeGameModeListener();
-        initializePlayedCardsListener();
-        initializeWinningPlayerListener();
-        initializeDisableButtonsListener();
+        gameUtil.getPlayerDeck().addListener((ListChangeListener<CardData>) c -> {
+            if (gameUtil.getPlayerDeck().size() == 9) {
+                logger.info("listener was activated. Now updating cards");
+                cardButtons = cardButtonsToArray();
+                addClickListenerToCardButtons();
+                logger.info("button click listeners created");
+                updateCardImages();
+                updateUserNames();
+            }
+        });
+        gameUtil.getGameModeProperty().addListener((obs, oldGameMode, newGameMode) -> {
+            Platform.runLater(() -> {
+                // TODO Make this more beautiful
+                if (newGameMode == GameMode.TRUMPF) {
+                    String rawTrumpf = gameUtil.getTrumpfProperty().getValue().toString();
+                    String trumpf = rawTrumpf.substring(0, 1).toUpperCase() + rawTrumpf.substring(1);
+                    mode.setText("Mode: " + newGameMode.toString() + " | Card: " + trumpf);
+                } else {
+                    mode.setText("Mode: " + newGameMode.toString());
+                }
+            });
+        });
+        gameUtil.getPlayedCards().addListener((ListChangeListener<CardData>) c -> {
+            updatePlayedCardImages();
+            Optional<CardData> card = gameUtil.getPlayerDeck().stream().filter(d -> d.getCardId() == gameUtil.getCardIdToRemove()).findFirst();
+            if (card.isPresent()) {
+                card.get().setPlayed(true);
+            }
+            updateCardImages();
+        });
+        gameUtil.getWinningPlayerUsername().addListener((obs, oldWinningPlayer, newWinningPlayer) -> {
+            // when there is a new winning player
+            if (!newWinningPlayer.equals(oldWinningPlayer) && !StringUtil.isNullOrEmpty(newWinningPlayer)) {
+                // TODO show dialog
+                gameUtil.setWinningPlayerUsername("");
+            }
+        });
+        gameUtil.getDisableButtonsProperty().addListener((obs, oldDisableButtons, newDisableButtons) -> {
+            // when there is a new winning player
+            disableButtons(newDisableButtons);
+        });
         gameUtil.getPointsRoundProperty().addListener(((observable, oldValue, newValue) -> Platform.runLater(() -> scoreR.setText("Points (Round): " + newValue))));
         gameUtil.getPointsRoundProperty().setValue(0);
         gameUtil.getPointsTotalProperty().addListener(((observable, oldValue, newValue) -> Platform.runLater(() -> scoreT.setText("Points (Total): " + newValue))));
         gameUtil.getPointsTotalProperty().setValue(0);
         logger.info("observable listeners created");
+
         gameUtil.setDisableButtons(true);
         logger.info("buttons disabled");
+
         cardButtons = cardButtonsToArray();
         addClickListenerToCardButtons();
         logger.info("button click listeners created");
+
         updateUserNames();
         logger.info("updated user names");
 
@@ -450,10 +493,6 @@ public final class GameController extends Controller implements Closeable, Disco
             updateCardImages();
             logger.info("updated card images");
         }
-
-        EventUtil.addDisconnectListener(this);
-        EventUtil.addAPlayerQuitEventListener(this);
-        EventUtil.addRoundOverEventListener(this);
 
         /*
          * Bind all texts
@@ -468,199 +507,6 @@ public final class GameController extends Controller implements Closeable, Disco
 
         mHelp.textProperty().bind(I18nUtil.createStringBinding(mHelp.getText()));
         mHelpAbout.textProperty().bind(I18nUtil.createStringBinding(mHelpAbout.getText()));
-    }
-
-    /**
-     * @author Victor Hargrave
-     * @since 1.0.0
-     */
-    private void initializePlayerDeckListener() {
-        gameUtil.getPlayerDeck().addListener((ListChangeListener<CardData>) c -> {
-            if (gameUtil.getPlayerDeck().size() == 9) {
-                logger.info("listener was activated. Now updating cards");
-                cardButtons = cardButtonsToArray();
-                addClickListenerToCardButtons();
-                logger.info("button click listeners created");
-                updateCardImages();
-                updateUserNames();
-            }
-        });
-    }
-
-    /**
-     * @author Victor Hargrave
-     * @since 1.0.0
-     */
-    @Override
-    public void onRoundOver(final BroadcastRoundOverData data) {
-        // run on separate thread so events can still come in nicely.
-        Platform.runLater(() -> {
-            showRoundOverMessage(data);
-        });
-    }
-
-    /**
-     * @param data Data from the DTO.
-     *
-     * @author Victor Hargrave
-     * @since 1.0.0
-     */
-    private void showRoundOverMessage(final BroadcastRoundOverData data) {
-        String roundOverMessage = "";
-        if (data.getTeam1Points() > data.getTeam2Points()) {
-            roundOverMessage = I18nUtil.get("gui.game.roundOverWin", data.getTeam1Player1(), data.getTeam1Player2(), data.getTeam1Points());
-        } else if (data.getTeam2Points() > data.getTeam1Points()) {
-            roundOverMessage = I18nUtil.get("gui.game.roundOverWin", data.getTeam2Player1(), data.getTeam2Player2(), data.getTeam2Points());
-        } else if (data.getTeam1Points() == data.getTeam2Points()) {
-            roundOverMessage = I18nUtil.get("gui.game.roundOverDraw", data.getTeam1Points());
-        }
-
-        Alert alert = new Alert(Alert.AlertType.INFORMATION,
-            roundOverMessage,
-            ButtonType.OK,
-            ButtonType.CANCEL);
-
-        alert.setTitle(I18nUtil.get("gui.game.roundOver"));
-        alert.showAndWait();
-        roundOverDialogClosed = false;
-
-
-        if (alert.getResult() == ButtonType.OK) {
-            roundOverDialogClosed = true;
-            if (gameUtil.getAPlayerLeft()) {
-                showNotificationThatPlayerLeft();
-            } else {
-                gameUtil.prepareForNewRound();
-                resetRound();
-            }
-        } else if (alert.getResult() == ButtonType.CANCEL) {
-            roundOverDialogClosed = true;
-            // if a player has already left, then just leave the game
-            if (gameUtil.getAPlayerLeft()) {
-                cleanupGameAndNavigateFromView();
-            }
-            gameUtil.setDecidedToLeaveGame(true);
-            // send message to server
-            gameUtil.stopPlaying();
-        }
-    }
-
-    /**
-     * @author Thomas Weber
-     * @since 1.0.0
-     */
-    public void resetRound() {
-        gameUtil.continuePlaying();
-    }
-
-    /**
-     * @author Victor Hargrave
-     * @since 1.0.0
-     */
-    @Override
-    public void onAPlayerQuit(final BroadcastAPlayerQuitData data) {
-        if (gameUtil.getDecidedToLeaveGame()) {
-            cleanupGameAndNavigateFromView();
-        } else if (roundOverDialogClosed) {
-            showNotificationThatPlayerLeft();
-        } else {
-            gameUtil.setAPlayerLeft(true);
-        }
-    }
-
-    /**
-     * @author Victor Hargrave
-     * @since 1.0.0
-     */
-    private void showNotificationThatPlayerLeft() {
-        Platform.runLater(() -> {
-            String anotherPlayerLeftMessage = I18nUtil.get("gui.lobby.aPlayerLeft");
-            Alert alert = new Alert(Alert.AlertType.ERROR, anotherPlayerLeftMessage, ButtonType.YES);
-            alert.showAndWait();
-
-            if (alert.getResult() == ButtonType.YES) {
-                alert.close();
-                cleanupGameAndNavigateFromView();
-            }
-
-        });
-    }
-
-    /**
-     * @author Victor Hargrave
-     * @since 1.0.0
-     */
-    private void cleanupGameAndNavigateFromView() {
-        updateCardImages();
-        gameUtil.cleanupGame();
-        updateUserNames();
-        cardButtons.clear();
-        try {
-            EventUtil.removeAPlayerQuitEventListener(this);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        close();
-        WindowUtil.switchTo(getView(), LobbyView.class);
-    }
-
-    /**
-     * @author ...
-     * @since 1.0.0
-     */
-    private void initializePlayedCardsListener() {
-        gameUtil.getPlayedCards().addListener((ListChangeListener<CardData>) c -> {
-            updatePlayedCardImages();
-            Optional<CardData> card = gameUtil.getPlayerDeck().stream().filter(d -> d.getCardId() == gameUtil.getCardIdToRemove()).findFirst();
-            if (card.isPresent()) {
-                card.get().setPlayed(true);
-            }
-            updateCardImages();
-        });
-    }
-
-    /**
-     * @author ...
-     * @since 1.0.0
-     */
-    private void initializeGameModeListener() {
-        gameUtil.getGameModeProperty().addListener((obs, oldGameMode, newGameMode) -> {
-            Platform.runLater(() -> {
-                // TODO Make this more beautiful
-                if (newGameMode == GameMode.TRUMPF) {
-                    String rawTrumpf = gameUtil.getTrumpfProperty().getValue().toString();
-                    String trumpf = rawTrumpf.substring(0, 1).toUpperCase() + rawTrumpf.substring(1);
-                    mode.setText("Mode: " + newGameMode.toString() + " | Card: " + trumpf);
-                } else {
-                    mode.setText("Mode: " + newGameMode.toString());
-                }
-            });
-        });
-    }
-
-    /**
-     * @author ...
-     * @since 1.0.0
-     */
-    private void initializeWinningPlayerListener() {
-        gameUtil.getWinningPlayerUsername().addListener((obs, oldWinningPlayer, newWinningPlayer) -> {
-            // when there is a new winning player
-            if (!newWinningPlayer.equals(oldWinningPlayer) && !StringUtil.isNullOrEmpty(newWinningPlayer)) {
-                // TODO show dialog
-                gameUtil.setWinningPlayerUsername("");
-            }
-        });
-    }
-
-    /**
-     * @author ...
-     * @since 1.0.0
-     */
-    private void initializeDisableButtonsListener() {
-        gameUtil.getDisableButtons().addListener((obs, oldDisableButtons, newDisableButtons) -> {
-            // when there is a new winning player
-            disableButtons(newDisableButtons);
-        });
     }
 
     /**
@@ -725,6 +571,101 @@ public final class GameController extends Controller implements Closeable, Disco
         EventUtil.removeDisconnectListener(this);
         EventUtil.removeAPlayerQuitEventListener(this);
         EventUtil.removeRoundOverEventListener(this);
+    }
+
+    /**
+     * @author Manuele Vaccari
+     * @since 1.0.0
+     */
+    @Override
+    public void onDisconnectEvent() {
+        ServiceLocator.remove(LoginEntity.class);
+        close();
+        WindowUtil.switchTo(getView(), ServerConnectionView.class);
+    }
+
+    /**
+     * @author Victor Hargrave
+     * @since 1.0.0
+     */
+    @Override
+    public void onRoundOver(final BroadcastRoundOverData data) {
+        // run on separate thread so events can still come in nicely.
+        Platform.runLater(() -> {
+            String roundOverMessage = "";
+            if (data.getTeam1Points() > data.getTeam2Points()) {
+                roundOverMessage = I18nUtil.get("gui.game.roundOverWin", data.getTeam1Player1(), data.getTeam1Player2(), data.getTeam1Points());
+            } else if (data.getTeam1Points() < data.getTeam2Points()) {
+                roundOverMessage = I18nUtil.get("gui.game.roundOverWin", data.getTeam2Player1(), data.getTeam2Player2(), data.getTeam2Points());
+            } else {
+                // The have the same amount of points.
+                roundOverMessage = I18nUtil.get("gui.game.roundOverDraw", data.getTeam1Points());
+            }
+
+            Alert alert = new Alert(Alert.AlertType.INFORMATION,
+                roundOverMessage,
+                ButtonType.OK,
+                ButtonType.CANCEL);
+
+            alert.setTitle(I18nUtil.get("gui.game.roundOver"));
+            alert.showAndWait();
+            roundOverDialogClosed = false;
+
+
+            if (alert.getResult() == ButtonType.OK) {
+                roundOverDialogClosed = true;
+                if (gameUtil.getAPlayerLeft()) {
+                    showNotificationThatPlayerLeft();
+                } else {
+                    gameUtil.prepareForNewRound();
+                    gameUtil.continuePlaying();
+                }
+            } else if (alert.getResult() == ButtonType.CANCEL) {
+                roundOverDialogClosed = true;
+                // if a player has already left, then just leave the game
+                if (gameUtil.getAPlayerLeft()) {
+                    close();
+                    WindowUtil.switchToNewWindow(getView(), LobbyView.class);
+                }
+                gameUtil.setDecidedToLeaveGame(true);
+                // send message to server
+                gameUtil.stopPlaying();
+            }
+        });
+    }
+
+    /**
+     * @author Victor Hargrave
+     * @since 1.0.0
+     */
+    @Override
+    public void onAPlayerQuit(final BroadcastAPlayerQuitData data) {
+        if (gameUtil.getDecidedToLeaveGame()) {
+            close();
+            WindowUtil.switchToNewWindow(getView(), LobbyView.class);
+        } else if (roundOverDialogClosed) {
+            showNotificationThatPlayerLeft();
+        } else {
+            gameUtil.setAPlayerLeft(true);
+        }
+    }
+
+    /**
+     * @author Victor Hargrave
+     * @since 1.0.0
+     */
+    private void showNotificationThatPlayerLeft() {
+        Platform.runLater(() -> {
+            String anotherPlayerLeftMessage = I18nUtil.get("gui.lobby.aPlayerLeft");
+            Alert alert = new Alert(Alert.AlertType.ERROR, anotherPlayerLeftMessage, ButtonType.YES);
+            alert.showAndWait();
+
+            if (alert.getResult() == ButtonType.YES) {
+                alert.close();
+                close();
+                WindowUtil.switchToNewWindow(getView(), LobbyView.class);
+            }
+        });
     }
 
     /**
@@ -982,17 +923,6 @@ public final class GameController extends Controller implements Closeable, Disco
                 user4.setText("--");
             }
         });
-    }
-
-    /**
-     * @author Manuele Vaccari
-     * @since 1.0.0
-     */
-    @Override
-    public void onDisconnectEvent() {
-        ServiceLocator.remove(LoginEntity.class);
-        close();
-        WindowUtil.switchTo(getView(), ServerConnectionView.class);
     }
 
     /**
