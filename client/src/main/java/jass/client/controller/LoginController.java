@@ -251,54 +251,6 @@ public final class LoginController extends Controller implements Closeable, Disc
     }
 
     /**
-     * Disables all the input fields in the view.
-     *
-     * @author Manuele Vaccari
-     * @since 1.0.0
-     */
-    public void disableInputs() {
-        username.setDisable(true);
-        password.setDisable(true);
-        rememberMe.setDisable(true);
-    }
-
-    /**
-     * Disables all the form fields in the view.
-     *
-     * @author Manuele Vaccari
-     * @since 1.0.0
-     */
-    public void disableAll() {
-        disableInputs();
-        loginBtn.setDisable(true);
-        register.setDisable(true);
-    }
-
-    /**
-     * Enables all the input fields in the view.
-     *
-     * @author Manuele Vaccari
-     * @since 1.0.0
-     */
-    public void enableInputs() {
-        username.setDisable(false);
-        password.setDisable(false);
-        rememberMe.setDisable(false);
-    }
-
-    /**
-     * Enables all the form fields in the view.
-     *
-     * @author Manuele Vaccari
-     * @since 1.0.0
-     */
-    public void enableAll() {
-        enableInputs();
-        loginBtn.setDisable(false);
-        register.setDisable(false);
-    }
-
-    /**
      * As the view contains an error message field, this updates the text and
      * the window appropriately.
      *
@@ -366,7 +318,11 @@ public final class LoginController extends Controller implements Closeable, Disc
     @FXML
     private void clickOnLogin() {
         // Disable everything to prevent something while working on the data
-        disableAll();
+        username.setDisable(true);
+        password.setDisable(true);
+        rememberMe.setDisable(true);
+        loginBtn.setDisable(true);
+        register.setDisable(true);
 
         // Connection would freeze window (and the animations) so do it in a
         // different thread.
@@ -451,7 +407,12 @@ public final class LoginController extends Controller implements Closeable, Disc
                             break;
                     }
                 }
-                enableAll();
+                // Enable all inputs again
+                username.setDisable(false);
+                password.setDisable(false);
+                rememberMe.setDisable(false);
+                loginBtn.setDisable(false);
+                register.setDisable(false);
             }
         }).start();
     }
