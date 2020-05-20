@@ -50,9 +50,11 @@ public final class Logout extends Message {
     @Override
     public void process(final ClientUtil client) {
         UserEntity user = UserRepository.getSingleton(null).getByUsername(client.getUsername());
-        assert user != null;
-        user.setOffline();
-        UserRepository.getSingleton(null).update(user);
+        // User could be null if we just deleted it
+        if (user != null) {
+            user.setOffline();
+            UserRepository.getSingleton(null).update(user);
+        }
 
         client.setToken(null); // Destroy authentication token
         client.setUser(null); // Destroy account information
