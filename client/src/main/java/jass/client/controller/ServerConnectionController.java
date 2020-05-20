@@ -36,8 +36,6 @@ import jass.client.view.LoginView;
 import jass.lib.servicelocator.ServiceLocator;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
-import javafx.beans.binding.NumberBinding;
-import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.fxml.FXML;
 import javafx.scene.control.Menu;
@@ -46,6 +44,7 @@ import javafx.scene.input.KeyCombination;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
+import javafx.stage.Stage;
 import javafx.util.StringConverter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -73,6 +72,12 @@ public final class ServerConnectionController extends Controller {
      * The logger to print to console and save in a .log file.
      */
     private static final Logger logger = LogManager.getLogger(ServerConnectionController.class);
+
+    /**
+     * The root element of the view.
+     */
+    @FXML
+    private VBox root;
 
     /**
      * The "File" element.
@@ -115,12 +120,6 @@ public final class ServerConnectionController extends Controller {
      */
     @FXML
     private MenuItem mHelpAbout;
-
-    /**
-     * The root element of the view.
-     */
-    @FXML
-    private VBox root;
 
     /**
      * The navbar.
@@ -209,15 +208,13 @@ public final class ServerConnectionController extends Controller {
 
         ipOrDomain.promptTextProperty().bind(I18nUtil.createStringBinding(ipOrDomain.getPromptText()));
         ipHint.textProperty().bind(I18nUtil.createStringBinding(ipHint.getText()));
-        // https://stackoverflow.com/questions/51199903/how-to-bind-a-value-to-the-result-of-a-calculation
         // Check the css at .custom-container (padding left and right = 40)
-        DoubleProperty padding = new SimpleDoubleProperty(40.0);
-        NumberBinding wrapping = Bindings.subtract(root.widthProperty(), padding);
-        ipHint.wrappingWidthProperty().bind(wrapping);
+        ipHint.wrappingWidthProperty().bind(Bindings.subtract(root.widthProperty(), new SimpleDoubleProperty(40.0)));
 
         port.promptTextProperty().bind(I18nUtil.createStringBinding(port.getPromptText()));
         portHint.textProperty().bind(I18nUtil.createStringBinding(portHint.getText()));
-        portHint.wrappingWidthProperty().bind(wrapping);
+        // Check the css at .custom-container (padding left and right = 40)
+        portHint.wrappingWidthProperty().bind(Bindings.subtract(root.widthProperty(), new SimpleDoubleProperty(40.0)));
 
         connectAutomatically.textProperty().bind(I18nUtil.createStringBinding(connectAutomatically.getText()));
         secure.textProperty().bind(I18nUtil.createStringBinding(secure.getText()));
@@ -225,6 +222,7 @@ public final class ServerConnectionController extends Controller {
         // TODO: Cannot use toUpperCase
         //connect.textProperty().bind(I18nUtil.createStringBinding(() -> I18nUtil.get(connect.getText()).toUpperCase()));
         connect.textProperty().bind(I18nUtil.createStringBinding(connect.getText()));
+        connect.prefWidthProperty().bind(Bindings.subtract(root.widthProperty(), new SimpleDoubleProperty(40.0)));
 
         /*
          * Converts the ServerEntity to a String
@@ -365,10 +363,9 @@ public final class ServerConnectionController extends Controller {
             if (errorMessage.getChildren().size() == 0) {
                 // Make window larger, so it doesn't become crammed, only if we
                 // haven't done so yet
-                // TODO: This keeps the window size even after switching to e.g.
-                //  login
-                //view.getStage().setHeight(view.getStage().getHeight() + 30);
-                errorMessage.setPrefHeight(30);
+                Stage stage = getView().getStage();
+                stage.setMinHeight(stage.getMinHeight() + 40);
+                errorMessage.setPrefHeight(40);
             }
             Text text = ViewUtil.useText(translatorKey);
             text.setFill(Color.RED);

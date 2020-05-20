@@ -82,6 +82,7 @@ public final class AboutController extends Controller {
         message.wrappingWidthProperty().bind(wrapping);
 
         ok.textProperty().bind(I18nUtil.createStringBinding(ok.getText()));
+        ok.prefWidthProperty().bind(Bindings.subtract(root.widthProperty(), new SimpleDoubleProperty(40.0)));
     }
 
     /**

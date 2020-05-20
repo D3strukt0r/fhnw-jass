@@ -19,12 +19,11 @@
 
 package jass.client.view;
 
-import jass.client.controller.ServerConnectionController;
+import jass.client.mvc.Controller;
 import jass.client.mvc.View;
 import jass.client.util.I18nUtil;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
@@ -47,8 +46,6 @@ public final class ServerConnectionView extends View {
     public ServerConnectionView(final Stage stage) {
         super(stage);
         stage.titleProperty().bind(I18nUtil.createStringBinding("gui.serverConnection.title"));
-        stage.setResizable(false);
-        stage.setWidth(getScene().getWidth()); // Fixes weird width when returning to server connection windows
 
         // Register ourselves to handle window-closing event
         stage.setOnCloseRequest(event -> Platform.exit());
@@ -62,10 +59,9 @@ public final class ServerConnectionView extends View {
     protected Scene createGUI() {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/server_connection.fxml"));
-            Parent root = loader.load();
-            ServerConnectionController controller = loader.getController();
-            controller.setView(this);
-            return new Scene(root);
+            setRoot(loader.load());
+            ((Controller) loader.getController()).setView(this);
+            return new Scene(getRoot());
         } catch (IOException e) {
             return null;
         }

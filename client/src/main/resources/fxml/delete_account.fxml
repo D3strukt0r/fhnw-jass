@@ -9,12 +9,16 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
 <?import javafx.scene.control.SeparatorMenuItem?>
-<VBox fx:id="root"
-      styleClass="background-white"
-      stylesheets="@../css/app.css"
-      xmlns="http://javafx.com/javafx/8.0.171"
+<VBox xmlns="http://javafx.com/javafx/8.0.171"
       xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="jass.client.controller.DeleteAccountController">
+      fx:controller="jass.client.controller.DeleteAccountController"
+      fx:id="root"
+      minHeight="250.0"
+      prefHeight="250.0"
+      minWidth="350.0"
+      prefWidth="350.0"
+      styleClass="background-white"
+      stylesheets="@../css/app.css">
     <MenuBar>
         <Menu fx:id="mFile" text="gui.menu.file">
             <Menu fx:id="mFileChangeLanguage" text="gui.menu.file.changeLanguage" />
@@ -43,9 +47,17 @@
         <Text fx:id="message" strokeType="OUTSIDE" strokeWidth="0.0" text="gui.deleteAccount.message" />
         <Region prefHeight="20.0" VBox.vgrow="ALWAYS" />
 
-        <HBox spacing="4">
-            <JFXButton fx:id="delete" styleClass="primary" text="gui.deleteAccount.delete" onAction="#clickOnDelete" defaultButton="true" />
-            <JFXButton fx:id="cancel" styleClass="secondary" text="gui.deleteAccount.cancel" onAction="#clickOnCancel" cancelButton="true" />
+        <HBox fx:id="buttonGroup" spacing="10">
+            <JFXButton fx:id="delete"
+                       styleClass="primary"
+                       text="gui.deleteAccount.delete"
+                       onAction="#clickOnDelete"
+                       defaultButton="true" />
+            <JFXButton fx:id="cancel"
+                       styleClass="secondary"
+                       text="gui.deleteAccount.cancel"
+                       onAction="#clickOnCancel"
+                       cancelButton="true" />
         </HBox>
     </VBox>
 </VBox>

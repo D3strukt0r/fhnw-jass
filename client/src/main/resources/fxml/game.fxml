@@ -14,461 +14,886 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
-
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="715.0" prefWidth="1210.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="jass.client.controller.GameController">
-   <top>
-      <VBox prefHeight="93.0" prefWidth="1155.0" BorderPane.alignment="CENTER">
-          <MenuBar>
-              <Menu fx:id="mFile" text="gui.menu.file">
-                  <Menu fx:id="mFileChangeLanguage" text="gui.menu.file.changeLanguage" />
-                  <SeparatorMenuItem />
-                  <MenuItem fx:id="mFileDisconnect" onAction="#clickOnDisconnect" text="gui.menu.file.disconnect" />
-                  <SeparatorMenuItem />
-                  <MenuItem fx:id="mFileLogout" onAction="#clickOnLogout" text="gui.menu.file.logout" />
-                  <SeparatorMenuItem />
-                  <MenuItem fx:id="mFileExit" onAction="#clickOnExit" text="gui.menu.file.exit" />
-              </Menu>
-              <Menu fx:id="mHelp" text="gui.menu.help">
-                  <MenuItem fx:id="mHelpAbout" text="gui.menu.help.about" onAction="#clickOnAbout" />
-              </Menu>
-          </MenuBar>
-         <HBox alignment="CENTER" prefHeight="60.0" prefWidth="1160.0" spacing="70.0" styleClass="navbar-game-panel" stylesheets="@../css/app.css">
-            <children>
-               <Pane prefHeight="200.0" prefWidth="200.0">
-                  <children>
-                     <Label fx:id="mode" alignment="TOP_CENTER" contentDisplay="CENTER" layoutY="5.0" prefHeight="50.0" prefWidth="202.0" styleClass="navbar-game-panel-text" stylesheets="@../css/app.css" text="Mode:" textAlignment="JUSTIFY">
+<BorderPane xmlns="http://javafx.com/javafx/8.0.171"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="jass.client.controller.GameController"
+            minHeight="740"
+            prefHeight="740.0"
+            minWidth="1220"
+            prefWidth="1220">
+    <top>
+        <VBox prefHeight="93.0" prefWidth="1155.0" BorderPane.alignment="CENTER">
+            <MenuBar>
+                <Menu fx:id="mFile" text="gui.menu.file">
+                    <Menu fx:id="mFileChangeLanguage" text="gui.menu.file.changeLanguage" />
+                    <SeparatorMenuItem />
+                    <MenuItem fx:id="mFileDisconnect" onAction="#clickOnDisconnect" text="gui.menu.file.disconnect" />
+                    <SeparatorMenuItem />
+                    <MenuItem fx:id="mFileLogout" onAction="#clickOnLogout" text="gui.menu.file.logout" />
+                    <SeparatorMenuItem />
+                    <MenuItem fx:id="mFileExit" onAction="#clickOnExit" text="gui.menu.file.exit" />
+                </Menu>
+                <Menu fx:id="mHelp" text="gui.menu.help">
+                    <MenuItem fx:id="mHelpAbout" text="gui.menu.help.about" onAction="#clickOnAbout" />
+                </Menu>
+            </MenuBar>
+            <HBox alignment="CENTER"
+                  prefHeight="60.0"
+                  prefWidth="1160.0"
+                  spacing="70.0"
+                  styleClass="navbar-game-panel"
+                  stylesheets="@../css/app.css">
+                <Pane prefHeight="200.0" prefWidth="200.0">
+                    <Label fx:id="mode"
+                           alignment="TOP_CENTER"
+                           contentDisplay="CENTER"
+                           layoutY="5.0"
+                           prefHeight="50.0"
+                           prefWidth="202.0"
+                           styleClass="navbar-game-panel-text"
+                           stylesheets="@../css/app.css"
+                           text="Mode:"
+                           textAlignment="JUSTIFY">
                         <padding>
-                           <Insets top="5.0" />
-                        </padding></Label>
-                  </children>
-               </Pane>
-               <Pane prefHeight="200.0" prefWidth="200.0">
-                  <children>
-                     <Label fx:id="scoreR" alignment="TOP_CENTER" layoutY="5.0" prefHeight="50.0" prefWidth="202.0" styleClass="navbar-game-panel-text" stylesheets="@../css/app.css" text="Points (Round):">
+                            <Insets top="5.0" />
+                        </padding>
+                    </Label>
+                </Pane>
+                <Pane prefHeight="200.0" prefWidth="200.0">
+                    <Label fx:id="scoreR"
+                           alignment="TOP_CENTER"
+                           layoutY="5.0"
+                           prefHeight="50.0"
+                           prefWidth="202.0"
+                           styleClass="navbar-game-panel-text"
+                           stylesheets="@../css/app.css"
+                           text="Points (Round):">
                         <padding>
-                           <Insets top="5.0" />
-                        </padding></Label>
-                  </children>
-               </Pane>
-               <Pane prefHeight="200.0" prefWidth="200.0">
-                  <children>
-                     <Label fx:id="scoreT" alignment="TOP_CENTER" layoutY="5.0" prefHeight="50.0" prefWidth="204.0" styleClass="navbar-game-panel-text" stylesheets="@../css/app.css" text="Points (Total):">
+                            <Insets top="5.0" />
+                        </padding>
+                    </Label>
+                </Pane>
+                <Pane prefHeight="200.0" prefWidth="200.0">
+                    <Label fx:id="scoreT"
+                           alignment="TOP_CENTER"
+                           layoutY="5.0"
+                           prefHeight="50.0"
+                           prefWidth="204.0"
+                           styleClass="navbar-game-panel-text"
+                           stylesheets="@../css/app.css"
+                           text="Points (Total):">
                         <padding>
-                           <Insets top="5.0" />
-                        </padding></Label>
-                  </children>
-               </Pane>
-            </children>
-            <VBox.margin>
-               <Insets />
-            </VBox.margin>
-         </HBox>
-      </VBox>
-   </top>
+                            <Insets top="5.0" />
+                        </padding>
+                    </Label>
+                </Pane>
+                <VBox.margin>
+                    <Insets />
+                </VBox.margin>
+            </HBox>
+        </VBox>
+    </top>
 
     <!-- body -->
-   <center>
-      <GridPane prefHeight="636.0" prefWidth="1225.0" BorderPane.alignment="CENTER">
-        <columnConstraints>
-            <ColumnConstraints hgrow="SOMETIMES" maxWidth="608.0" minWidth="10.0" prefWidth="603.0" />
-          <ColumnConstraints hgrow="SOMETIMES" maxWidth="605.0" minWidth="10.0" prefWidth="602.0" />
-        </columnConstraints>
-        <rowConstraints>
-            <RowConstraints maxHeight="306.0" minHeight="10.0" prefHeight="300.0" vgrow="SOMETIMES" />
-          <RowConstraints maxHeight="307.0" minHeight="10.0" prefHeight="296.0" vgrow="SOMETIMES" />
-        </rowConstraints>
-         <children>
+    <center>
+        <GridPane prefHeight="636.0" prefWidth="1225.0" BorderPane.alignment="CENTER">
+            <columnConstraints>
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="608.0" minWidth="10.0" prefWidth="603.0" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="605.0" minWidth="10.0" prefWidth="602.0" />
+            </columnConstraints>
+            <rowConstraints>
+                <RowConstraints maxHeight="306.0" minHeight="10.0" prefHeight="300.0" vgrow="SOMETIMES" />
+                <RowConstraints maxHeight="307.0" minHeight="10.0" prefHeight="296.0" vgrow="SOMETIMES" />
+            </rowConstraints>
             <BorderPane prefHeight="200.0" prefWidth="200.0" styleClass="player-pane" stylesheets="@../css/app.css">
-               <top>
-                  <Label fx:id="user1" prefHeight="20.0" prefWidth="556.0" styleClass="player-pane" stylesheets="@../css/app.css" text="User 1" BorderPane.alignment="TOP_LEFT">
-                     <BorderPane.margin>
-                        <Insets bottom="15.0" left="17.5" top="10.0" />
-                     </BorderPane.margin>
-                  </Label>
-               </top>
-               <center>
-                  <GridPane prefHeight="215.0" prefWidth="471.0" BorderPane.alignment="CENTER">
-                    <columnConstraints>
-                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                    </columnConstraints>
-                    <rowConstraints>
-                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                    </rowConstraints>
-                     <BorderPane.margin>
-                        <Insets bottom="15.0" left="15.0" />
-                     </BorderPane.margin>
-                     <children>
-                        <Button fx:id="user1b1" disable="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" styleClass="card-buttons" stylesheets="@../css/app.css">
-                           <GridPane.margin>
-                              <Insets bottom="5.0" right="5.0" />
-                           </GridPane.margin>
+                <top>
+                    <Label fx:id="user1"
+                           prefHeight="20.0"
+                           prefWidth="556.0"
+                           styleClass="player-pane"
+                           stylesheets="@../css/app.css"
+                           text="User 1"
+                           BorderPane.alignment="TOP_LEFT">
+                        <BorderPane.margin>
+                            <Insets bottom="15.0" left="17.5" top="10.0" />
+                        </BorderPane.margin>
+                    </Label>
+                </top>
+                <center>
+                    <GridPane prefHeight="215.0" prefWidth="471.0" BorderPane.alignment="CENTER">
+                        <columnConstraints>
+                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                        </columnConstraints>
+                        <rowConstraints>
+                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        </rowConstraints>
+                        <BorderPane.margin>
+                            <Insets bottom="15.0" left="15.0" />
+                        </BorderPane.margin>
+                        <Button fx:id="user1b1"
+                                disable="true"
+                                maxHeight="1.7976931348623157E308"
+                                maxWidth="1.7976931348623157E308"
+                                mnemonicParsing="false"
+                                styleClass="card-buttons"
+                                stylesheets="@../css/app.css">
+                            <GridPane.margin>
+                                <Insets bottom="5.0" right="5.0" />
+                            </GridPane.margin>
                         </Button>
-                        <Button fx:id="user1b2" disable="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="127.0" prefWidth="99.0" styleClass="card-buttons" stylesheets="@../css/app.css" GridPane.columnIndex="1">
-                           <GridPane.margin>
-                              <Insets bottom="5.0" right="5.0" />
-                           </GridPane.margin>
+                        <Button fx:id="user1b2"
+                                disable="true"
+                                maxHeight="1.7976931348623157E308"
+                                maxWidth="1.7976931348623157E308"
+                                mnemonicParsing="false"
+                                prefHeight="127.0"
+                                prefWidth="99.0"
+                                styleClass="card-buttons"
+                                stylesheets="@../css/app.css"
+                                GridPane.columnIndex="1">
+                            <GridPane.margin>
+                                <Insets bottom="5.0" right="5.0" />
+                            </GridPane.margin>
                         </Button>
-                        <Button fx:id="user1b3" disable="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="127.0" prefWidth="142.0" styleClass="card-buttons" stylesheets="@../css/app.css" GridPane.columnIndex="2">
-                           <GridPane.margin>
-                              <Insets bottom="5.0" right="5.0" />
-                           </GridPane.margin>
+                        <Button fx:id="user1b3"
+                                disable="true"
+                                maxHeight="1.7976931348623157E308"
+                                maxWidth="1.7976931348623157E308"
+                                mnemonicParsing="false"
+                                prefHeight="127.0"
+                                prefWidth="142.0"
+                                styleClass="card-buttons"
+                                stylesheets="@../css/app.css"
+                                GridPane.columnIndex="2">
+                            <GridPane.margin>
+                                <Insets bottom="5.0" right="5.0" />
+                            </GridPane.margin>
                         </Button>
-                        <Button fx:id="user1b4" disable="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="127.0" prefWidth="141.0" styleClass="card-buttons" stylesheets="@../css/app.css" GridPane.columnIndex="3">
-                           <GridPane.margin>
-                              <Insets bottom="5.0" right="5.0" />
-                           </GridPane.margin>
+                        <Button fx:id="user1b4"
+                                disable="true"
+                                maxHeight="1.7976931348623157E308"
+                                maxWidth="1.7976931348623157E308"
+                                mnemonicParsing="false"
+                                prefHeight="127.0"
+                                prefWidth="141.0"
+                                styleClass="card-buttons"
+                                stylesheets="@../css/app.css"
+                                GridPane.columnIndex="3">
+                            <GridPane.margin>
+                                <Insets bottom="5.0" right="5.0" />
+                            </GridPane.margin>
                         </Button>
-                        <Button fx:id="user1b5" disable="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="127.0" prefWidth="118.0" styleClass="card-buttons" stylesheets="@../css/app.css" GridPane.columnIndex="4">
-                           <GridPane.margin>
-                              <Insets bottom="5.0" right="5.0" />
-                           </GridPane.margin>
+                        <Button fx:id="user1b5"
+                                disable="true"
+                                maxHeight="1.7976931348623157E308"
+                                maxWidth="1.7976931348623157E308"
+                                mnemonicParsing="false"
+                                prefHeight="127.0"
+                                prefWidth="118.0"
+                                styleClass="card-buttons"
+                                stylesheets="@../css/app.css"
+                                GridPane.columnIndex="4">
+                            <GridPane.margin>
+                                <Insets bottom="5.0" right="5.0" />
+                            </GridPane.margin>
                         </Button>
-                        <Button fx:id="user1b6" disable="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="127.0" prefWidth="128.0" styleClass="card-buttons" stylesheets="@../css/app.css" GridPane.rowIndex="1">
-                           <GridPane.margin>
-                              <Insets bottom="5.0" right="5.0" />
-                           </GridPane.margin>
+                        <Button fx:id="user1b6"
+                                disable="true"
+                                maxHeight="1.7976931348623157E308"
+                                maxWidth="1.7976931348623157E308"
+                                mnemonicParsing="false"
+                                prefHeight="127.0"
+                                prefWidth="128.0"
+                                styleClass="card-buttons"
+                                stylesheets="@../css/app.css"
+                                GridPane.rowIndex="1">
+                            <GridPane.margin>
+                                <Insets bottom="5.0" right="5.0" />
+                            </GridPane.margin>
                         </Button>
-                        <Button fx:id="user1b7" disable="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="127.0" prefWidth="119.0" styleClass="card-buttons" stylesheets="@../css/app.css" GridPane.columnIndex="1" GridPane.rowIndex="1">
-                           <GridPane.margin>
-                              <Insets bottom="5.0" right="5.0" />
-                           </GridPane.margin>
+                        <Button fx:id="user1b7"
+                                disable="true"
+                                maxHeight="1.7976931348623157E308"
+                                maxWidth="1.7976931348623157E308"
+                                mnemonicParsing="false"
+                                prefHeight="127.0"
+                                prefWidth="119.0"
+                                styleClass="card-buttons"
+                                stylesheets="@../css/app.css"
+                                GridPane.columnIndex="1"
+                                GridPane.rowIndex="1">
+                            <GridPane.margin>
+                                <Insets bottom="5.0" right="5.0" />
+                            </GridPane.margin>
                         </Button>
-                        <Button fx:id="user1b8" disable="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="127.0" prefWidth="103.0" styleClass="card-buttons" stylesheets="@../css/app.css" GridPane.columnIndex="2" GridPane.rowIndex="1">
-                           <GridPane.margin>
-                              <Insets bottom="5.0" right="5.0" />
-                           </GridPane.margin>
+                        <Button fx:id="user1b8"
+                                disable="true"
+                                maxHeight="1.7976931348623157E308"
+                                maxWidth="1.7976931348623157E308"
+                                mnemonicParsing="false"
+                                prefHeight="127.0"
+                                prefWidth="103.0"
+                                styleClass="card-buttons"
+                                stylesheets="@../css/app.css"
+                                GridPane.columnIndex="2"
+                                GridPane.rowIndex="1">
+                            <GridPane.margin>
+                                <Insets bottom="5.0" right="5.0" />
+                            </GridPane.margin>
                         </Button>
-                        <Button fx:id="user1b9" disable="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="127.0" prefWidth="128.0" styleClass="card-buttons" stylesheets="@../css/app.css" GridPane.columnIndex="3" GridPane.rowIndex="1">
-                           <GridPane.margin>
-                              <Insets bottom="5.0" right="5.0" />
-                           </GridPane.margin>
+                        <Button fx:id="user1b9"
+                                disable="true"
+                                maxHeight="1.7976931348623157E308"
+                                maxWidth="1.7976931348623157E308"
+                                mnemonicParsing="false"
+                                prefHeight="127.0"
+                                prefWidth="128.0"
+                                styleClass="card-buttons"
+                                stylesheets="@../css/app.css"
+                                GridPane.columnIndex="3"
+                                GridPane.rowIndex="1">
+                            <GridPane.margin>
+                                <Insets bottom="5.0" right="5.0" />
+                            </GridPane.margin>
                         </Button>
-                     </children>
-                  </GridPane>
-               </center>
-               <GridPane.margin>
-                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-               </GridPane.margin>
-               <right>
-                  <GridPane prefHeight="241.0" prefWidth="74.0" BorderPane.alignment="CENTER">
-                    <columnConstraints>
-                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                    </columnConstraints>
-                    <rowConstraints>
-                      <RowConstraints maxHeight="131.0" minHeight="10.0" prefHeight="126.0" vgrow="SOMETIMES" />
-                      <RowConstraints maxHeight="113.0" minHeight="10.0" prefHeight="113.0" vgrow="SOMETIMES" />
-                    </rowConstraints>
-                     <children>
-                        <Button fx:id="user1played" disable="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="113.0" prefWidth="74.0" style="-fx-background-color: WHITE;" styleClass="card-buttons" stylesheets="@../css/app.css" GridPane.rowIndex="1">
-                           <GridPane.margin>
-                              <Insets />
-                           </GridPane.margin>
+                    </GridPane>
+                </center>
+                <GridPane.margin>
+                    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                </GridPane.margin>
+                <right>
+                    <GridPane prefHeight="241.0" prefWidth="74.0" BorderPane.alignment="CENTER">
+                        <columnConstraints>
+                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                        </columnConstraints>
+                        <rowConstraints>
+                            <RowConstraints maxHeight="131.0"
+                                            minHeight="10.0"
+                                            prefHeight="126.0"
+                                            vgrow="SOMETIMES" />
+                            <RowConstraints maxHeight="113.0"
+                                            minHeight="10.0"
+                                            prefHeight="113.0"
+                                            vgrow="SOMETIMES" />
+                        </rowConstraints>
+                        <Button fx:id="user1played"
+                                disable="true"
+                                maxHeight="1.7976931348623157E308"
+                                maxWidth="1.7976931348623157E308"
+                                mnemonicParsing="false"
+                                prefHeight="113.0"
+                                prefWidth="74.0"
+                                style="-fx-background-color: WHITE;"
+                                styleClass="card-buttons"
+                                stylesheets="@../css/app.css"
+                                GridPane.rowIndex="1">
+                            <GridPane.margin>
+                                <Insets />
+                            </GridPane.margin>
                         </Button>
-                     </children>
-                     <BorderPane.margin>
-                        <Insets bottom="10.0" right="10.0" />
-                     </BorderPane.margin>
-                  </GridPane>
-               </right>
+                        <BorderPane.margin>
+                            <Insets bottom="10.0" right="10.0" />
+                        </BorderPane.margin>
+                    </GridPane>
+                </right>
             </BorderPane>
-            <BorderPane prefHeight="200.0" prefWidth="200.0" styleClass="player-pane" stylesheets="@../css/app.css" GridPane.rowIndex="1">
-               <bottom>
-                  <Label fx:id="user2" styleClass="player-pane" stylesheets="@../css/app.css" text="User 3" BorderPane.alignment="BOTTOM_LEFT">
-                     <BorderPane.margin>
-                        <Insets bottom="10.0" left="17.5" top="15.0" />
-                     </BorderPane.margin>
-                  </Label>
-               </bottom>
-               <center>
-                  <GridPane prefHeight="220.0" prefWidth="287.0" BorderPane.alignment="CENTER">
-                    <columnConstraints>
-                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                    </columnConstraints>
-                    <rowConstraints>
-                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                    </rowConstraints>
-                     <BorderPane.margin>
-                        <Insets left="15.0" top="15.0" />
-                     </BorderPane.margin>
-                     <children>
-                        <Button fx:id="user2b5" disable="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="126.0" prefWidth="123.0" styleClass="card-buttons" stylesheets="@../css/app.css" GridPane.rowIndex="1">
-                           <GridPane.margin>
-                              <Insets right="5.0" top="5.0" />
-                           </GridPane.margin>
+            <BorderPane prefHeight="200.0"
+                        prefWidth="200.0"
+                        styleClass="player-pane"
+                        stylesheets="@../css/app.css"
+                        GridPane.rowIndex="1">
+                <bottom>
+                    <Label fx:id="user2"
+                           styleClass="player-pane"
+                           stylesheets="@../css/app.css"
+                           text="User 3"
+                           BorderPane.alignment="BOTTOM_LEFT">
+                        <BorderPane.margin>
+                            <Insets bottom="10.0" left="17.5" top="15.0" />
+                        </BorderPane.margin>
+                    </Label>
+                </bottom>
+                <center>
+                    <GridPane prefHeight="220.0" prefWidth="287.0" BorderPane.alignment="CENTER">
+                        <columnConstraints>
+                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                        </columnConstraints>
+                        <rowConstraints>
+                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        </rowConstraints>
+                        <BorderPane.margin>
+                            <Insets left="15.0" top="15.0" />
+                        </BorderPane.margin>
+                        <Button fx:id="user2b5"
+                                disable="true"
+                                maxHeight="1.7976931348623157E308"
+                                maxWidth="1.7976931348623157E308"
+                                mnemonicParsing="false"
+                                prefHeight="126.0"
+                                prefWidth="123.0"
+                                styleClass="card-buttons"
+                                stylesheets="@../css/app.css"
+                                GridPane.rowIndex="1">
+                            <GridPane.margin>
+                                <Insets right="5.0" top="5.0" />
+                            </GridPane.margin>
                         </Button>
-                        <Button fx:id="user2b6" disable="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="126.0" prefWidth="112.0" styleClass="card-buttons" stylesheets="@../css/app.css" GridPane.columnIndex="1" GridPane.rowIndex="1">
-                           <GridPane.margin>
-                              <Insets right="5.0" top="5.0" />
-                           </GridPane.margin>
+                        <Button fx:id="user2b6"
+                                disable="true"
+                                maxHeight="1.7976931348623157E308"
+                                maxWidth="1.7976931348623157E308"
+                                mnemonicParsing="false"
+                                prefHeight="126.0"
+                                prefWidth="112.0"
+                                styleClass="card-buttons"
+                                stylesheets="@../css/app.css"
+                                GridPane.columnIndex="1"
+                                GridPane.rowIndex="1">
+                            <GridPane.margin>
+                                <Insets right="5.0" top="5.0" />
+                            </GridPane.margin>
                         </Button>
-                        <Button fx:id="user2b7" disable="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="126.0" prefWidth="116.0" styleClass="card-buttons" stylesheets="@../css/app.css" GridPane.columnIndex="2" GridPane.rowIndex="1">
-                           <GridPane.margin>
-                              <Insets right="5.0" top="5.0" />
-                           </GridPane.margin>
+                        <Button fx:id="user2b7"
+                                disable="true"
+                                maxHeight="1.7976931348623157E308"
+                                maxWidth="1.7976931348623157E308"
+                                mnemonicParsing="false"
+                                prefHeight="126.0"
+                                prefWidth="116.0"
+                                styleClass="card-buttons"
+                                stylesheets="@../css/app.css"
+                                GridPane.columnIndex="2"
+                                GridPane.rowIndex="1">
+                            <GridPane.margin>
+                                <Insets right="5.0" top="5.0" />
+                            </GridPane.margin>
                         </Button>
-                        <Button fx:id="user2b8" disable="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="126.0" prefWidth="94.0" styleClass="card-buttons" stylesheets="@../css/app.css" GridPane.columnIndex="3" GridPane.rowIndex="1">
-                           <GridPane.margin>
-                              <Insets right="5.0" top="5.0" />
-                           </GridPane.margin>
+                        <Button fx:id="user2b8"
+                                disable="true"
+                                maxHeight="1.7976931348623157E308"
+                                maxWidth="1.7976931348623157E308"
+                                mnemonicParsing="false"
+                                prefHeight="126.0"
+                                prefWidth="94.0"
+                                styleClass="card-buttons"
+                                stylesheets="@../css/app.css"
+                                GridPane.columnIndex="3"
+                                GridPane.rowIndex="1">
+                            <GridPane.margin>
+                                <Insets right="5.0" top="5.0" />
+                            </GridPane.margin>
                         </Button>
-                        <Button fx:id="user2b1" disable="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="126.0" prefWidth="112.0" styleClass="card-buttons" stylesheets="@../css/app.css">
-                           <GridPane.margin>
-                              <Insets right="5.0" top="5.0" />
-                           </GridPane.margin>
+                        <Button fx:id="user2b1"
+                                disable="true"
+                                maxHeight="1.7976931348623157E308"
+                                maxWidth="1.7976931348623157E308"
+                                mnemonicParsing="false"
+                                prefHeight="126.0"
+                                prefWidth="112.0"
+                                styleClass="card-buttons"
+                                stylesheets="@../css/app.css">
+                            <GridPane.margin>
+                                <Insets right="5.0" top="5.0" />
+                            </GridPane.margin>
                         </Button>
-                        <Button fx:id="user2b2" disable="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="126.0" prefWidth="113.0" styleClass="card-buttons" stylesheets="@../css/app.css" GridPane.columnIndex="1">
-                           <GridPane.margin>
-                              <Insets right="5.0" top="5.0" />
-                           </GridPane.margin>
+                        <Button fx:id="user2b2"
+                                disable="true"
+                                maxHeight="1.7976931348623157E308"
+                                maxWidth="1.7976931348623157E308"
+                                mnemonicParsing="false"
+                                prefHeight="126.0"
+                                prefWidth="113.0"
+                                styleClass="card-buttons"
+                                stylesheets="@../css/app.css"
+                                GridPane.columnIndex="1">
+                            <GridPane.margin>
+                                <Insets right="5.0" top="5.0" />
+                            </GridPane.margin>
                         </Button>
-                        <Button fx:id="user2b3" disable="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="126.0" prefWidth="121.0" styleClass="card-buttons" stylesheets="@../css/app.css" GridPane.columnIndex="2">
-                           <GridPane.margin>
-                              <Insets right="5.0" top="5.0" />
-                           </GridPane.margin>
+                        <Button fx:id="user2b3"
+                                disable="true"
+                                maxHeight="1.7976931348623157E308"
+                                maxWidth="1.7976931348623157E308"
+                                mnemonicParsing="false"
+                                prefHeight="126.0"
+                                prefWidth="121.0"
+                                styleClass="card-buttons"
+                                stylesheets="@../css/app.css"
+                                GridPane.columnIndex="2">
+                            <GridPane.margin>
+                                <Insets right="5.0" top="5.0" />
+                            </GridPane.margin>
                         </Button>
-                        <Button fx:id="user2b4" disable="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="126.0" prefWidth="162.0" styleClass="card-buttons" stylesheets="@../css/app.css" GridPane.columnIndex="3">
-                           <GridPane.margin>
-                              <Insets right="5.0" top="5.0" />
-                           </GridPane.margin>
+                        <Button fx:id="user2b4"
+                                disable="true"
+                                maxHeight="1.7976931348623157E308"
+                                maxWidth="1.7976931348623157E308"
+                                mnemonicParsing="false"
+                                prefHeight="126.0"
+                                prefWidth="162.0"
+                                styleClass="card-buttons"
+                                stylesheets="@../css/app.css"
+                                GridPane.columnIndex="3">
+                            <GridPane.margin>
+                                <Insets right="5.0" top="5.0" />
+                            </GridPane.margin>
                         </Button>
-                        <Button fx:id="user2b9" disable="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="126.0" prefWidth="126.0" styleClass="card-buttons" stylesheets="@../css/app.css" GridPane.columnIndex="4" GridPane.rowIndex="1">
-                           <GridPane.margin>
-                              <Insets right="5.0" top="5.0" />
-                           </GridPane.margin>
+                        <Button fx:id="user2b9"
+                                disable="true"
+                                maxHeight="1.7976931348623157E308"
+                                maxWidth="1.7976931348623157E308"
+                                mnemonicParsing="false"
+                                prefHeight="126.0"
+                                prefWidth="126.0"
+                                styleClass="card-buttons"
+                                stylesheets="@../css/app.css"
+                                GridPane.columnIndex="4"
+                                GridPane.rowIndex="1">
+                            <GridPane.margin>
+                                <Insets right="5.0" top="5.0" />
+                            </GridPane.margin>
                         </Button>
-                     </children>
-                  </GridPane>
-               </center>
-               <GridPane.margin>
-                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-               </GridPane.margin>
-               <right>
-                  <GridPane prefHeight="242.0" prefWidth="74.0" BorderPane.alignment="CENTER">
-                    <columnConstraints>
-                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                    </columnConstraints>
-                    <rowConstraints>
-                      <RowConstraints maxHeight="113.0" minHeight="10.0" prefHeight="113.0" vgrow="SOMETIMES" />
-                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                    </rowConstraints>
-                     <children>
-                        <Button fx:id="user2played" disable="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="113.0" prefWidth="74.0" style="-fx-background-color: WHITE;" styleClass="card-buttons" stylesheets="@../css/app.css" />
-                     </children>
-                     <BorderPane.margin>
-                        <Insets right="10.0" top="10.0" />
-                     </BorderPane.margin>
-                  </GridPane>
-               </right>
+                    </GridPane>
+                </center>
+                <GridPane.margin>
+                    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                </GridPane.margin>
+                <right>
+                    <GridPane prefHeight="242.0" prefWidth="74.0" BorderPane.alignment="CENTER">
+                        <columnConstraints>
+                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                        </columnConstraints>
+                        <rowConstraints>
+                            <RowConstraints maxHeight="113.0"
+                                            minHeight="10.0"
+                                            prefHeight="113.0"
+                                            vgrow="SOMETIMES" />
+                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        </rowConstraints>
+                        <Button fx:id="user2played"
+                                disable="true"
+                                maxHeight="1.7976931348623157E308"
+                                maxWidth="1.7976931348623157E308"
+                                mnemonicParsing="false"
+                                prefHeight="113.0"
+                                prefWidth="74.0"
+                                style="-fx-background-color: WHITE;"
+                                styleClass="card-buttons"
+                                stylesheets="@../css/app.css" />
+                        <BorderPane.margin>
+                            <Insets right="10.0" top="10.0" />
+                        </BorderPane.margin>
+                    </GridPane>
+                </right>
             </BorderPane>
-            <BorderPane prefHeight="321.0" prefWidth="566.0" styleClass="player-pane" stylesheets="@../css/app.css" GridPane.columnIndex="1">
-               <top>
-                  <Label fx:id="user4" styleClass="player-pane" text="User 2" BorderPane.alignment="TOP_RIGHT">
-                     <BorderPane.margin>
-                        <Insets bottom="15.0" right="17.5" top="10.0" />
-                     </BorderPane.margin>
-                  </Label>
-               </top>
-               <center>
-                  <GridPane BorderPane.alignment="CENTER">
-                    <columnConstraints>
-                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                    </columnConstraints>
-                    <rowConstraints>
-                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                    </rowConstraints>
-                     <BorderPane.margin>
-                        <Insets bottom="15.0" right="15.0" />
-                     </BorderPane.margin>
-                     <children>
-                        <Button fx:id="user4b2" disable="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="83.0" prefWidth="71.0" styleClass="card-buttons" stylesheets="@../css/app.css" GridPane.columnIndex="2">
-                           <GridPane.margin>
-                              <Insets bottom="5.0" right="5.0" />
-                           </GridPane.margin>
+            <BorderPane prefHeight="321.0"
+                        prefWidth="566.0"
+                        styleClass="player-pane"
+                        stylesheets="@../css/app.css"
+                        GridPane.columnIndex="1">
+                <top>
+                    <Label fx:id="user4" styleClass="player-pane" text="User 2" BorderPane.alignment="TOP_RIGHT">
+                        <BorderPane.margin>
+                            <Insets bottom="15.0" right="17.5" top="10.0" />
+                        </BorderPane.margin>
+                    </Label>
+                </top>
+                <center>
+                    <GridPane BorderPane.alignment="CENTER">
+                        <columnConstraints>
+                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                        </columnConstraints>
+                        <rowConstraints>
+                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        </rowConstraints>
+                        <BorderPane.margin>
+                            <Insets bottom="15.0" right="15.0" />
+                        </BorderPane.margin>
+                        <Button fx:id="user4b2"
+                                disable="true"
+                                maxHeight="1.7976931348623157E308"
+                                maxWidth="1.7976931348623157E308"
+                                mnemonicParsing="false"
+                                prefHeight="83.0"
+                                prefWidth="71.0"
+                                styleClass="card-buttons"
+                                stylesheets="@../css/app.css"
+                                GridPane.columnIndex="2">
+                            <GridPane.margin>
+                                <Insets bottom="5.0" right="5.0" />
+                            </GridPane.margin>
                         </Button>
-                        <Button fx:id="user4b9" disable="true" mnemonicParsing="false" prefHeight="121.0" prefWidth="83.0" styleClass="card-buttons" stylesheets="@../css/app.css" GridPane.columnIndex="2" GridPane.rowIndex="1">
-                           <GridPane.margin>
-                              <Insets bottom="5.0" right="5.0" />
-                           </GridPane.margin>
+                        <Button fx:id="user4b9"
+                                disable="true"
+                                mnemonicParsing="false"
+                                prefHeight="121.0"
+                                prefWidth="83.0"
+                                styleClass="card-buttons"
+                                stylesheets="@../css/app.css"
+                                GridPane.columnIndex="2"
+                                GridPane.rowIndex="1">
+                            <GridPane.margin>
+                                <Insets bottom="5.0" right="5.0" />
+                            </GridPane.margin>
                         </Button>
-                        <Button fx:id="user4b3" disable="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="121.0" prefWidth="97.0" styleClass="card-buttons" stylesheets="@../css/app.css" GridPane.columnIndex="3">
-                           <padding>
-                              <Insets left="5.0" right="5.0" />
-                           </padding>
-                           <GridPane.margin>
-                              <Insets bottom="5.0" right="5.0" />
-                           </GridPane.margin>
+                        <Button fx:id="user4b3"
+                                disable="true"
+                                maxHeight="1.7976931348623157E308"
+                                maxWidth="1.7976931348623157E308"
+                                mnemonicParsing="false"
+                                prefHeight="121.0"
+                                prefWidth="97.0"
+                                styleClass="card-buttons"
+                                stylesheets="@../css/app.css"
+                                GridPane.columnIndex="3">
+                            <padding>
+                                <Insets left="5.0" right="5.0" />
+                            </padding>
+                            <GridPane.margin>
+                                <Insets bottom="5.0" right="5.0" />
+                            </GridPane.margin>
                         </Button>
-                        <Button fx:id="user4b8" disable="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="159.0" prefWidth="71.0" styleClass="card-buttons" stylesheets="@../css/app.css" GridPane.columnIndex="3" GridPane.rowIndex="1">
-                           <GridPane.margin>
-                              <Insets bottom="5.0" right="5.0" />
-                           </GridPane.margin>
+                        <Button fx:id="user4b8"
+                                disable="true"
+                                maxHeight="1.7976931348623157E308"
+                                maxWidth="1.7976931348623157E308"
+                                mnemonicParsing="false"
+                                prefHeight="159.0"
+                                prefWidth="71.0"
+                                styleClass="card-buttons"
+                                stylesheets="@../css/app.css"
+                                GridPane.columnIndex="3"
+                                GridPane.rowIndex="1">
+                            <GridPane.margin>
+                                <Insets bottom="5.0" right="5.0" />
+                            </GridPane.margin>
                         </Button>
-                        <Button fx:id="user4b4" disable="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="121.0" prefWidth="114.0" styleClass="card-buttons" stylesheets="@../css/app.css" GridPane.columnIndex="4">
-                           <GridPane.margin>
-                              <Insets bottom="5.0" right="5.0" />
-                           </GridPane.margin>
+                        <Button fx:id="user4b4"
+                                disable="true"
+                                maxHeight="1.7976931348623157E308"
+                                maxWidth="1.7976931348623157E308"
+                                mnemonicParsing="false"
+                                prefHeight="121.0"
+                                prefWidth="114.0"
+                                styleClass="card-buttons"
+                                stylesheets="@../css/app.css"
+                                GridPane.columnIndex="4">
+                            <GridPane.margin>
+                                <Insets bottom="5.0" right="5.0" />
+                            </GridPane.margin>
                         </Button>
-                        <Button fx:id="user4b1" disable="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="113.0" prefWidth="86.0" styleClass="card-buttons" stylesheets="@../css/app.css" GridPane.columnIndex="1">
-                           <GridPane.margin>
-                              <Insets bottom="5.0" right="5.0" />
-                           </GridPane.margin>
+                        <Button fx:id="user4b1"
+                                disable="true"
+                                maxHeight="1.7976931348623157E308"
+                                maxWidth="1.7976931348623157E308"
+                                mnemonicParsing="false"
+                                prefHeight="113.0"
+                                prefWidth="86.0"
+                                styleClass="card-buttons"
+                                stylesheets="@../css/app.css"
+                                GridPane.columnIndex="1">
+                            <GridPane.margin>
+                                <Insets bottom="5.0" right="5.0" />
+                            </GridPane.margin>
                         </Button>
-                        <Button fx:id="user4b7" disable="true" mnemonicParsing="false" prefHeight="121.0" prefWidth="109.0" styleClass="card-buttons" stylesheets="@../css/app.css" GridPane.columnIndex="4" GridPane.rowIndex="1">
-                           <GridPane.margin>
-                              <Insets bottom="5.0" right="5.0" />
-                           </GridPane.margin>
+                        <Button fx:id="user4b7"
+                                disable="true"
+                                mnemonicParsing="false"
+                                prefHeight="121.0"
+                                prefWidth="109.0"
+                                styleClass="card-buttons"
+                                stylesheets="@../css/app.css"
+                                GridPane.columnIndex="4"
+                                GridPane.rowIndex="1">
+                            <GridPane.margin>
+                                <Insets bottom="5.0" right="5.0" />
+                            </GridPane.margin>
                         </Button>
-                        <Button fx:id="user4b5" disable="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="121.0" prefWidth="113.0" styleClass="card-buttons" stylesheets="@../css/app.css" GridPane.columnIndex="5">
-                           <GridPane.margin>
-                              <Insets bottom="5.0" right="5.0" />
-                           </GridPane.margin>
+                        <Button fx:id="user4b5"
+                                disable="true"
+                                maxHeight="1.7976931348623157E308"
+                                maxWidth="1.7976931348623157E308"
+                                mnemonicParsing="false"
+                                prefHeight="121.0"
+                                prefWidth="113.0"
+                                styleClass="card-buttons"
+                                stylesheets="@../css/app.css"
+                                GridPane.columnIndex="5">
+                            <GridPane.margin>
+                                <Insets bottom="5.0" right="5.0" />
+                            </GridPane.margin>
                         </Button>
-                        <Button fx:id="user4b6" disable="true" mnemonicParsing="false" prefHeight="121.0" prefWidth="103.0" styleClass="card-buttons" stylesheets="@../css/app.css" GridPane.columnIndex="5" GridPane.rowIndex="1">
-                           <GridPane.margin>
-                              <Insets bottom="5.0" right="5.0" />
-                           </GridPane.margin>
+                        <Button fx:id="user4b6"
+                                disable="true"
+                                mnemonicParsing="false"
+                                prefHeight="121.0"
+                                prefWidth="103.0"
+                                styleClass="card-buttons"
+                                stylesheets="@../css/app.css"
+                                GridPane.columnIndex="5"
+                                GridPane.rowIndex="1">
+                            <GridPane.margin>
+                                <Insets bottom="5.0" right="5.0" />
+                            </GridPane.margin>
                         </Button>
-                     </children>
-                  </GridPane>
-               </center>
-               <GridPane.margin>
-                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-               </GridPane.margin>
-               <left>
-                  <GridPane prefHeight="241.0" prefWidth="74.0" BorderPane.alignment="CENTER">
-                    <columnConstraints>
-                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                    </columnConstraints>
-                    <rowConstraints>
-                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                      <RowConstraints maxHeight="113.0" minHeight="10.0" prefHeight="113.0" vgrow="SOMETIMES" />
-                    </rowConstraints>
-                     <children>
-                        <Button fx:id="user4played" disable="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="129.0" prefWidth="84.0" style="-fx-background-color: WHITE;" styleClass="card-buttons" stylesheets="@../css/app.css" GridPane.rowIndex="1" />
-                     </children>
-                     <BorderPane.margin>
-                        <Insets bottom="10.0" left="10.0" />
-                     </BorderPane.margin>
-                  </GridPane>
-               </left>
+                    </GridPane>
+                </center>
+                <GridPane.margin>
+                    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                </GridPane.margin>
+                <left>
+                    <GridPane prefHeight="241.0" prefWidth="74.0" BorderPane.alignment="CENTER">
+                        <columnConstraints>
+                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                        </columnConstraints>
+                        <rowConstraints>
+                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                            <RowConstraints maxHeight="113.0"
+                                            minHeight="10.0"
+                                            prefHeight="113.0"
+                                            vgrow="SOMETIMES" />
+                        </rowConstraints>
+                        <Button fx:id="user4played"
+                                disable="true"
+                                maxHeight="1.7976931348623157E308"
+                                maxWidth="1.7976931348623157E308"
+                                mnemonicParsing="false"
+                                prefHeight="129.0"
+                                prefWidth="84.0"
+                                style="-fx-background-color: WHITE;"
+                                styleClass="card-buttons"
+                                stylesheets="@../css/app.css"
+                                GridPane.rowIndex="1" />
+                        <BorderPane.margin>
+                            <Insets bottom="10.0" left="10.0" />
+                        </BorderPane.margin>
+                    </GridPane>
+                </left>
             </BorderPane>
-            <BorderPane prefHeight="200.0" prefWidth="200.0" styleClass="player-pane" stylesheets="@../css/app.css" GridPane.columnIndex="1" GridPane.rowIndex="1">
-               <center>
-                  <GridPane styleClass="player-pane" stylesheets="@../css/app.css" BorderPane.alignment="CENTER">
-                    <columnConstraints>
-                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                    </columnConstraints>
-                    <rowConstraints>
-                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                    </rowConstraints>
-                     <BorderPane.margin>
-                        <Insets right="15.0" top="15.0" />
-                     </BorderPane.margin>
-                     <children>
-                        <Button fx:id="user3b9" disable="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="126.0" prefWidth="117.0" styleClass="card-buttons" stylesheets="@../css/app.css" GridPane.columnIndex="2">
-                           <GridPane.margin>
-                              <Insets bottom="2.5" right="5.0" top="2.5" />
-                           </GridPane.margin>
+            <BorderPane prefHeight="200.0"
+                        prefWidth="200.0"
+                        styleClass="player-pane"
+                        stylesheets="@../css/app.css"
+                        GridPane.columnIndex="1"
+                        GridPane.rowIndex="1">
+                <center>
+                    <GridPane styleClass="player-pane" stylesheets="@../css/app.css" BorderPane.alignment="CENTER">
+                        <columnConstraints>
+                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                        </columnConstraints>
+                        <rowConstraints>
+                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        </rowConstraints>
+                        <BorderPane.margin>
+                            <Insets right="15.0" top="15.0" />
+                        </BorderPane.margin>
+                        <Button fx:id="user3b9"
+                                disable="true"
+                                maxHeight="1.7976931348623157E308"
+                                maxWidth="1.7976931348623157E308"
+                                mnemonicParsing="false"
+                                prefHeight="126.0"
+                                prefWidth="117.0"
+                                styleClass="card-buttons"
+                                stylesheets="@../css/app.css"
+                                GridPane.columnIndex="2">
+                            <GridPane.margin>
+                                <Insets bottom="2.5" right="5.0" top="2.5" />
+                            </GridPane.margin>
                         </Button>
-                        <Button fx:id="user3b1" disable="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="123.0" prefWidth="118.0" styleClass="card-buttons" stylesheets="@../css/app.css" GridPane.columnIndex="1" GridPane.rowIndex="1">
-                           <GridPane.margin>
-                              <Insets right="5.0" top="2.5" />
-                           </GridPane.margin>
+                        <Button fx:id="user3b1"
+                                disable="true"
+                                maxHeight="1.7976931348623157E308"
+                                maxWidth="1.7976931348623157E308"
+                                mnemonicParsing="false"
+                                prefHeight="123.0"
+                                prefWidth="118.0"
+                                styleClass="card-buttons"
+                                stylesheets="@../css/app.css"
+                                GridPane.columnIndex="1"
+                                GridPane.rowIndex="1">
+                            <GridPane.margin>
+                                <Insets right="5.0" top="2.5" />
+                            </GridPane.margin>
                         </Button>
-                        <Button fx:id="user3b2" disable="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="123.0" prefWidth="127.0" styleClass="card-buttons" stylesheets="@../css/app.css" GridPane.columnIndex="2" GridPane.rowIndex="1">
-                           <GridPane.margin>
-                              <Insets right="5.0" top="2.5" />
-                           </GridPane.margin>
+                        <Button fx:id="user3b2"
+                                disable="true"
+                                maxHeight="1.7976931348623157E308"
+                                maxWidth="1.7976931348623157E308"
+                                mnemonicParsing="false"
+                                prefHeight="123.0"
+                                prefWidth="127.0"
+                                styleClass="card-buttons"
+                                stylesheets="@../css/app.css"
+                                GridPane.columnIndex="2"
+                                GridPane.rowIndex="1">
+                            <GridPane.margin>
+                                <Insets right="5.0" top="2.5" />
+                            </GridPane.margin>
                         </Button>
-                        <Button fx:id="user3b8" disable="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="123.0" prefWidth="101.0" styleClass="card-buttons" stylesheets="@../css/app.css" GridPane.columnIndex="3">
-                           <GridPane.margin>
-                              <Insets bottom="2.5" right="5.0" top="2.5" />
-                           </GridPane.margin>
+                        <Button fx:id="user3b8"
+                                disable="true"
+                                maxHeight="1.7976931348623157E308"
+                                maxWidth="1.7976931348623157E308"
+                                mnemonicParsing="false"
+                                prefHeight="123.0"
+                                prefWidth="101.0"
+                                styleClass="card-buttons"
+                                stylesheets="@../css/app.css"
+                                GridPane.columnIndex="3">
+                            <GridPane.margin>
+                                <Insets bottom="2.5" right="5.0" top="2.5" />
+                            </GridPane.margin>
                         </Button>
-                        <Button fx:id="user3b3" disable="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="123.0" prefWidth="115.0" styleClass="card-buttons" stylesheets="@../css/app.css" GridPane.columnIndex="3" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1">
-                           <GridPane.margin>
-                              <Insets right="5.0" top="2.5" />
-                           </GridPane.margin>
+                        <Button fx:id="user3b3"
+                                disable="true"
+                                maxHeight="1.7976931348623157E308"
+                                maxWidth="1.7976931348623157E308"
+                                mnemonicParsing="false"
+                                prefHeight="123.0"
+                                prefWidth="115.0"
+                                styleClass="card-buttons"
+                                stylesheets="@../css/app.css"
+                                GridPane.columnIndex="3"
+                                GridPane.hgrow="ALWAYS"
+                                GridPane.rowIndex="1">
+                            <GridPane.margin>
+                                <Insets right="5.0" top="2.5" />
+                            </GridPane.margin>
                         </Button>
-                        <Button fx:id="user3b7" disable="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="123.0" prefWidth="113.0" styleClass="card-buttons" stylesheets="@../css/app.css" GridPane.columnIndex="4">
-                           <GridPane.margin>
-                              <Insets bottom="2.5" right="5.0" top="2.5" />
-                           </GridPane.margin>
+                        <Button fx:id="user3b7"
+                                disable="true"
+                                maxHeight="1.7976931348623157E308"
+                                maxWidth="1.7976931348623157E308"
+                                mnemonicParsing="false"
+                                prefHeight="123.0"
+                                prefWidth="113.0"
+                                styleClass="card-buttons"
+                                stylesheets="@../css/app.css"
+                                GridPane.columnIndex="4">
+                            <GridPane.margin>
+                                <Insets bottom="2.5" right="5.0" top="2.5" />
+                            </GridPane.margin>
                         </Button>
-                        <Button fx:id="user3b6" disable="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="123.0" prefWidth="113.0" styleClass="card-buttons" stylesheets="@../css/app.css" GridPane.columnIndex="5">
-                           <GridPane.margin>
-                              <Insets bottom="2.5" right="5.0" top="2.5" />
-                           </GridPane.margin>
+                        <Button fx:id="user3b6"
+                                disable="true"
+                                maxHeight="1.7976931348623157E308"
+                                maxWidth="1.7976931348623157E308"
+                                mnemonicParsing="false"
+                                prefHeight="123.0"
+                                prefWidth="113.0"
+                                styleClass="card-buttons"
+                                stylesheets="@../css/app.css"
+                                GridPane.columnIndex="5">
+                            <GridPane.margin>
+                                <Insets bottom="2.5" right="5.0" top="2.5" />
+                            </GridPane.margin>
                         </Button>
-                        <Button fx:id="user3b4" disable="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="123.0" prefWidth="102.0" styleClass="card-buttons" stylesheets="@../css/app.css" GridPane.columnIndex="4" GridPane.rowIndex="1">
-                           <GridPane.margin>
-                              <Insets right="5.0" top="2.5" />
-                           </GridPane.margin>
+                        <Button fx:id="user3b4"
+                                disable="true"
+                                maxHeight="1.7976931348623157E308"
+                                maxWidth="1.7976931348623157E308"
+                                mnemonicParsing="false"
+                                prefHeight="123.0"
+                                prefWidth="102.0"
+                                styleClass="card-buttons"
+                                stylesheets="@../css/app.css"
+                                GridPane.columnIndex="4"
+                                GridPane.rowIndex="1">
+                            <GridPane.margin>
+                                <Insets right="5.0" top="2.5" />
+                            </GridPane.margin>
                         </Button>
-                        <Button fx:id="user3b5" disable="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="123.0" prefWidth="123.0" styleClass="card-buttons" stylesheets="@../css/app.css" GridPane.columnIndex="5" GridPane.rowIndex="1">
-                           <GridPane.margin>
-                              <Insets right="5.0" top="2.5" />
-                           </GridPane.margin>
+                        <Button fx:id="user3b5"
+                                disable="true"
+                                maxHeight="1.7976931348623157E308"
+                                maxWidth="1.7976931348623157E308"
+                                mnemonicParsing="false"
+                                prefHeight="123.0"
+                                prefWidth="123.0"
+                                styleClass="card-buttons"
+                                stylesheets="@../css/app.css"
+                                GridPane.columnIndex="5"
+                                GridPane.rowIndex="1">
+                            <GridPane.margin>
+                                <Insets right="5.0" top="2.5" />
+                            </GridPane.margin>
                         </Button>
-                     </children>
-                  </GridPane>
-               </center>
-               <bottom>
-                  <Label fx:id="user3" styleClass="player-pane" stylesheets="@../css/app.css" text="User 4" BorderPane.alignment="BOTTOM_RIGHT">
-                     <BorderPane.margin>
-                        <Insets bottom="10.0" right="17.5" top="15.0" />
-                     </BorderPane.margin>
-                  </Label>
-               </bottom>
-               <GridPane.margin>
-                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-               </GridPane.margin>
-               <left>
-                  <GridPane prefHeight="242.0" prefWidth="74.0" styleClass="player-pane" stylesheets="@../css/app.css" BorderPane.alignment="CENTER">
-                    <columnConstraints>
-                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                    </columnConstraints>
-                    <rowConstraints>
-                      <RowConstraints maxHeight="113.0" minHeight="10.0" prefHeight="113.0" vgrow="SOMETIMES" />
-                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                    </rowConstraints>
-                     <children>
-                        <Button fx:id="user3played" disable="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="113.0" prefWidth="86.0" style="-fx-background-color: WHITE;" styleClass="card-buttons" stylesheets="@../css/app.css" />
-                     </children>
-                     <BorderPane.margin>
-                        <Insets left="10.0" top="10.0" />
-                     </BorderPane.margin>
-                  </GridPane>
-               </left>
+                    </GridPane>
+                </center>
+                <bottom>
+                    <Label fx:id="user3"
+                           styleClass="player-pane"
+                           stylesheets="@../css/app.css"
+                           text="User 4"
+                           BorderPane.alignment="BOTTOM_RIGHT">
+                        <BorderPane.margin>
+                            <Insets bottom="10.0" right="17.5" top="15.0" />
+                        </BorderPane.margin>
+                    </Label>
+                </bottom>
+                <GridPane.margin>
+                    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                </GridPane.margin>
+                <left>
+                    <GridPane prefHeight="242.0"
+                              prefWidth="74.0"
+                              styleClass="player-pane"
+                              stylesheets="@../css/app.css"
+                              BorderPane.alignment="CENTER">
+                        <columnConstraints>
+                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                        </columnConstraints>
+                        <rowConstraints>
+                            <RowConstraints maxHeight="113.0"
+                                            minHeight="10.0"
+                                            prefHeight="113.0"
+                                            vgrow="SOMETIMES" />
+                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        </rowConstraints>
+                        <Button fx:id="user3played"
+                                disable="true"
+                                maxHeight="1.7976931348623157E308"
+                                maxWidth="1.7976931348623157E308"
+                                mnemonicParsing="false"
+                                prefHeight="113.0"
+                                prefWidth="86.0"
+                                style="-fx-background-color: WHITE;"
+                                styleClass="card-buttons"
+                                stylesheets="@../css/app.css" />
+                        <BorderPane.margin>
+                            <Insets left="10.0" top="10.0" />
+                        </BorderPane.margin>
+                    </GridPane>
+                </left>
             </BorderPane>
-         </children>
-         <BorderPane.margin>
-            <Insets bottom="5.0" left="5.0" right="5.0" />
-         </BorderPane.margin>
-      </GridPane>
-   </center>
+            <BorderPane.margin>
+                <Insets bottom="5.0" left="5.0" right="5.0" />
+            </BorderPane.margin>
+        </GridPane>
+    </center>
 </BorderPane>

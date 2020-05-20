@@ -14,9 +14,14 @@
 <?import javafx.scene.control.SeparatorMenuItem?>
 <VBox xmlns="http://javafx.com/javafx/8.0.171"
       xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="jass.client.controller.LoginController"
+      fx:id="root"
+      minHeight="350.0"
+      prefHeight="350.0"
+      minWidth="350.0"
+      prefWidth="350.0"
       stylesheets="@../css/app.css"
-      styleClass="background-white"
-      fx:controller="jass.client.controller.LoginController">
+      styleClass="background-white">
     <MenuBar>
         <Menu fx:id="mFile" text="gui.menu.file">
             <Menu fx:id="mFileChangeLanguage" text="gui.menu.file.changeLanguage" />
@@ -51,8 +56,13 @@
         <JFXCheckBox fx:id="connectAutomatically" text="gui.login.connectAutomatically" />
         <Region prefHeight="15.0" VBox.vgrow="ALWAYS" />
 
-        <HBox spacing="4">
-            <JFXButton fx:id="login" disable="true" styleClass="primary" text="gui.login.login" onAction="#clickOnLogin" defaultButton="true" />
+        <HBox fx:id="buttonGroup" spacing="10">
+            <JFXButton fx:id="login"
+                       disable="true"
+                       styleClass="primary"
+                       text="gui.login.login"
+                       onAction="#clickOnLogin"
+                       defaultButton="true" />
             <JFXButton fx:id="register" styleClass="secondary" text="gui.login.register" onAction="#clickOnRegister" />
         </HBox>
     </VBox>

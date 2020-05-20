@@ -629,7 +629,7 @@ public final class GameController extends Controller implements Closeable, Disco
                 // if a player has already left, then just leave the game
                 if (gameUtil.getAPlayerLeft()) {
                     close();
-                    WindowUtil.switchToNewWindow(getView(), LobbyView.class);
+                    WindowUtil.switchTo(getView(), LobbyView.class);
                 }
                 gameUtil.setDecidedToLeaveGame(true);
                 // send message to server
@@ -646,7 +646,7 @@ public final class GameController extends Controller implements Closeable, Disco
     public void onAPlayerQuit(final BroadcastAPlayerQuitData data) {
         if (gameUtil.getDecidedToLeaveGame()) {
             close();
-            WindowUtil.switchToNewWindow(getView(), LobbyView.class);
+            WindowUtil.switchTo(getView(), LobbyView.class);
         } else if (roundOverDialogClosed) {
             showNotificationThatPlayerLeft();
         } else {
@@ -667,7 +667,7 @@ public final class GameController extends Controller implements Closeable, Disco
             if (alert.getResult() == ButtonType.YES) {
                 alert.close();
                 close();
-                WindowUtil.switchToNewWindow(getView(), LobbyView.class);
+                WindowUtil.switchTo(getView(), LobbyView.class);
             }
         });
     }

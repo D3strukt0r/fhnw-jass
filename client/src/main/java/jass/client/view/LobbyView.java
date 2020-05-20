@@ -19,14 +19,13 @@
 
 package jass.client.view;
 
-import jass.client.controller.LobbyController;
-import javafx.application.Platform;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.stage.Stage;
+import jass.client.mvc.Controller;
 import jass.client.mvc.View;
 import jass.client.util.I18nUtil;
+import javafx.application.Platform;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
 
 import java.io.IOException;
 
@@ -47,8 +46,6 @@ public final class LobbyView extends View {
     public LobbyView(final Stage stage) {
         super(stage);
         stage.titleProperty().bind(I18nUtil.createStringBinding("gui.lobby.title"));
-        stage.setResizable(false);
-        stage.setWidth(350);
 
         // Register ourselves to handle window-closing event
         stage.setOnCloseRequest(event -> Platform.exit());
@@ -62,10 +59,9 @@ public final class LobbyView extends View {
     protected Scene createGUI() {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/lobby.fxml"));
-            Parent root = loader.load();
-            LobbyController controller = loader.getController();
-            controller.setView(this);
-            return new Scene(root);
+            setRoot(loader.load());
+            ((Controller) loader.getController()).setView(this);
+            return new Scene(getRoot());
         } catch (IOException e) {
             return null;
         }

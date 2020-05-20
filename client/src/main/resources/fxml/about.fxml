@@ -5,12 +5,16 @@
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
-<VBox fx:id="root"
-      styleClass="background-white"
-      stylesheets="@../css/app.css"
-      xmlns="http://javafx.com/javafx/8.0.171"
+<VBox xmlns="http://javafx.com/javafx/8.0.171"
       xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="jass.client.controller.AboutController">
+      fx:controller="jass.client.controller.AboutController"
+      fx:id="root"
+      minHeight="260.0"
+      prefHeight="260.0"
+      minWidth="350.0"
+      prefWidth="350.0"
+      styleClass="background-white"
+      stylesheets="@../css/app.css">
 
     <!-- navbar -->
     <HBox styleClass="navbar">
@@ -22,6 +26,11 @@
         <Text fx:id="message" strokeType="OUTSIDE" strokeWidth="0.0" text="gui.about.message" />
         <Region prefHeight="20.0" VBox.vgrow="ALWAYS" />
 
-        <JFXButton fx:id="ok" styleClass="primary" text="gui.about.ok" onAction="#clickOnOk" defaultButton="true" cancelButton="true" />
+        <JFXButton fx:id="ok"
+                   styleClass="primary"
+                   text="gui.about.ok"
+                   onAction="#clickOnOk"
+                   defaultButton="true"
+                   cancelButton="true" />
     </VBox>
 </VBox>

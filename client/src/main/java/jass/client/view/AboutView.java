@@ -19,11 +19,10 @@
 
 package jass.client.view;
 
-import jass.client.controller.AboutController;
+import jass.client.mvc.Controller;
 import jass.client.mvc.View;
 import jass.client.util.I18nUtil;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
@@ -46,8 +45,6 @@ public final class AboutView extends View {
     public AboutView(final Stage stage) {
         super(stage);
         stage.titleProperty().bind(I18nUtil.createStringBinding("gui.about.title"));
-        stage.setResizable(false);
-        stage.setWidth(300);
     }
 
     /**
@@ -58,10 +55,9 @@ public final class AboutView extends View {
     protected Scene createGUI() {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/about.fxml"));
-            Parent root = loader.load();
-            AboutController controller = loader.getController();
-            controller.setView(this);
-            return new Scene(root);
+            setRoot(loader.load());
+            ((Controller) loader.getController()).setView(this);
+            return new Scene(getRoot());
         } catch (IOException e) {
             return null;
         }

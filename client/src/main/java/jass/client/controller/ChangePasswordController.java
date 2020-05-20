@@ -36,13 +36,17 @@ import jass.client.view.ServerConnectionView;
 import jass.lib.message.ChangePasswordData;
 import jass.lib.servicelocator.ServiceLocator;
 import javafx.application.Platform;
+import javafx.beans.binding.Bindings;
+import javafx.beans.property.SimpleDoubleProperty;
 import javafx.fxml.FXML;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.input.KeyCombination;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
+import javafx.stage.Stage;
 
 import java.io.Closeable;
 import java.net.URL;
@@ -57,6 +61,12 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * @since 1.0.0
  */
 public final class ChangePasswordController extends Controller implements Closeable, DisconnectEventListener {
+    /**
+     * The root element of the view.
+     */
+    @FXML
+    private VBox root;
+
     /**
      * The "File" element.
      */
@@ -136,6 +146,12 @@ public final class ChangePasswordController extends Controller implements Closea
     private JFXPasswordField repeatNewPassword;
 
     /**
+     * The container for the buttons.
+     */
+    @FXML
+    private HBox buttonGroup;
+
+    /**
      * The change button.
      */
     @FXML
@@ -175,8 +191,11 @@ public final class ChangePasswordController extends Controller implements Closea
         newPassword.promptTextProperty().bind(I18nUtil.createStringBinding(newPassword.getPromptText()));
         repeatNewPassword.promptTextProperty().bind(I18nUtil.createStringBinding(repeatNewPassword.getPromptText()));
 
+        buttonGroup.prefWidthProperty().bind(Bindings.subtract(root.widthProperty(), new SimpleDoubleProperty(40.0)));
         change.textProperty().bind(I18nUtil.createStringBinding(change.getText()));
+        change.prefWidthProperty().bind(Bindings.divide(root.widthProperty(), buttonGroup.getChildren().size()));
         cancel.textProperty().bind(I18nUtil.createStringBinding(cancel.getText()));
+        cancel.prefWidthProperty().bind(Bindings.divide(root.widthProperty(), buttonGroup.getChildren().size()));
 
         /*
          * Disable/Enable the "Change"-button depending on if the inputs are
@@ -282,7 +301,9 @@ public final class ChangePasswordController extends Controller implements Closea
             if (errorMessage.getChildren().size() == 0) {
                 // Make window larger, so it doesn't become crammed, only if we
                 // haven't done so yet
-                errorMessage.setPrefHeight(50);
+                Stage stage = getView().getStage();
+                stage.setMinHeight(stage.getMinHeight() + 40);
+                errorMessage.setPrefHeight(40);
             }
             Text text = ViewUtil.useText(translatorKey);
             text.setFill(Color.RED);

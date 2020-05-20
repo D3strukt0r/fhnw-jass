@@ -19,6 +19,7 @@
 
 package jass.client.mvc;
 
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
@@ -42,6 +43,11 @@ public abstract class View {
     private final Scene scene;
 
     /**
+     * The root element of the document.
+     */
+    private Parent root;
+
+    /**
      * Set any options for the stage in the subclass constructor.
      *
      * @param stage An object containing a Stage.
@@ -52,12 +58,19 @@ public abstract class View {
     protected View(final Stage stage) {
         this.stage = stage;
 
-        scene = createGUI(); // Create all controls within "root"
+        // Create all controls within "root"
+        scene = createGUI();
+        stage.setScene(scene);
 
         // Add icon to window
         stage.getIcons().add(new Image(getClass().getResource("/images/icon.png").toString()));
 
-        stage.setScene(scene);
+        // Use the minWidth and minHeight given from the FXML file
+        stage.setResizable(true);
+        stage.setMinHeight(root.minHeight(-1));
+        stage.setHeight(root.prefHeight(-1));
+        stage.setMinWidth(root.minWidth(-1));
+        stage.setWidth(root.prefWidth(-1));
     }
 
     /**
@@ -108,5 +121,28 @@ public abstract class View {
      */
     public Stage getStage() {
         return stage;
+    }
+
+    /**
+     * @param root The root of the document.
+     *
+     * @return Returns the object for further processing.
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
+     */
+    public View setRoot(final Parent root) {
+        this.root = root;
+        return this;
+    }
+
+    /**
+     * @return Returns the root of the document.
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
+     */
+    public Parent getRoot() {
+        return root;
     }
 }

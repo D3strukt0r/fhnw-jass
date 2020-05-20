@@ -45,11 +45,14 @@ import jass.lib.message.LogoutData;
 import jass.lib.message.SearchGameData;
 import jass.lib.servicelocator.ServiceLocator;
 import javafx.application.Platform;
+import javafx.beans.binding.Bindings;
+import javafx.beans.property.SimpleDoubleProperty;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.input.KeyCombination;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -70,6 +73,12 @@ public final class LobbyController extends Controller implements Closeable, Disc
      * The logger to print to console and save in a .log file.
      */
     private static final Logger logger = LogManager.getLogger(LobbyController.class);
+
+    /**
+     * The root element of the view.
+     */
+    @FXML
+    private VBox root;
 
     /**
      * The "File" element.
@@ -132,6 +141,12 @@ public final class LobbyController extends Controller implements Closeable, Disc
     private MenuItem mHelpAbout;
 
     /**
+     * The navbar.
+     */
+    @FXML
+    private Text navbar;
+
+    /**
      * The Find Match button.
      */
     @FXML
@@ -186,9 +201,15 @@ public final class LobbyController extends Controller implements Closeable, Disc
         mHelp.textProperty().bind(I18nUtil.createStringBinding(mHelp.getText()));
         mHelpAbout.textProperty().bind(I18nUtil.createStringBinding(mHelpAbout.getText()));
 
-        findMatch.textProperty().bind(I18nUtil.createStringBinding(findMatch.getText()));
-        cancelMatch.textProperty().bind(I18nUtil.createStringBinding(cancelMatch.getText()));
+        LoginEntity login = ServiceLocator.get(LoginEntity.class);
+        assert login != null;
+        navbar.textProperty().bind(I18nUtil.createStringBinding(navbar.getText(), login.getUsername().toUpperCase()));
+
         searching.textProperty().bind(I18nUtil.createStringBinding(searching.getText()));
+        findMatch.textProperty().bind(I18nUtil.createStringBinding(findMatch.getText()));
+        findMatch.prefWidthProperty().bind(Bindings.subtract(root.widthProperty(), new SimpleDoubleProperty(40.0)));
+        cancelMatch.textProperty().bind(I18nUtil.createStringBinding(cancelMatch.getText()));
+        cancelMatch.prefWidthProperty().bind(Bindings.subtract(root.widthProperty(), new SimpleDoubleProperty(40.0)));
     }
 
     /**

@@ -19,10 +19,9 @@
 
 package jass.client.view;
 
-import jass.client.controller.SplashController;
+import jass.client.mvc.Controller;
 import jass.client.mvc.View;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -45,7 +44,9 @@ public final class SplashView extends View {
      */
     public SplashView(final Stage stage) {
         super(stage);
-        stage.initStyle(StageStyle.TRANSPARENT); // Also undecorated
+
+        // Also undecorated
+        stage.initStyle(StageStyle.TRANSPARENT);
     }
 
     /**
@@ -56,11 +57,9 @@ public final class SplashView extends View {
     protected Scene createGUI() {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/splash_screen.fxml"));
-            Parent root = loader.load();
-            SplashController controller = loader.getController();
-            controller.setView(this);
-
-            return new Scene(root);
+            setRoot(loader.load());
+            ((Controller) loader.getController()).setView(this);
+            return new Scene(getRoot());
         } catch (IOException e) {
             return null;
         }

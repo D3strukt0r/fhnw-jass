@@ -42,13 +42,17 @@ import jass.lib.message.LoginData;
 import jass.lib.message.RegisterData;
 import jass.lib.servicelocator.ServiceLocator;
 import javafx.application.Platform;
+import javafx.beans.binding.Bindings;
+import javafx.beans.property.SimpleDoubleProperty;
 import javafx.fxml.FXML;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.input.KeyCombination;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
+import javafx.stage.Stage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -69,6 +73,12 @@ public final class RegisterController extends Controller implements Closeable, D
      * The logger to print to console and save in a .log file.
      */
     private static final Logger logger = LogManager.getLogger(RegisterController.class);
+
+    /**
+     * The root element of the view.
+     */
+    @FXML
+    private VBox root;
 
     /**
      * The "File" element.
@@ -155,6 +165,12 @@ public final class RegisterController extends Controller implements Closeable, D
     private JFXCheckBox connectAutomatically;
 
     /**
+     * The container for the buttons.
+     */
+    @FXML
+    private HBox buttonGroup;
+
+    /**
      * The register button.
      */
     @FXML
@@ -201,8 +217,11 @@ public final class RegisterController extends Controller implements Closeable, D
 
         connectAutomatically.textProperty().bind(I18nUtil.createStringBinding(connectAutomatically.getText()));
 
+        buttonGroup.prefWidthProperty().bind(Bindings.subtract(root.widthProperty(), new SimpleDoubleProperty(40.0)));
         register.textProperty().bind(I18nUtil.createStringBinding(register.getText()));
+        register.prefWidthProperty().bind(Bindings.divide(root.widthProperty(), buttonGroup.getChildren().size()));
         login.textProperty().bind(I18nUtil.createStringBinding(login.getText()));
+        login.prefWidthProperty().bind(Bindings.divide(root.widthProperty(), buttonGroup.getChildren().size()));
 
         /*
          * Disable/Enable the Connect button depending on if the inputs are
@@ -308,9 +327,8 @@ public final class RegisterController extends Controller implements Closeable, D
             if (errorMessage.getChildren().size() == 0) {
                 // Make window larger, so it doesn't become crammed, only if we
                 // haven't done so yet
-                // TODO: This keeps the window size even after switching to e.g.
-                //  login
-                //view.getStage().setHeight(view.getStage().getHeight() + 30);
+                Stage stage = getView().getStage();
+                stage.setMinHeight(stage.getMinHeight() + 40);
                 errorMessage.setPrefHeight(40);
             }
             Text text = ViewUtil.useText(translatorKey);

@@ -19,14 +19,13 @@
 
 package jass.client.view;
 
-import jass.client.controller.GameController;
-import javafx.application.Platform;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.stage.Stage;
+import jass.client.mvc.Controller;
 import jass.client.mvc.View;
 import jass.client.util.I18nUtil;
+import javafx.application.Platform;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
 
 import java.io.IOException;
 
@@ -48,9 +47,7 @@ public final class GameView extends View {
         super(stage);
         stage.titleProperty().bind(I18nUtil.createStringBinding("gui.game.title"));
         stage.setResizable(false);
-        stage.setMinHeight(715);
-        stage.setMinWidth(1220);
-        stage.centerOnScreen();
+        //stage.centerOnScreen();
 
         // Register ourselves to handle window-closing event
         stage.setOnCloseRequest(event -> Platform.exit());
@@ -64,10 +61,9 @@ public final class GameView extends View {
     protected Scene createGUI() {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/game.fxml"));
-            Parent root = loader.load();
-            GameController controller = loader.getController();
-            controller.setView(this);
-            return new Scene(root);
+            setRoot(loader.load());
+            ((Controller) loader.getController()).setView(this);
+            return new Scene(getRoot());
         } catch (IOException e) {
             return null;
         }

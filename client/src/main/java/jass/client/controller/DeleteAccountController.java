@@ -46,9 +46,11 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.input.KeyCombination;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
+import javafx.stage.Stage;
 
 import java.io.Closeable;
 import java.net.URL;
@@ -135,6 +137,12 @@ public final class DeleteAccountController extends Controller implements Closeab
     private Text message;
 
     /**
+     * The container for the buttons.
+     */
+    @FXML
+    private HBox buttonGroup;
+
+    /**
      * The delete button.
      */
     @FXML
@@ -175,8 +183,11 @@ public final class DeleteAccountController extends Controller implements Closeab
         NumberBinding wrapping = Bindings.subtract(root.widthProperty(), padding);
         message.wrappingWidthProperty().bind(wrapping);
 
+        buttonGroup.prefWidthProperty().bind(Bindings.subtract(root.widthProperty(), new SimpleDoubleProperty(40.0)));
         delete.textProperty().bind(I18nUtil.createStringBinding(delete.getText()));
+        delete.prefWidthProperty().bind(Bindings.divide(root.widthProperty(), buttonGroup.getChildren().size()));
         cancel.textProperty().bind(I18nUtil.createStringBinding(cancel.getText()));
+        cancel.prefWidthProperty().bind(Bindings.divide(root.widthProperty(), buttonGroup.getChildren().size()));
     }
 
     /**
@@ -215,10 +226,9 @@ public final class DeleteAccountController extends Controller implements Closeab
             if (errorMessage.getChildren().size() == 0) {
                 // Make window larger, so it doesn't become crammed, only if we
                 // haven't done so yet
-                // TODO: This keeps the window size even after switching to e.g.
-                //  login
-                //view.getStage().setHeight(view.getStage().getHeight() + 30);
-                errorMessage.setPrefHeight(50);
+                Stage stage = getView().getStage();
+                stage.setMinHeight(stage.getMinHeight() + 40);
+                errorMessage.setPrefHeight(40);
             }
             Text text = ViewUtil.useText(translatorKey);
             text.setFill(Color.RED);
@@ -276,7 +286,9 @@ public final class DeleteAccountController extends Controller implements Closeab
         // different thread.
         new Thread(() -> {
             SocketUtil backend = ServiceLocator.get(SocketUtil.class);
+            assert backend != null;
             LoginEntity login = ServiceLocator.get(LoginEntity.class);
+            assert login != null;
             DeleteLogin deleteLoginMsg = new DeleteLogin(new DeleteLoginData(login.getToken()));
 
             // Try to delete the account
