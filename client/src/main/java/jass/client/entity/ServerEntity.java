@@ -40,21 +40,36 @@ public final class ServerEntity extends Entity implements Service {
     private int id;
 
     /**
+     * The field name for ip.
+     */
+    public static final String IP_FIELD_NAME = "ip";
+
+    /**
      * The IP address of the server.
      */
-    @DatabaseField
+    @DatabaseField(columnName = IP_FIELD_NAME, uniqueCombo = true, canBeNull = false)
     private String ip;
+
+    /**
+     * The field name for port.
+     */
+    public static final String PORT_FIELD_NAME = "port";
 
     /**
      * The port of the server.
      */
-    @DatabaseField
+    @DatabaseField(columnName = PORT_FIELD_NAME, uniqueCombo = true, canBeNull = false)
     private int port;
+
+    /**
+     * The field name for secure.
+     */
+    public static final String SECURE_FIELD_NAME = "secure";
 
     /**
      * Whether to use SSL or not.
      */
-    @DatabaseField(defaultValue = "false")
+    @DatabaseField(columnName = SECURE_FIELD_NAME, defaultValue = "false")
     private boolean secure = false;
 
     /**

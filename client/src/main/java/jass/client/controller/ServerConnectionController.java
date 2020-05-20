@@ -19,6 +19,7 @@
 
 package jass.client.controller;
 
+import com.j256.ormlite.stmt.QueryBuilder;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXCheckBox;
 import com.jfoenix.controls.JFXComboBox;
@@ -57,6 +58,8 @@ import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.UnrecoverableKeyException;
 import java.security.cert.CertificateException;
+import java.sql.SQLException;
+import java.util.List;
 import java.util.ResourceBundle;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -182,6 +185,11 @@ public final class ServerConnectionController extends Controller {
     private JFXButton connect;
 
     /**
+     * Whether to create a new entry or not.
+     */
+    private boolean isNewEntry;
+
+    /**
      * @author Manuele Vaccari
      * @since 1.0.0
      */
@@ -257,6 +265,7 @@ public final class ServerConnectionController extends Controller {
         // Add the "Create new..." element
         chooseServer.getItems().add((new ServerEntity()).setIp(null).setPort(0));
         chooseServer.getSelectionModel().selectFirst();
+        isNewEntry = true;
         // Find all saved element
         DatabaseUtil db = ServiceLocator.get(DatabaseUtil.class);
         if (db != null) {
@@ -296,57 +305,6 @@ public final class ServerConnectionController extends Controller {
             ViewUtil.useIsIntegerValidator("gui.serverConnection.port.nan"),
             ViewUtil.useIsValidPortValidator("gui.serverConnection.port.outOfRange")
         );
-    }
-
-    /**
-     * Disables all the input fields in the view.
-     *
-     * @author Manuele Vaccari
-     * @since 1.0.0
-     */
-    public void disableInputs() {
-        ipOrDomain.setDisable(true);
-        port.setDisable(true);
-        secure.setDisable(true);
-        connectAutomatically.setDisable(true);
-    }
-
-    /**
-     * Disables all the form fields in the view.
-     *
-     * @author Manuele Vaccari
-     * @since 1.0.0
-     */
-    public void disableAll() {
-        disableInputs();
-        connect.setDisable(true);
-    }
-
-    /**
-     * Enables all the input fields in the view.
-     *
-     * @author Manuele Vaccari
-     * @since 1.0.0
-     */
-    public void enableInputs() {
-        ipOrDomain.setDisable(false);
-        port.setDisable(false);
-        secure.setDisable(false);
-        connectAutomatically.setDisable(false);
-    }
-
-    /**
-     * Enables all the form fields in the view, if it's a new entry.
-     *
-     * @author Manuele Vaccari
-     * @since 1.0.0
-     */
-    public void enableAllIfNew() {
-        ServerEntity server = chooseServer.getSelectionModel().getSelectedItem();
-        if (server == null || server.getIp() == null) {
-            enableInputs();
-        }
-        connect.setDisable(false);
     }
 
     /**
@@ -407,15 +365,19 @@ public final class ServerConnectionController extends Controller {
     private void clickOnChooseServer() {
         ServerEntity server = chooseServer.getSelectionModel().getSelectedItem();
         if (server == null || server.getIp() == null) {
-            enableInputs();
+            isNewEntry = true;
             ipOrDomain.setText("");
+            ipOrDomain.setDisable(false);
             port.setText("");
+            port.setDisable(false);
             secure.setSelected(false);
             connectAutomatically.setSelected(false);
         } else {
-            disableInputs();
+            isNewEntry = false;
             ipOrDomain.setText(server.getIp());
+            ipOrDomain.setDisable(true);
             port.setText(Integer.toString(server.getPort()));
+            port.setDisable(true);
             secure.setSelected(server.isSecure());
             connectAutomatically.setSelected(server.isConnectAutomatically());
         }
@@ -431,48 +393,102 @@ public final class ServerConnectionController extends Controller {
     @FXML
     private void clickOnConnect() {
         // Disable everything to prevent something while working on the data
-        disableAll();
+        ipOrDomain.setDisable(true);
+        port.setDisable(true);
+        secure.setDisable(true);
+        connectAutomatically.setDisable(true);
+        connect.setDisable(true);
 
         // Connection would freeze window (and the animations) so do it in a
         // different thread.
         new Thread(() -> {
+            boolean newServer = true;
             ServerEntity server = (new ServerEntity())
                 .setIp(ipOrDomain.getText())
                 .setPort(Integer.parseInt(port.getText()))
                 .setSecure(secure.isSelected())
                 .setConnectAutomatically(connectAutomatically.isSelected());
-            ServiceLocator.add(server);
+
+            // Try to find existing server
+            DatabaseUtil db = ServiceLocator.get(DatabaseUtil.class);
+            if (db != null) {
+                try {
+                    QueryBuilder<ServerEntity, Integer> findSameServerStmt = ServerRepository.getSingleton(null).getDao().queryBuilder();
+                    findSameServerStmt.where()
+                        .like(ServerEntity.IP_FIELD_NAME, server.getIp())
+                        .and().like(ServerEntity.PORT_FIELD_NAME, server.getPort());
+                    List<ServerEntity> findSameServerResult = ServerRepository.getSingleton(null).getDao().query(findSameServerStmt.prepare());
+
+                    if (findSameServerResult.size() != 0) {
+                        // Otherwise check if we need to overwrite
+                        newServer = false;
+                        server = findSameServerResult.get(0);
+                    }
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
 
             SocketUtil socket = null;
             try {
                 // Try to connect to the server
                 socket = new SocketUtil(server.getIp(), server.getPort(), server.isSecure());
-                ServiceLocator.add(socket);
             } catch (ConnectException e) {
-                enableAllIfNew();
                 setErrorMessage("gui.serverConnection.connect.connection");
             } catch (IOException e) {
-                enableAllIfNew();
                 setErrorMessage("gui.serverConnection.connect.failed");
             } catch (CertificateException | NoSuchAlgorithmException | UnrecoverableKeyException | KeyStoreException | KeyManagementException e) {
-                enableAllIfNew();
                 setErrorMessage("gui.serverConnection.connect.ssl");
             }
 
             if (socket != null) {
-                // If the user selected "Create new connection" add it to the DB
-                ServerEntity selectedItem = chooseServer.getSelectionModel().getSelectedItem();
-                if (selectedItem != null && selectedItem.getIp() == null) {
-                    if (!ServerRepository.getSingleton(null).add(server)) {
-                        logger.error("Server connection not saved to database");
-                    }
-                    if (server.isConnectAutomatically()) {
-                        // Make sure it's the only entry
-                        ServerRepository.getSingleton(null).setToConnectAutomatically(server);
+                ServiceLocator.add(server);
+                ServiceLocator.add(socket);
+
+                // Save the server in the db
+                if (db != null) {
+                    if (newServer) {
+                        if (!ServerRepository.getSingleton(null).add(server)) {
+                            logger.error("Couldn't save login data to local database.");
+                        }
+                        if (server.isConnectAutomatically()) {
+                            if (!ServerRepository.getSingleton(null).setToConnectAutomatically(server)) {
+                                logger.error("Couldn't set connect automatically.");
+                            }
+                        }
+                    } else {
+                        // Update secure
+                        if (secure.isSelected() != server.isSecure()) {
+                            server.setSecure(secure.isSelected());
+                            if (!ServerRepository.getSingleton(null).update(server)) {
+                                logger.error("Couldn't update database.");
+                            }
+                        }
+
+                        // Update connect automatically
+                        if (connectAutomatically.isSelected() && !server.isConnectAutomatically()) {
+                            if (!ServerRepository.getSingleton(null).setToConnectAutomatically(server)) {
+                                logger.error("Couldn't set connect automatically.");
+                            }
+                        } else if (!connectAutomatically.isSelected() && server.isConnectAutomatically()) {
+                            server.setConnectAutomatically(false);
+                            if (!ServerRepository.getSingleton(null).update(server)) {
+                                logger.error("Couldn't update database.");
+                            }
+                        }
                     }
                 }
                 WindowUtil.switchTo(getView(), LoginView.class);
             }
+
+            // Enable all inputs again
+            if (isNewEntry) {
+                ipOrDomain.setDisable(false);
+                port.setDisable(false);
+            }
+            secure.setDisable(false);
+            connectAutomatically.setDisable(false);
+            connect.setDisable(false);
         }).start();
     }
 }
