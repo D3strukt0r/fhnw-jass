@@ -20,7 +20,6 @@
 package jass.client.message;
 
 import jass.client.util.SocketUtil;
-import jass.lib.message.BroadcastDeckData;
 import jass.lib.message.MessageData;
 
 /**
@@ -30,11 +29,6 @@ import jass.lib.message.MessageData;
  */
 public final class BroadcastDeck extends Message {
     /**
-     * The data of the message.
-     */
-    private final BroadcastDeckData data;
-
-    /**
      * @param rawData The data (still not casted)
      *
      * @author Victor Hargrave
@@ -42,10 +36,11 @@ public final class BroadcastDeck extends Message {
      */
     public BroadcastDeck(final MessageData rawData) {
         super(rawData);
-        data = (BroadcastDeckData) rawData;
     }
 
     /**
+     * No processing required. Is handled in event handlers.
+     *
      * @author Victor Hargrave
      * @since 1.0.0
      */

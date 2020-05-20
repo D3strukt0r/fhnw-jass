@@ -19,6 +19,9 @@
 
 package jass.server.message;
 
+import jass.lib.message.LoginData;
+import jass.lib.message.MessageData;
+import jass.lib.message.ResultData;
 import jass.server.entity.UserEntity;
 import jass.server.repository.UserRepository;
 import jass.server.util.ClientUtil;
@@ -26,9 +29,6 @@ import jass.server.util.ServerSocketUtil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.json.JSONObject;
-import jass.lib.message.LoginData;
-import jass.lib.message.MessageData;
-import jass.lib.message.ResultData;
 
 import java.security.SecureRandom;
 import java.time.Instant;

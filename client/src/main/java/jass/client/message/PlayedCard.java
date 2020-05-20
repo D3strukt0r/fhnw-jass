@@ -21,7 +21,6 @@ package jass.client.message;
 
 import jass.client.util.SocketUtil;
 import jass.lib.message.MessageData;
-import jass.lib.message.PlayedCardData;
 
 /**
  * @author Victor Hargrave
@@ -30,11 +29,6 @@ import jass.lib.message.PlayedCardData;
  */
 public final class PlayedCard extends Message {
     /**
-     * The data of the message.
-     */
-    private final PlayedCardData data;
-
-    /**
      * @param rawData The data (still not casted)
      *
      * @author Victor Hargrave
@@ -42,16 +36,16 @@ public final class PlayedCard extends Message {
      */
     public PlayedCard(final MessageData rawData) {
         super(rawData);
-        data = (PlayedCardData) rawData;
     }
 
     /**
+     * No processing required. Is handled in event handlers.
+     *
      * @author Victor Hargrave
      * @since 1.0.0
      */
     @Override
     public boolean process(final SocketUtil socket) {
-        // No processing required. Is handled in event handlers.
         return true;
     }
 }

@@ -20,6 +20,7 @@
 package jass.client;
 
 import jass.client.util.DatabaseUtil;
+import jass.client.util.WindowUtil;
 import jass.client.view.SplashView;
 import javafx.application.Application;
 import javafx.stage.Stage;
@@ -32,7 +33,6 @@ import org.apache.commons.cli.ParseException;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.core.LoggerContext;
-import jass.client.util.WindowUtil;
 
 /**
  * The main class for the client application.

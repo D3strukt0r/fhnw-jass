@@ -19,7 +19,6 @@
 
 package jass.server.eventlistener;
 
-import jass.lib.message.ChosenGameModeData;
 import jass.lib.message.ContinuePlayingData;
 
 /**

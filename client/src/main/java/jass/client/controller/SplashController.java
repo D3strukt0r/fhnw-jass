@@ -20,14 +20,14 @@
 package jass.client.controller;
 
 import com.jfoenix.controls.JFXProgressBar;
+import jass.client.model.SplashModel;
+import jass.client.mvc.Controller;
+import jass.client.util.WindowUtil;
 import jass.client.view.LobbyView;
 import jass.client.view.LoginView;
 import jass.client.view.ServerConnectionView;
 import javafx.concurrent.Worker;
 import javafx.fxml.FXML;
-import jass.client.mvc.Controller;
-import jass.client.model.SplashModel;
-import jass.client.util.WindowUtil;
 
 import java.net.URL;
 import java.util.ResourceBundle;

@@ -1091,7 +1091,7 @@ public final class GameUtil implements ChosenGameModeEventListener, PlayedCardEv
      */
     @Override
     public void onContinuePlaying(final ContinuePlayingData data) {
-        continuePlayClicks ++;
+        continuePlayClicks++;
         // If all four players decide to play another round, initialize new round
         if (continuePlayClicks == 4) {
             // Set back the counter

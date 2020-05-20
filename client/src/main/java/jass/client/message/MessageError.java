@@ -19,13 +19,13 @@
 
 package jass.client.message;
 
+import jass.client.util.SocketUtil;
+import jass.lib.message.MessageData;
+import jass.lib.message.MessageErrorData;
 import javafx.application.Platform;
 import javafx.scene.control.Alert;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
-import jass.client.util.SocketUtil;
-import jass.lib.message.MessageData;
-import jass.lib.message.MessageErrorData;
 
 /**
  * Login to the server.

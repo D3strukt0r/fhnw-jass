@@ -1,5 +1,3 @@
-package jass.client.message;
-
 /*
  * fhnw-jass is jass game programmed in java for a school project.
  * Copyright (C) 2020 Manuele Vaccari & Victor Hargrave & Thomas Weber & Sasa
@@ -19,8 +17,9 @@ package jass.client.message;
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+package jass.client.message;
+
 import jass.client.util.SocketUtil;
-import jass.lib.message.ContinuePlayingData;
 import jass.lib.message.MessageData;
 
 /**
@@ -30,11 +29,6 @@ import jass.lib.message.MessageData;
  */
 public final class ContinuePlaying extends Message {
     /**
-     * The data of the message.
-     */
-    private final ContinuePlayingData data;
-
-    /**
      * @param rawData The data (still not casted)
      *
      * @author Thomas Weber
@@ -42,16 +36,16 @@ public final class ContinuePlaying extends Message {
      */
     public ContinuePlaying(final MessageData rawData) {
         super(rawData);
-        data = (ContinuePlayingData) rawData;
     }
 
     /**
+     * No processing required.
+     *
      * @author Thomas Weber
      * @since 1.0.0
      */
     @Override
     public boolean process(final SocketUtil socket) {
-        // No processing required.
         return true;
     }
 }

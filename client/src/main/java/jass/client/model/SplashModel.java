@@ -19,20 +19,20 @@
 
 package jass.client.model;
 
+import jass.client.Main;
+import jass.client.entity.LoginEntity;
+import jass.client.entity.ServerEntity;
+import jass.client.message.Login;
+import jass.client.mvc.Model;
+import jass.client.repository.LoginRepository;
+import jass.client.repository.ServerRepository;
+import jass.client.util.DatabaseUtil;
+import jass.client.util.SocketUtil;
+import jass.lib.message.LoginData;
+import jass.lib.servicelocator.ServiceLocator;
 import javafx.concurrent.Task;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import jass.client.entity.LoginEntity;
-import jass.client.repository.LoginRepository;
-import jass.client.entity.ServerEntity;
-import jass.client.repository.ServerRepository;
-import jass.client.Main;
-import jass.client.message.Login;
-import jass.client.util.SocketUtil;
-import jass.client.util.DatabaseUtil;
-import jass.client.mvc.Model;
-import jass.lib.message.LoginData;
-import jass.lib.servicelocator.ServiceLocator;
 
 import java.io.IOException;
 import java.security.KeyManagementException;

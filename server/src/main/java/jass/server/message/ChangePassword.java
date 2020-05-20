@@ -19,14 +19,14 @@
 
 package jass.server.message;
 
+import jass.lib.message.ChangePasswordData;
+import jass.lib.message.MessageData;
+import jass.lib.message.ResultData;
 import jass.server.entity.UserEntity;
 import jass.server.repository.UserRepository;
 import jass.server.util.ClientUtil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import jass.lib.message.ChangePasswordData;
-import jass.lib.message.MessageData;
-import jass.lib.message.ResultData;
 
 /**
  * Overwrite the password of the currently logged in user.

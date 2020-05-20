@@ -39,11 +39,12 @@ public final class ContinuePlaying extends Message {
     }
 
     /**
+     * No processing required. Is handled in event handlers.
+     *
      * @author Thomas Weber
      * @since 1.0.0
      */
     @Override
     public void process(final ClientUtil client) {
-        // No processing required. Is handled in event handlers.
     }
 }

@@ -41,11 +41,12 @@ public final class Result extends Message {
     }
 
     /**
+     * No processing required.
+     *
      * @author Manuele Vaccari
      * @since 1.0.0
      */
     @Override
     public void process(final ClientUtil client) {
-        // No processing is required on the server.
     }
 }

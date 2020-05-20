@@ -19,10 +19,9 @@
 
 package jass.server.message;
 
-import jass.lib.message.SearchGameData;
-
 import jass.lib.message.MessageData;
 import jass.lib.message.ResultData;
+import jass.lib.message.SearchGameData;
 import jass.lib.servicelocator.ServiceLocator;
 import jass.server.util.ClientUtil;
 import jass.server.util.SearchGameUtil;

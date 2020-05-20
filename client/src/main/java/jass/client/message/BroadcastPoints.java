@@ -48,6 +48,8 @@ public final class BroadcastPoints extends Message {
     }
 
     /**
+     * No processing required. Is handled in event handlers.
+     *
      * @author Manuele Vaccari
      * @since 1.0.0
      */

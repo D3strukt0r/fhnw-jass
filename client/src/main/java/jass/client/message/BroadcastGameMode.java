@@ -20,7 +20,6 @@
 package jass.client.message;
 
 import jass.client.util.SocketUtil;
-import jass.lib.message.BroadcastGameModeData;
 import jass.lib.message.MessageData;
 
 /**
@@ -30,11 +29,6 @@ import jass.lib.message.MessageData;
  */
 public final class BroadcastGameMode extends Message {
     /**
-     * The data of the message.
-     */
-    private final BroadcastGameModeData data;
-
-    /**
      * @param rawData The data (still not casted)
      *
      * @author Manuele Vaccari
@@ -42,16 +36,16 @@ public final class BroadcastGameMode extends Message {
      */
     public BroadcastGameMode(final MessageData rawData) {
         super(rawData);
-        data = (BroadcastGameModeData) rawData;
     }
 
     /**
+     * No processing required. Is handled in event handlers.
+     *
      * @author Manuele Vaccari
      * @since 1.0.0
      */
     @Override
     public boolean process(final SocketUtil socket) {
-        // No processing required. Is handled in event handlers.
         return true;
     }
 }

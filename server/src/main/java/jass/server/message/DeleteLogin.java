@@ -19,13 +19,13 @@
 
 package jass.server.message;
 
+import jass.lib.message.DeleteLoginData;
+import jass.lib.message.MessageData;
+import jass.lib.message.ResultData;
 import jass.server.repository.UserRepository;
 import jass.server.util.ClientUtil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import jass.lib.message.DeleteLoginData;
-import jass.lib.message.MessageData;
-import jass.lib.message.ResultData;
 
 /**
  * Deletes a user.

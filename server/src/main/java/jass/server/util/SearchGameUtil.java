@@ -19,6 +19,7 @@
 
 package jass.server.util;
 
+import jass.lib.servicelocator.Service;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -28,8 +29,6 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
-
-import jass.lib.servicelocator.Service;
 
 /**
  * Creates a game once 4 clients are searching for a game in the lobby.

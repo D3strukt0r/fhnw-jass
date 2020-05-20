@@ -32,10 +32,10 @@ import jass.server.eventlistener.ContinuePlayingEventListener;
 import jass.server.eventlistener.PlayedCardEventListener;
 import jass.server.eventlistener.StopPlayingEventListener;
 import jass.server.message.Message;
+import jass.server.message.MessageError;
 import jass.server.repository.UserRepository;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import jass.server.message.MessageError;
 
 import javax.net.ssl.SSLException;
 import java.io.BufferedReader;

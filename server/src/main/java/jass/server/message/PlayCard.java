@@ -39,11 +39,12 @@ public final class PlayCard extends Message {
     }
 
     /**
+     * No processing required. Is handled in event handlers.
+     *
      * @author Manuele Vaccari
      * @since 1.0.0
      */
     @Override
     public void process(final ClientUtil client) {
-        // No processing required. Is handled in event handlers.
     }
 }

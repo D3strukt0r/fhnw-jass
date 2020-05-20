@@ -20,7 +20,6 @@
 package jass.client.message;
 
 import jass.client.util.SocketUtil;
-import jass.lib.message.BroadcastTurnData;
 import jass.lib.message.MessageData;
 
 /**
@@ -30,11 +29,6 @@ import jass.lib.message.MessageData;
  */
 public final class BroadcastTurn extends Message {
     /**
-     * The data of the message.
-     */
-    private final BroadcastTurnData data;
-
-    /**
      * @param rawData The data (still not casted)
      *
      * @author Victor Hargrave
@@ -42,16 +36,16 @@ public final class BroadcastTurn extends Message {
      */
     public BroadcastTurn(final MessageData rawData) {
         super(rawData);
-        data = (BroadcastTurnData) rawData;
     }
 
     /**
+     * No processing required. Is handled in event handlers.
+     *
      * @author Victor Hargrave
      * @since 1.0.0
      */
     @Override
     public boolean process(final SocketUtil socket) {
-        // No processing required. Is handled in event handlers.
         return true;
     }
 }

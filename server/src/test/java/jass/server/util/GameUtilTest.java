@@ -19,11 +19,6 @@
 
 package jass.server.util;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-
-import java.util.ArrayList;
-
 import jass.lib.Card;
 import jass.lib.GameMode;
 import jass.server.entity.CardEntity;
@@ -33,6 +28,11 @@ import jass.server.entity.RoundEntity;
 import jass.server.entity.SuitEntity;
 import org.junit.Before;
 import org.junit.Test;
+
+import java.util.ArrayList;
+
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Test Class for the validation of the different game modes.

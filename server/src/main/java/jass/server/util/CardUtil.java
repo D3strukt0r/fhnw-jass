@@ -21,6 +21,7 @@ package jass.server.util;
 
 import jass.lib.message.BroadcastDeckData;
 import jass.lib.message.CardData;
+import jass.lib.servicelocator.Service;
 import jass.server.entity.CardEntity;
 import jass.server.entity.DeckEntity;
 import jass.server.entity.RoundEntity;
@@ -35,8 +36,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
-
-import jass.lib.servicelocator.Service;
 
 /**
  * @author Victor Hargrave
