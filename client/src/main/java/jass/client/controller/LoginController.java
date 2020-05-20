@@ -353,22 +353,6 @@ public final class LoginController extends Controller implements Closeable, Disc
                         // Otherwise check if we need to overwrite
                         newLogin = false;
                         login = findSameLoginResult.get(0);
-
-                        // Update remember me
-                        if (rememberMe.isSelected() && !login.isRememberMe()) {
-                            if (!LoginRepository.getSingleton(null).setToRememberMe(login)) {
-                                logger.error("Couldn't set user remember me.");
-                            }
-                        } else if (!rememberMe.isSelected() && login.isRememberMe()) {
-                            login.setRememberMe(false);
-                            LoginRepository.getSingleton(null).update(login);
-                        }
-
-                        // Update password
-                        if (!password.getText().equals(login.getPassword())) {
-                            login.setPassword(password.getText());
-                            LoginRepository.getSingleton(null).update(login);
-                        }
                     }
                 } catch (SQLException e) {
                     e.printStackTrace();
@@ -385,6 +369,25 @@ public final class LoginController extends Controller implements Closeable, Disc
                     if (newLogin) {
                         if (!LoginRepository.getSingleton(null).add(login)) {
                             logger.error("Couldn't save login data to local database.");
+                        }
+                        if (login.isRememberMe()) {
+                            LoginRepository.getSingleton(null).setToRememberMe(login);
+                        }
+                    } else {
+                        // Update remember me
+                        if (rememberMe.isSelected() && !login.isRememberMe()) {
+                            if (!LoginRepository.getSingleton(null).setToRememberMe(login)) {
+                                logger.error("Couldn't set user remember me.");
+                            }
+                        } else if (!rememberMe.isSelected() && login.isRememberMe()) {
+                            login.setRememberMe(false);
+                            LoginRepository.getSingleton(null).update(login);
+                        }
+
+                        // Update password
+                        if (!password.getText().equals(login.getPassword())) {
+                            login.setPassword(password.getText());
+                            LoginRepository.getSingleton(null).update(login);
                         }
                     }
                 }
