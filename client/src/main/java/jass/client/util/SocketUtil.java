@@ -180,7 +180,8 @@ public final class SocketUtil extends Thread implements Service, Closeable {
         }
 
         close();
-        for (DisconnectEventListener listener : EventUtil.getDisconnectListeners()) {
+        for (DisconnectEventListener listener : new ArrayList<>(EventUtil.getDisconnectListeners())) {
+            logger.info("Invoking onDisconnectEvent event on " + listener.getClass().getName());
             listener.onDisconnectEvent();
         }
     }
