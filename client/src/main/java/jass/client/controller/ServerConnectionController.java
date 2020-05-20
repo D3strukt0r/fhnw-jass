@@ -423,6 +423,11 @@ public final class ServerConnectionController extends Controller {
                         // Otherwise check if we need to overwrite
                         newServer = false;
                         server = findSameServerResult.get(0);
+
+                        // Update secure
+                        if (secure.isSelected() != server.isSecure()) {
+                            server.setSecure(secure.isSelected());
+                        }
                     }
                 } catch (SQLException e) {
                     e.printStackTrace();
@@ -457,12 +462,9 @@ public final class ServerConnectionController extends Controller {
                             }
                         }
                     } else {
-                        // Update secure
-                        if (secure.isSelected() != server.isSecure()) {
-                            server.setSecure(secure.isSelected());
-                            if (!ServerRepository.getSingleton(null).update(server)) {
-                                logger.error("Couldn't update database.");
-                            }
+                        // Update secure (in case)
+                        if (!ServerRepository.getSingleton(null).update(server)) {
+                            logger.error("Couldn't update database.");
                         }
 
                         // Update connect automatically
