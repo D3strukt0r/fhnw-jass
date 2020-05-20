@@ -227,92 +227,19 @@ public final class DatabaseUtil implements Service, Closeable {
          * Drop and Recreate all the tables except for the user if server
          * restarts.
          */
-        TableUtils.createTableIfNotExists(connectionSource, UserEntity.class);
         TableUtils.createTableIfNotExists(connectionSource, RankEntity.class);
+        RankRepository.getSingleton(null).insertSeedData();
         TableUtils.createTableIfNotExists(connectionSource, SuitEntity.class);
+        SuitRepository.getSingleton(null).insertSeedData();
         TableUtils.createTableIfNotExists(connectionSource, CardEntity.class);
+        CardRepository.getSingleton(null).insertSeedData();
+
+        TableUtils.createTableIfNotExists(connectionSource, UserEntity.class);
         TableUtils.createTableIfNotExists(connectionSource, GameEntity.class);
         TableUtils.createTableIfNotExists(connectionSource, TeamEntity.class);
         TableUtils.createTableIfNotExists(connectionSource, RoundEntity.class);
         TableUtils.createTableIfNotExists(connectionSource, DeckEntity.class);
         TableUtils.createTableIfNotExists(connectionSource, TurnEntity.class);
-
-        insertSuitSeedData();
-        insertRankSeedData();
-        insertCardSeedData();
-    }
-
-    /**
-     * @author Victor Hargrave
-     * @since 1.0.0
-     */
-    private void insertRankSeedData() throws SQLException {
-        if (!rankDao.idExists(1)) {
-            rankDao.create((new RankEntity().setId(1).setKey("6").setPointsTrumpf(0).setPointsObeAbe(0).setPointsOndeufe(11)));
-        }
-        if (!rankDao.idExists(2)) {
-            rankDao.create((new RankEntity().setId(2).setKey("7").setPointsTrumpf(0).setPointsObeAbe(0).setPointsOndeufe(0)));
-        }
-        if (!rankDao.idExists(3)) {
-            rankDao.create((new RankEntity().setId(3).setKey("8").setPointsTrumpf(0).setPointsObeAbe(8).setPointsOndeufe(8)));
-        }
-        if (!rankDao.idExists(4)) {
-            rankDao.create((new RankEntity().setId(4).setKey("9").setPointsTrumpf(0).setPointsObeAbe(0).setPointsOndeufe(0)));
-        }
-        if (!rankDao.idExists(5)) {
-            rankDao.create((new RankEntity().setId(5).setKey("10").setPointsTrumpf(10).setPointsObeAbe(10).setPointsOndeufe(10)));
-        }
-        if (!rankDao.idExists(6)) {
-            rankDao.create((new RankEntity().setId(6).setKey("jack").setPointsTrumpf(2).setPointsObeAbe(2).setPointsOndeufe(2)));
-        }
-        if (!rankDao.idExists(7)) {
-            rankDao.create((new RankEntity().setId(7).setKey("queen").setPointsTrumpf(3).setPointsObeAbe(3).setPointsOndeufe(3)));
-        }
-        if (!rankDao.idExists(8)) {
-            rankDao.create((new RankEntity().setId(8).setKey("king").setPointsTrumpf(4).setPointsObeAbe(4).setPointsOndeufe(4)));
-        }
-        if (!rankDao.idExists(9)) {
-            rankDao.create((new RankEntity().setId(9).setKey("ace").setPointsTrumpf(11).setPointsObeAbe(11).setPointsOndeufe(0)));
-        }
-    }
-
-    /**
-     * @author Victor Hargrave
-     * @since 1.0.0
-     */
-    private void insertSuitSeedData() throws SQLException {
-        if (!suitDao.idExists(1)) {
-            suitDao.create((new SuitEntity()).setId(1).setKey("hearts"));
-        }
-        if (!suitDao.idExists(2)) {
-            suitDao.create((new SuitEntity()).setId(2).setKey("diamonds"));
-        }
-        if (!suitDao.idExists(3)) {
-            suitDao.create((new SuitEntity()).setId(3).setKey("spades"));
-        }
-        if (!suitDao.idExists(4)) {
-            suitDao.create((new SuitEntity()).setId(4).setKey("clubs"));
-        }
-    }
-
-    /**
-     * @author Victor Hargrave
-     * @since 1.0.0
-     */
-    private void insertCardSeedData() throws SQLException {
-        int addend = 0;
-        for (int i = 1; i <= 4; i++) {
-            for (int j = 1; j <= 9; j++) {
-                if (!cardDao.idExists(j + addend)) {
-                    cardDao.create((new CardEntity())
-                        .setId(j + addend)
-                        .setRank(rankDao.queryForId(j))
-                        .setSuit(suitDao.queryForId(i))
-                    );
-                }
-            }
-            addend += 9;
-        }
     }
 
     /**

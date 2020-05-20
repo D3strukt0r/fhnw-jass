@@ -25,6 +25,7 @@ import jass.server.entity.CardEntity;
 import jass.server.entity.RankEntity;
 import jass.server.entity.SuitEntity;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 /**
@@ -65,6 +66,33 @@ public final class CardRepository extends Repository<Dao<CardEntity, Integer>, C
      */
     public CardRepository(final Dao<CardEntity, Integer> dao) {
         super(dao);
+    }
+
+    /**
+     * @return Returns true if successful otherwise false.
+     *
+     * @author Victor Hargrave
+     * @since 1.0.0
+     */
+    public boolean insertSeedData() {
+        try {
+            int addend = 0;
+            for (int i = 1; i <= 4; i++) {
+                for (int j = 1; j <= 9; j++) {
+                    if (!getDao().idExists(j + addend)) {
+                        getDao().create((new CardEntity())
+                            .setId(j + addend)
+                            .setRank(RankRepository.getSingleton(null).getDao().queryForId(j))
+                            .setSuit(SuitRepository.getSingleton(null).getDao().queryForId(i))
+                        );
+                    }
+                }
+                addend += 9;
+            }
+            return true;
+        } catch (SQLException e) {
+            return false;
+        }
     }
 
     /**

@@ -67,6 +67,47 @@ public final class RankRepository extends Repository<Dao<RankEntity, Integer>, R
     }
 
     /**
+     * @return Returns true if successful otherwise false.
+     *
+     * @author Victor Hargrave
+     * @since 1.0.0
+     */
+    public boolean insertSeedData() {
+        try {
+            if (!getDao().idExists(1)) {
+                getDao().create((new RankEntity().setId(1).setKey("6").setPointsTrumpf(0).setPointsObeAbe(0).setPointsOndeufe(11)));
+            }
+            if (!getDao().idExists(2)) {
+                getDao().create((new RankEntity().setId(2).setKey("7").setPointsTrumpf(0).setPointsObeAbe(0).setPointsOndeufe(0)));
+            }
+            if (!getDao().idExists(3)) {
+                getDao().create((new RankEntity().setId(3).setKey("8").setPointsTrumpf(0).setPointsObeAbe(8).setPointsOndeufe(8)));
+            }
+            if (!getDao().idExists(4)) {
+                getDao().create((new RankEntity().setId(4).setKey("9").setPointsTrumpf(0).setPointsObeAbe(0).setPointsOndeufe(0)));
+            }
+            if (!getDao().idExists(5)) {
+                getDao().create((new RankEntity().setId(5).setKey("10").setPointsTrumpf(10).setPointsObeAbe(10).setPointsOndeufe(10)));
+            }
+            if (!getDao().idExists(6)) {
+                getDao().create((new RankEntity().setId(6).setKey("jack").setPointsTrumpf(2).setPointsObeAbe(2).setPointsOndeufe(2)));
+            }
+            if (!getDao().idExists(7)) {
+                getDao().create((new RankEntity().setId(7).setKey("queen").setPointsTrumpf(3).setPointsObeAbe(3).setPointsOndeufe(3)));
+            }
+            if (!getDao().idExists(8)) {
+                getDao().create((new RankEntity().setId(8).setKey("king").setPointsTrumpf(4).setPointsObeAbe(4).setPointsOndeufe(4)));
+            }
+            if (!getDao().idExists(9)) {
+                getDao().create((new RankEntity().setId(9).setKey("ace").setPointsTrumpf(11).setPointsObeAbe(11).setPointsOndeufe(0)));
+            }
+            return true;
+        } catch (SQLException e) {
+            return false;
+        }
+    }
+
+    /**
      * @param name The name of the rank.
      *
      * @return Returns the RankEntity of the rank, or null if not found or

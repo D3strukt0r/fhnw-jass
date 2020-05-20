@@ -67,6 +67,32 @@ public final class SuitRepository extends Repository<Dao<SuitEntity, Integer>, S
     }
 
     /**
+     * @return Returns true if successful otherwise false.
+     *
+     * @author Victor Hargrave
+     * @since 1.0.0
+     */
+    public boolean insertSeedData() {
+        try {
+            if (!getDao().idExists(1)) {
+                getDao().create((new SuitEntity()).setId(1).setKey("hearts"));
+            }
+            if (!getDao().idExists(2)) {
+                getDao().create((new SuitEntity()).setId(2).setKey("diamonds"));
+            }
+            if (!getDao().idExists(3)) {
+                getDao().create((new SuitEntity()).setId(3).setKey("spades"));
+            }
+            if (!getDao().idExists(4)) {
+                getDao().create((new SuitEntity()).setId(4).setKey("clubs"));
+            }
+            return true;
+        } catch (SQLException e) {
+            return false;
+        }
+    }
+
+    /**
      * @param name The name of the suit.
      *
      * @return Returns the SuitEntity of the suit, or null if not found or
