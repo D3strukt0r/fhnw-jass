@@ -84,6 +84,19 @@ public final class ServerEntity extends Entity implements Service {
     }
 
     /**
+     * @param id The ID
+     *
+     * @return Returns the object for further processing.
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
+     */
+    public ServerEntity setId(final int id) {
+        this.id = id;
+        return this;
+    }
+
+    /**
      * @return Returns the IP address.
      *
      * @author Manuele Vaccari

@@ -113,6 +113,7 @@ public final class DatabaseUtil implements Service, Closeable {
          */
         TableUtils.createTableIfNotExists(connectionSource, LoginEntity.class);
         TableUtils.createTableIfNotExists(connectionSource, ServerEntity.class);
+        ServerRepository.getSingleton(null).insertSeedData();
     }
 
     /**

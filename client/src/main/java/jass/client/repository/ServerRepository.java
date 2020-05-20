@@ -23,6 +23,8 @@ import com.j256.ormlite.dao.Dao;
 import jass.client.entity.ServerEntity;
 import jass.lib.database.Repository;
 
+import java.sql.SQLException;
+
 /**
  * Helper functions concerning the ServerEntity class.
  *
@@ -61,6 +63,23 @@ public final class ServerRepository extends Repository<Dao<ServerEntity, Integer
      */
     public ServerRepository(final Dao<ServerEntity, Integer> dao) {
         super(dao);
+    }
+
+    /**
+     * @return Returns true if successful otherwise false.
+     *
+     * @author Manuele Vaccari
+     * @since 1.0.0
+     */
+    public boolean insertSeedData() {
+        try {
+            if (!getDao().idExists(1)) {
+                getDao().create((new ServerEntity().setId(1).setIp("jass-game.manuele-vaccari.ch").setPort(2001)));
+            }
+            return true;
+        } catch (SQLException e) {
+            return false;
+        }
     }
 
     /**
