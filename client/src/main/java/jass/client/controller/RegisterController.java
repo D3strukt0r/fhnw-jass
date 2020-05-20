@@ -367,12 +367,10 @@ public final class RegisterController extends Controller implements Closeable, D
                     QueryBuilder<LoginEntity, Integer> findSameLoginStmt = LoginRepository.getSingleton(null).getDao().queryBuilder();
                     findSameLoginStmt.where()
                         .like(LoginEntity.SERVER_FIELD_NAME, server)
-                        .and().like(LoginEntity.USERNAME_FIELD_NAME, username.getText())
-                        .and().like(LoginEntity.PASSWORD_FIELD_NAME, password.getText());
+                        .and().like(LoginEntity.USERNAME_FIELD_NAME, username.getText());
                     List<LoginEntity> findSameLoginResult = LoginRepository.getSingleton(null).getDao().query(findSameLoginStmt.prepare());
 
                     if (findSameLoginResult.size() != 0) {
-                        // Otherwise check if we need to overwrite
                         LoginEntity loginToDelete = findSameLoginResult.get(0);
                         LoginRepository.getSingleton(null).remove(loginToDelete);
                     }

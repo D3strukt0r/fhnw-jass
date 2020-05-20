@@ -79,6 +79,7 @@ public final class SplashModel extends Model {
 
             // Initialize the db connection in the service locator
             tasks.add(() -> {
+                logger.info("Task: Connect to database");
                 try {
                     DatabaseUtil db = new DatabaseUtil(DatabaseUtil.SupportedDatabase.SQLITE, Main.dbLocation);
                     ServiceLocator.add(db);
@@ -103,10 +104,13 @@ public final class SplashModel extends Model {
             });
             // Check whether we can already login
             tasks.add(() -> {
+                logger.info("Task: Login");
                 LoginEntity login = null;
                 try {
                     login = LoginRepository.getSingleton(null).findRememberMe();
-                } catch (SQLException e) { /* Ignore if nothing found */ }
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
                 if (login != null) {
                     logger.info("Automatic login found");
                     SocketUtil backend = ServiceLocator.get(SocketUtil.class);

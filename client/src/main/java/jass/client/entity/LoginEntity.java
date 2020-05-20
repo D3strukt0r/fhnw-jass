@@ -58,7 +58,7 @@ public final class LoginEntity extends Entity implements Service {
     /**
      * The password.
      */
-    @DatabaseField(columnName = PASSWORD_FIELD_NAME, uniqueCombo = true, canBeNull = false)
+    @DatabaseField(columnName = PASSWORD_FIELD_NAME, canBeNull = false)
     private String password;
 
     /**

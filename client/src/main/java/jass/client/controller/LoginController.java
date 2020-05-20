@@ -346,8 +346,7 @@ public final class LoginController extends Controller implements Closeable, Disc
                     QueryBuilder<LoginEntity, Integer> findSameLoginStmt = LoginRepository.getSingleton(null).getDao().queryBuilder();
                     findSameLoginStmt.where()
                         .like(LoginEntity.SERVER_FIELD_NAME, server)
-                        .and().like(LoginEntity.USERNAME_FIELD_NAME, username.getText())
-                        .and().like(LoginEntity.PASSWORD_FIELD_NAME, password.getText());
+                        .and().like(LoginEntity.USERNAME_FIELD_NAME, username.getText());
                     List<LoginEntity> findSameLoginResult = LoginRepository.getSingleton(null).getDao().query(findSameLoginStmt.prepare());
 
                     if (findSameLoginResult.size() != 0) {
@@ -355,12 +354,19 @@ public final class LoginController extends Controller implements Closeable, Disc
                         newLogin = false;
                         login = findSameLoginResult.get(0);
 
+                        // Update remember me
                         if (rememberMe.isSelected() && !login.isRememberMe()) {
                             if (!LoginRepository.getSingleton(null).setToRememberMe(login)) {
                                 logger.error("Couldn't set user remember me.");
                             }
                         } else if (!rememberMe.isSelected() && login.isRememberMe()) {
                             login.setRememberMe(false);
+                            LoginRepository.getSingleton(null).update(login);
+                        }
+
+                        // Update password
+                        if (!password.getText().equals(login.getPassword())) {
+                            login.setPassword(password.getText());
                             LoginRepository.getSingleton(null).update(login);
                         }
                     }
@@ -407,14 +413,14 @@ public final class LoginController extends Controller implements Closeable, Disc
                             break;
                     }
                 }
-
-                // Enable all inputs again
-                username.setDisable(false);
-                password.setDisable(false);
-                rememberMe.setDisable(false);
-                loginBtn.setDisable(false);
-                register.setDisable(false);
             }
+
+            // Enable all inputs again
+            username.setDisable(false);
+            password.setDisable(false);
+            rememberMe.setDisable(false);
+            loginBtn.setDisable(false);
+            register.setDisable(false);
         }).start();
     }
 
