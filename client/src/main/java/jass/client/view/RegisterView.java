@@ -20,14 +20,13 @@
 package jass.client.view;
 
 import jass.client.controller.RegisterController;
+import jass.client.mvc.View;
+import jass.client.util.I18nUtil;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
-import jass.client.mvc.View;
-import jass.client.util.I18nUtil;
 
 import java.io.IOException;
 
@@ -66,17 +65,7 @@ public final class RegisterView extends View {
             Parent root = loader.load();
             RegisterController controller = loader.getController();
             controller.setView(this);
-
-            Scene scene = new Scene(root);
-            scene.setOnKeyPressed(event -> {
-                // Click the register button by clicking ENTER
-                if (event.getCode() == KeyCode.ENTER) {
-                    if (!controller.getRegister().isDisable()) {
-                        controller.getRegister().fire();
-                    }
-                }
-            });
-            return scene;
+            return new Scene(root);
         } catch (IOException e) {
             return null;
         }

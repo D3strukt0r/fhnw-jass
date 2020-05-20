@@ -65,7 +65,6 @@ public final class LobbyView extends View {
             Parent root = loader.load();
             LobbyController controller = loader.getController();
             controller.setView(this);
-
             return new Scene(root);
         } catch (IOException e) {
             return null;

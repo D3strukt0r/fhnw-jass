@@ -61,7 +61,6 @@ public final class AboutView extends View {
             Parent root = loader.load();
             AboutController controller = loader.getController();
             controller.setView(this);
-
             return new Scene(root);
         } catch (IOException e) {
             return null;

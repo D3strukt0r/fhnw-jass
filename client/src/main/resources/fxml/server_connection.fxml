@@ -59,6 +59,6 @@
         <JFXCheckBox fx:id="connectAutomatically" text="gui.serverConnection.connectAutomatically" />
         <Region prefHeight="15.0" VBox.vgrow="ALWAYS" />
 
-        <JFXButton fx:id="connect" disable="true" styleClass="primary" text="gui.serverConnection.connect" onAction="#clickOnConnect" />
+        <JFXButton fx:id="connect" disable="true" styleClass="primary" text="gui.serverConnection.connect" onAction="#clickOnConnect" defaultButton="true" />
     </VBox>
 </VBox>

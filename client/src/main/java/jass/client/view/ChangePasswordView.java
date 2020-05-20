@@ -26,7 +26,6 @@ import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -66,17 +65,7 @@ public final class ChangePasswordView extends View {
             Parent root = loader.load();
             ChangePasswordController controller = loader.getController();
             controller.setView(this);
-
-            Scene scene = new Scene(root);
-            scene.setOnKeyPressed(event -> {
-                // Click the connect button by clicking ENTER
-                if (event.getCode() == KeyCode.ENTER) {
-                    if (!controller.getChange().isDisable()) {
-                        controller.getChange().fire();
-                    }
-                }
-            });
-            return scene;
+            return new Scene(root);
         } catch (IOException e) {
             return null;
         }

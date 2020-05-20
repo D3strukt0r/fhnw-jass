@@ -52,7 +52,7 @@
         <Region prefHeight="15.0" VBox.vgrow="ALWAYS" />
 
         <HBox spacing="4">
-            <JFXButton fx:id="login" disable="true" styleClass="primary" text="gui.login.login" onAction="#clickOnLogin" />
+            <JFXButton fx:id="login" disable="true" styleClass="primary" text="gui.login.login" onAction="#clickOnLogin" defaultButton="true" />
             <JFXButton fx:id="register" styleClass="secondary" text="gui.login.register" onAction="#clickOnRegister" />
         </HBox>
     </VBox>

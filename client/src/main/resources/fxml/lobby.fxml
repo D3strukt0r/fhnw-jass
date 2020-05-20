@@ -30,8 +30,8 @@
     <VBox styleClass="custom-container" alignment="TOP_CENTER">
 
         <Text fx:id="searching" styleClass="search-text" visible="false" text="gui.lobby.searching"  />
-        <JFXButton fx:id="findMatch" styleClass="primary" text="gui.lobby.findMatch" onAction="#clickOnFindMatch" />
-        <JFXButton fx:id="cancelMatch" styleClass="secondary" text="gui.lobby.cancelMatch" visible="false" onAction="#clickOnCancelMatch" />
+        <JFXButton fx:id="findMatch" styleClass="primary" text="gui.lobby.findMatch" onAction="#clickOnFindMatch" defaultButton="true" />
+        <JFXButton fx:id="cancelMatch" styleClass="secondary" text="gui.lobby.cancelMatch" visible="false" onAction="#clickOnCancelMatch" cancelButton="true" />
 
     </VBox>
 

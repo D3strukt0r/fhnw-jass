@@ -44,8 +44,8 @@
         <Region prefHeight="20.0" VBox.vgrow="ALWAYS" />
 
         <HBox spacing="4">
-            <JFXButton fx:id="delete" disable="true" styleClass="primary" text="gui.deleteAccount.delete" onAction="#clickOnDelete" />
-            <JFXButton fx:id="cancel" styleClass="secondary" text="gui.deleteAccount.cancel" onAction="#clickOnCancel" />
+            <JFXButton fx:id="delete" styleClass="primary" text="gui.deleteAccount.delete" onAction="#clickOnDelete" defaultButton="true" />
+            <JFXButton fx:id="cancel" styleClass="secondary" text="gui.deleteAccount.cancel" onAction="#clickOnCancel" cancelButton="true" />
         </HBox>
     </VBox>
 </VBox>
