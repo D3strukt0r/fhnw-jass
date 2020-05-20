@@ -353,6 +353,11 @@ public final class LoginController extends Controller implements Closeable, Disc
                         // Otherwise check if we need to overwrite
                         newLogin = false;
                         login = findSameLoginResult.get(0);
+
+                        // Update password
+                        if (!password.getText().equals(login.getPassword())) {
+                            login.setPassword(password.getText());
+                        }
                     }
                 } catch (SQLException e) {
                     e.printStackTrace();
@@ -374,6 +379,11 @@ public final class LoginController extends Controller implements Closeable, Disc
                             LoginRepository.getSingleton(null).setToRememberMe(login);
                         }
                     } else {
+                        // Update password (in case)
+                        if (!LoginRepository.getSingleton(null).update(login)) {
+                            logger.error("Couldn't update database.");
+                        }
+
                         // Update remember me
                         if (rememberMe.isSelected() && !login.isRememberMe()) {
                             if (!LoginRepository.getSingleton(null).setToRememberMe(login)) {
@@ -381,12 +391,6 @@ public final class LoginController extends Controller implements Closeable, Disc
                             }
                         } else if (!rememberMe.isSelected() && login.isRememberMe()) {
                             login.setRememberMe(false);
-                            LoginRepository.getSingleton(null).update(login);
-                        }
-
-                        // Update password
-                        if (!password.getText().equals(login.getPassword())) {
-                            login.setPassword(password.getText());
                             LoginRepository.getSingleton(null).update(login);
                         }
                     }
