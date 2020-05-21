@@ -48,7 +48,6 @@ import javafx.beans.property.SimpleDoubleProperty;
 import javafx.fxml.FXML;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
-import javafx.scene.input.KeyCombination;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -198,7 +197,6 @@ public final class LoginController extends Controller implements Closeable, Disc
         ViewUtil.useLanguageMenuContent(mFileChangeLanguage);
         mFileDisconnect.textProperty().bind(I18nUtil.createStringBinding(mFileDisconnect.getText()));
         mFileExit.textProperty().bind(I18nUtil.createStringBinding(mFileExit.getText()));
-        mFileExit.setAccelerator(KeyCombination.keyCombination("Alt+F4"));
 
         mEdit.textProperty().bind(I18nUtil.createStringBinding(mEdit.getText()));
         mEditDelete.textProperty().bind(I18nUtil.createStringBinding(mEditDelete.getText()));

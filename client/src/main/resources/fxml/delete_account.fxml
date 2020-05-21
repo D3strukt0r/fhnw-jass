@@ -1,14 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import com.jfoenix.controls.JFXButton?>
-<?import javafx.scene.control.Menu?>
-<?import javafx.scene.control.MenuBar?>
-<?import javafx.scene.control.MenuItem?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.Region?>
-<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.input.KeyCodeCombination?>
+<?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Text?>
-<?import javafx.scene.control.SeparatorMenuItem?>
 <VBox xmlns="http://javafx.com/javafx/8.0.171"
       xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="jass.client.controller.DeleteAccountController"
@@ -25,7 +21,11 @@
             <SeparatorMenuItem />
             <MenuItem fx:id="mFileDisconnect" text="gui.menu.file.disconnect" onAction="#clickOnDisconnect" />
             <SeparatorMenuItem />
-            <MenuItem fx:id="mFileExit" text="gui.menu.file.exit" onAction="#clickOnExit" />
+            <MenuItem fx:id="mFileExit" onAction="#clickOnExit" text="gui.menu.file.exit">
+                <accelerator>
+                    <KeyCodeCombination alt="DOWN" code="F4" control="UP" meta="UP" shift="UP" shortcut="UP" />
+                </accelerator>
+            </MenuItem>
         </Menu>
         <Menu fx:id="mEdit" text="gui.menu.edit">
             <MenuItem fx:id="mEditDelete" text="gui.menu.edit.delete" />

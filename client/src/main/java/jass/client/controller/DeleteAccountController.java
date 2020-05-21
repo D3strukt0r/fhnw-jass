@@ -39,13 +39,10 @@ import jass.lib.message.LogoutData;
 import jass.lib.servicelocator.ServiceLocator;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
-import javafx.beans.binding.NumberBinding;
-import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.fxml.FXML;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
-import javafx.scene.input.KeyCombination;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -168,7 +165,6 @@ public final class DeleteAccountController extends Controller implements Closeab
         ViewUtil.useLanguageMenuContent(mFileChangeLanguage);
         mFileDisconnect.textProperty().bind(I18nUtil.createStringBinding(mFileDisconnect.getText()));
         mFileExit.textProperty().bind(I18nUtil.createStringBinding(mFileExit.getText()));
-        mFileExit.setAccelerator(KeyCombination.keyCombination("Alt+F4"));
 
         mEdit.textProperty().bind(I18nUtil.createStringBinding(mEdit.getText()));
         mEditDelete.textProperty().bind(I18nUtil.createStringBinding(mEditDelete.getText()));
@@ -179,9 +175,7 @@ public final class DeleteAccountController extends Controller implements Closeab
         navbar.textProperty().bind(I18nUtil.createStringBinding(navbar.getText()));
 
         message.textProperty().bind(I18nUtil.createStringBinding(message.getText()));
-        DoubleProperty padding = new SimpleDoubleProperty(40.0);
-        NumberBinding wrapping = Bindings.subtract(root.widthProperty(), padding);
-        message.wrappingWidthProperty().bind(wrapping);
+        message.wrappingWidthProperty().bind(Bindings.subtract(root.widthProperty(), new SimpleDoubleProperty(40.0)));
 
         buttonGroup.prefWidthProperty().bind(Bindings.subtract(root.widthProperty(), new SimpleDoubleProperty(40.0)));
         delete.textProperty().bind(I18nUtil.createStringBinding(delete.getText()));

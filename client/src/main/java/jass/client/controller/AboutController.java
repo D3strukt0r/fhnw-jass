@@ -23,8 +23,6 @@ import com.jfoenix.controls.JFXButton;
 import jass.client.mvc.Controller;
 import jass.client.util.I18nUtil;
 import javafx.beans.binding.Bindings;
-import javafx.beans.binding.NumberBinding;
-import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.fxml.FXML;
 import javafx.scene.layout.VBox;
@@ -77,9 +75,7 @@ public final class AboutController extends Controller {
         navbar.textProperty().bind(I18nUtil.createStringBinding(navbar.getText()));
 
         message.textProperty().bind(I18nUtil.createStringBinding(message.getText()));
-        DoubleProperty padding = new SimpleDoubleProperty(40.0);
-        NumberBinding wrapping = Bindings.subtract(root.widthProperty(), padding);
-        message.wrappingWidthProperty().bind(wrapping);
+        message.wrappingWidthProperty().bind(Bindings.subtract(root.widthProperty(), new SimpleDoubleProperty(40.0)));
 
         ok.textProperty().bind(I18nUtil.createStringBinding(ok.getText()));
         ok.prefWidthProperty().bind(Bindings.subtract(root.widthProperty(), new SimpleDoubleProperty(40.0)));

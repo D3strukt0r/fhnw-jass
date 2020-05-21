@@ -51,7 +51,6 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
-import javafx.scene.input.KeyCombination;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import org.apache.logging.log4j.LogManager;
@@ -192,7 +191,6 @@ public final class LobbyController extends Controller implements Closeable, Disc
         mFileDisconnect.textProperty().bind(I18nUtil.createStringBinding(mFileDisconnect.getText()));
         mFileLogout.textProperty().bind(I18nUtil.createStringBinding(mFileLogout.getText()));
         mFileExit.textProperty().bind(I18nUtil.createStringBinding(mFileExit.getText()));
-        mFileExit.setAccelerator(KeyCombination.keyCombination("Alt+F4"));
 
         mEdit.textProperty().bind(I18nUtil.createStringBinding(mEdit.getText()));
         mEditChangePassword.textProperty().bind(I18nUtil.createStringBinding(mEditChangePassword.getText()));
