@@ -42,9 +42,18 @@ run {
     args('--verbose')
 }
 
+distZip {
+    archiveFileName = "jass.zip"
+}
+
+distTar {
+    archiveFileName = "jass.tgz"
+    compression = Compression.GZIP
+}
+
 jar {
     // So that Docker can easily find the file
-    archiveName("jass.jar")
+    archiveFileName = "jass.jar"
 
     // Every .jar needs a manifest file
     manifest {

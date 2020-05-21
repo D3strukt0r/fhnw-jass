@@ -30,6 +30,10 @@ script:
   - ./gradlew :server:check
   - ./gradlew :client:check
 
+after_success:
+  - ./gradlew :server:assembleDist
+  - ./gradlew :client:assembleDist
+
 deploy:
   # "latest" build
   - provider: script
@@ -49,7 +53,9 @@ deploy:
     file_glob: true
     file:
       - "client/build/libs/*"
+      - "client/build/distributions/*"
       - "server/build/libs/*"
+      - "server/build/distributions/*"
     skip_cleanup: true
     on:
       tags: true
