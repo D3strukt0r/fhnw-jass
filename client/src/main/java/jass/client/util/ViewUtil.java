@@ -293,7 +293,9 @@ public final class ViewUtil {
                     break;
                 case "fr":
                     langInLocale.bind(I18nUtil.createStringBinding("gui.menu.file.changeLanguage.french"));
-                    lang = "Français";
+                    // TODO: Can't use special characters
+                    //lang = "Français";
+                    lang = "Francais";
                     break;
                 case "it":
                     langInLocale.bind(I18nUtil.createStringBinding("gui.menu.file.changeLanguage.italian"));
@@ -301,7 +303,8 @@ public final class ViewUtil {
                     break;
             }
 
-            MenuItem language = new MenuItem(langInLocale.get() + " (" + lang + ")");
+            MenuItem language = new MenuItem();
+            language.textProperty().bind(Bindings.concat(langInLocale, " (", lang, ")"));
             language.setOnAction(event -> I18nUtil.setLocale(locale));
             changeLanguageMenu.getItems().add(language);
         }
