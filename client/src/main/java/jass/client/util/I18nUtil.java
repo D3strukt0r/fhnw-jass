@@ -137,7 +137,7 @@ public final class I18nUtil {
      * @since 1.0.0
      */
     public static String get(final String key, final Object... args) {
-        ResourceBundle bundle = ResourceBundle.getBundle("i18n/messages", getLocale());
+        ResourceBundle bundle = ResourceBundle.getBundle("i18n/messages", getLocale(), new Utf8ResourceBundle());
         return MessageFormat.format(bundle.getString(key), args);
     }
 
