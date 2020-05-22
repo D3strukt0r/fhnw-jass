@@ -688,48 +688,43 @@ public final class GameController extends Controller implements Closeable, Disco
             CardData card8 = gameUtil.getPlayerDeck().get(7);
             CardData card9 = gameUtil.getPlayerDeck().get(8);
 
+            CardData[] allCards = new CardData[] {card1,card2,card3,card4,card5,card6,card7,card8,card9};
+            Button[] userOneButtons = new Button[]{user1b1, user1b2, user1b3, user1b4, user1b5, user1b6, user1b7, user1b8, user1b9};
+            Button[] userTwoButtons = new Button[]{user2b1, user2b2, user2b3, user2b4, user2b5, user2b6, user2b7, user2b8, user2b9};
+            Button[] userThreeButtons = new Button[]{user3b1, user3b2, user3b3, user3b4, user3b5, user3b6, user3b7, user3b8, user3b9};
+            Button[] userFourButtons = new Button[]{user4b1, user4b2, user4b3, user4b4, user4b5, user4b6, user4b7, user4b8, user4b9};
+
             LoginEntity login = ServiceLocator.get(LoginEntity.class);
             assert login != null;
+
             if (gameUtil.getGame().getPlayerOne().equals(login.getUsername())) {
-                setImage(getCardPath(card1), user1b1);
-                setImage(getCardPath(card2), user1b2);
-                setImage(getCardPath(card3), user1b3);
-                setImage(getCardPath(card4), user1b4);
-                setImage(getCardPath(card5), user1b5);
-                setImage(getCardPath(card6), user1b6);
-                setImage(getCardPath(card7), user1b7);
-                setImage(getCardPath(card8), user1b8);
-                setImage(getCardPath(card9), user1b9);
+                for (int i = 0; i <=8; i++){
+                    setImage(getCardPath(allCards[i]), userOneButtons[i]);
+                    setImage(null, userTwoButtons[i]);
+                    setImage(null, userThreeButtons[i]);
+                    setImage(null, userFourButtons[i]);
+                }
             } else if (gameUtil.getGame().getPlayerTwo().equals(login.getUsername())) {
-                setImage(getCardPath(card1), user2b1);
-                setImage(getCardPath(card2), user2b2);
-                setImage(getCardPath(card3), user2b3);
-                setImage(getCardPath(card4), user2b4);
-                setImage(getCardPath(card5), user2b5);
-                setImage(getCardPath(card6), user2b6);
-                setImage(getCardPath(card7), user2b7);
-                setImage(getCardPath(card8), user2b8);
-                setImage(getCardPath(card9), user2b9);
+                for (int i = 0; i <=8; i++){
+                    setImage(getCardPath(allCards[i]), userTwoButtons[i]);
+                    setImage(null, userOneButtons[i]);
+                    setImage(null, userThreeButtons[i]);
+                    setImage(null, userFourButtons[i]);
+                }
             } else if (gameUtil.getGame().getPlayerThree().equals(login.getUsername())) {
-                setImage(getCardPath(card1), user3b1);
-                setImage(getCardPath(card2), user3b2);
-                setImage(getCardPath(card3), user3b3);
-                setImage(getCardPath(card4), user3b4);
-                setImage(getCardPath(card5), user3b5);
-                setImage(getCardPath(card6), user3b6);
-                setImage(getCardPath(card7), user3b7);
-                setImage(getCardPath(card8), user3b8);
-                setImage(getCardPath(card9), user3b9);
+                for (int i = 0; i <=8; i++){
+                    setImage(getCardPath(allCards[i]), userThreeButtons[i]);
+                    setImage(null, userOneButtons[i]);
+                    setImage(null, userTwoButtons[i]);
+                    setImage(null, userFourButtons[i]);
+                }
             } else if (gameUtil.getGame().getPlayerFour().equals(login.getUsername())) {
-                setImage(getCardPath(card1), user4b1);
-                setImage(getCardPath(card2), user4b2);
-                setImage(getCardPath(card3), user4b3);
-                setImage(getCardPath(card4), user4b4);
-                setImage(getCardPath(card5), user4b5);
-                setImage(getCardPath(card6), user4b6);
-                setImage(getCardPath(card7), user4b7);
-                setImage(getCardPath(card8), user4b8);
-                setImage(getCardPath(card9), user4b9);
+                for (int i = 0; i <=8; i++){
+                    setImage(getCardPath(allCards[i]), userFourButtons[i]);
+                    setImage(null, userOneButtons[i]);
+                    setImage(null, userTwoButtons[i]);
+                    setImage(null, userThreeButtons[i]);
+                }
             }
         }
     }
@@ -802,8 +797,14 @@ public final class GameController extends Controller implements Closeable, Disco
      */
     private void setImage(final String pathToImage, final Button button) {
         if (StringUtil.isNullOrEmpty(pathToImage)) {
-            button.setBackground(null);
-        } else {
+            BackgroundImage cardBackImage = new BackgroundImage(new Image("/images/cards/back@2x.png"),
+                BackgroundRepeat.NO_REPEAT,
+                BackgroundRepeat.NO_REPEAT,
+                BackgroundPosition.CENTER,
+                new BackgroundSize(74, 113, true, true, true, false));
+            Background cardBackground = new Background(cardBackImage);
+            button.setBackground(cardBackground);        }
+        else {
             BackgroundImage backgroundImage = new BackgroundImage(new Image(
                 getClass().getResource(pathToImage).toExternalForm()),
                 BackgroundRepeat.NO_REPEAT,
