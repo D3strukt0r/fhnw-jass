@@ -19,7 +19,6 @@
 
 package jass.client.util;
 
-import jass.client.controller.GameController;
 import jass.client.entity.LoginEntity;
 import jass.client.eventlistener.BroadcastDeckEventListener;
 import jass.client.eventlistener.BroadcastGameModeEventListener;
