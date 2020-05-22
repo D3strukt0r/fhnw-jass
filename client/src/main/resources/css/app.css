@@ -106,6 +106,16 @@ dark: #005005;
     -fx-font-size: 14px;
 }
 
+.team-pane{
+    -fx-background-color: #c5c5c5;
+    -fx-border-color: #9c9c9c;
+    -fx-border-width: 2 2 2 2;
+    -fx-border-radius: 5px;
+    -fx-background-radius: 5px;
+    -fx-text-fill: grey;
+    -fx-font-size: 14px;
+}
+
 .card-buttons {
     -fx-border-color: #acacac;
     -fx-border-width: 1 2 2 1;
