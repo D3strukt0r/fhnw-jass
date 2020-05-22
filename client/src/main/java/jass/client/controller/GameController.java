@@ -703,6 +703,11 @@ public final class GameController extends Controller implements Closeable, Disco
                     setImage(null, userTwoButtons[i]);
                     setImage(null, userThreeButtons[i]);
                     setImage(null, userFourButtons[i]);
+
+                    //clear background if the card has already been played
+                    if(allCards[i].isPlayed()){
+                        userOneButtons[i].setBackground(null);
+                    }
                 }
             } else if (gameUtil.getGame().getPlayerTwo().equals(login.getUsername())) {
                 for (int i = 0; i <=8; i++){
@@ -710,6 +715,11 @@ public final class GameController extends Controller implements Closeable, Disco
                     setImage(null, userOneButtons[i]);
                     setImage(null, userThreeButtons[i]);
                     setImage(null, userFourButtons[i]);
+
+                    //clear background if the card has already been played
+                    if(allCards[i].isPlayed()){
+                        userTwoButtons[i].setBackground(null);
+                    }
                 }
             } else if (gameUtil.getGame().getPlayerThree().equals(login.getUsername())) {
                 for (int i = 0; i <=8; i++){
@@ -717,6 +727,11 @@ public final class GameController extends Controller implements Closeable, Disco
                     setImage(null, userOneButtons[i]);
                     setImage(null, userTwoButtons[i]);
                     setImage(null, userFourButtons[i]);
+
+                    //clear background if the card has already been played
+                    if(allCards[i].isPlayed()){
+                        userThreeButtons[i].setBackground(null);
+                    }
                 }
             } else if (gameUtil.getGame().getPlayerFour().equals(login.getUsername())) {
                 for (int i = 0; i <=8; i++){
@@ -724,6 +739,11 @@ public final class GameController extends Controller implements Closeable, Disco
                     setImage(null, userOneButtons[i]);
                     setImage(null, userTwoButtons[i]);
                     setImage(null, userThreeButtons[i]);
+
+                    //clear background if the card has already been played
+                    if(allCards[i].isPlayed()){
+                        userFourButtons[i].setBackground(null);
+                    }
                 }
             }
         }
@@ -814,6 +834,20 @@ public final class GameController extends Controller implements Closeable, Disco
             Background background = new Background(backgroundImage);
             button.setBackground(background);
         }
+
+        //do not set a background for "played cards" pane
+        if(StringUtil.isNullOrEmpty(pathToImage) && button == user1played){
+            user1played.setBackground(null);
+        }
+        if(StringUtil.isNullOrEmpty(pathToImage) && button == user2played){
+            user2played.setBackground(null);
+        }
+        if(StringUtil.isNullOrEmpty(pathToImage) && button == user3played){
+            user3played.setBackground(null);
+        }
+        if(StringUtil.isNullOrEmpty(pathToImage) && button == user3played){
+            user4played.setBackground(null);
+        }
     }
 
     /**
@@ -892,6 +926,13 @@ public final class GameController extends Controller implements Closeable, Disco
      */
     public void changePlayerPaneBackground() {
         //TODO change player pane background
+        LoginEntity login = ServiceLocator.get(LoginEntity.class);
+        assert login != null;
+        assert gameUtil.getGame() != null;
+
+        if(gameUtil.getGame().getPlayerOne().equals(login.getUsername()){
+
+        }
     }
 
     /**
