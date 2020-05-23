@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.input.KeyCodeCombination?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Text?>
+<VBox xmlns="http://javafx.com/javafx/8.0.171"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="jass.client.controller.LoginController"
+      fx:id="root"
+      minHeight="350.0"
+      prefHeight="350.0"
+      minWidth="350.0"
+      prefWidth="350.0"
+      stylesheets="@../css/app.css"
+      styleClass="background-white">
+    <MenuBar>
+        <Menu fx:id="mFile" text="gui.menu.file">
+            <Menu fx:id="mFileChangeLanguage" text="gui.menu.file.changeLanguage" />
+            <SeparatorMenuItem />
+            <MenuItem fx:id="mFileDisconnect" text="gui.menu.file.disconnect" onAction="#clickOnDisconnect" />
+            <SeparatorMenuItem />
+            <MenuItem fx:id="mFileExit" onAction="#clickOnExit" text="gui.menu.file.exit">
+                <accelerator>
+                    <KeyCodeCombination alt="DOWN" code="F4" control="UP" meta="UP" shift="UP" shortcut="UP" />
+                </accelerator>
+            </MenuItem>
+        </Menu>
+        <Menu fx:id="mEdit" text="gui.menu.edit">
+            <MenuItem fx:id="mEditDelete" text="gui.menu.edit.delete" />
+        </Menu>
+        <Menu fx:id="mHelp" text="gui.menu.help">
+            <MenuItem fx:id="mHelpAbout" text="gui.menu.help.about" onAction="#clickOnAbout" />
+        </Menu>
+    </MenuBar>
+
+    <!-- navbar -->
+    <HBox styleClass="navbar">
+        <Text fx:id="navbar" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="gui.login.title2" />
+    </HBox>
+
+    <!-- body -->
+    <VBox styleClass="custom-container">
+        <VBox fx:id="errorMessage" prefHeight="0.0" />
+
+        <JFXTextField fx:id="username" labelFloat="true" promptText="gui.login.username" />
+        <Region prefHeight="35.0" VBox.vgrow="ALWAYS" />
+
+        <JFXPasswordField fx:id="password" labelFloat="true" promptText="gui.login.password" />
+        <Region prefHeight="35.0" VBox.vgrow="ALWAYS" />
+
+        <JFXCheckBox fx:id="rememberMe" text="gui.login.connectAutomatically" />
+        <Region prefHeight="15.0" VBox.vgrow="ALWAYS" />
+
+        <HBox fx:id="buttonGroup" spacing="10">
+            <JFXButton fx:id="loginBtn"
+                       disable="true"
+                       styleClass="primary"
+                       text="gui.login.login"
+                       onAction="#clickOnLogin"
+                       defaultButton="true" />
+            <JFXButton fx:id="register" styleClass="secondary" text="gui.login.register" onAction="#clickOnRegister" />
+        </HBox>
+    </VBox>
+</VBox>

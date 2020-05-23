@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Text?>
+<VBox xmlns="http://javafx.com/javafx/8.0.171"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="jass.client.controller.AboutController"
+      fx:id="root"
+      minHeight="260.0"
+      prefHeight="260.0"
+      minWidth="350.0"
+      prefWidth="350.0"
+      styleClass="background-white"
+      stylesheets="@../css/app.css">
+
+    <!-- navbar -->
+    <HBox styleClass="navbar">
+        <Text fx:id="navbar" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="gui.about.title2" />
+    </HBox>
+
+    <!-- body -->
+    <VBox styleClass="custom-container">
+        <Text fx:id="message" strokeType="OUTSIDE" strokeWidth="0.0" text="gui.about.message" />
+        <Region prefHeight="20.0" VBox.vgrow="ALWAYS" />
+
+        <JFXButton fx:id="ok"
+                   styleClass="primary"
+                   text="gui.about.ok"
+                   onAction="#clickOnOk"
+                   defaultButton="true"
+                   cancelButton="true" />
+    </VBox>
+</VBox>

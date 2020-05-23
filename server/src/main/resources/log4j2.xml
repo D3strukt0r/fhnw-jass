@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="warn" name="JassGameServer" packages="">
+    <Appenders>
+        <File name="File" fileName="jass_server.log" ignoreExceptions="false">
+            <PatternLayout>
+                <Pattern>%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n</Pattern>
+            </PatternLayout>
+        </File>
+        <Console name="Console" target="SYSTEM_OUT" ignoreExceptions="false">
+            <PatternLayout>
+                <Pattern>%-5level %logger{36} - %msg%n</Pattern>
+            </PatternLayout>
+        </Console>
+    </Appenders>
+    <Loggers>
+        <Logger name="com.j256.ormlite" level="info" additivity="false">
+            <AppenderRef ref="Console" />
+            <AppenderRef ref="File" level="debug"/>
+        </Logger>
+        <Logger name="com.j256.ormlite.stmt.StatementExecutor" level="debug" additivity="false">
+            <AppenderRef ref="Console" />
+            <AppenderRef ref="File"/>
+        </Logger>
+        <Root level="info">
+            <AppenderRef ref="Console"/>
+            <AppenderRef ref="File" level="debug"/>
+        </Root>
+    </Loggers>
+</Configuration>

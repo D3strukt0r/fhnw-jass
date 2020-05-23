@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.input.KeyCodeCombination?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Text?>
+<VBox fx:id="root"
+      minHeight="460.0"
+      minWidth="350.0"
+      prefHeight="460.0"
+      prefWidth="350.0"
+      styleClass="background-white"
+      stylesheets="@../css/app.css"
+      xmlns="http://javafx.com/javafx/8.0.171"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="jass.client.controller.ServerConnectionController">
+    <MenuBar>
+        <Menu fx:id="mFile" text="gui.menu.file">
+            <Menu fx:id="mFileChangeLanguage" text="gui.menu.file.changeLanguage" />
+            <SeparatorMenuItem />
+            <MenuItem fx:id="mFileExit" onAction="#clickOnExit" text="gui.menu.file.exit">
+                <accelerator>
+                    <KeyCodeCombination alt="DOWN" code="F4" control="UP" meta="UP" shift="UP" shortcut="UP" />
+                </accelerator>
+            </MenuItem>
+        </Menu>
+        <Menu fx:id="mEdit" text="gui.menu.edit">
+            <MenuItem fx:id="mEditDelete" text="gui.menu.edit.delete" />
+        </Menu>
+        <Menu fx:id="mHelp" text="gui.menu.help">
+            <MenuItem fx:id="mHelpAbout" onAction="#clickOnAbout" text="gui.menu.help.about" />
+        </Menu>
+    </MenuBar>
+
+    <!-- navbar -->
+    <HBox styleClass="navbar">
+        <Text fx:id="navbar" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="gui.serverConnection.title2" />
+    </HBox>
+
+    <!-- body -->
+    <VBox styleClass="custom-container">
+        <VBox fx:id="errorMessage" prefHeight="0.0" />
+
+        <JFXComboBox fx:id="chooseServer" onAction="#clickOnChooseServer" />
+        <Region prefHeight="25.0" VBox.vgrow="ALWAYS" />
+
+        <JFXTextField fx:id="ipOrDomain" labelFloat="true" promptText="gui.serverConnection.ipOrDomain" />
+        <Region prefHeight="35.0" VBox.vgrow="ALWAYS" />
+        <Text fx:id="ipHint" strokeType="OUTSIDE" strokeWidth="0.0" text="gui.serverConnection.ip.hint" />
+        <Region prefHeight="15.0" VBox.vgrow="ALWAYS" />
+
+        <JFXTextField fx:id="port" labelFloat="true" promptText="gui.serverConnection.port" />
+        <Region prefHeight="35.0" VBox.vgrow="ALWAYS" />
+        <Text fx:id="portHint" strokeType="OUTSIDE" strokeWidth="0.0" text="gui.serverConnection.port.hint" />
+        <Region prefHeight="15.0" VBox.vgrow="ALWAYS" />
+
+        <JFXCheckBox fx:id="secure" text="gui.serverConnection.secure" />
+        <Region prefHeight="10.0" VBox.vgrow="ALWAYS" />
+        <JFXCheckBox fx:id="connectAutomatically" text="gui.serverConnection.connectAutomatically" />
+        <Region prefHeight="15.0" VBox.vgrow="ALWAYS" />
+
+        <JFXButton fx:id="connect"
+                   defaultButton="true"
+                   disable="true"
+                   onAction="#clickOnConnect"
+                   styleClass="primary"
+                   text="gui.serverConnection.connect" />
+    </VBox>
+</VBox>

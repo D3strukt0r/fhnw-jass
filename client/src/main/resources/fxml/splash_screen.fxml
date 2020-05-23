@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXProgressBar?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<BorderPane prefHeight="300"
+            prefWidth="300"
+            styleClass="splash"
+            stylesheets="@../css/splash.css"
+            xmlns="http://javafx.com/javafx/8.0.171"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="jass.client.controller.SplashController">
+    <center>
+        <HBox prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER" styleClass="icon-container" />
+    </center>
+    <bottom>
+        <JFXProgressBar fx:id="loadingProgress" BorderPane.alignment="CENTER" prefWidth="Infinity" />
+    </bottom>
+</BorderPane>

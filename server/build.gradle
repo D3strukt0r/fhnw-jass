@@ -1,0 +1,63 @@
+plugins {
+    id('application')
+}
+
+dependencies {
+    implementation(project(':lib'))
+
+    // Use SQLite and ORM for storage
+    implementation(group: 'org.xerial', name: 'sqlite-jdbc', version: '3.28.0')
+    implementation(group: 'mysql', name: 'mysql-connector-java', version: '8.0.20')
+    implementation(group: 'org.mariadb.jdbc', name: 'mariadb-java-client', version: '2.1.2')
+
+    implementation(group: 'com.j256.ormlite', name: 'ormlite-core', version: '5.1')
+    implementation(group: 'com.j256.ormlite', name: 'ormlite-jdbc', version: '5.1')
+
+    // Use JSON for messaging
+    implementation(group: 'org.json', name: 'json', version: '20190722')
+
+    // Needed to pass arguments
+    implementation(group: 'commons-cli', name: 'commons-cli', version: '1.4')
+
+    // For logging
+    implementation(group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.12.1')
+    implementation(group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.12.1')
+    implementation(group: 'org.apache.logging.log4j', name: 'log4j-slf4j-impl', version: '2.12.1')
+
+    // For testing
+    testImplementation(group: 'junit', name: 'junit', version: '4.12')
+}
+
+// When running :server:run, where should it start?
+application {
+    mainClassName = 'jass.server.Main'
+}
+
+// When running :server:run, these arguments are included
+run {
+    args('--ssl', '--verbose')
+}
+
+distZip {
+    archiveFileName = "jass-server.zip"
+}
+
+distTar {
+    archiveFileName = "jass-server.tgz"
+    compression = Compression.GZIP
+}
+
+jar {
+    // So that Docker can easily find the file
+    archiveFileName = "jass-server.jar"
+
+    // Every .jar needs a manifest file
+    manifest {
+        attributes('Implementation-Title': project.name, 'Implementation-Version': project.version, 'Main-Class': mainClassName)
+    }
+
+    // Makes sure the :lib project is included
+    from {
+        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+}

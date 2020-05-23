@@ -1,81 +1,151 @@
-# fhnw-poker
+# fhnw-jass
 
-The IT-Project in the FHNW
+As part of the IT-Project course in the FHNW Basel, four students, which are mentioned in the authors section of this
+document, created this game.
 
 ## Getting Started
 
-These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
+These instructions will get you a copy of the project up and running on your local machine for development and testing
+purposes. See deployment for notes on how to deploy the project on a live system.
 
 ### Prerequisites
 
 What things you need to install the software and how to install them
 
+#### User environment
+
+* [Oracle JRE 8 (Java 8)](https://www.java.com/de/)
+
+#### Developer environment
+
+* [Oracle JDK 8](https://www.oracle.com/java/technologies/javase/javase-jdk8-downloads.html)
+* [JetBrains IntelliJ IDEA](https://www.jetbrains.com/de-de/idea/) (Preferred)
+
+### Installing (the client)
+
+#### User environment
+
+After having installed Java 8, you have to download the latest client software under the releases page, or click on this
+[link](https://github.com/D3strukt0r/fhnw-jass/releases/latest/download/jass.zip).
+
+The package you just downloaded needs to be unpacked now.
+
+Go to `jass/bin/` and in there you will find two files. If you are on a linux system double-click `client` otherwise
+(Windows) double-click on `client.bat`.
+
+#### Developer environment
+
+Get the project (through the console):
+```shell script
+$ git clone https://github.com/D3strukt0r/fhnw-jass.git
 ```
-Give examples
+In case you want to change to the `develop` branch for the latest and greatest:
+```shell script
+$ git checkout develop
 ```
 
-### Installing
+Now import the project to IntelliJ (from the start screen):
+1. `Import Project`
+2. Select the directory of the downloaded project
+3. `[OK]`
+4. `(o) Import project from external model`
+5. `Gradle`
+6. `[Finish]`
+In the popup that appears on the bottom right:
+7. `Import Gradle Project`
 
-A step by step series of examples that tell you how to get a development env running
+(On Windows) If a message appears concerning "Windows Defender might be impacting your build performance":
 
-Say what the step will be
-
-```
-Give the example
-```
-
-And repeat
-
-```
-until finished
-```
-
-End with an example of getting some data out of the system or using it for a little demo
+8. `Fix...` -> `Configure Automatically`
 
 ## Running the tests
 
-Explain how to run the automated tests for this system
-
-### Break down into end to end tests
-
-Explain what these tests test and why
-
-```
-Give an example
+Through the terminal
+```shell script
+$ ./gradlew :lib:check
+$ ./gradlew :client:check
+$ ./gradlew :server:check
 ```
 
-### And coding style tests
+Through IntelliJ
+1. Click on the "Gradle" Tab on the top right
+2. Go to: `fhnw-jass` -> `client` (or `server`) -> `Tasks` -> `verification` -> `check` and double-click.
 
-Explain what these tests test and why
+## Deployment (of the server)
 
+### Docker
+
+This project uses Docker for easy deployment of the server(!).
+
+Therefore, you can use a `docker-compose.yml` file and then run `docker-compose up -d`
+```yaml
+version: '2'
+
+services:
+  jass:
+    image: d3strukt0r/fhnw-jass
+    restart: on-failure
+    command: --ssl --verbose
+    ports:
+      - 2000:2000
+    volumes:
+      - ./data:/app/data
 ```
-Give an example
-```
+Or just s simple command: `docker run -p 2000:2000 -v ./data:/app/data d3strukt0r/fhnw-jass`
 
-## Deployment
+For more example check the [wiki page](https://github.com/D3strukt0r/fhnw-jass/wiki/Example-docker-compose.yml)
 
-Add additional notes about how to deploy this on a live system
+### `.jar` file
+
+After having installed Java 8, you have to download the latest server software under the releases page, or click on this
+[link](https://github.com/D3strukt0r/fhnw-jass/releases/latest/download/jass-server.zip) for the compressed `.zip` or
+[here](https://github.com/D3strukt0r/fhnw-jass/releases/latest/download/jass-server.jar) for only the `.jar`.
+
+If you downloaded the package, you have to unpack it first.
+
+Go to `jass-server/bin/` and in there you will find two files. If you are on a linux system double-click `server`
+otherwise (Windows) double-click on `server.bat`.
+
+If you downloaded the jar file only:
+
+Go to the console and enter enter `java -jar server.jar` in the command line.
 
 ## Built With
 
+* [Java](https://www.java.com/de/) - Programming Language
 * [Gradle](https://gradle.org/) - Dependency Management
+* [JUnit5](https://junit.org/junit5/) - Testing the Java Code
+* [SQLite3](https://www.sqlite.org/index.html) - Data Storage
+* [ORMLite](http://ormlite.com/) - ORM for Data Storage
+* [JSON](https://www.json.org/json-en.html) - Data Model for Transmission between Server <-> Client
+* [Apache Commons Cli](https://commons.apache.org/proper/commons-cli/) - Handle CLI arguments
+* [Apache Log4J](https://logging.apache.org/log4j/2.x/) - Handle logging uniquely
+* [JFoenix](http://www.jfoenix.com/) - Theme for the GUI
+* [Travis CI](https://travis-ci.com/) - Automatic CI (Testing) / CD (Deployment)
+* [Docker](https://www.docker.com/) - Building a Container for the Server
 
 ## Contributing
 
-Please read [CONTRIBUTING.md](CONTRIBUTING.md) for details on our code of conduct, and the process for submitting pull requests to us.
+Please read [CONTRIBUTING.md](CONTRIBUTING.md) for details on our code of conduct, and the process for submitting pull
+requests to us.
 
 ## Versioning
 
-We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/D3strukt0r/fhnw-poker/tags). 
+We use [SemVer](http://semver.org/) for versioning. For the versions available, see the
+[tags on this repository](https://github.com/D3strukt0r/fhnw-jass/tags). 
 
 ## Authors
 
-* **Manuele Vaccari** - *Initial work* - [D3strukt0r](https://github.com/D3strukt0r)
-* **Victor Hargrave** - *Initial work*
-* **Sasa Trajkova** - *Initial work* - [sasatrajkova](https://github.com/sasatrajkova)
-* **Thomas Weber** - *Initial work*
+* **Manuele Vaccari** - [D3strukt0r](https://github.com/D3strukt0r) - *Initial work, Basic Client and Server App (Server
+connection, Login, Register, Change Password, Delete Account, Logout), JSON Messaging, CI/CD setup, Game configuration,
+Validate moves, Find winner*
+* **Victor Hargrave** - [jokerengine](https://github.com/jokerengine) - *Create a deck, Display deck, Make move, Round
+over*
+* **Sasa Trajkova** - [sasatrajkova](https://github.com/sasatrajkova) - *Lobby design, Game design*
+* **Thomas Weber** - [tjw52](https://github.com/tjw52) - *Game finder, Game creation, Initialize new game*
 
-See also the list of [contributors](https://github.com/D3strukt0r/fhnw-poker/contributors) who participated in this project.
+See also the list of [contributors](https://github.com/D3strukt0r/fhnw-jass/contributors) who participated in this
+project.
 
 ## License
 

@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.input.KeyCodeCombination?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Text?>
+<VBox xmlns="http://javafx.com/javafx/8.0.171"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="jass.client.controller.LobbyController"
+      fx:id="root"
+      minHeight="250.0"
+      prefHeight="250.0"
+      minWidth="350.0"
+      prefWidth="350.0"
+      stylesheets="@../css/app.css"
+      styleClass="background-white">
+    <MenuBar>
+        <Menu fx:id="mFile" text="gui.menu.file">
+            <Menu fx:id="mFileChangeLanguage" text="gui.menu.file.changeLanguage" />
+            <SeparatorMenuItem />
+            <MenuItem fx:id="mFileDisconnect" text="gui.menu.file.disconnect" onAction="#clickOnDisconnect" />
+            <SeparatorMenuItem />
+            <MenuItem fx:id="mFileLogout" text="gui.menu.file.logout" onAction="#clickOnLogout" />
+            <SeparatorMenuItem />
+            <MenuItem fx:id="mFileExit" onAction="#clickOnExit" text="gui.menu.file.exit">
+                <accelerator>
+                    <KeyCodeCombination alt="DOWN" code="F4" control="UP" meta="UP" shift="UP" shortcut="UP" />
+                </accelerator>
+            </MenuItem>
+        </Menu>
+        <Menu fx:id="mEdit" text="gui.menu.edit">
+            <MenuItem fx:id="mEditChangePassword"
+                      text="gui.menu.edit.changePassword"
+                      onAction="#clickOnChangePassword" />
+            <MenuItem fx:id="mEditDeleteAccount" text="gui.menu.edit.deleteAccount" onAction="#clickOnDeleteAccount" />
+        </Menu>
+        <Menu fx:id="mHelp" text="gui.menu.help">
+            <MenuItem fx:id="mHelpAbout" text="gui.menu.help.about" onAction="#clickOnAbout" />
+        </Menu>
+    </MenuBar>
+
+    <!-- navbar -->
+    <HBox styleClass="navbar">
+        <Text fx:id="navbar" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="gui.lobby.title2" />
+    </HBox>
+
+    <!-- body -->
+    <VBox styleClass="custom-container" alignment="TOP_CENTER">
+        <Text fx:id="searching" styleClass="search-text" visible="false" text="gui.lobby.searching" />
+
+        <JFXButton fx:id="findMatch"
+                   styleClass="primary"
+                   text="gui.lobby.findMatch"
+                   onAction="#clickOnFindMatch"
+                   defaultButton="true" />
+        <JFXButton fx:id="cancelMatch"
+                   styleClass="secondary"
+                   text="gui.lobby.cancelMatch"
+                   visible="false"
+                   onAction="#clickOnCancelMatch"
+                   cancelButton="true" />
+    </VBox>
+</VBox>
