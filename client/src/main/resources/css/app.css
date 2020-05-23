@@ -136,8 +136,12 @@ dark: #005005;
 }
 
 .turn-to-play-pane {
+    -fx-background-color: rgba(61, 187, 65, 0.45) !important;
     -fx-border-color: #2e7d32;
     -fx-border-width: 3 3 3 3;
     -fx-border-radius: 5px;
     -fx-background-radius: 5px;
+    -fx-text-fill: grey;
+    -fx-font-size: 14px;
+
 }

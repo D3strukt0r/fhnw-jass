@@ -490,6 +490,7 @@ public final class GameController extends Controller implements Closeable, Disco
                 card.get().setPlayed(true);
             }
             updateCardImages();
+            indicateTurnToPlay();
         });
         gameUtil.getWinningPlayerUsername().addListener((obs, oldWinningPlayer, newWinningPlayer) -> {
             // when there is a new winning player
@@ -498,6 +499,14 @@ public final class GameController extends Controller implements Closeable, Disco
                 gameUtil.setWinningPlayerUsername("");
             }
         });
+
+        gameUtil.getStartingPlayerUsername().addListener((obs, oldStartingPlayer, newStartingPlayer) -> {
+            // when there is a new winning player
+            if (!newStartingPlayer.equals(oldStartingPlayer) && !StringUtil.isNullOrEmpty(newStartingPlayer)) {
+                indicateTurnToPlay();
+            }
+        });
+
         gameUtil.getDisableButtonsProperty().addListener((obs, oldDisableButtons, newDisableButtons) -> {
             // when there is a new winning player
             disableButtons(newDisableButtons);
@@ -705,6 +714,7 @@ public final class GameController extends Controller implements Closeable, Disco
      * @since 1.0.0
      */
     private void updateCardImages() {
+
         if (gameUtil.getPlayerDeck().size() == 9) {
             CardData card1 = gameUtil.getPlayerDeck().get(0);
             CardData card2 = gameUtil.getPlayerDeck().get(1);
@@ -716,7 +726,7 @@ public final class GameController extends Controller implements Closeable, Disco
             CardData card8 = gameUtil.getPlayerDeck().get(7);
             CardData card9 = gameUtil.getPlayerDeck().get(8);
 
-            CardData[] allCards = new CardData[] {card1,card2,card3,card4,card5,card6,card7,card8,card9};
+            CardData[] allCards = new CardData[]{card1, card2, card3, card4, card5, card6, card7, card8, card9};
             Button[] userOneButtons = new Button[]{user1b1, user1b2, user1b3, user1b4, user1b5, user1b6, user1b7, user1b8, user1b9};
             Button[] userTwoButtons = new Button[]{user2b1, user2b2, user2b3, user2b4, user2b5, user2b6, user2b7, user2b8, user2b9};
             Button[] userThreeButtons = new Button[]{user3b1, user3b2, user3b3, user3b4, user3b5, user3b6, user3b7, user3b8, user3b9};
@@ -726,50 +736,50 @@ public final class GameController extends Controller implements Closeable, Disco
             assert login != null;
 
             if (gameUtil.getGame().getPlayerOne().equals(login.getUsername())) {
-                for (int i = 0; i <=8; i++){
+                for (int i = 0; i <= 8; i++) {
                     setImage(getCardPath(allCards[i]), userOneButtons[i]);
                     setImage(null, userTwoButtons[i]);
                     setImage(null, userThreeButtons[i]);
                     setImage(null, userFourButtons[i]);
 
                     //clear background if the card has already been played
-                    if(allCards[i].isPlayed()){
+                    if (allCards[i].isPlayed()) {
                         userOneButtons[i].setBackground(null);
                     }
                 }
             } else if (gameUtil.getGame().getPlayerTwo().equals(login.getUsername())) {
-                for (int i = 0; i <=8; i++){
+                for (int i = 0; i <= 8; i++) {
                     setImage(getCardPath(allCards[i]), userTwoButtons[i]);
                     setImage(null, userOneButtons[i]);
                     setImage(null, userThreeButtons[i]);
                     setImage(null, userFourButtons[i]);
 
                     //clear background if the card has already been played
-                    if(allCards[i].isPlayed()){
+                    if (allCards[i].isPlayed()) {
                         userTwoButtons[i].setBackground(null);
                     }
                 }
             } else if (gameUtil.getGame().getPlayerThree().equals(login.getUsername())) {
-                for (int i = 0; i <=8; i++){
+                for (int i = 0; i <= 8; i++) {
                     setImage(getCardPath(allCards[i]), userThreeButtons[i]);
                     setImage(null, userOneButtons[i]);
                     setImage(null, userTwoButtons[i]);
                     setImage(null, userFourButtons[i]);
 
                     //clear background if the card has already been played
-                    if(allCards[i].isPlayed()){
+                    if (allCards[i].isPlayed()) {
                         userThreeButtons[i].setBackground(null);
                     }
                 }
             } else if (gameUtil.getGame().getPlayerFour().equals(login.getUsername())) {
-                for (int i = 0; i <=8; i++){
+                for (int i = 0; i <= 8; i++) {
                     setImage(getCardPath(allCards[i]), userFourButtons[i]);
                     setImage(null, userOneButtons[i]);
                     setImage(null, userTwoButtons[i]);
                     setImage(null, userThreeButtons[i]);
 
                     //clear background if the card has already been played
-                    if(allCards[i].isPlayed()){
+                    if (allCards[i].isPlayed()) {
                         userFourButtons[i].setBackground(null);
                     }
                 }
@@ -851,8 +861,8 @@ public final class GameController extends Controller implements Closeable, Disco
                 BackgroundPosition.CENTER,
                 new BackgroundSize(74, 113, true, true, true, false));
             Background cardBackground = new Background(cardBackImage);
-            button.setBackground(cardBackground);        }
-        else {
+            button.setBackground(cardBackground);
+        } else {
             BackgroundImage backgroundImage = new BackgroundImage(new Image(
                 getClass().getResource(pathToImage).toExternalForm()),
                 BackgroundRepeat.NO_REPEAT,
@@ -864,19 +874,19 @@ public final class GameController extends Controller implements Closeable, Disco
         }
 
         //clear background image and set background color for "played cards" pane
-        if(StringUtil.isNullOrEmpty(pathToImage) && button == user1played){
+        if (StringUtil.isNullOrEmpty(pathToImage) && button == user1played) {
             user1played.setBackground(null);
             user1played.setStyle("-fx-background-color: white");
         }
-        if(StringUtil.isNullOrEmpty(pathToImage) && button == user2played){
+        if (StringUtil.isNullOrEmpty(pathToImage) && button == user2played) {
             user2played.setBackground(null);
             user2played.setStyle("-fx-background-color: white");
         }
-        if(StringUtil.isNullOrEmpty(pathToImage) && button == user3played){
+        if (StringUtil.isNullOrEmpty(pathToImage) && button == user3played) {
             user3played.setBackground(null);
             user3played.setStyle("-fx-background-color: white");
         }
-        if(StringUtil.isNullOrEmpty(pathToImage) && button == user4played){
+        if (StringUtil.isNullOrEmpty(pathToImage) && button == user4played) {
             user4played.setBackground(null);
             user4played.setStyle("-fx-background-color: white");
         }
@@ -948,6 +958,7 @@ public final class GameController extends Controller implements Closeable, Disco
             user4b9.setDisable(card9 != null && card9.isPlayed() ? card9.isPlayed() : disable);
         }
     }
+
     /**
      * Change border color if it's the player's turn to play
      *
@@ -957,62 +968,62 @@ public final class GameController extends Controller implements Closeable, Disco
 
     public void indicateTurnToPlay() {
 
-        LoginEntity login = ServiceLocator.get(LoginEntity.class);
-        assert login != null;
-        assert gameUtil.getGame() != null;
+        Platform.runLater(() -> {
+            assert gameUtil.getGame() != null;
 
-        if (gameUtil.getGame() == null) {
-            return;
-        }
+            user1pane.getStyleClass().remove("turn-to-play-pane");
+            user2pane.getStyleClass().remove("turn-to-play-pane");
+            user3pane.getStyleClass().remove("turn-to-play-pane");
+            user4pane.getStyleClass().remove("turn-to-play-pane");
 
-        if(gameUtil.getGame().getPlayerOne().equals(gameUtil.getStartingPlayerUsername().getValue())){
-            if (gameUtil.getPlayedCards().size() == 0) {
-                user1pane.getStyleClass().add("turn-to-play-pane");
-            } else if (gameUtil.getPlayedCards().size() == 1) {
-                user2pane.getStyleClass().add("turn-to-play-pane");
-            } else if (gameUtil.getPlayedCards().size() == 2) {
-                user3pane.getStyleClass().add("turn-to-play-pane");
-            } else if (gameUtil.getPlayedCards().size() == 3) {
-                user4pane.getStyleClass().add("turn-to-play-pane");
+            if (gameUtil.getGame().getPlayerOne().equals(gameUtil.getStartingPlayerUsername().getValue())) {
+                if (gameUtil.getPlayedCards().size() == 0) {
+                    user1pane.getStyleClass().add("turn-to-play-pane");
+                } else if (gameUtil.getPlayedCards().size() == 1) {
+                    user2pane.getStyleClass().add("turn-to-play-pane");
+                } else if (gameUtil.getPlayedCards().size() == 2) {
+                    user3pane.getStyleClass().add("turn-to-play-pane");
+                } else if (gameUtil.getPlayedCards().size() == 3) {
+                    user4pane.getStyleClass().add("turn-to-play-pane");
+                }
             }
-        }
 
-        if(gameUtil.getGame().getPlayerTwo().equals(gameUtil.getStartingPlayerUsername().getValue())){
-            if (gameUtil.getPlayedCards().size() == 0) {
-                user2pane.getStyleClass().add("turn-to-play-pane");
-            } else if (gameUtil.getPlayedCards().size() == 1) {
-                user3pane.getStyleClass().add("turn-to-play-pane");
-            } else if (gameUtil.getPlayedCards().size() == 2) {
-                user4pane.getStyleClass().add("turn-to-play-pane");
-            } else if (gameUtil.getPlayedCards().size() == 3) {
-                user1pane.getStyleClass().add("turn-to-play-pane");
+            if (gameUtil.getGame().getPlayerTwo().equals(gameUtil.getStartingPlayerUsername().getValue())) {
+                if (gameUtil.getPlayedCards().size() == 0) {
+                    user2pane.getStyleClass().add("turn-to-play-pane");
+                } else if (gameUtil.getPlayedCards().size() == 1) {
+                    user3pane.getStyleClass().add("turn-to-play-pane");
+                } else if (gameUtil.getPlayedCards().size() == 2) {
+                    user4pane.getStyleClass().add("turn-to-play-pane");
+                } else if (gameUtil.getPlayedCards().size() == 3) {
+                    user1pane.getStyleClass().add("turn-to-play-pane");
+                }
             }
-        }
 
-        if(gameUtil.getGame().getPlayerThree().equals(gameUtil.getStartingPlayerUsername().getValue())){
-            if (gameUtil.getPlayedCards().size() == 0) {
-                user3pane.getStyleClass().add("turn-to-play-pane");
-            } else if (gameUtil.getPlayedCards().size() == 1) {
-                user4pane.getStyleClass().add("turn-to-play-pane");
-            } else if (gameUtil.getPlayedCards().size() == 2) {
-                user1pane.getStyleClass().add("turn-to-play-pane");
-            } else if (gameUtil.getPlayedCards().size() == 3) {
-                user2pane.getStyleClass().add("turn-to-play-pane");
+            if (gameUtil.getGame().getPlayerThree().equals(gameUtil.getStartingPlayerUsername().getValue())) {
+                if (gameUtil.getPlayedCards().size() == 0) {
+                    user3pane.getStyleClass().add("turn-to-play-pane");
+                } else if (gameUtil.getPlayedCards().size() == 1) {
+                    user4pane.getStyleClass().add("turn-to-play-pane");
+                } else if (gameUtil.getPlayedCards().size() == 2) {
+                    user1pane.getStyleClass().add("turn-to-play-pane");
+                } else if (gameUtil.getPlayedCards().size() == 3) {
+                    user2pane.getStyleClass().add("turn-to-play-pane");
+                }
             }
-        }
 
-        if(gameUtil.getGame().getPlayerFour().equals(gameUtil.getStartingPlayerUsername().getValue())){
-            if (gameUtil.getPlayedCards().size() == 0) {
-                user4pane.getStyleClass().add("turn-to-play-pane");
-            } else if (gameUtil.getPlayedCards().size() == 1) {
-                user1pane.getStyleClass().add("turn-to-play-pane");
-            } else if (gameUtil.getPlayedCards().size() == 2) {
-                user2pane.getStyleClass().add("turn-to-play-pane");
-            } else if (gameUtil.getPlayedCards().size() == 3) {
-                user3pane.getStyleClass().add("turn-to-play-pane");
+            if (gameUtil.getGame().getPlayerFour().equals(gameUtil.getStartingPlayerUsername().getValue())) {
+                if (gameUtil.getPlayedCards().size() == 0) {
+                    user4pane.getStyleClass().add("turn-to-play-pane");
+                } else if (gameUtil.getPlayedCards().size() == 1) {
+                    user1pane.getStyleClass().add("turn-to-play-pane");
+                } else if (gameUtil.getPlayedCards().size() == 2) {
+                    user2pane.getStyleClass().add("turn-to-play-pane");
+                } else if (gameUtil.getPlayedCards().size() == 3) {
+                    user3pane.getStyleClass().add("turn-to-play-pane");
+                }
             }
-        }
-
+        });
     }
 
     /**
@@ -1030,73 +1041,73 @@ public final class GameController extends Controller implements Closeable, Disco
             return;
         }
 
-        if(gameUtil.getGame().getPlayerOne().equals(login.getUsername())){
+        if (gameUtil.getGame().getPlayerOne().equals(login.getUsername())) {
             user1.getStyleClass().add("team-label");
             user1pane.getStyleClass().add("team-pane");
 
-            if(gameUtil.getGame().getPlayerOneTeamId() == gameUtil.getGame().getPlayerTwoTeamId()){
+            if (gameUtil.getGame().getPlayerOneTeamId() == gameUtil.getGame().getPlayerTwoTeamId()) {
                 user2pane.getStyleClass().add("team-pane");
                 user2.getStyleClass().add("team-label");
             }
-            if(gameUtil.getGame().getPlayerOneTeamId() == gameUtil.getGame().getPlayerThreeTeamId()){
+            if (gameUtil.getGame().getPlayerOneTeamId() == gameUtil.getGame().getPlayerThreeTeamId()) {
                 user3pane.getStyleClass().add("team-pane");
                 user3.getStyleClass().add("team-label");
             }
-            if(gameUtil.getGame().getPlayerOneTeamId() == gameUtil.getGame().getPlayerFourTeamId()){
+            if (gameUtil.getGame().getPlayerOneTeamId() == gameUtil.getGame().getPlayerFourTeamId()) {
                 user4pane.getStyleClass().add("team-pane");
                 user3.getStyleClass().add("team-label");
             }
         }
 
-        if(gameUtil.getGame().getPlayerTwo().equals(login.getUsername())){
+        if (gameUtil.getGame().getPlayerTwo().equals(login.getUsername())) {
             user2pane.getStyleClass().add("team-pane");
             user2.getStyleClass().add("team-label");
 
-            if(gameUtil.getGame().getPlayerTwoTeamId() == gameUtil.getGame().getPlayerOneTeamId()){
+            if (gameUtil.getGame().getPlayerTwoTeamId() == gameUtil.getGame().getPlayerOneTeamId()) {
                 user1pane.getStyleClass().add("team-pane");
                 user1.getStyleClass().add("team-label");
             }
-            if(gameUtil.getGame().getPlayerTwoTeamId() == gameUtil.getGame().getPlayerThreeTeamId()){
+            if (gameUtil.getGame().getPlayerTwoTeamId() == gameUtil.getGame().getPlayerThreeTeamId()) {
                 user3pane.getStyleClass().add("team-pane");
                 user3.getStyleClass().add("team-label");
             }
-            if(gameUtil.getGame().getPlayerTwoTeamId() == gameUtil.getGame().getPlayerFourTeamId()){
+            if (gameUtil.getGame().getPlayerTwoTeamId() == gameUtil.getGame().getPlayerFourTeamId()) {
                 user4pane.getStyleClass().add("team-pane");
                 user4.getStyleClass().add("team-label");
             }
         }
 
-        if(gameUtil.getGame().getPlayerThree().equals(login.getUsername())){
+        if (gameUtil.getGame().getPlayerThree().equals(login.getUsername())) {
             user3pane.getStyleClass().add("team-pane");
             user3.getStyleClass().add("team-label");
 
-            if(gameUtil.getGame().getPlayerThreeTeamId() == gameUtil.getGame().getPlayerOneTeamId()){
+            if (gameUtil.getGame().getPlayerThreeTeamId() == gameUtil.getGame().getPlayerOneTeamId()) {
                 user1pane.getStyleClass().add("team-pane");
                 user1.getStyleClass().add("team-label");
             }
-            if(gameUtil.getGame().getPlayerThreeTeamId() == gameUtil.getGame().getPlayerTwoTeamId()){
+            if (gameUtil.getGame().getPlayerThreeTeamId() == gameUtil.getGame().getPlayerTwoTeamId()) {
                 user2pane.getStyleClass().add("team-pane");
                 user2.getStyleClass().add("team-label");
             }
-            if(gameUtil.getGame().getPlayerThreeTeamId() == gameUtil.getGame().getPlayerFourTeamId()){
+            if (gameUtil.getGame().getPlayerThreeTeamId() == gameUtil.getGame().getPlayerFourTeamId()) {
                 user4pane.getStyleClass().add("team-pane");
                 user4.getStyleClass().add("team-label");
             }
         }
 
-        if(gameUtil.getGame().getPlayerFour().equals(login.getUsername())){
+        if (gameUtil.getGame().getPlayerFour().equals(login.getUsername())) {
             user4pane.getStyleClass().add("team-pane");
             user4.getStyleClass().add("team-label");
 
-            if(gameUtil.getGame().getPlayerFourTeamId() == gameUtil.getGame().getPlayerOneTeamId()){
+            if (gameUtil.getGame().getPlayerFourTeamId() == gameUtil.getGame().getPlayerOneTeamId()) {
                 user1pane.getStyleClass().add("team-pane");
                 user1.getStyleClass().add("team-label");
             }
-            if(gameUtil.getGame().getPlayerFourTeamId() == gameUtil.getGame().getPlayerTwoTeamId()){
+            if (gameUtil.getGame().getPlayerFourTeamId() == gameUtil.getGame().getPlayerTwoTeamId()) {
                 user2pane.getStyleClass().add("team-pane");
                 user2.getStyleClass().add("team-label");
             }
-            if(gameUtil.getGame().getPlayerFourTeamId() == gameUtil.getGame().getPlayerThreeTeamId()){
+            if (gameUtil.getGame().getPlayerFourTeamId() == gameUtil.getGame().getPlayerThreeTeamId()) {
                 user3pane.getStyleClass().add("team-pane");
                 user3.getStyleClass().add("team-label");
             }
@@ -1110,31 +1121,29 @@ public final class GameController extends Controller implements Closeable, Disco
      * @since 1.0.0
      */
     public void updateUserNames() {
-        Platform.runLater(() -> {
-            if (gameUtil.getGame() != null && gameUtil.getGame().getPlayerOne() != null) {
-                user1.setText(gameUtil.getGame().getPlayerOne());
-            } else {
-                user1.setText("--");
-            }
+        if (gameUtil.getGame() != null && gameUtil.getGame().getPlayerOne() != null) {
+            user1.setText(gameUtil.getGame().getPlayerOne());
+        } else {
+            user1.setText("--");
+        }
 
-            if (gameUtil.getGame() != null && gameUtil.getGame().getPlayerTwo() != null) {
-                user2.setText(gameUtil.getGame().getPlayerTwo());
-            } else {
-                user2.setText("--");
-            }
+        if (gameUtil.getGame() != null && gameUtil.getGame().getPlayerTwo() != null) {
+            user2.setText(gameUtil.getGame().getPlayerTwo());
+        } else {
+            user2.setText("--");
+        }
 
-            if (gameUtil.getGame() != null && gameUtil.getGame().getPlayerThree() != null) {
-                user3.setText(gameUtil.getGame().getPlayerThree());
-            } else {
-                user3.setText("--");
-            }
+        if (gameUtil.getGame() != null && gameUtil.getGame().getPlayerThree() != null) {
+            user3.setText(gameUtil.getGame().getPlayerThree());
+        } else {
+            user3.setText("--");
+        }
 
-            if (gameUtil.getGame() != null && gameUtil.getGame().getPlayerFour() != null) {
-                user4.setText(gameUtil.getGame().getPlayerFour());
-            } else {
-                user4.setText("--");
-            }
-        });
+        if (gameUtil.getGame() != null && gameUtil.getGame().getPlayerFour() != null) {
+            user4.setText(gameUtil.getGame().getPlayerFour());
+        } else {
+            user4.setText("--");
+        }
     }
 
     /**
