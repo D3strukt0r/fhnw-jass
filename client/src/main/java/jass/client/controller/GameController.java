@@ -466,7 +466,6 @@ public final class GameController extends Controller implements Closeable, Disco
                 logger.info("button click listeners created");
                 updateCardImages();
                 updateUserNames();
-                indicateTeam();
             }
         });
         gameUtil.getGameModeProperty().addListener((obs, oldGameMode, newGameMode) -> {
@@ -490,20 +489,12 @@ public final class GameController extends Controller implements Closeable, Disco
                 card.get().setPlayed(true);
             }
             updateCardImages();
-            indicateTurnToPlay();
         });
         gameUtil.getWinningPlayerUsername().addListener((obs, oldWinningPlayer, newWinningPlayer) -> {
             // when there is a new winning player
             if (!newWinningPlayer.equals(oldWinningPlayer) && !StringUtil.isNullOrEmpty(newWinningPlayer)) {
                 // TODO show dialog
                 gameUtil.setWinningPlayerUsername("");
-            }
-        });
-
-        gameUtil.getStartingPlayerUsername().addListener((obs, oldStartingPlayer, newStartingPlayer) -> {
-            // when there is a new winning player
-            if (!newStartingPlayer.equals(oldStartingPlayer) && !StringUtil.isNullOrEmpty(newStartingPlayer)) {
-                indicateTurnToPlay();
             }
         });
 
@@ -533,6 +524,8 @@ public final class GameController extends Controller implements Closeable, Disco
             updateCardImages();
             logger.info("updated card images");
         }
+        indicateTeam();
+        logger.info("updated team colors");
 
         /*
          * Bind all texts
@@ -929,63 +922,60 @@ public final class GameController extends Controller implements Closeable, Disco
      */
 
     public void indicateTurnToPlay() {
+        assert gameUtil.getGame() != null;
 
-        Platform.runLater(() -> {
-            assert gameUtil.getGame() != null;
+        user1pane.getStyleClass().removeIf(style -> style.equals("turn-to-play-pane"));
+        user2pane.getStyleClass().removeIf(style -> style.equals("turn-to-play-pane"));
+        user3pane.getStyleClass().removeIf(style -> style.equals("turn-to-play-pane"));
+        user4pane.getStyleClass().removeIf(style -> style.equals("turn-to-play-pane"));
 
-            user1pane.getStyleClass().remove("turn-to-play-pane");
-            user2pane.getStyleClass().remove("turn-to-play-pane");
-            user3pane.getStyleClass().remove("turn-to-play-pane");
-            user4pane.getStyleClass().remove("turn-to-play-pane");
-
-            if (gameUtil.getGame().getPlayerOne().equals(gameUtil.getStartingPlayerUsername().getValue())) {
-                if (gameUtil.getPlayedCards().size() == 0) {
-                    user1pane.getStyleClass().add("turn-to-play-pane");
-                } else if (gameUtil.getPlayedCards().size() == 1) {
-                    user2pane.getStyleClass().add("turn-to-play-pane");
-                } else if (gameUtil.getPlayedCards().size() == 2) {
-                    user3pane.getStyleClass().add("turn-to-play-pane");
-                } else if (gameUtil.getPlayedCards().size() == 3) {
-                    user4pane.getStyleClass().add("turn-to-play-pane");
-                }
+        if (gameUtil.getGame().getPlayerOne().equals(gameUtil.getStartingPlayerUsername().getValue())) {
+            if (gameUtil.getPlayedCards().size() == 0) {
+                user1pane.getStyleClass().add("turn-to-play-pane");
+            } else if (gameUtil.getPlayedCards().size() == 1) {
+                user2pane.getStyleClass().add("turn-to-play-pane");
+            } else if (gameUtil.getPlayedCards().size() == 2) {
+                user3pane.getStyleClass().add("turn-to-play-pane");
+            } else if (gameUtil.getPlayedCards().size() == 3) {
+                user4pane.getStyleClass().add("turn-to-play-pane");
             }
+        }
 
-            if (gameUtil.getGame().getPlayerTwo().equals(gameUtil.getStartingPlayerUsername().getValue())) {
-                if (gameUtil.getPlayedCards().size() == 0) {
-                    user2pane.getStyleClass().add("turn-to-play-pane");
-                } else if (gameUtil.getPlayedCards().size() == 1) {
-                    user3pane.getStyleClass().add("turn-to-play-pane");
-                } else if (gameUtil.getPlayedCards().size() == 2) {
-                    user4pane.getStyleClass().add("turn-to-play-pane");
-                } else if (gameUtil.getPlayedCards().size() == 3) {
-                    user1pane.getStyleClass().add("turn-to-play-pane");
-                }
+        if (gameUtil.getGame().getPlayerTwo().equals(gameUtil.getStartingPlayerUsername().getValue())) {
+            if (gameUtil.getPlayedCards().size() == 0) {
+                user2pane.getStyleClass().add("turn-to-play-pane");
+            } else if (gameUtil.getPlayedCards().size() == 1) {
+                user3pane.getStyleClass().add("turn-to-play-pane");
+            } else if (gameUtil.getPlayedCards().size() == 2) {
+                user4pane.getStyleClass().add("turn-to-play-pane");
+            } else if (gameUtil.getPlayedCards().size() == 3) {
+                user1pane.getStyleClass().add("turn-to-play-pane");
             }
+        }
 
-            if (gameUtil.getGame().getPlayerThree().equals(gameUtil.getStartingPlayerUsername().getValue())) {
-                if (gameUtil.getPlayedCards().size() == 0) {
-                    user3pane.getStyleClass().add("turn-to-play-pane");
-                } else if (gameUtil.getPlayedCards().size() == 1) {
-                    user4pane.getStyleClass().add("turn-to-play-pane");
-                } else if (gameUtil.getPlayedCards().size() == 2) {
-                    user1pane.getStyleClass().add("turn-to-play-pane");
-                } else if (gameUtil.getPlayedCards().size() == 3) {
-                    user2pane.getStyleClass().add("turn-to-play-pane");
-                }
+        if (gameUtil.getGame().getPlayerThree().equals(gameUtil.getStartingPlayerUsername().getValue())) {
+            if (gameUtil.getPlayedCards().size() == 0) {
+                user3pane.getStyleClass().add("turn-to-play-pane");
+            } else if (gameUtil.getPlayedCards().size() == 1) {
+                user4pane.getStyleClass().add("turn-to-play-pane");
+            } else if (gameUtil.getPlayedCards().size() == 2) {
+                user1pane.getStyleClass().add("turn-to-play-pane");
+            } else if (gameUtil.getPlayedCards().size() == 3) {
+                user2pane.getStyleClass().add("turn-to-play-pane");
             }
+        }
 
-            if (gameUtil.getGame().getPlayerFour().equals(gameUtil.getStartingPlayerUsername().getValue())) {
-                if (gameUtil.getPlayedCards().size() == 0) {
-                    user4pane.getStyleClass().add("turn-to-play-pane");
-                } else if (gameUtil.getPlayedCards().size() == 1) {
-                    user1pane.getStyleClass().add("turn-to-play-pane");
-                } else if (gameUtil.getPlayedCards().size() == 2) {
-                    user2pane.getStyleClass().add("turn-to-play-pane");
-                } else if (gameUtil.getPlayedCards().size() == 3) {
-                    user3pane.getStyleClass().add("turn-to-play-pane");
-                }
+        if (gameUtil.getGame().getPlayerFour().equals(gameUtil.getStartingPlayerUsername().getValue())) {
+            if (gameUtil.getPlayedCards().size() == 0) {
+                user4pane.getStyleClass().add("turn-to-play-pane");
+            } else if (gameUtil.getPlayedCards().size() == 1) {
+                user1pane.getStyleClass().add("turn-to-play-pane");
+            } else if (gameUtil.getPlayedCards().size() == 2) {
+                user2pane.getStyleClass().add("turn-to-play-pane");
+            } else if (gameUtil.getPlayedCards().size() == 3) {
+                user3pane.getStyleClass().add("turn-to-play-pane");
             }
-        });
+        }
     }
 
     /**
