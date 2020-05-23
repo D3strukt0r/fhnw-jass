@@ -4,13 +4,13 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.input.KeyCodeCombination?>
 <?import javafx.scene.layout.*?>
-<BorderPane xmlns="http://javafx.com/javafx/8.0.171"
-            xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="jass.client.controller.GameController"
-            minHeight="740"
-            prefHeight="740.0"
+<BorderPane minHeight="740"
             minWidth="1220"
-            prefWidth="1220">
+            prefHeight="740.0"
+            prefWidth="1220"
+            xmlns="http://javafx.com/javafx/8.0.171"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="jass.client.controller.GameController">
     <top>
         <VBox prefHeight="93.0" prefWidth="1155.0" BorderPane.alignment="CENTER">
             <MenuBar>
@@ -28,7 +28,7 @@
                     </MenuItem>
                 </Menu>
                 <Menu fx:id="mHelp" text="gui.menu.help">
-                    <MenuItem fx:id="mHelpAbout" text="gui.menu.help.about" onAction="#clickOnAbout" />
+                    <MenuItem fx:id="mHelpAbout" onAction="#clickOnAbout" text="gui.menu.help.about" />
                 </Menu>
             </MenuBar>
             <HBox alignment="CENTER"
@@ -41,8 +41,9 @@
                     <Label fx:id="mode"
                            alignment="TOP_CENTER"
                            contentDisplay="CENTER"
-                           layoutY="5.0"
-                           prefHeight="50.0"
+                           layoutX="-1.0"
+                           layoutY="15.0"
+                           prefHeight="30.0"
                            prefWidth="202.0"
                            styleClass="navbar-game-panel-text"
                            stylesheets="@../css/app.css"
@@ -56,8 +57,9 @@
                 <Pane prefHeight="200.0" prefWidth="200.0">
                     <Label fx:id="scoreR"
                            alignment="TOP_CENTER"
-                           layoutY="5.0"
-                           prefHeight="50.0"
+                           layoutX="-1.0"
+                           layoutY="15.0"
+                           prefHeight="30.0"
                            prefWidth="202.0"
                            styleClass="navbar-game-panel-text"
                            stylesheets="@../css/app.css"
@@ -70,8 +72,9 @@
                 <Pane prefHeight="200.0" prefWidth="200.0">
                     <Label fx:id="scoreT"
                            alignment="TOP_CENTER"
-                           layoutY="5.0"
-                           prefHeight="50.0"
+                           layoutX="-2.0"
+                           layoutY="15.0"
+                           prefHeight="30.0"
                            prefWidth="204.0"
                            styleClass="navbar-game-panel-text"
                            stylesheets="@../css/app.css"
@@ -99,7 +102,11 @@
                 <RowConstraints maxHeight="306.0" minHeight="10.0" prefHeight="300.0" vgrow="SOMETIMES" />
                 <RowConstraints maxHeight="307.0" minHeight="10.0" prefHeight="296.0" vgrow="SOMETIMES" />
             </rowConstraints>
-            <BorderPane prefHeight="200.0" prefWidth="200.0" styleClass="player-pane" stylesheets="@../css/app.css">
+            <BorderPane fx:id="user1pane"
+                        prefHeight="200.0"
+                        prefWidth="200.0"
+                        styleClass="player-pane"
+                        stylesheets="@../css/app.css">
                 <top>
                     <Label fx:id="user1"
                            prefHeight="20.0"
@@ -267,14 +274,8 @@
                             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                         </columnConstraints>
                         <rowConstraints>
-                            <RowConstraints maxHeight="131.0"
-                                            minHeight="10.0"
-                                            prefHeight="126.0"
-                                            vgrow="SOMETIMES" />
-                            <RowConstraints maxHeight="113.0"
-                                            minHeight="10.0"
-                                            prefHeight="113.0"
-                                            vgrow="SOMETIMES" />
+                            <RowConstraints maxHeight="131.0" minHeight="10.0" prefHeight="126.0" vgrow="SOMETIMES" />
+                            <RowConstraints maxHeight="113.0" minHeight="10.0" prefHeight="113.0" vgrow="SOMETIMES" />
                         </rowConstraints>
                         <Button fx:id="user1played"
                                 disable="true"
@@ -297,7 +298,8 @@
                     </GridPane>
                 </right>
             </BorderPane>
-            <BorderPane prefHeight="200.0"
+            <BorderPane fx:id="user2pane"
+                        prefHeight="200.0"
                         prefWidth="200.0"
                         styleClass="player-pane"
                         stylesheets="@../css/app.css"
@@ -470,10 +472,7 @@
                             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                         </columnConstraints>
                         <rowConstraints>
-                            <RowConstraints maxHeight="113.0"
-                                            minHeight="10.0"
-                                            prefHeight="113.0"
-                                            vgrow="SOMETIMES" />
+                            <RowConstraints maxHeight="113.0" minHeight="10.0" prefHeight="113.0" vgrow="SOMETIMES" />
                             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                         </rowConstraints>
                         <Button fx:id="user2played"
@@ -492,7 +491,8 @@
                     </GridPane>
                 </right>
             </BorderPane>
-            <BorderPane prefHeight="321.0"
+            <BorderPane fx:id="user4pane"
+                        prefHeight="321.0"
                         prefWidth="566.0"
                         styleClass="player-pane"
                         stylesheets="@../css/app.css"
@@ -660,10 +660,7 @@
                         </columnConstraints>
                         <rowConstraints>
                             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                            <RowConstraints maxHeight="113.0"
-                                            minHeight="10.0"
-                                            prefHeight="113.0"
-                                            vgrow="SOMETIMES" />
+                            <RowConstraints maxHeight="113.0" minHeight="10.0" prefHeight="113.0" vgrow="SOMETIMES" />
                         </rowConstraints>
                         <Button fx:id="user4played"
                                 disable="true"
@@ -682,14 +679,15 @@
                     </GridPane>
                 </left>
             </BorderPane>
-            <BorderPane prefHeight="200.0"
+            <BorderPane fx:id="user3pane"
+                        prefHeight="200.0"
                         prefWidth="200.0"
                         styleClass="player-pane"
                         stylesheets="@../css/app.css"
                         GridPane.columnIndex="1"
                         GridPane.rowIndex="1">
                 <center>
-                    <GridPane styleClass="player-pane" stylesheets="@../css/app.css" BorderPane.alignment="CENTER">
+                    <GridPane stylesheets="@../css/app.css" BorderPane.alignment="CENTER">
                         <columnConstraints>
                             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -856,17 +854,13 @@
                 <left>
                     <GridPane prefHeight="242.0"
                               prefWidth="74.0"
-                              styleClass="player-pane"
                               stylesheets="@../css/app.css"
                               BorderPane.alignment="CENTER">
                         <columnConstraints>
                             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                         </columnConstraints>
                         <rowConstraints>
-                            <RowConstraints maxHeight="113.0"
-                                            minHeight="10.0"
-                                            prefHeight="113.0"
-                                            vgrow="SOMETIMES" />
+                            <RowConstraints maxHeight="113.0" minHeight="10.0" prefHeight="113.0" vgrow="SOMETIMES" />
                             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                         </rowConstraints>
                         <Button fx:id="user3played"
