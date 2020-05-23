@@ -39,7 +39,6 @@ import jass.client.view.ServerConnectionView;
 import jass.lib.GameMode;
 import jass.lib.message.BroadcastAPlayerQuitData;
 import jass.lib.message.BroadcastRoundOverData;
-import jass.lib.message.BroadcastTurnData;
 import jass.lib.message.CardData;
 import jass.lib.message.LogoutData;
 import jass.lib.servicelocator.ServiceLocator;
@@ -62,7 +61,6 @@ import javafx.scene.layout.BorderPane;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import javax.swing.*;
 import java.io.Closeable;
 import java.net.URL;
 import java.util.ArrayList;
@@ -978,7 +976,8 @@ public final class GameController extends Controller implements Closeable, Disco
     }
 
     /**
-     * Change background color in the player pane depending on which team they belong to
+     * Change background color in the player pane depending on which team they
+     * belong to
      *
      * @author Sasa Trajkova
      * @since 1.0.0

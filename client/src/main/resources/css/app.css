@@ -94,6 +94,7 @@ dark: #005005;
     -fx-background-radius: 50px;
     -fx-border-radius: 50px;
 }
+
 .search-text {
     -fx-font-size: 16px;
 }
@@ -106,7 +107,7 @@ dark: #005005;
     -fx-font-size: 14px;
 }
 
-.team-pane{
+.team-pane {
     -fx-background-color: rgba(61, 187, 65, 0.45);
     -fx-border-color: #2e7d32;
     -fx-border-width: 2 2 2 2;
@@ -116,10 +117,9 @@ dark: #005005;
     -fx-font-size: 14px;
 }
 
-.team-label{
+.team-label {
     -fx-background-color: rgba(0, 0, 0, 0);
     -fx-text-fill: #2e7d32;
-
 }
 
 .card-buttons {
@@ -130,6 +130,7 @@ dark: #005005;
 .navbar-game-panel {
     -fx-background-color: gainsboro;
 }
+
 .navbar-game-panel-text {
     -fx-border-color: #bdbdbd;
     -fx-border-radius: 15px;
@@ -145,5 +146,4 @@ dark: #005005;
     -fx-background-radius: 5px;
     -fx-text-fill: grey;
     -fx-font-size: 14px;
-
 }
