@@ -118,6 +118,8 @@ dark: #005005;
 
 .team-label{
     -fx-background-color: clear;
+    -fx-text-fill: #2e7d32;
+
 }
 
 .card-buttons {
