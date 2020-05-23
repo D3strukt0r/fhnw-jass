@@ -117,7 +117,7 @@ dark: #005005;
 }
 
 .team-label{
-    -fx-background-color: clear;
+    -fx-background-color: rgba(0, 0, 0, 0);
     -fx-text-fill: #2e7d32;
 
 }
