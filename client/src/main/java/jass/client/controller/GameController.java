@@ -857,7 +857,6 @@ public final class GameController extends Controller implements Closeable, Disco
      * @since 1.0.0
      */
     public void disableButtons(final boolean disable) {
-        //TODO enable buttons for the cards that could be played in the round based on game mode
         CardData card1 = !gameUtil.getPlayerDeck().isEmpty() ? gameUtil.getPlayerDeck().get(0) : null;
         CardData card2 = !gameUtil.getPlayerDeck().isEmpty() ? gameUtil.getPlayerDeck().get(1) : null;
         CardData card3 = !gameUtil.getPlayerDeck().isEmpty() ? gameUtil.getPlayerDeck().get(2) : null;
@@ -915,7 +914,7 @@ public final class GameController extends Controller implements Closeable, Disco
     }
 
     /**
-     * Change border color if it's the player's turn to play
+     * Change border color if it's the player's turn to play. Method not used.
      *
      * @author Sasa Trajkova
      * @since 1.0.0

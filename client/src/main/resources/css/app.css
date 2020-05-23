@@ -107,8 +107,8 @@ dark: #005005;
 }
 
 .team-pane{
-    -fx-background-color: #c5c5c5;
-    -fx-border-color: #9c9c9c;
+    -fx-background-color: rgba(61, 187, 65, 0.45);
+    -fx-border-color: #2e7d32;
     -fx-border-width: 2 2 2 2;
     -fx-border-radius: 5px;
     -fx-background-radius: 5px;
@@ -117,7 +117,7 @@ dark: #005005;
 }
 
 .team-label{
-    -fx-background-color: #c5c5c5;
+    -fx-background-color: clear;
 }
 
 .card-buttons {
@@ -136,7 +136,7 @@ dark: #005005;
 }
 
 .turn-to-play-pane {
-    -fx-background-color: rgba(61, 187, 65, 0.45) !important;
+    -fx-background-color: rgba(61, 187, 65, 0.45);
     -fx-border-color: #2e7d32;
     -fx-border-width: 3 3 3 3;
     -fx-border-radius: 5px;
