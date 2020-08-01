@@ -14,7 +14,7 @@ dependencies {
     implementation(group: 'com.j256.ormlite', name: 'ormlite-jdbc', version: '5.1')
 
     // Use JSON for messaging
-    implementation(group: 'org.json', name: 'json', version: '20190722')
+    implementation(group: 'org.json', name: 'json', version: '20200518')
 
     // Needed to pass arguments
     implementation(group: 'commons-cli', name: 'commons-cli', version: '1.4')
