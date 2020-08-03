@@ -6,7 +6,7 @@ dependencies {
     implementation(project(':lib'))
 
     // Material UI Theme
-    implementation(group: 'com.jfoenix', name: 'jfoenix', version: '8.0.9')
+    implementation(group: 'com.jfoenix', name: 'jfoenix', version: '9.0.10')
 
     // Use Material icons in the UI
     implementation(group: 'com.github.jiconfont', name: 'jiconfont-javafx', version: '1.0.0')
