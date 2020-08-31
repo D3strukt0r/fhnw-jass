@@ -86,13 +86,8 @@ jobs:
       - name: Set up JDK 1.8
         uses: actions/setup-java@v1
         with:
-          java-version: 1.8
-
-      - name: Setup Travis DPL
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y ruby
-          sudo gem install dpl --pre
+          java-version: 1.8 # The JDK version to make available on the path.
+          java-package: jdk+fx # (jre, jdk, or jdk+fx) - defaults to jdk
 
       - name: Cache local Gradle repository
         uses: actions/cache@v2
@@ -139,6 +134,25 @@ jobs:
         run: |
           docker tag $IMAGE_NAME $IMAGE_ID:$VERSION
           docker push $IMAGE_ID:$VERSION
+
+      - name: Setup Travis DPL
+        if: startsWith(github.ref, 'refs/tags/')
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ruby
+          sudo gem install dpl --pre
+
+      - name: Assemble the library
+        if: startsWith(github.ref, 'refs/tags/')
+        run: ./gradlew :lib:assemble
+
+      - name: Assemble distributable server
+        if: startsWith(github.ref, 'refs/tags/')
+        run: ./gradlew :server:assembleDist
+
+      - name: Assemble distributable client
+        if: startsWith(github.ref, 'refs/tags/')
+        run: ./gradlew :client:assembleDist
 
       # https://github.com/travis-ci/dpl#github-releases
       - name: Deploy to Github Releases
