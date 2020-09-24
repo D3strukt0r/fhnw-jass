@@ -1,0 +1,37 @@
+# Add 'repo' label to any root file changes
+repo:
+  - ./*
+
+# Add 'docker' label to any change to files within the docker dir and docker relevant files
+docker:
+  - .dockerignore
+  - docker-compose.yml
+  - Dockerfile
+
+# Add 'client' label to any change to files within the client dir
+client:
+  - client/**/*
+
+# Add 'library' label to any change to files within the lib dir
+library:
+  - lib/**/*
+
+# Add 'server' label to any change to files within the server dir
+server:
+  - server/**/*
+
+# Add 'source' label to any change to files within the source dir
+source:
+  - client/src/main/java/**/*
+  - lib/src/main/java/**/*
+  - server/src/main/java/**/*
+
+# Add 'test' label to any change to files within the test dir
+test:
+  - client/src/test/java/**/*
+  - lib/src/test/java/**/*
+  - server/src/test/java/**/*
+
+# Add 'translation' label to any change to files within the translations dir
+translation:
+  - client/src/main/resources/i18n/**/*

@@ -1,99 +1,95 @@
 # fhnw-jass
 
-As part of the IT-Project course in the FHNW Basel, four students, which are mentioned in the authors section of this
-document, created this game.
+As part of the IT-Project course in the FHNW Basel, four students, which are mentioned in the authors section of this document, created this game.
 
-**Project**
+Project
 
 [![License](https://img.shields.io/github/license/d3strukt0r/fhnw-jass)][license]
+[![Docker Stars](https://img.shields.io/docker/stars/d3strukt0r/fhnw-jass-server.svg)][docker]
+[![Docker Pulls](https://img.shields.io/docker/pulls/d3strukt0r/fhnw-jass-server.svg)][docker]
 
-**master**-branch (alias stable, latest)
+master-branch (alias stable, latest)
 
 [![GH Action CI/CD](https://github.com/D3strukt0r/fhnw-jass/workflows/CI/CD/badge.svg?branch=master)][gh-action]
+[![Codacy grade](https://img.shields.io/codacy/grade/a5ffb2e6c88a4345aba88b5ff948fe88/master)][codacy]
 
-**develop**-branch (alias nightly)
+develop-branch (alias nightly)
 
 [![GH Action CI/CD](https://github.com/D3strukt0r/fhnw-jass/workflows/CI/CD/badge.svg?branch=develop)][gh-action]
-
-[license]: https://github.com/D3strukt0r/fhnw-jass/blob/master/LICENSE.txt
-[packagist]: https://packagist.org/packages/d3strukt0r/votifier-client
-[gh-action]: https://github.com/D3strukt0r/fhnw-jass/actions
+[![Codacy grade](https://img.shields.io/codacy/grade/a5ffb2e6c88a4345aba88b5ff948fe88/develop)][codacy]
 
 ## Getting Started
 
-These instructions will get you a copy of the project up and running on your local machine for development and testing
-purposes. See deployment for notes on how to deploy the project on a live system.
+These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
 
 ### Prerequisites
 
 What things you need to install the software and how to install them
 
-#### User environment
+#### User environment prerequisites
 
 -   [Oracle JRE 8 (Java 8)](https://www.java.com/de/)
 
-#### Developer environment
+#### Developer environment prerequisites
 
 -   [Oracle JDK 8](https://www.oracle.com/java/technologies/javase/javase-jdk8-downloads.html)
 -   [JetBrains IntelliJ IDEA](https://www.jetbrains.com/de-de/idea/) (Preferred)
 
 ### Installing (the client)
 
-#### User environment
+#### User environment installation
 
-After having installed Java 8, you have to download the latest client software under the releases page, or click on this
-[link](https://github.com/D3strukt0r/fhnw-jass/releases/latest/download/jass.zip).
+After having installed Java 8, you have to download the latest client software under the releases page, or click on this [link](https://github.com/D3strukt0r/fhnw-jass/releases/latest/download/jass.zip).
 
 The package you just downloaded needs to be unpacked now.
 
-Go to `jass/bin/` and in there you will find two files. If you are on a linux system double-click `client` otherwise
-(Windows) double-click on `client.bat`.
+Go to `jass/bin/` and in there you will find two files. If you are on a linux system double-click `client` otherwise (Windows) double-click on `client.bat`.
 
-#### Developer environment
+#### Developer environment installation
 
 Get the project (through the console):
 
 ```shell
-$ git clone https://github.com/D3strukt0r/fhnw-jass.git
+git clone https://github.com/D3strukt0r/fhnw-jass.git
 ```
 
 In case you want to change to the `develop` branch for the latest and greatest:
 
 ```shell
-$ git checkout develop
+git checkout develop
 ```
 
 Now import the project to IntelliJ (from the start screen):
 
-1. `Import Project`
-2. Select the directory of the downloaded project
-3. `[OK]`
-4. `(o) Import project from external model`
-5. `Gradle`
-6. `[Finish]`
+1.  `Import Project`
+2.  Select the directory of the downloaded project
+3.  `[OK]`
+4.  `(o) Import project from external model`
+5.  `Gradle`
+6.  `[Finish]`
 
 In the popup that appears on the bottom right:
 
-7. `Import Gradle Project`
+7.  `Import Gradle Project`
 
 (On Windows) If a message appears concerning "Windows Defender might be impacting your build performance":
 
-8. `Fix...` -> `Configure Automatically`
+8.  `Fix...` -> `Configure Automatically`
 
 ## Running the tests
 
 Through the terminal
 
 ```shell
-$ ./gradlew :lib:check
-$ ./gradlew :client:check
-$ ./gradlew :server:check
+./gradlew :lib:check
+./gradlew :client:check
+./gradlew :server:check
 ```
 
 Through IntelliJ
 
-1. Click on the "Gradle" Tab on the top right
-2. Go to: `fhnw-jass` -> `client` (or `server`) -> `Tasks` -> `verification` -> `check` and double-click.
+1.  Click on the "Gradle" Tab on the top right
+2.  Go to: `fhnw-jass` -> `client` (or `server`) -> `Tasks` -> `verification` -> `check` and double-click.
 
 ## Deployment (of the server)
 
@@ -123,14 +119,11 @@ For more example check the [wiki page](https://github.com/D3strukt0r/fhnw-jass/w
 
 ### `.jar` file
 
-After having installed Java 8, you have to download the latest server software under the releases page, or click on this
-[link](https://github.com/D3strukt0r/fhnw-jass/releases/latest/download/jass-server.zip) for the compressed `.zip` or
-[here](https://github.com/D3strukt0r/fhnw-jass/releases/latest/download/jass-server.jar) for only the `.jar`.
+After having installed Java 8, you have to download the latest server software under the releases page, or click on this [link](https://github.com/D3strukt0r/fhnw-jass/releases/latest/download/jass-server.zip) for the compressed `.zip` or [here](https://github.com/D3strukt0r/fhnw-jass/releases/latest/download/jass-server.jar) for only the `.jar`.
 
 If you downloaded the package, you have to unpack it first.
 
-Go to `jass-server/bin/` and in there you will find two files. If you are on a linux system double-click `server`
-otherwise (Windows) double-click on `server.bat`.
+Go to `jass-server/bin/` and in there you will find two files. If you are on a linux system double-click `server` otherwise (Windows) double-click on `server.bat`.
 
 If you downloaded the jar file only:
 
@@ -169,10 +162,15 @@ See also the list of [contributors](https://github.com/D3strukt0r/fhnw-jass/cont
 
 ## License
 
-This project is licensed under the GNU General Public License v3.0 - see the [LICENSE.txt](LICENSE.txt) file for details
+This project is licensed under the GNU General Public License v3.0 - see the [LICENSE.txt](LICENSE.txt) file for details.
 
 ## Acknowledgments
 
 -   Hat tip to anyone whose code was used
 -   Inspiration
 -   etc
+
+[license]: https://github.com/D3strukt0r/fhnw-jass/blob/master/LICENSE.txt
+[docker]: https://hub.docker.com/repository/docker/d3strukt0r/fhnw-jass-server
+[gh-action]: https://github.com/D3strukt0r/fhnw-jass/actions
+[codacy]: https://app.codacy.com/manual/D3strukt0r/fhnw-jass/dashboard
