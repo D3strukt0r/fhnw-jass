@@ -5,7 +5,7 @@
 # -------
 # Builder
 # -------
-FROM gradle:jdk8 AS build
+FROM --platform=${BUILDPLATFORM:-linux/amd64} gradle:jdk8 AS build
 
 WORKDIR /home/gradle/src
 
